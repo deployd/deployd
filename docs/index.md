@@ -2,7 +2,7 @@
 
 ## Users
 
-**GET** [api.deployd.com/user/:id]
+**GET** http://api.deployd.com/user/:id
 
 *returns*
 
