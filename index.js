@@ -1,0 +1,1 @@
+var loader = require('./lib/boot');

@@ -1,0 +1,12 @@
+{
+  "version": "0.0.0",
+  "controller": [
+    "app",
+    "user"
+  ],
+  "model": [
+    "app",
+    "user"
+  ],
+  "port": 3000
+}
