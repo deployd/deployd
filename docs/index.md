@@ -6,11 +6,11 @@
 
 *returns*
 
-  {
-    'email' : 'joe@bob.com',
-    'first' : 'Joe',
-    'last'  : 'Bob' 
-  }
+	{
+		'email' : 'joe@bob.com',
+		'first' : 'Joe',
+		'last'  : 'Bob' 
+	}
 
 ## Roles
 
