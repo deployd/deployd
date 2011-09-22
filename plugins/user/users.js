@@ -1,9 +1,5 @@
-var Collection = require('./collection')
-  , users = new Collection()
-;
+var Collection = lib.require('collection');
 
-users.collection = 'users';
+console.log(Collection.fetch);
 
-console.log(users);
-
-module.exports = users;
+module.exports = Collection.spawn({collection: 'users'});

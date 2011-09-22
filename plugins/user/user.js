@@ -1,4 +1,4 @@
-var Model = require('./model')
+var Model = lib.require('model')
   , User = Model.extend(function() {
     
   })
