@@ -1,0 +1,8 @@
+#!/usr/bin/env node
+
+var spawn = require('child_process').spawn;
+
+process.chdir(__dirname + '/../');
+
+// TODO implement forever
+spawn('node', ['index.js', process.argv[0]]); 
