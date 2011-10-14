@@ -1,10 +1,12 @@
+require('spawn');
+
 var db = require('db')
   , User = require('plugins/user/user')
 ;
 
 var user = User.spawn();
 
-exports.module = {
+module.exports = {
   'db.find()': function() {
     user.notify({
       send: function(u) {
