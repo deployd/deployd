@@ -12,32 +12,37 @@ var Model = require('model')
 module.exports = {
   
   'creating a new model': function(done, assert) {
-    TestModel
-      .spawn(data)
+    var m = TestModel
+      .spawn()
+      .set(data)
       .notify(function(json) {
+        console.log('json', json);
         assert.eql(json, data);
       })
       .save()
     ;
+    console.log(m);
   },
   
-  'find and update': function(done, assert) {
-    TestModel
-      .spawn(data)
-      .notify(function(json) {
-          assert.eql(json, data);
-      })
-      .fetch()
-    ;
-  },
-  
-  'remove': function(done, assert) {
-    TestModel
-      .spawn(data)
-      .notify(function(json) {
-        assert.ok(json.removed);
-      })
-    ;
-  }
+  // 'find and update': function(done, assert) {
+  //   TestModel
+  //     .spawn()
+  //     .set(data)
+  //     .notify(function(json) {
+  //         assert.eql(json, data);
+  //     })
+  //     .fetch()
+  //   ;
+  // },
+  // 
+  // 'remove': function(done, assert) {
+  //   TestModel
+  //     .spawn()
+  //     .set(data)
+  //     .notify(function(json) {
+  //       assert.ok(json.removed);
+  //     })
+  //   ;
+  // }
   
 }
