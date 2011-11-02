@@ -1,1 +1,1 @@
-var loader = require('./lib/boot');
+require('./lib/boot');

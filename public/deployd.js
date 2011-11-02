@@ -22,7 +22,5 @@ function d(route, data, callback) {
     }
   }
   
-  console.log(options);
-  
   $.ajax(options);
 }

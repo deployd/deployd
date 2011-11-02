@@ -21,7 +21,7 @@ var app = {
 
 var tests = {
   
-  'creating a user': {
+  '1. creating a user': {
     route: '/user',
     data: user,
     expect: {
@@ -32,7 +32,7 @@ var tests = {
     }
   },
   
-  'finding a user': {
+  '2. finding a user': {
     route: '/user/' + user.uid,
     expect: {
       _id: 'toExist',
@@ -41,7 +41,7 @@ var tests = {
     }
   },
   
-  'login a user': {
+  '3. login a user': {
     route: '/user/login',
     data: user,
     expect: {
@@ -50,12 +50,12 @@ var tests = {
       auth: 'toExist',
       errors: 'toNotExist'
     },
-    complete: function(res) {
+    after: function(res) {
       auth = res.auth;
     }
   },
   
-  'get me': {
+  '4. get me': {
     route: '/me',
     expect: {
       uid: user.uid,
@@ -65,25 +65,43 @@ var tests = {
     }
   },
   
-  'searching users': {
-    route: '/search?type=user&find={uid: "skawful@gmail.com"}',
+  '5. searching users': {
+    route: '/search?type=users&find={"uid": "skawful@gmail.com"}',
     expect: {
       results: 'toExist', 
-      erros: 'toNotExist'
+      errors: 'toNotExist'
     }
   },
   
-  'delete a user': {
+  '6. delete a user': {
     route: '/me?method=delete',
     expect: {
       errors: 'toNotExist'
     }
   },
   
+  '7. creating an app': {
+    route: '/app',
+    data: app,
+    expect: {
+      _id: 'toExist',
+      name: app.name,
+      errors: 'toNotExist'
+    },
+    after: function(result) {
+      app = result;
+    }
+  }
+  
 };
 
+var testNames = Object.keys(tests)
+  , sorted = testNames.sort()
+;
+
 // execute tests
-for(var context in tests) {
+for(var i = 0; i < sorted.length; i++) {
+  var context = sorted[i];
   if(tests.hasOwnProperty(context)) {
     describe(context, function() {
       var test = tests[context];
@@ -91,11 +109,11 @@ for(var context in tests) {
         
         var args = []
           , finished = false
-          , complete = test.complete
+          , after = test.after
           , callback = function(res) {
             console.log('finished');
               finished = true;
-              complete && complete(res);
+              after && after(res);
               // dynamic expects
               if(test.expect) {
                 for(var p in test.expect) {
@@ -120,7 +138,7 @@ for(var context in tests) {
             }
         ;
         
-        // build arguments do d()
+        // build arguments
         args.push(test.route);
         test.data && args.push(test.data);
         args.push(callback);
