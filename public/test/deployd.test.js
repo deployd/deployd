@@ -16,6 +16,7 @@ var user = {
 var auth;
 
 var app = {
+  _id: 1234,
   name: 'My Testing App'
 };
 
@@ -90,6 +91,25 @@ var tests = {
     },
     after: function(result) {
       app = result;
+      console.log(app);
+    }
+  },
+  
+  '8. list my apps': {
+    route: '/apps',
+    expect: {
+      results: 'toExist',
+      errors: 'toNotExist'
+    }
+  },
+  
+  '9. get 1 app': {
+    route: '/app/' + app._id,
+    expect: {
+      _id: app._id,
+      name: app.name,
+      errors: 'toNotExist',
+      plugins: 'toExist'
     }
   }
   
@@ -104,8 +124,11 @@ for(var i = 0; i < sorted.length; i++) {
   var context = sorted[i];
   if(tests.hasOwnProperty(context)) {
     describe(context, function() {
-      var test = tests[context];
-      it('should hit ' + test.route, function() {
+      var test = tests[context]
+        , route = typeof test.route === 'function' ? test.route() : test.route
+      ;
+      
+      it('should hit ' + route, function() {
         
         var args = []
           , finished = false
@@ -139,7 +162,7 @@ for(var i = 0; i < sorted.length; i++) {
         ;
         
         // build arguments
-        args.push(test.route);
+        args.push(route);
         test.data && args.push(test.data);
         args.push(callback);
         
