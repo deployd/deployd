@@ -1,0 +1,74 @@
+<!doctype html>
+<html xmlns:fb="http://ogp.me/ns/fb#">
+<head>
+  <meta charset="utf-8">
+  <title>Deployd :: Dashboard</title>
+</head>
+
+<body>
+  <h1>Dashboard</h1>
+  <ul>
+    <li><a href="#/">Config</a></li>
+    <li><a href="#/plugins">Plugins</a></li>
+    <li><a href="#/models">Models</a></li>
+  </ul>
+  <div id="content"></div>
+  
+  <!-- PARTIAL TEMPLATES -->
+
+  <script id="app-detail-template" type="html/template">
+    <div>App Name: <%= name %></div>
+  </script>
+  <script id="model-detail-template" type="html/template">
+    <div><%= name %></div>
+  </script>
+  <script id="plugin-detail-template" type="html/template">
+    <div><%= name %></div>
+  </script>
+  
+  <script id="model-item-template" type="html/template">
+    <%= name %> Model
+  </script>
+  <script id="plugin-item-template" type="html/template">
+    <%= name %> Plugin
+  </script>
+
+  <!-- END PARTIAL TEMPLATES -->
+  
+  <script src="js/libs/LAB.js"></script>
+  <script>
+  (function() {
+    var l = 'js/libs/', m = 'js/model/', v = 'js/view/', p = 'js/view/partial/';
+    // dependencies
+    $LAB
+    .setOptions({
+      AlwaysPreserveOrder: true,
+      CacheBust: true
+    })
+    .script(l + 'underscore-min.js')
+    .script(l + 'jquery-1.6.2.js')
+    .wait()
+    .script(l + 'backbone.js')
+    .script(l + 'json.min.js')
+    .script(l + 'jquery.cookie.js')
+    // model
+    .script(m + 'app.js')
+    .script(m + 'list.js')
+    .script(m + 'model.js')
+    .script(m + 'plugin.js')
+    .script(m + 'search.js')
+    .script(m + 'dashboard.js')
+    // partials
+    .script(v + 'view.js')
+    .script(p + 'app-view.js')
+    .script(p + 'list-view.js')
+    .script(p + 'model-view.js')
+    .script(p + 'plugin-view.js')
+    // views
+    .script(v + 'dashboard-view.js')
+    // router
+    .script('js/router.js');
+    })();
+    </script>
+  </body>
+</html>
