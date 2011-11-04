@@ -11,16 +11,4 @@ window.App = Backbone.Model.extend({
 //   name: 'Hello World',
 //   _id: 1234,
 //   host: 'hello-world.myname.deployd.com',
-//   plugins: [{
-//     name: 'Users',
-//     models: [{
-//         name: 'User',
-//         attributes: {
-//           name: 'String',
-//           email: 'String',
-//           age: 'Number',
-//           password: 'Special'
-//         }
-//     }]
-//   }]
 // });
