@@ -6,4 +6,4 @@ window.Dashboard = Backbone.Model.extend({
     app.fetch();
   }
   
-})
+});

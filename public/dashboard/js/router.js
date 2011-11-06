@@ -7,6 +7,24 @@ var Router = Backbone.Router.extend({
     Backbone.emulateHTTP = true;
     dashboard = new Dashboard();
     this.stage = new DashboardView({model: dashboard, el: $('#content')});
+    
+    window.plugins = new Plugins;
+    plugins.fetch();
+    window.models = new Models;
+    models.fetch();
+    window.appNav = new Backbone.Model({plugins: plugins, models: models});
+    this.appNavView = new AppNavView({model: appNav, el: $('#appNav')});
+    this.appNavView.render();
+    plugins.bind("all",function () {
+      this.appNavView.render();
+      console.log("appNav changed");
+    }, this);
+    models.bind("all",function () {
+      this.appNavView.render();
+      console.log("appNav changed");
+      console.log(appNav.toJSON());
+    }, this);
+
   },
 
 // examples
@@ -34,6 +52,7 @@ var Router = Backbone.Router.extend({
   routes: {
     '/:type': 'list',
     '/:type/:id': 'detail',
+    '/:type/:id/:context': 'detail_context',
     '/': 'config'
     // IDEA:
     // '/debug/*route': 'debug'
@@ -59,8 +78,17 @@ var Router = Backbone.Router.extend({
   },
   
   detail: function(type, id) {
-    var model = new this.models[type]({id: id});
-    this.stage.content = new this.views[type]({model: model});
+    var model = new window[this.models[type]]({type: type, id: id});
+    model.set({type: type});
+    this.stage.content = new window[this.views[type]]({model: model});
+    model.fetch();
+    this.stage.render();
+  },
+  detail_context: function (type, id, context) {
+    //TODO: Make this different from detail
+    var model = new window[this.models[type]]({type: type, id: id});
+    model.set({type: type});
+    this.stage.content = new window[this.views[type]]({model: model});
     model.fetch();
     this.stage.render();
   }

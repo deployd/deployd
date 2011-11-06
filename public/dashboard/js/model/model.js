@@ -5,3 +5,11 @@ window.Model = Backbone.Model.extend({
 	}
 	
 });
+
+window.Models = Backbone.Collection.extend({
+  url: '/models',
+  model: Model,
+  parse: function (response) {
+    return response['results'];
+  }
+});

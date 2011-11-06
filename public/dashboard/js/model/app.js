@@ -1,8 +1,9 @@
 window.App = Backbone.Model.extend({
 	
 	url: function(id) {
-	 return '/config'
+	 return '/config';
 	}
+	
 	
 });
 

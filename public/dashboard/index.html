@@ -7,9 +7,13 @@
 
 <body>
   <h1>Dashboard</h1>
-  <ul>
+  <ul role="navigation" id="appNav">
     <li><a href="#/">Config</a></li>
-    <li><a href="#/plugins">Plugins</a></li>
+    <li><a href="#/plugins">Plugins</a>
+      <ul>
+        <li><a href="#/plugins/1">Users</a></li>
+      </ul>
+    </li>
     <li><a href="#/models">Models</a></li>
   </ul>
   <div id="content"></div>
@@ -19,10 +23,32 @@
   <script id="app-detail-template" type="html/template">
     <div>App Name: <%= name %></div>
   </script>
+  <script id="app-nav-template" type="html/template">
+    <li><a href="#/">Config</a></li>
+    <li><a href="#/plugins">Plugins</a>
+      <ul>
+        <% _.each(plugins.models, function (plugin) { %>
+          <li><a href="#/plugins/<%= plugin.attributes._id %>"><%= plugin.attributes.name %></a></li>
+        <% }); %>
+      </ul>
+    </li>
+    <li><a href="#/models">Models</a>
+      <ul>
+        <% _.each(models.models, function (model) { %>
+          <li><a href="#/plugins/<%= model.attributes._id %>"><%= model.attributes.name %></a></li>
+        <% }); %>
+      </ul>
+    </li>
+  </script>
   <script id="model-detail-template" type="html/template">
     <div><%= name %></div>
   </script>
   <script id="plugin-detail-template" type="html/template">
+    <ul class="plugin-nav">
+      <% _.each(navItems, function (navItem) { %>
+        <li><a href="<%= navItem.link %>"><%= navItem.name %></a></li>
+      <% }); %>
+    </ul>
     <div><%= name %></div>
   </script>
   
@@ -58,6 +84,7 @@
     .script(m + 'plugin.js')
     .script(m + 'search.js')
     .script(m + 'dashboard.js')
+    .script(m + 'app-nav.js')
     // partials
     .script(v + 'view.js')
     .script(p + 'app-view.js')
@@ -66,6 +93,7 @@
     .script(p + 'plugin-view.js')
     // views
     .script(v + 'dashboard-view.js')
+    .script(v + 'app-nav-view.js')
     // router
     .script('js/router.js');
     })();
