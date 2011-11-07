@@ -3,20 +3,26 @@
 <head>
   <meta charset="utf-8">
   <title>Deployd :: Dashboard</title>
+  <link rel="stylesheet" media="all" href="css/dashboard.css" />
 </head>
 
 <body>
-  <h1>Dashboard</h1>
-  <ul role="navigation" id="appNav">
-    <li><a href="#/">Config</a></li>
-    <li><a href="#/plugins">Plugins</a>
-      <ul>
-        <li><a href="#/plugins/1">Users</a></li>
-      </ul>
-    </li>
-    <li><a href="#/models">Models</a></li>
-  </ul>
-  <div id="content"></div>
+  <header class="top-level">
+    <h1>MyApp Dashboard</h1>
+    <a href="#" class="sign-out">sign out</a>
+  </header>
+  <section class="app-admin">
+    <ul role="navigation" id="appNav">
+      <li><a href="#/">Config</a></li>
+      <li><a href="#/plugins">Plugins</a>
+        <ul>
+          <li><a href="#/plugins/1">Users</a></li>
+        </ul>
+      </li>
+      <li><a href="#/models">Models</a></li>
+    </ul>
+    <div id="content"></div>
+  </section>
   
   <!-- PARTIAL TEMPLATES -->
 
