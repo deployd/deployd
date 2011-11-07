@@ -6,7 +6,8 @@ $content-header-color: #ccc;
 $content-area-color: #fff;
 $button-base-color: #4c4c4c;
 
-$app-nav-width: 200px;
+$text-prominent-color: $base-color;
+$text-subtle-color: #999;
 
 @mixin clearfix {
 	&:before, &:after { content: ""; display: table; }
@@ -49,7 +50,7 @@ header.top-level {
 		display: inline-block;
 		font-size: 18px;
 		line-height: 50px;
-		margin:0 10px;
+		margin:0 20px;
 	}
 	a {
 		color: $base-color;
@@ -60,15 +61,16 @@ header.top-level {
 			font-size: 12px;
 			font-weight: bold;
 			line-height: 30px;
-			padding: 10px;
+			padding: 10px 20px;
 		}
 	}
 }
 .app-admin {
 	@include clearfix;
+	padding-right:5px;
 	
 	ul#appNav {
-		width: $app-nav-width;
+		width: 20%;
 		float: left;
 		margin: 10px 0;
 		&, ul {
@@ -77,15 +79,15 @@ header.top-level {
 		}
 		& > li {
 			display:block;
-			@include background-gradient(lighten($button-base-color, 10%), darken($button-base-color, 10%));
-			width: $app-nav-width - 10;
+			width: 95%;
 			min-height: 50px;
 			clear: right;
 			float: right;
-			&.active > a, &:hover {
+			&.active > a, & > a:hover {
 				@include background-gradient(lighten($button-base-color, 5%), darken($button-base-color, 15%));
 			}
 			& > a {
+				@include background-gradient(lighten($button-base-color, 10%), darken($button-base-color, 10%));
 				display: block;
 				border-bottom: 1px solid darken($button-base-color, 25%);
 				color: $contrast-color;
@@ -96,7 +98,8 @@ header.top-level {
 				text-decoration: none;
 			}
 			& > ul {
-				margin: 16px;
+				background-color: $button-base-color;
+				padding: 16px;
 				li {
 					margin-bottom: 6px;
 					height: 18px;
@@ -111,7 +114,7 @@ header.top-level {
 						font-size: 12px;
 						
 					}
-					&.active a {
+					&.active a, &:hover a {
 						font-weight: bold;
 						@include border-radius(9px);
 						background-color: $contrast-color;
@@ -124,7 +127,25 @@ header.top-level {
 	
 	div#content {
 		float:left;
-		width: 800px;
+		margin: 5px 0;
+		width:80%;
+		min-height: 500px;
 		background-color: $content-area-color;
+		header {
+			height: 100px;
+			background-color: $content-header-color;
+			h2 {
+				color: $text-subtle-color;
+				margin:0 15px;
+				height: 70px;
+				line-height: 70px;
+				font-size:30px;
+				em {
+					font-style: normal;
+					color: $text-prominent-color ;
+				}
+				
+			}
+		}
 	}	
 }

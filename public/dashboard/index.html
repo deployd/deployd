@@ -21,7 +21,11 @@
       </li>
       <li><a href="#/models">Models</a></li>
     </ul>
-    <div id="content"></div>
+    <div id="content">
+      <header>
+        <h1>Hello</h1>
+      </header>
+    </div>
   </section>
   
   <!-- PARTIAL TEMPLATES -->
@@ -50,6 +54,11 @@
     <div><%= name %></div>
   </script>
   <script id="plugin-detail-template" type="html/template">
+    <header>
+      <h2>
+        <em><%= name %></em> Plugin
+      </h2>
+    </header>
     <ul class="plugin-nav">
       <% _.each(navItems, function (navItem) { %>
         <li><a href="<%= navItem.link %>"><%= navItem.name %></a></li>
@@ -90,7 +99,6 @@
     .script(m + 'plugin.js')
     .script(m + 'search.js')
     .script(m + 'dashboard.js')
-    .script(m + 'app-nav.js')
     // partials
     .script(v + 'view.js')
     .script(p + 'app-view.js')

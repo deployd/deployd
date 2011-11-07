@@ -1,5 +1,17 @@
-var Router = Backbone.Router.extend({
+var loader = {
+  modelsToLoad: 2,
+  modelsLoaded: 1,
+  loaded: function () {
+    if (loader.modelsLoaded == loader.modelsToLoad) {
+      Backbone.history.start();
+    }
+    else {
+      loader.modelsLoaded++;
+    }
+  }
+};
 
+var Router = Backbone.Router.extend({
   initialize: function() {
     // prevent caching
     $.ajaxSetup({ cache: false });
@@ -9,20 +21,21 @@ var Router = Backbone.Router.extend({
     this.stage = new DashboardView({model: dashboard, el: $('#content')});
     
     window.plugins = new Plugins;
-    plugins.fetch();
+    plugins.fetch({
+      success: loader.loaded
+    });
     window.models = new Models;
-    models.fetch();
+    models.fetch({
+      success: loader.loaded
+    });
     window.appNav = new Backbone.Model({plugins: plugins, models: models});
     this.appNavView = new AppNavView({model: appNav, el: $('#appNav')});
     this.appNavView.render();
     plugins.bind("all",function () {
       this.appNavView.render();
-      console.log("appNav changed");
     }, this);
     models.bind("all",function () {
       this.appNavView.render();
-      console.log("appNav changed");
-      console.log(appNav.toJSON());
     }, this);
 
   },
@@ -78,7 +91,9 @@ var Router = Backbone.Router.extend({
   },
   
   detail: function(type, id) {
-    var model = new window[this.models[type]]({type: type, id: id});
+    // var model = new window[this.models[type]]({type: type, id: id});
+    console.log(window[type].models);
+    var model = window[type].get(id);
     model.set({type: type});
     this.stage.content = new window[this.views[type]]({model: model});
     model.fetch();
@@ -102,4 +117,3 @@ var Router = Backbone.Router.extend({
 
 // boot the application
 new Router();
-Backbone.history.start();

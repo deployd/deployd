@@ -19,6 +19,9 @@ window.Plugin = Backbone.Model.extend({
 window.Plugins = Backbone.Collection.extend({
   model: Plugin,
   parse: function (response) {
+    for (var i = 0,iLength = response['results'].length; i<iLength; i++) {
+      response['results'][i].id = response['results'][i]._id;
+    }
     return response['results'];
   },
   url: "/plugins"
