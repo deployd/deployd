@@ -65,7 +65,7 @@ var Router = Backbone.Router.extend({
   routes: {
     '/:type': 'list',
     '/:type/:id': 'detail',
-    '/:type/:id/:context': 'detail_context',
+    '/:type/:id/:context': 'detail',
     '/': 'config'
     // IDEA:
     // '/debug/*route': 'debug'
@@ -90,18 +90,9 @@ var Router = Backbone.Router.extend({
     this.stage.render();
   },
   
-  detail: function(type, id) {
-    // var model = new window[this.models[type]]({type: type, id: id});
-    console.log(window[type].models);
+  detail: function(type, id, context) {
+    //TODO: Handle the context passed in somehow
     var model = window[type].get(id);
-    model.set({type: type});
-    this.stage.content = new window[this.views[type]]({model: model});
-    model.fetch();
-    this.stage.render();
-  },
-  detail_context: function (type, id, context) {
-    //TODO: Make this different from detail
-    var model = new window[this.models[type]]({type: type, id: id});
     model.set({type: type});
     this.stage.content = new window[this.views[type]]({model: model});
     model.fetch();

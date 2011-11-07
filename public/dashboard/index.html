@@ -21,11 +21,7 @@
       </li>
       <li><a href="#/models">Models</a></li>
     </ul>
-    <div id="content">
-      <header>
-        <h1>Hello</h1>
-      </header>
-    </div>
+    <div id="content"><strong>Loading...</strong></div>
   </section>
   
   <!-- PARTIAL TEMPLATES -->
@@ -58,13 +54,15 @@
       <h2>
         <em><%= name %></em> Plugin
       </h2>
+      <ul class="plugin-nav">
+        <li class="active"><a href="<%= url %>">Overview</a></li>
+        <% _.each(configurable_objects, function (navItem) { %>
+          <li><a href="<%= url %>/<%= navItem.name %>"><%= navItem.name %></a></li>
+        <% }); %>
+      </ul>
     </header>
-    <ul class="plugin-nav">
-      <% _.each(navItems, function (navItem) { %>
-        <li><a href="<%= navItem.link %>"><%= navItem.name %></a></li>
-      <% }); %>
-    </ul>
-    <div><%= name %></div>
+    
+    <div class="substance"><%= overview_html %></div>
   </script>
   
   <script id="model-item-template" type="html/template">

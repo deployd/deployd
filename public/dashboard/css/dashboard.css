@@ -7,7 +7,8 @@ header.top-level {
   zoom: 1;
   background-color: #eeeeee;
   color: #222222;
-  height: 50px; }
+  height: 50px;
+  margin-bottom: 10px; }
   header.top-level:before, header.top-level:after {
     content: "";
     display: table; }
@@ -37,69 +38,94 @@ header.top-level {
     display: table; }
   .app-admin:after {
     clear: both; }
-  .app-admin ul#appNav {
-    width: 20%;
-    float: left;
-    margin: 10px 0; }
-    .app-admin ul#appNav, .app-admin ul#appNav ul {
-      list-style-type: none;
-      padding: 0; }
-    .app-admin ul#appNav > li {
+
+.app-admin ul#appNav {
+  width: 20%;
+  float: left;
+  margin: 10px 0; }
+  .app-admin ul#appNav, .app-admin ul#appNav ul {
+    list-style-type: none;
+    padding: 0; }
+  .app-admin ul#appNav > li {
+    display: block;
+    width: 95%;
+    min-height: 50px;
+    clear: right;
+    float: right; }
+    .app-admin ul#appNav > li.active > a, .app-admin ul#appNav > li > a:hover {
+      background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0, #262626), color-stop(1, #595959));
+      background-image: -moz-linear-gradient(center bottom, #262626 0%, #595959 76%); }
+    .app-admin ul#appNav > li > a {
+      background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0, #333333), color-stop(1, #666666));
+      background-image: -moz-linear-gradient(center bottom, #333333 0%, #666666 76%);
       display: block;
-      width: 95%;
-      min-height: 50px;
-      clear: right;
-      float: right; }
-      .app-admin ul#appNav > li.active > a, .app-admin ul#appNav > li > a:hover {
-        background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0, #262626), color-stop(1, #595959));
-        background-image: -moz-linear-gradient(center bottom, #262626 0%, #595959 76%); }
-      .app-admin ul#appNav > li > a {
-        background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0, #333333), color-stop(1, #666666));
-        background-image: -moz-linear-gradient(center bottom, #333333 0%, #666666 76%);
-        display: block;
-        border-bottom: 1px solid #0c0c0c;
-        color: #eeeeee;
-        line-height: 50px;
-        padding: 0 16px;
-        font-size: 14px;
-        font-weight: bold;
-        text-decoration: none; }
-      .app-admin ul#appNav > li > ul {
-        background-color: #4c4c4c;
-        padding: 16px; }
-        .app-admin ul#appNav > li > ul li {
-          margin-bottom: 6px;
-          height: 18px; }
-          .app-admin ul#appNav > li > ul li a {
-            text-decoration: none;
-            color: #eeeeee;
-            display: inline-block;
-            height: 18px;
-            line-height: 18px;
-            padding: 0 7px;
-            font-size: 12px; }
-          .app-admin ul#appNav > li > ul li.active a, .app-admin ul#appNav > li > ul li:hover a {
-            font-weight: bold;
-            -webkit-border-radius: 9px;
-            -moz-border-radius: 9px;
-            border-radius: 9px;
-            background-color: #eeeeee;
-            color: #222222; }
-  .app-admin div#content {
-    float: left;
-    margin: 5px 0;
-    width: 80%;
-    min-height: 500px;
-    background-color: white; }
-    .app-admin div#content header {
-      height: 100px;
-      background-color: #cccccc; }
-      .app-admin div#content header h2 {
-        color: #999999;
-        margin: 0 15px;
-        height: 70px;
-        line-height: 70px;
-        font-size: 30px; }
-        .app-admin div#content header h2 em {
-          font-style: normal;
+      border-bottom: 1px solid #0c0c0c;
+      color: #eeeeee;
+      line-height: 50px;
+      padding: 0 16px;
+      font-size: 14px;
+      font-weight: bold;
+      text-decoration: none; }
+    .app-admin ul#appNav > li > ul {
+      background-color: #4c4c4c;
+      padding: 16px; }
+      .app-admin ul#appNav > li > ul li {
+        margin-bottom: 6px;
+        height: 18px; }
+        .app-admin ul#appNav > li > ul li a {
+          text-decoration: none;
+          color: #eeeeee;
+          display: inline-block;
+          height: 18px;
+          line-height: 18px;
+          padding: 0 7px;
+          font-size: 12px; }
+        .app-admin ul#appNav > li > ul li.active a, .app-admin ul#appNav > li > ul li:hover a {
+          font-weight: bold;
+          -webkit-border-radius: 9px;
+          -moz-border-radius: 9px;
+          border-radius: 9px;
+          background-color: #eeeeee;
           color: #222222; }
+
+.app-admin div#content {
+  float: left;
+  margin: 5px 0;
+  width: 80%;
+  min-height: 500px;
+  background-color: white; }
+  .app-admin div#content header {
+    height: 100px;
+    background-color: #cccccc; }
+    .app-admin div#content header h2 {
+      color: #999999;
+      margin: 0 15px;
+      height: 70px;
+      line-height: 70px;
+      font-size: 30px; }
+      .app-admin div#content header h2 em {
+        font-style: normal;
+        color: #222222; }
+    .app-admin div#content header ul {
+      list-style-type: none;
+      height: 30px;
+      margin: 0;
+      padding: 0;
+      padding-left: 9px; }
+      .app-admin div#content header ul li {
+        display: inline-block;
+        padding: 0;
+        height: 30px; }
+        .app-admin div#content header ul li a {
+          background-color: #999999;
+          display: block;
+          padding: 0 8px;
+          color: #222222;
+          text-decoration: none;
+          font-weight: bold;
+          font-size: 12px;
+          line-height: 30px; }
+        .app-admin div#content header ul li.active a, .app-admin div#content header ul li a:hover {
+          background-color: white; }
+  .app-admin div#content > .substance {
+    padding: 15px; }

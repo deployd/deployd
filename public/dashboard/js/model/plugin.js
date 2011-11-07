@@ -6,14 +6,9 @@ window.Plugin = Backbone.Model.extend({
 	url: function() {
   	 return '/dashboard/#/' + this.get('type') + '/' + this.id;
 	},
-	fetch: function () {
-	  this.set({
-	    navItems: [{
-  	    link: this.url() + "/create",
-  	    name: "create"
-  	  }]
-	  });
-	}	
+	initialize: function () {
+	  this.set({url: this.url()});
+	}
 });
 
 window.Plugins = Backbone.Collection.extend({

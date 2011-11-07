@@ -9,6 +9,10 @@ $button-base-color: #4c4c4c;
 $text-prominent-color: $base-color;
 $text-subtle-color: #999;
 
+$tab-color: #999;
+$tab-active-color: $content-area-color;
+$tab-font-color: $base-color;
+
 @mixin clearfix {
 	&:before, &:after { content: ""; display: table; }
 	&:after { clear: both; }
@@ -46,6 +50,7 @@ header.top-level {
 	background-color: $contrast-color;
 	color: $base-color;
 	height: 50px;
+	margin-bottom: 10px;
 	h1 {
 		display: inline-block;
 		font-size: 18px;
@@ -68,84 +73,112 @@ header.top-level {
 .app-admin {
 	@include clearfix;
 	padding-right:5px;
-	
-	ul#appNav {
-		width: 20%;
-		float: left;
-		margin: 10px 0;
-		&, ul {
-			list-style-type: none;
-			padding:0;
+}
+.app-admin ul#appNav {
+	width: 20%;
+	float: left;
+	margin: 10px 0;
+	&, ul {
+		list-style-type: none;
+		padding:0;
+	}
+	& > li {
+		display:block;
+		width: 95%;
+		min-height: 50px;
+		clear: right;
+		float: right;
+		&.active > a, & > a:hover {
+			@include background-gradient(lighten($button-base-color, 5%), darken($button-base-color, 15%));
 		}
-		& > li {
-			display:block;
-			width: 95%;
-			min-height: 50px;
-			clear: right;
-			float: right;
-			&.active > a, & > a:hover {
-				@include background-gradient(lighten($button-base-color, 5%), darken($button-base-color, 15%));
-			}
-			& > a {
-				@include background-gradient(lighten($button-base-color, 10%), darken($button-base-color, 10%));
-				display: block;
-				border-bottom: 1px solid darken($button-base-color, 25%);
-				color: $contrast-color;
-				line-height: 50px;
-				padding: 0 16px;
-				font-size: 14px;
-				font-weight: bold;
-				text-decoration: none;
-			}
-			& > ul {
-				background-color: $button-base-color;
-				padding: 16px;
-				li {
-					margin-bottom: 6px;
+		& > a {
+			@include background-gradient(lighten($button-base-color, 10%), darken($button-base-color, 10%));
+			display: block;
+			border-bottom: 1px solid darken($button-base-color, 25%);
+			color: $contrast-color;
+			line-height: 50px;
+			padding: 0 16px;
+			font-size: 14px;
+			font-weight: bold;
+			text-decoration: none;
+		}
+		& > ul {
+			background-color: $button-base-color;
+			padding: 16px;
+			li {
+				margin-bottom: 6px;
+				height: 18px;
+				
+				a {
+					text-decoration: none;
+					color: $contrast-color;
+					display: inline-block;
 					height: 18px;
+					line-height: 18px;
+					padding: 0 7px;
+					font-size: 12px;
 					
-					a {
-						text-decoration: none;
-						color: $contrast-color;
-						display: inline-block;
-						height: 18px;
-						line-height: 18px;
-						padding: 0 7px;
-						font-size: 12px;
-						
-					}
-					&.active a, &:hover a {
-						font-weight: bold;
-						@include border-radius(9px);
-						background-color: $contrast-color;
-						color: $base-color;
-					}
+				}
+				&.active a, &:hover a {
+					font-weight: bold;
+					@include border-radius(9px);
+					background-color: $contrast-color;
+					color: $base-color;
 				}
 			}
 		}
 	}
+}
 	
-	div#content {
-		float:left;
-		margin: 5px 0;
-		width:80%;
-		min-height: 500px;
-		background-color: $content-area-color;
-		header {
-			height: 100px;
-			background-color: $content-header-color;
-			h2 {
-				color: $text-subtle-color;
-				margin:0 15px;
-				height: 70px;
-				line-height: 70px;
-				font-size:30px;
-				em {
-					font-style: normal;
-					color: $text-prominent-color ;
+.app-admin div#content {
+	float:left;
+	margin: 5px 0;
+	width:80%;
+	min-height: 500px;
+	background-color: $content-area-color;
+	header {
+		height: 100px;
+		background-color: $content-header-color;
+		h2 {
+			color: $text-subtle-color;
+			margin:0 15px;
+			height: 70px;
+			line-height: 70px;
+			font-size:30px;
+			em {
+				font-style: normal;
+				color: $text-prominent-color ;
+			}
+			
+		}
+		ul {
+			list-style-type: none;
+			height: 30px;
+			margin: 0;
+			padding: 0;
+			padding-left: 9px;
+			li {
+				display: inline-block;
+				padding: 0;
+				height: 30px;
+
+				a {
+					background-color: $tab-color;
+					display:block;
+					padding:0 8px;
+					color: $tab-font-color;
+					text-decoration:none;
+					font-weight: bold;
+					font-size: 12px;
+					line-height: 30px;
 				}
-				
+				&.active a, a:hover {
+					background-color: $tab-active-color;
+				}
 			}
 		}
-	}	
-}
+	}
+	& > .substance {
+		padding: 15px;
+	}
+}	
