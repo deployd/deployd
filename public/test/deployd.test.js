@@ -16,7 +16,7 @@ var user = {
 var auth;
 
 var app = {
-  _id: 1234,
+  host: 'my-testing-app.skawful@gmail.com',
   name: 'My Testing App'
 };
 
