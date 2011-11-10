@@ -1,5 +1,8 @@
 @import "normalize.css";
 //Colors
+/* Gray theme */
+/*
+$body-color: #222;
 $base-color: #222;
 $contrast-color: #eee;
 $content-header-color: #ccc;
@@ -12,6 +15,23 @@ $text-subtle-color: #999;
 $tab-color: #999;
 $tab-active-color: $content-area-color;
 $tab-font-color: $base-color;
+$tab-active-font-color: $base-color;*/
+
+/* Blue Theme */
+$body-color: #fff;
+$base-color: #036;
+$contrast-color: #eee;
+$content-header-color: #cde;
+$content-area-color: #fff;
+$button-base-color: #069;
+
+$text-prominent-color: $base-color;
+$text-subtle-color: #9ab;
+
+$tab-color: #069;
+$tab-active-color: $content-area-color;
+$tab-font-color: #fff;
+$tab-active-font-color: $base-color;
 
 @mixin clearfix {
 	&:before, &:after { content: ""; display: table; }
@@ -40,17 +60,36 @@ $tab-font-color: $base-color;
     border-radius: $radius;
 }
 
+@mixin border-radius-top-left ($radius) {
+	-webkit-border-top-left-radius: $radius;
+    -moz-border-radius-topleft: $radius;
+    border-top-left-radius: $radius;
+}
+
+@mixin border-radius-bottom-left ($radius) {
+    -webkit-border-bottom-left-radius: $radius;
+    -moz-border-radius-bottomleft: $radius;
+    border-bottom-left-radius: $radius;
+}
+
+@mixin shadow ($hor, $vert, $blur, $spread, $color) {
+    -webkit-box-shadow: $hor $vert $blur $spread $color;
+    -moz-box-shadow: $hor $vert $blur $spread $color;
+    box-shadow: $hor $vert $blur $spread $color;
+}
+
 
 body {
-	background-color: $base-color;
+	background-color: $body-color;
 	font-family: Helvetica, Arial, sans-serif;
 }
 header.top-level {
 	@include clearfix;
 	background-color: $contrast-color;
+	border-bottom: 2px solid $base-color;
 	color: $base-color;
 	height: 50px;
-	margin-bottom: 10px;
+	margin-bottom: 15px;
 	h1 {
 		display: inline-block;
 		font-size: 18px;
@@ -72,12 +111,13 @@ header.top-level {
 }
 .app-admin {
 	@include clearfix;
-	padding-right:5px;
+	margin: auto;
+	padding: 0 15px;
 }
 .app-admin ul#appNav {
 	width: 20%;
 	float: left;
-	margin: 10px 0;
+	margin: 20px 0;
 	&, ul {
 		list-style-type: none;
 		padding:0;
@@ -88,6 +128,15 @@ header.top-level {
 		min-height: 50px;
 		clear: right;
 		float: right;
+		&:first-child > a {
+			@include border-radius-top-left(10px);
+		}
+		&:last-child {
+			background-color: $button-base-color;
+			height:10px;
+			min-height:0;
+			@include border-radius-bottom-left(10px);
+		}
 		&.active > a, & > a:hover {
 			@include background-gradient(lighten($button-base-color, 5%), darken($button-base-color, 15%));
 		}
@@ -134,8 +183,10 @@ header.top-level {
 	float:left;
 	margin: 5px 0;
 	width:80%;
-	min-height: 500px;
+	min-height: 900px;
 	background-color: $content-area-color;
+	@include shadow(0, 0, 10px, 0, rgba(0,0,0,0.5));
+	@include border-radius(10px);
 	header {
 		height: 100px;
 		background-color: $content-header-color;
@@ -174,11 +225,12 @@ header.top-level {
 				}
 				&.active a, a:hover {
 					background-color: $tab-active-color;
+					color: $tab-active-font-color;
 				}
 			}
 		}
 	}
-	& > .substance {
+	& .substance {
 		padding: 15px;
 	}
 }	

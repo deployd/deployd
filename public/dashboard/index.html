@@ -38,16 +38,23 @@
         <% }); %>
       </ul>
     </li>
-    <li><a href="#/models">Models</a>
-      <ul>
-        <% _.each(models.models, function (model) { %>
-          <li><a href="#/plugins/<%= model.attributes._id %>"><%= model.attributes.name %></a></li>
-        <% }); %>
-      </ul>
-    </li>
+    <li></li>
   </script>
   <script id="model-detail-template" type="html/template">
     <div><%= name %></div>
+  </script>
+  <script id="plugin-form-template" type="html/template">
+    <div class="plugin-form">
+    <form action="<%= action %>" method="<%= method %>">
+    <% _.each(fields, function (form_field) { %>
+      <div class="form-row">
+        <label for="<%= form_field.name %>"><%= form_field.name %></label>
+        <input name="<%= form_field.name %>" type="<%= form_field.type %>" <% if (form_field.required) { %> required="true" <%; } %> />
+      </div>
+    <% }); %>
+    <input type="submit" value="Submit" />
+    </form>
+    </div>
   </script>
   <script id="plugin-detail-template" type="html/template">
     <header>
@@ -57,7 +64,12 @@
       <ul class="plugin-nav">
         <li class="active"><a href="<%= url %>">Overview</a></li>
         <% _.each(configurable_objects, function (navItem) { %>
-          <li><a href="<%= url %>/<%= navItem.name %>"><%= navItem.name %></a></li>
+          <li class="<% 
+            var className = navItem.name;
+            while (className.indexOf(' ') > -1) {
+              className = className.replace(' ', '');
+            }
+            %><%= className %>"><a href="<%= url %>/<%= navItem.name %>"><%= navItem.name %></a></li>
         <% }); %>
       </ul>
     </header>

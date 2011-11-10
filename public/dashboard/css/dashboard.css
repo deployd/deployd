@@ -1,14 +1,32 @@
 @import url(normalize.css);
+/* Gray theme */
+/*
+$body-color: #222;
+$base-color: #222;
+$contrast-color: #eee;
+$content-header-color: #ccc;
+$content-area-color: #fff;
+$button-base-color: #4c4c4c;
+
+$text-prominent-color: $base-color;
+$text-subtle-color: #999;
+
+$tab-color: #999;
+$tab-active-color: $content-area-color;
+$tab-font-color: $base-color;
+$tab-active-font-color: $base-color;*/
+/* Blue Theme */
 body {
-  background-color: #222222;
+  background-color: white;
   font-family: Helvetica, Arial, sans-serif; }
 
 header.top-level {
   zoom: 1;
   background-color: #eeeeee;
-  color: #222222;
+  border-bottom: 2px solid #003366;
+  color: #003366;
   height: 50px;
-  margin-bottom: 10px; }
+  margin-bottom: 15px; }
   header.top-level:before, header.top-level:after {
     content: "";
     display: table; }
@@ -20,7 +38,7 @@ header.top-level {
     line-height: 50px;
     margin: 0 20px; }
   header.top-level a {
-    color: #222222;
+    color: #003366;
     text-decoration: none; }
     header.top-level a.sign-out {
       display: inline-block;
@@ -32,7 +50,8 @@ header.top-level {
 
 .app-admin {
   zoom: 1;
-  padding-right: 5px; }
+  margin: auto;
+  padding: 0 15px; }
   .app-admin:before, .app-admin:after {
     content: "";
     display: table; }
@@ -42,7 +61,7 @@ header.top-level {
 .app-admin ul#appNav {
   width: 20%;
   float: left;
-  margin: 10px 0; }
+  margin: 20px 0; }
   .app-admin ul#appNav, .app-admin ul#appNav ul {
     list-style-type: none;
     padding: 0; }
@@ -52,14 +71,25 @@ header.top-level {
     min-height: 50px;
     clear: right;
     float: right; }
+    .app-admin ul#appNav > li:first-child > a {
+      -webkit-border-top-left-radius: 10px;
+      -moz-border-radius-topleft: 10px;
+      border-top-left-radius: 10px; }
+    .app-admin ul#appNav > li:last-child {
+      background-color: #006699;
+      height: 10px;
+      min-height: 0;
+      -webkit-border-bottom-left-radius: 10px;
+      -moz-border-radius-bottomleft: 10px;
+      border-bottom-left-radius: 10px; }
     .app-admin ul#appNav > li.active > a, .app-admin ul#appNav > li > a:hover {
-      background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0, #262626), color-stop(1, #595959));
-      background-image: -moz-linear-gradient(center bottom, #262626 0%, #595959 76%); }
+      background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0, #00334d), color-stop(1, #0077b3));
+      background-image: -moz-linear-gradient(center bottom, #00334d 0%, #0077b3 76%); }
     .app-admin ul#appNav > li > a {
-      background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0, #333333), color-stop(1, #666666));
-      background-image: -moz-linear-gradient(center bottom, #333333 0%, #666666 76%);
+      background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0, #004466), color-stop(1, #0088cc));
+      background-image: -moz-linear-gradient(center bottom, #004466 0%, #0088cc 76%);
       display: block;
-      border-bottom: 1px solid #0c0c0c;
+      border-bottom: 1px solid #00111a;
       color: #eeeeee;
       line-height: 50px;
       padding: 0 16px;
@@ -67,7 +97,7 @@ header.top-level {
       font-weight: bold;
       text-decoration: none; }
     .app-admin ul#appNav > li > ul {
-      background-color: #4c4c4c;
+      background-color: #006699;
       padding: 16px; }
       .app-admin ul#appNav > li > ul li {
         margin-bottom: 6px;
@@ -86,26 +116,32 @@ header.top-level {
           -moz-border-radius: 9px;
           border-radius: 9px;
           background-color: #eeeeee;
-          color: #222222; }
+          color: #003366; }
 
 .app-admin div#content {
   float: left;
   margin: 5px 0;
   width: 80%;
-  min-height: 500px;
-  background-color: white; }
+  min-height: 900px;
+  background-color: white;
+  -webkit-box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
+  -moz-box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px; }
   .app-admin div#content header {
     height: 100px;
-    background-color: #cccccc; }
+    background-color: #ccddee; }
     .app-admin div#content header h2 {
-      color: #999999;
+      color: #99aabb;
       margin: 0 15px;
       height: 70px;
       line-height: 70px;
       font-size: 30px; }
       .app-admin div#content header h2 em {
         font-style: normal;
-        color: #222222; }
+        color: #003366; }
     .app-admin div#content header ul {
       list-style-type: none;
       height: 30px;
@@ -117,15 +153,16 @@ header.top-level {
         padding: 0;
         height: 30px; }
         .app-admin div#content header ul li a {
-          background-color: #999999;
+          background-color: #006699;
           display: block;
           padding: 0 8px;
-          color: #222222;
+          color: white;
           text-decoration: none;
           font-weight: bold;
           font-size: 12px;
           line-height: 30px; }
         .app-admin div#content header ul li.active a, .app-admin div#content header ul li a:hover {
-          background-color: white; }
-  .app-admin div#content > .substance {
+          background-color: white;
+          color: #003366; }
+  .app-admin div#content .substance {
     padding: 15px; }

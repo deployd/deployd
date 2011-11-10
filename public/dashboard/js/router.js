@@ -95,8 +95,9 @@ var Router = Backbone.Router.extend({
     var model = window[type].get(id);
     model.set({type: type});
     this.stage.content = new window[this.views[type]]({model: model});
-    model.fetch();
+    // model.fetch();
     this.stage.render();
+    if (typeof context !== "undefined") this.stage.content.showContext(context);
   }
 
   // IDEA: be able to paste a deployed route with /debug and see information about it
