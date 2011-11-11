@@ -11,7 +11,3 @@
 		'first' : 'Joe',
 		'last'  : 'Bob' 
 	}
-
-## Roles
-
-## Etc

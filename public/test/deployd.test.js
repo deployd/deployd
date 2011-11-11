@@ -33,7 +33,7 @@ var tests = {
     }
   },
   
-  '2. finding a user': {
+  '2. find user by id': {
     route: '/user/' + user.uid,
     expect: {
       _id: 'toExist',
@@ -56,7 +56,7 @@ var tests = {
     }
   },
   
-  '4. get me': {
+  '4. get current user': {
     route: '/me',
     expect: {
       uid: user.uid,
@@ -95,21 +95,35 @@ var tests = {
     }
   },
   
+  // search supports GET and POST
+  // GET
+  // my-app.d.com/search/apps?find={"creator": "someuser"}
   '8. list my apps': {
-    route: '/apps',
+    route: '/search/apps',
+    data: {
+      creator: user.uid
+    },
     expect: {
       results: 'toExist',
       errors: 'toNotExist'
     }
   },
   
-  '9. get 1 app': {
-    route: '/app/' + app._id,
+  '9. get app config': {
+    route: '/settings/app',
     expect: {
-      _id: app._id,
-      name: app.name,
-      errors: 'toNotExist',
-      plugins: 'toExist'
+      _id: 'toExist',
+      db: 'toExist',
+      'db-host': 'toExist',
+      port: 'toExist'
+    }
+  },
+  
+  '10. validate users': {
+    route: '/user',
+    data: {asdf: 1234, uid: {foo: 'bar'}, password: 1111},
+    expect: {
+      errors: 'toExist'
     }
   }
   
