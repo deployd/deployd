@@ -65,11 +65,11 @@
         <li class="active"><a href="<%= url %>">Overview</a></li>
         <% _.each(configurable_objects, function (navItem) { %>
           <li class="<% 
-            var className = navItem.name;
+            var className = 'context' + navItem.id;
             while (className.indexOf(' ') > -1) {
               className = className.replace(' ', '');
             }
-            %><%= className %>"><a href="<%= url %>/<%= navItem.name %>"><%= navItem.name %></a></li>
+            %><%= className %>"><a href="<%= url %>/<%= navItem.id %>"><%= navItem.name %></a></li>
         <% }); %>
       </ul>
     </header>

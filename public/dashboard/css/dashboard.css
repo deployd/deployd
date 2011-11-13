@@ -25,8 +25,7 @@ header.top-level {
   background-color: #eeeeee;
   border-bottom: 2px solid #003366;
   color: #003366;
-  height: 50px;
-  margin-bottom: 15px; }
+  height: 50px; }
   header.top-level:before, header.top-level:after {
     content: "";
     display: table; }
@@ -50,8 +49,7 @@ header.top-level {
 
 .app-admin {
   zoom: 1;
-  margin: auto;
-  padding: 0 15px; }
+  margin: auto; }
   .app-admin:before, .app-admin:after {
     content: "";
     display: table; }
@@ -59,29 +57,22 @@ header.top-level {
     clear: both; }
 
 .app-admin ul#appNav {
+  margin: 0;
   width: 20%;
-  float: left;
-  margin: 20px 0; }
+  float: left; }
   .app-admin ul#appNav, .app-admin ul#appNav ul {
     list-style-type: none;
     padding: 0; }
   .app-admin ul#appNav > li {
     display: block;
-    width: 95%;
+    width: 100%;
     min-height: 50px;
     clear: right;
     float: right; }
-    .app-admin ul#appNav > li:first-child > a {
-      -webkit-border-top-left-radius: 10px;
-      -moz-border-radius-topleft: 10px;
-      border-top-left-radius: 10px; }
     .app-admin ul#appNav > li:last-child {
       background-color: #006699;
       height: 10px;
-      min-height: 0;
-      -webkit-border-bottom-left-radius: 10px;
-      -moz-border-radius-bottomleft: 10px;
-      border-bottom-left-radius: 10px; }
+      min-height: 0; }
     .app-admin ul#appNav > li.active > a, .app-admin ul#appNav > li > a:hover {
       background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0, #00334d), color-stop(1, #0077b3));
       background-image: -moz-linear-gradient(center bottom, #00334d 0%, #0077b3 76%); }
@@ -120,16 +111,12 @@ header.top-level {
 
 .app-admin div#content {
   float: left;
-  margin: 5px 0;
   width: 80%;
   min-height: 900px;
   background-color: white;
   -webkit-box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
   -moz-box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
-  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
-  -webkit-border-radius: 10px;
-  -moz-border-radius: 10px;
-  border-radius: 10px; }
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5); }
   .app-admin div#content header {
     height: 100px;
     background-color: #ccddee; }

@@ -89,7 +89,7 @@ header.top-level {
 	border-bottom: 2px solid $base-color;
 	color: $base-color;
 	height: 50px;
-	margin-bottom: 15px;
+//	margin-bottom: 15px;
 	h1 {
 		display: inline-block;
 		font-size: 18px;
@@ -112,30 +112,30 @@ header.top-level {
 .app-admin {
 	@include clearfix;
 	margin: auto;
-	padding: 0 15px;
+//	padding: 0 15px;
 }
 .app-admin ul#appNav {
+	margin: 0;
 	width: 20%;
 	float: left;
-	margin: 20px 0;
 	&, ul {
 		list-style-type: none;
 		padding:0;
 	}
 	& > li {
 		display:block;
-		width: 95%;
+		width: 100%;
 		min-height: 50px;
 		clear: right;
 		float: right;
 		&:first-child > a {
-			@include border-radius-top-left(10px);
+//			@include border-radius-top-left(10px);
 		}
 		&:last-child {
 			background-color: $button-base-color;
 			height:10px;
 			min-height:0;
-			@include border-radius-bottom-left(10px);
+//			@include border-radius-bottom-left(10px);
 		}
 		&.active > a, & > a:hover {
 			@include background-gradient(lighten($button-base-color, 5%), darken($button-base-color, 15%));
@@ -181,12 +181,11 @@ header.top-level {
 	
 .app-admin div#content {
 	float:left;
-	margin: 5px 0;
 	width:80%;
 	min-height: 900px;
 	background-color: $content-area-color;
 	@include shadow(0, 0, 10px, 0, rgba(0,0,0,0.5));
-	@include border-radius(10px);
+//	@include border-radius(10px);
 	header {
 		height: 100px;
 		background-color: $content-header-color;
