@@ -58,6 +58,32 @@
     </form>
 
   </script>
+  <script id="plugin-datalist-template" type="html/template">
+    <table>    
+      <thead>
+        <tr>
+          <% for (attribute in dataItems[0]) { 
+            if (dataItems[0].hasOwnProperty(attribute)) {
+            %>
+              <th><%= attribute =></th>
+            <% } 
+            }
+          %>
+        </tr>
+      </thead>
+      <% _.each(dataItems, function (dataItem) { %>
+        <tr>
+          <% for (column in dataItem) {
+            if (dataItem.hasOwnProperty(column)) { %>
+              <td><%= dataItem.column %></td>
+          <%  }
+          } %>
+          
+        </tr>
+      <% });%>
+    </table>
+    
+  </script>
   <script id="plugin-detail-template" type="html/template">
     <header>
       <h2>
@@ -108,6 +134,7 @@
     // model
     .script(m + 'app.js')
     .script(m + 'list.js')
+    .script(m + 'data-list.js')
     .script(m + 'plugin.js')
     .script(m + 'search.js')
     .script(m + 'dashboard.js')

@@ -20,6 +20,7 @@ window.PluginView = View.extend({
 	  if (typeof modelContext !== "undefined") {
 	    output =  modelContext.helper_text || "<em>No overview text</em>";
 	    
+	    //If there's a form, then implement the form view/template
 	    if (typeof modelContext["form"] !== "undefined") {
 	      $("<div />").addClass("plugin-form").appendTo($(this.el).find(".substance"));
 	      var pluginFormModel = new FormModel(modelContext["form"]);
@@ -29,14 +30,31 @@ window.PluginView = View.extend({
 	      });
 	      pluginFormView.render();
   	  }
-	  }
-	  else {
-	    output = "No valid context to display";
+  	  
+  	  //If there's a list, implement the list view/template
+  	  if (typeof modelContext["list"] !== "undefined") {
+  	    var _self = this;
+  	    $("<div />").addClass("plugin-list").appendTo($(this.el).find(".substance"));
+  	    var dataListCollection = new DataListCollection();
+  	    dataListCollection.fetch({
+  	      success: function (collection, response) {
+  	        console.log("Successful response of collection: " + JSON.stringify(response));
+  	        $(".plugin-list").append(JSON.stringify(response));
+  	      }
+  	    });
+  	    //TODO: Create DataListView
+  	    /*var pluginListView = new DataListView({
+  	      el: $(this.el).find(".substance > .plugin-list"),
+  	      model: pluginListModel
+  	    });
+  	    pluginListView.render();
+  	    pluginListModel.bind("all", pluginListView.render);
+  	    pluginListModel.fetch();*/
+  	  }
 	  }
 	  
 	  var className = "context" + this.contextID;
 	  
-    // $(this.el).find(".substance").empty().html(output);
 	  $(this.el).find("ul.plugin-nav > li.active").removeClass("active");
 	  $(this.el).find("ul.plugin-nav > li." + className).addClass("active");
 	}
