@@ -17,13 +17,12 @@ $tab-font-color: $base-color;
 $tab-active-font-color: $base-color;*/
 /* Blue Theme */
 body {
-  background-color: white;
+  background-color: #eeeeee;
   font-family: Helvetica, Arial, sans-serif; }
 
 header.top-level {
   zoom: 1;
   background-color: #eeeeee;
-  border-bottom: 2px solid #003366;
   color: #003366;
   height: 50px; }
   header.top-level:before, header.top-level:after {
@@ -69,16 +68,12 @@ header.top-level {
     min-height: 50px;
     clear: right;
     float: right; }
-    .app-admin ul#appNav > li:last-child {
-      background-color: #006699;
-      height: 10px;
-      min-height: 0; }
     .app-admin ul#appNav > li.active > a, .app-admin ul#appNav > li > a:hover {
-      background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0, #00334d), color-stop(1, #0077b3));
-      background-image: -moz-linear-gradient(center bottom, #00334d 0%, #0077b3 76%); }
+      background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0, #0077b3), color-stop(1, #005580));
+      background-image: -moz-linear-gradient(center bottom, #0077b3 0%, #005580 76%); }
     .app-admin ul#appNav > li > a {
-      background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0, #004466), color-stop(1, #0088cc));
-      background-image: -moz-linear-gradient(center bottom, #004466 0%, #0088cc 76%);
+      background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0, #005580), color-stop(1, #0077b3));
+      background-image: -moz-linear-gradient(center bottom, #005580 0%, #0077b3 76%);
       display: block;
       border-bottom: 1px solid #00111a;
       color: #eeeeee;
@@ -113,10 +108,7 @@ header.top-level {
   float: left;
   width: 80%;
   min-height: 900px;
-  background-color: white;
-  -webkit-box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
-  -moz-box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
-  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5); }
+  background-color: white; }
   .app-admin div#content header {
     height: 100px;
     background-color: #ccddee; }
@@ -145,11 +137,13 @@ header.top-level {
           padding: 0 8px;
           color: white;
           text-decoration: none;
-          font-weight: bold;
-          font-size: 12px;
+          font-weight: normal;
+          font-size: 14px;
           line-height: 30px; }
         .app-admin div#content header ul li.active a, .app-admin div#content header ul li a:hover {
           background-color: white;
           color: #003366; }
+        .app-admin div#content header ul li.active a {
+          font-weight: bold; }
   .app-admin div#content .substance {
     padding: 15px; }

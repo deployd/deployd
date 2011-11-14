@@ -7,6 +7,7 @@ window.PluginView = View.extend({
 	showContext: function (context) {
 	  //Method used to show any configurable object in a plugin, anything other than "overview"
 	  this.contextID = context;
+	  $(this.el).find(".substance").empty();
 	  var contexts = this.model.get("configurable_objects"), modelContext, output;
 
 	  $.each(contexts, function (i, val) {
@@ -20,7 +21,13 @@ window.PluginView = View.extend({
 	    output =  modelContext.helper_text || "<em>No overview text</em>";
 	    
 	    if (typeof modelContext["form"] !== "undefined") {
-        output += this.formTemplate(modelContext["form"]);
+	      $("<div />").addClass("plugin-form").appendTo($(this.el).find(".substance"));
+	      var pluginFormModel = new FormModel(modelContext["form"]);
+	      var pluginFormView = new FormView({
+	        el: $(this.el).find(".substance > .plugin-form"),
+	        model: pluginFormModel
+	      });
+	      pluginFormView.render();
   	  }
 	  }
 	  else {
@@ -29,7 +36,7 @@ window.PluginView = View.extend({
 	  
 	  var className = "context" + this.contextID;
 	  
-	  $(this.el).find(".substance").empty().html(output);
+    // $(this.el).find(".substance").empty().html(output);
 	  $(this.el).find("ul.plugin-nav > li.active").removeClass("active");
 	  $(this.el).find("ul.plugin-nav > li." + className).addClass("active");
 	}
