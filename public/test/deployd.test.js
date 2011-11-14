@@ -2,13 +2,14 @@
 beforeEach(function() {
   this.addMatchers({
     toExist: function() { return !!this.actual; },
-    toNotExist: function() { return !this.actual; }
+    toNotExist: function() { return !this.actual; },
+    toContainOne: function() { return this.actual && (this.actual.length === 1); }
   });
 });
 
 // sample data
 var user = {
-  uid: 'skawful@gmail.com',
+  email: 'skawful@gmail.com',
   name: 'Ritchie Martori',
   password: '1234'
 };
@@ -16,7 +17,6 @@ var user = {
 var auth;
 
 var app = {
-  host: 'my-testing-app.skawful@gmail.com',
   name: 'My Testing App'
 };
 
@@ -34,7 +34,7 @@ var tests = {
   },
   
   '2. find user by id': {
-    route: '/user/' + user.uid,
+    route: '/user/' + user.email,
     expect: {
       _id: 'toExist',
       password: 'toNotExist',
@@ -59,7 +59,7 @@ var tests = {
   '4. get current user': {
     route: '/me',
     expect: {
-      uid: user.uid,
+      email: user.email,
       name: user.name,
       password: 'toNotExist',
       errors: 'toNotExist'
@@ -109,21 +109,35 @@ var tests = {
     }
   },
   
-  '9. get app config': {
-    route: '/settings/app',
-    expect: {
-      _id: 'toExist',
-      db: 'toExist',
-      'db-host': 'toExist',
-      port: 'toExist'
-    }
-  },
-  
-  '10. validate users': {
+  '9. validate users': {
     route: '/user',
     data: {asdf: 1234, uid: {foo: 'bar'}, password: 1111},
     expect: {
       errors: 'toExist'
+    }
+  },
+  
+  '10. add a user to group': {
+    route: '/user/test@user.com/group',
+    data: {group: 'author'},
+    expect: {
+      group: 'author'
+    }
+  },
+  
+  '11. only 1 user per email': {
+    route: '/search/users', 
+    data: {email: user.email},
+    expect: {
+      results: 'toContainOne'
+    }
+  },
+  
+  '12. only 1 app per name': {
+    route: '/search/apps', 
+    data: {name: app.name},
+    expect: {
+      results: 'toContainOne'
     }
   }
   
