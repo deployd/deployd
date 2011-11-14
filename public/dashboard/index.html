@@ -38,23 +38,47 @@
         <% }); %>
       </ul>
     </li>
-    <li></li>
+    <li>
+      <a>Reference</a>
+    </li>
   </script>
   <script id="model-detail-template" type="html/template">
     <div><%= name %></div>
   </script>
   <script id="plugin-form-template" type="html/template">
-    <div class="plugin-form">
-    <form action="<%= action %>" method="<%= method %>">
+    
+    <form action="<%= action %>" method="<%= method %>" onsubmit="return false;">
     <% _.each(fields, function (form_field) { %>
       <div class="form-row">
-        <label for="<%= form_field.name %>"><%= form_field.name %></label>
+        <label for="<%= form_field.name %>"><%= form_field.label %></label>
         <input name="<%= form_field.name %>" type="<%= form_field.type %>" <% if (form_field.required) { %> required="true" <%; } %> />
       </div>
     <% }); %>
     <input type="submit" value="Submit" />
     </form>
-    </div>
+
+  </script>
+  <script id="plugin-datalist-template" type="html/template">
+    <table>    
+      <thead>
+        <tr>
+          <% _.each(dataItems[0].attributes, function (value, key, list) {
+            %> <th><%= key %></th> <%
+          });%>
+              
+        </tr>
+      </thead>
+      <% _.each(dataItems, function (dataItem) { %>
+        <tr>
+          <% _.each(dataItem.attributes, function(value, key, list){
+            %><td><%= value %></td><%
+          });%>
+              
+          
+        </tr>
+      <% });%>
+    </table>
+    
   </script>
   <script id="plugin-detail-template" type="html/template">
     <header>
@@ -65,11 +89,11 @@
         <li class="active"><a href="<%= url %>">Overview</a></li>
         <% _.each(configurable_objects, function (navItem) { %>
           <li class="<% 
-            var className = navItem.name;
+            var className = 'context' + navItem.id;
             while (className.indexOf(' ') > -1) {
               className = className.replace(' ', '');
             }
-            %><%= className %>"><a href="<%= url %>/<%= navItem.name %>"><%= navItem.name %></a></li>
+            %><%= className %>"><a href="<%= url %>/<%= navItem.id %>"><%= navItem.name %></a></li>
         <% }); %>
       </ul>
     </header>
@@ -106,16 +130,19 @@
     // model
     .script(m + 'app.js')
     .script(m + 'list.js')
-    .script(m + 'model.js')
+    .script(m + 'data-list.js')
     .script(m + 'plugin.js')
     .script(m + 'search.js')
     .script(m + 'dashboard.js')
+    .script(m + 'form.js')
+    .script(m + 'model.js')
     // partials
     .script(v + 'view.js')
     .script(p + 'app-view.js')
     .script(p + 'list-view.js')
     .script(p + 'model-view.js')
     .script(p + 'plugin-view.js')
+    .script(p + 'form-view.js')
     // views
     .script(v + 'dashboard-view.js')
     .script(v + 'app-nav-view.js')

@@ -18,7 +18,7 @@ $tab-font-color: $base-color;
 $tab-active-font-color: $base-color;*/
 
 /* Blue Theme */
-$body-color: #fff;
+$body-color: #eee;
 $base-color: #036;
 $contrast-color: #eee;
 $content-header-color: #cde;
@@ -86,10 +86,8 @@ body {
 header.top-level {
 	@include clearfix;
 	background-color: $contrast-color;
-	border-bottom: 2px solid $base-color;
 	color: $base-color;
 	height: 50px;
-	margin-bottom: 15px;
 	h1 {
 		display: inline-block;
 		font-size: 18px;
@@ -112,36 +110,26 @@ header.top-level {
 .app-admin {
 	@include clearfix;
 	margin: auto;
-	padding: 0 15px;
 }
 .app-admin ul#appNav {
+	margin: 0;
 	width: 20%;
 	float: left;
-	margin: 20px 0;
 	&, ul {
 		list-style-type: none;
 		padding:0;
 	}
 	& > li {
 		display:block;
-		width: 95%;
+		width: 100%;
 		min-height: 50px;
 		clear: right;
 		float: right;
-		&:first-child > a {
-			@include border-radius-top-left(10px);
-		}
-		&:last-child {
-			background-color: $button-base-color;
-			height:10px;
-			min-height:0;
-			@include border-radius-bottom-left(10px);
-		}
 		&.active > a, & > a:hover {
-			@include background-gradient(lighten($button-base-color, 5%), darken($button-base-color, 15%));
+			@include background-gradient(darken($button-base-color, 5%), lighten($button-base-color, 5%));
 		}
 		& > a {
-			@include background-gradient(lighten($button-base-color, 10%), darken($button-base-color, 10%));
+			@include background-gradient(lighten($button-base-color, 5%), darken($button-base-color, 5%));
 			display: block;
 			border-bottom: 1px solid darken($button-base-color, 25%);
 			color: $contrast-color;
@@ -181,12 +169,9 @@ header.top-level {
 	
 .app-admin div#content {
 	float:left;
-	margin: 5px 0;
 	width:80%;
 	min-height: 900px;
 	background-color: $content-area-color;
-	@include shadow(0, 0, 10px, 0, rgba(0,0,0,0.5));
-	@include border-radius(10px);
 	header {
 		height: 100px;
 		background-color: $content-header-color;
@@ -219,13 +204,16 @@ header.top-level {
 					padding:0 8px;
 					color: $tab-font-color;
 					text-decoration:none;
-					font-weight: bold;
-					font-size: 12px;
+					font-weight: normal;
+					font-size: 14px;
 					line-height: 30px;
 				}
 				&.active a, a:hover {
 					background-color: $tab-active-color;
 					color: $tab-active-font-color;
+				}
+				&.active a {
+					font-weight: bold;
 				}
 			}
 		}
