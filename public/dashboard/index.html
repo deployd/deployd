@@ -62,22 +62,18 @@
     <table>    
       <thead>
         <tr>
-          <% for (attribute in dataItems[0]) { 
-            if (dataItems[0].hasOwnProperty(attribute)) {
-            %>
-              <th><%= attribute =></th>
-            <% } 
-            }
-          %>
+          <% _.each(dataItems[0].attributes, function (value, key, list) {
+            %> <th><%= key %></th> <%
+          });%>
+              
         </tr>
       </thead>
       <% _.each(dataItems, function (dataItem) { %>
         <tr>
-          <% for (column in dataItem) {
-            if (dataItem.hasOwnProperty(column)) { %>
-              <td><%= dataItem.column %></td>
-          <%  }
-          } %>
+          <% _.each(dataItem.attributes, function(value, key, list){
+            %><td><%= value %></td><%
+          });%>
+              
           
         </tr>
       <% });%>

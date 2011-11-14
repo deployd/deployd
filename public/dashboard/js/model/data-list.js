@@ -1,12 +1,15 @@
 window.DataListModel = Backbone.Model.extend();
 
 window.DataListCollection = Backbone.Collection.extend({
-  sourceUrl: "/users",
   model: DataListModel,
-  setUrl: function (url) {
-    this.url = url;
-  },
-  url: function () {
-    return this.sourceUrl;
+  parse: function (response) {
+    //Filter out the objects with an error message.
+    var _parsedModels = [];
+    for (var i=0, iLength = response.length; i<iLength; i++) {
+      if (typeof response[i].errors === "undefined") {
+        _parsedModels.push(response[i]);
+      }
+    }
+    return _parsedModels;
   }
 });

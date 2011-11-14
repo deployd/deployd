@@ -33,23 +33,20 @@ window.PluginView = View.extend({
   	  
   	  //If there's a list, implement the list view/template
   	  if (typeof modelContext["list"] !== "undefined") {
-  	    var _self = this;
+  	    var _self = this, detailListTemplate;
   	    $("<div />").addClass("plugin-list").appendTo($(this.el).find(".substance"));
   	    var dataListCollection = new DataListCollection();
+  	    detailListTemplate = _.template($("#plugin-datalist-template").html());
+  	    
+        dataListCollection.url = modelContext.source;
   	    dataListCollection.fetch({
   	      success: function (collection, response) {
   	        console.log("Successful response of collection: " + JSON.stringify(response));
-  	        $(".plugin-list").append(JSON.stringify(response));
+            // $(".plugin-list").append(JSON.stringify(collection.models));
+            console.log("Collection models: " + JSON.stringify(dataListCollection.models));
+  	        $(".plugin-list").append(detailListTemplate({dataItems: dataListCollection.models}));
   	      }
-  	    });
-  	    //TODO: Create DataListView
-  	    /*var pluginListView = new DataListView({
-  	      el: $(this.el).find(".substance > .plugin-list"),
-  	      model: pluginListModel
-  	    });
-  	    pluginListView.render();
-  	    pluginListModel.bind("all", pluginListView.render);
-  	    pluginListModel.fetch();*/
+  	    });  	    
   	  }
 	  }
 	  
