@@ -38,6 +38,12 @@ var Router = Backbone.Router.extend({
       this.appNavView.render();
     }, this);
 
+    var settings = new Settings();
+    settings.fetch({
+      success: function (model, response) {
+        console.log(model.toJSON());
+      }
+    });
   },
 
 // examples
