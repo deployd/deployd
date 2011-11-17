@@ -80,6 +80,35 @@
     </table>
     
   </script>
+  <script id="plugin-model-template" type="html/template">
+    <h2>Model Permissions</h2>
+    <p>Set what permissions different groups will have on instances of this model.</p>
+    <table class="role-permissions-grid">
+      <thead>
+        <th width="20%"><em>Group</em></th>
+        <th width="20%">Create</th>
+        <th width="20%">Read</th>
+        <th width="20%">Update</th>
+        <th width="20%">Delete</th>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Public</td>
+          <td><input name="group[Public][Create]" type="checkbox" /></td>
+          <td><input name="group[Public][Read]" type="checkbox" /></td>
+          <td><input name="group[Public][Update]" type="checkbox" /></td>
+          <td><input name="group[Public][Delete]" type="checkbox" /></td>
+        </tr>
+        <tr>
+          <td>Object Owner</td>
+          <td><input name="group[Public][Create]" type="checkbox" /></td>
+          <td><input name="group[Public][Read]" type="checkbox" /></td>
+          <td><input name="group[Public][Update]" type="checkbox" /></td>
+          <td><input name="group[Public][Delete]" type="checkbox" /></td>
+        </tr>
+      </tbody>
+    </table>
+  </script>
   <script id="plugin-detail-template" type="html/template">
     <header>
       <h2>
