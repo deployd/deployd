@@ -92,20 +92,15 @@
         <th width="20%">Delete</th>
       </thead>
       <tbody>
-        <tr>
-          <td>Public</td>
-          <td><input name="group[Public][Create]" type="checkbox" /></td>
-          <td><input name="group[Public][Read]" type="checkbox" /></td>
-          <td><input name="group[Public][Update]" type="checkbox" /></td>
-          <td><input name="group[Public][Delete]" type="checkbox" /></td>
-        </tr>
-        <tr>
-          <td>Object Owner</td>
-          <td><input name="group[Public][Create]" type="checkbox" /></td>
-          <td><input name="group[Public][Read]" type="checkbox" /></td>
-          <td><input name="group[Public][Update]" type="checkbox" /></td>
-          <td><input name="group[Public][Delete]" type="checkbox" /></td>
-        </tr>
+        <% _.each(groupPermissions, function (group) { %>
+          <tr>
+            <td><%= group.groupName %></td>
+            <td><input name="group[<%= group.groupID %>]" type="checkbox" value="create" <% if (group.create === true) {%> checked  <%}%> /></td>
+            <td><input name="group[<%= group.groupID %>]" type="checkbox" value="read" <% if (group.read === true) {%> checked  <%}%> /></td>
+            <td><input name="group[<%= group.groupID %>]" type="checkbox" value="update" <% if (group.update === true) {%> checked  <%}%> /></td>
+            <td><input name="group[<%= group.groupID %>]" type="checkbox" value="del" <% if (group.del === true) {%> checked  <%}%> /></td>
+          </tr>
+        <% }); %>
       </tbody>
     </table>
   </script>

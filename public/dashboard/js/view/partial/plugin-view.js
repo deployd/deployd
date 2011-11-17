@@ -3,6 +3,7 @@ window.PluginView = View.extend({
 	item: 'plugin-item-template',
 	template: 'plugin-detail-template',
 	formTemplate: _.template($("#plugin-form-template").html()),
+	schemaTemplate: _.template($("#plugin-model-template").html()),
 	
 	showContext: function (context) {
 	  //Method used to show any configurable object in a plugin, anything other than "overview"
@@ -41,13 +42,43 @@ window.PluginView = View.extend({
         dataListCollection.url = modelContext.source;
   	    dataListCollection.fetch({
   	      success: function (collection, response) {
-  	        console.log("Successful response of collection: " + JSON.stringify(response));
             // $(".plugin-list").append(JSON.stringify(collection.models));
-            console.log("Collection models: " + JSON.stringify(dataListCollection.models));
   	        $(".plugin-list").append(detailListTemplate({dataItems: dataListCollection.models}));
   	      }
   	    });  	    
   	  }
+  	  
+      if (typeof modelContext["model_description"] !== "undefined") {
+        //TODO: Create a view and model for this.
+  	    $(".substance").append(this.schemaTemplate({
+  	      groupPermissions: [
+    	      {
+  	          groupID: "0",
+  	          groupName: "Public",
+  	          create: false,
+  	          read: true,
+  	          update: false,
+              del: false
+  	        },
+  	        {
+  	          groupID: "1",
+  	          groupName: "Jeffs",
+  	          create: true,
+  	          read: true,
+  	          update: true,
+              del: false
+  	        },
+  	        {
+  	          groupID: "2",
+  	          groupName: "Object Owner",
+  	          create: true,
+  	          read: true,
+  	          update: true,
+              del: true
+  	        }
+  	      ]
+  	    }));
+      }
 	  }
 	  
 	  var className = "context" + this.contextID;
