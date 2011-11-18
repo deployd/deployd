@@ -7,11 +7,261 @@
 </head>
 
 <body>
-  <header class="top-level">
-    <h1>MyApp Dashboard</h1>
-    <a href="#" class="sign-out">sign out</a>
-  </header>
-  <section class="app-admin">
+  <div id="nav">
+		<div class="row">
+			<div class="three columns">
+				<h1>Deployd</h1>
+			</div>
+			<div class="nine columns">
+				<strong class="right">
+					<a href="">Settings</a>
+					<a href="">Your Account</a>
+					<a href="">Your Apps</a>
+					<a href="">Docs</a>
+					<a href="">Plugins</a>
+					<a href="" class="small radius nice blue button">New App</a>
+				</strong>
+			</div>
+		</div>
+	</div>
+	
+	<!-- container -->
+	<div class="container">
+		
+		<div id="bread" class="row">
+			<div class="twelve columns">
+				<h4>
+					<a href="" id="app-name">My App</a>
+					>
+					<a href="" id="current-page">Users</a>
+				</h4>
+				<hr />
+			</div>
+		</div>
+		<div class="row">
+			<div id="menu" class="three columns">
+				<div class="panel">
+					<h5>Plugins</h5>
+					<div class="links">
+						<a href="" class="active">Users</a>
+						<a href="">Settings</a>
+						<a href="">Graph</a>
+						<a href="">Logs</a>
+						<a href="">Analytics</a>
+						<a href="">Email</a>
+						<a href="">Notifications</a>
+						<a href="">Facebook</a>
+						<a href="">Twitter</a>
+						<hr />
+						<a href="">My Custom Plugin</a>
+						<a href="">My Testing Plugin</a>
+						<a href="">SEO Meta</a>
+					</div>
+					<hr />
+					<p>Browse the <a href="">plugin library</a> for useful add-ons or use our plugin generator to quickly build your own.</p>
+					<a href="" class="small radius nice blue button">Create New Plugin</a>
+				</div>
+			</div>
+			<div class="nine columns">
+				<dl class="tabs">
+					<dd><a href="#simple1" class="active">Settings</a></dd>
+					<dd><a href="#simple2">Search Users</a></dd>
+				</dl>
+
+				<ul class="tabs-content" id="content">
+					<li class="active" id="simple1Tab">
+						<div class="row">
+							<div class="six columns">
+								<div class="panel">
+									<h6>User Description</h6>
+									<hr />
+									<form class="description nice custom">
+										<fieldset>
+												<input class="input-text" type="text" value="email">
+												<span>is a</span>
+												<select>
+												  <option>string</option>
+												  <option SELECTED>email</option>
+												  <option>password</option>
+												  <option>boolean</option>
+												  <option>binary</option>
+												</select>
+												<label for="unique1">
+												  <input type="checkbox" id="unique1" style="display: none;">
+												  <span class="custom checkbox"></span> unique in this collection
+												</label>
+										</fieldset>
+										<fieldset>
+												<input class="input-text" type="text" value="password">
+												<span>is a</span>
+												<select>
+												  <option>string</option>
+												  <option>email</option>
+												  <option SELECTED>password</option>
+												  <option>boolean</option>
+												  <option>binary</option>
+												</select>
+												<label for="unique1">
+												  <input type="checkbox" id="unique1" style="display: none;">
+												  <span class="custom checkbox"></span> unique in this collection
+												</label>
+										</fieldset>
+										<fieldset>
+												<input class="input-text" type="text" value="name">
+												<span>is a</span>
+												<select>
+												  <option SELECTED>string</option>
+												  <option>email</option>
+												  <option>password</option>
+												  <option>boolean</option>
+												  <option>binary</option>
+												</select>
+												<label for="unique1">
+												  <input type="checkbox" id="unique1" style="display: none;">
+												  <span class="custom checkbox"></span> unique in this collection
+												</label>
+										</fieldset>
+										<a href="#" class="nice small radius blue button">Add New Property</a>
+									</form>
+								</div>
+							</div>
+							<div class="six columns">
+							<div class="panel">
+								<h6>User Groups</h6>
+								<hr />
+								<form class="roles nice custom">
+									<fieldset>
+										<input class="input-text" type="text" placeholder="Group Name" value="Authors">
+										<input class="input-text" type="text" placeholder="Group Name" value="Editors">
+										<input class="input-text" type="text" placeholder="Group Name" value="Banned">
+										<input class="input-text" type="text" placeholder="New Group Name">
+									</fieldset>
+								</form>
+							</div>
+						</div>
+						</div>
+						<div class="row">
+							<div class="twelve columns">
+								<div class="panel">
+									<h6>User Permissions</h6>
+									<hr />
+									<form class="description nice custom">
+										<fieldset>
+												<input class="input-text" type="text" value="email">
+												<span>can be <strong>seen</strong> by</span>
+												<select>
+												  <option>You</option>
+												  <option>Authors</option>
+												  <option>Editors</option>
+												  <option SELECTED>Everyone</option>
+												</select>
+												<span> and is <strong>editable</strong> by</span>
+												<select>
+												  <option>You</option>
+												  <option>Authors</option>
+												  <option>Editors</option>
+												  <option>Everyone</option>
+												</select>
+										</fieldset>
+										<fieldset>
+												<input class="input-text" type="text" value="password">
+												<span>is <strong>encrypted</strong> and cannot be changed by anyone but the user.</span>
+										</fieldset>
+										<fieldset>
+												<input class="input-text" type="text" value="name">
+												<span>can be <strong>seen</strong> by</span>
+												<select>
+												  <option>You</option>
+												  <option>Authors</option>
+												  <option>Editors</option>
+												  <option SELECTED>Everyone</option>
+												</select>
+												<span> and is <strong>editable</strong> by</span>
+												<select>
+												  <option>You</option>
+												  <option>Authors</option>
+												  <option>Editors</option>
+												  <option>Everyone</option>
+												</select>
+										</fieldset>
+										<fieldset>
+												<select>
+												  <option>You</option>
+												  <option>Authors</option>
+												  <option>Editors</option>
+												  <option SELECTED>Everyone</option>
+												  <option SELECTED>Its creator</option>
+												</select>
+												<span> can <strong>delete</strong> this.</span>
+										</fieldset>
+										<a href="#" class="nice small radius blue button">Add New Property</a>
+									</form>
+								</div>
+							</div>
+						</div>
+					</li>
+					<li id="simple2Tab">
+						<form class="nice">
+							<input class="large input-text search" type="text" placeholder="Search Users" />
+						</form>
+						<table>
+							<thead>
+								<tr>
+									<th>Email</th>
+									<th>Name</th>
+									<th>Password</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>skawful@gmail.com</td>
+									<td>Ritchie Martori</td>
+									<td class="password">encrypted</td>
+								</tr>
+								<tr>
+									<td>bob@gmail.com</td>
+									<td>Bob Joeson</td>
+									<td class="password">encrypted</td>
+								</tr>
+								<tr>
+									<td>dood@gmail.com</td>
+									<td>Guy Man</td>
+									<td class="password">encrypted</td>
+								</tr>
+							</tbody>
+						</table>
+
+						
+						<ul class="pagination">
+						  <li class="unavailable"><a href="">&laquo;</a></li>
+						  <li class="current"><a href="">1</a></li>
+						  <li><a href="">2</a></li>
+						  <li><a href="">3</a></li>
+						  <li><a href="">4</a></li>
+						  <li class="unavailable"><a href="">&hellip;</a></li>
+						  <li><a href="">12</a></li>
+						  <li><a href="">13</a></li>
+						  <li><a href="">&raquo;</a></li>
+						</ul>
+					</li>
+					<li id="simple3Tab">
+					
+					</li>
+				</ul>
+			</div>
+		</div>
+		
+	</div>
+	<!-- container -->
+	
+	
+	
+	
+	
+	
+	
+	
+  <!--<section class="app-admin">
     <ul role="navigation" id="appNav">
       <li><a href="#/">Config</a></li>
       <li><a href="#/plugins">Plugins</a>
@@ -22,13 +272,21 @@
       <li><a href="#/models">Models</a></li>
     </ul>
     <div id="content"><strong>Loading...</strong></div>
-  </section>
+  </section>-->
   
   <!-- PARTIAL TEMPLATES -->
+
+  <script id="nav-item-template" type="html/template">
+    <% _.each(plugins, function (value, key, list) { %>
+      <a href="/dashboard/#/plugins/<%= key %>"> <%= key %> </a>  
+    <%}); %>
+  </script>
+
 
   <script id="app-detail-template" type="html/template">
     <div>App Name: <%= name %></div>
   </script>
+
   <script id="app-nav-template" type="html/template">
     <li><a href="#/">Config</a></li>
     <li><a href="#/plugins">Plugins</a>
@@ -151,6 +409,7 @@
     .script(l + 'backbone.js')
     .script(l + 'json.min.js')
     .script(l + 'jquery.cookie.js')
+    .script(l + 'foundation.js')
     // model
     .script(m + 'app.js')
     .script(m + 'list.js')

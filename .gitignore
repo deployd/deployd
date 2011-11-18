@@ -3,3 +3,6 @@ lib-cov
 
 # dev testing
 bin/test
+
+.DS_Store
+.sass-cache/

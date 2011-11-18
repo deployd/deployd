@@ -19,29 +19,13 @@ var Router = Backbone.Router.extend({
     Backbone.emulateHTTP = true;
     dashboard = new Dashboard();
     this.stage = new DashboardView({model: dashboard, el: $('#content')});
-    
-    window.plugins = new Plugins;
-    plugins.fetch({
-      success: loader.loaded
-    });
-    window.models = new Models;
-    models.fetch({
-      success: loader.loaded
-    });
-    window.appNav = new Backbone.Model({plugins: plugins, models: models});
-    this.appNavView = new AppNavView({model: appNav, el: $('#appNav')});
-    this.appNavView.render();
-    plugins.bind("all",function () {
-      this.appNavView.render();
-    }, this);
-    models.bind("all",function () {
-      this.appNavView.render();
-    }, this);
 
     var settings = new Settings();
     settings.fetch({
       success: function (model, response) {
         console.log(model.toJSON());
+        var navTemplate = _.template($("#nav-item-template").html());
+        $("#menu > .panel > .links").empty().html(navTemplate(model.toJSON()));
       }
     });
   },
@@ -98,6 +82,7 @@ var Router = Backbone.Router.extend({
   
   detail: function(type, id, context) {
     //TODO: Handle the context passed in somehow
+    console.log("Detail()");
     var model = window[type].get(id);
     model.set({type: type});
     this.stage.content = new window[this.views[type]]({model: model});

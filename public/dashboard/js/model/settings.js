@@ -1,23 +1,33 @@
 window.Settings = Backbone.Model.extend({
   url: "/settings",
   parse: function (response) {
-    var plugins = {}, app = [];
+    var plugins, app = [];
     
-    //First generate the plugins hash
-    _.each(response, function (item) {
-      if (typeof item !== "undefined" 
-        && typeof item.plugin !== "undefined" 
-        && typeof item.name !== "undefined") {
-          if (typeof plugins[item.plugin] === "undefined") {
-            plugins[item.plugin] = [];
-          }
-          plugins[item.plugin].push(item);
-      }
-      else if (item.app) {
-        //TODO: parse app settings as well
-      }
+    plugins = _.groupBy(response, function(obj) {
+      return obj.plugin;
     });
-        
+    delete plugins["undefined"];
+
+    
+    /*
+      Model should look like...
+      {
+        plugins: [
+          {
+            name: "graph",
+            _id: 123,
+            settings: [
+              {
+                name: "whatever",
+                _id: 234,
+                ...
+              }
+            ]
+          }
+        ]
+      }
+    */
+    
     return { plugins: plugins, app: app };
   }
 });
