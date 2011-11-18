@@ -41,21 +41,11 @@
 		<div class="row">
 			<div id="menu" class="three columns">
 				<div class="panel">
+				  <h5>App Config</h5>
+          <hr />
 					<h5>Plugins</h5>
 					<div class="links">
-						<a href="" class="active">Users</a>
-						<a href="">Settings</a>
-						<a href="">Graph</a>
-						<a href="">Logs</a>
-						<a href="">Analytics</a>
-						<a href="">Email</a>
-						<a href="">Notifications</a>
-						<a href="">Facebook</a>
-						<a href="">Twitter</a>
-						<hr />
-						<a href="">My Custom Plugin</a>
-						<a href="">My Testing Plugin</a>
-						<a href="">SEO Meta</a>
+					  <em>No Plugins Loaded</em>
 					</div>
 					<hr />
 					<p>Browse the <a href="">plugin library</a> for useful add-ons or use our plugin generator to quickly build your own.</p>
@@ -63,11 +53,7 @@
 				</div>
 			</div>
 			<div class="nine columns">
-				<dl class="tabs">
-					<dd><a href="#simple1" class="active">Settings</a></dd>
-					<dd><a href="#simple2">Search Users</a></dd>
-				</dl>
-
+        <!--tabs-nav-template goes here-->
 				<ul class="tabs-content" id="content">
 					<li class="active" id="simple1Tab">
 						<div class="row">
@@ -232,17 +218,6 @@
 						</table>
 
 						
-						<ul class="pagination">
-						  <li class="unavailable"><a href="">&laquo;</a></li>
-						  <li class="current"><a href="">1</a></li>
-						  <li><a href="">2</a></li>
-						  <li><a href="">3</a></li>
-						  <li><a href="">4</a></li>
-						  <li class="unavailable"><a href="">&hellip;</a></li>
-						  <li><a href="">12</a></li>
-						  <li><a href="">13</a></li>
-						  <li><a href="">&raquo;</a></li>
-						</ul>
 					</li>
 					<li id="simple3Tab">
 					
@@ -253,32 +228,49 @@
 		
 	</div>
 	<!-- container -->
-	
-	
-	
-	
-	
-	
-	
-	
-  <!--<section class="app-admin">
-    <ul role="navigation" id="appNav">
-      <li><a href="#/">Config</a></li>
-      <li><a href="#/plugins">Plugins</a>
-        <ul>
-          <li><a href="#/plugins/1">Users</a></li>
-        </ul>
-      </li>
-      <li><a href="#/models">Models</a></li>
-    </ul>
-    <div id="content"><strong>Loading...</strong></div>
-  </section>-->
   
   <!-- PARTIAL TEMPLATES -->
-
+  <script id="tabs-nav-template" type="html/template">
+    //Expects model: {baseHref: "/dashboard/#/plugins/graph?section=", navItems: [{name: "linkone", active: true}, {name: "linktwo"}]}
+    <dl class="tabs">
+      <% _.each(navItems, function (val, key, list) {
+        %> <dd><a href="<%= baseHref %><%= val.name %>" <% if (val.active) { %> class="active" <% } %>><%= val.name %></a></dd> <%
+      });%>
+  	</dl>	
+  </script>
+  <script id="pagination-template" type="html/template">
+    //Untested template
+    //Implement with model like so: {numPages: Int, currPage: Int, pageUrl: "/dashboard/#/plugins/id/context?page="}
+    <ul class="pagination">
+      <% 
+      var i = 1;
+      if (currPage == 1) {
+        %> <li class="unavailable">&laquo;</li> <%
+      }
+      else {
+        %> <li><a href="<%= pageUrl %>1">&laquo;</a></li> <%
+      }
+      _(numPages).times(function () {
+        //TODO: Add an elipsis if it's beyond a certain number of pages
+        if (i === currPage) {
+          %> <li class="current"><%= i %></li> <%
+        }
+        else {
+          %> <li><a href="<%= pageUrl %><%= i %>"><%= i %></a></li> <%
+        }
+      });
+      if (numPages == currPage) { %>
+        <li class="unavailable">&raquo;</li>
+      <% }
+      else { %>
+        <li><a href="<%= pageUrl %><%= numPages %>">&raquo;</a></li>
+      <% }		  
+		</ul>
+		
+  </script>
   <script id="nav-item-template" type="html/template">
     <% _.each(plugins, function (value, key, list) { %>
-      <a href="/dashboard/#/plugins/<%= key %>"> <%= key %> </a>  
+      <a href="/dashboard/#/plugins/<%= key %>"> <%= key %> </a>
     <%}); %>
   </script>
 

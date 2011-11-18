@@ -1,31 +1,18 @@
-var loader = {
-  modelsToLoad: 2,
-  modelsLoaded: 1,
-  loaded: function () {
-    if (loader.modelsLoaded == loader.modelsToLoad) {
-      Backbone.history.start();
-    }
-    else {
-      loader.modelsLoaded++;
-    }
-  }
-};
-
 var Router = Backbone.Router.extend({
   initialize: function() {
     // prevent caching
     $.ajaxSetup({ cache: false });
     // allows to send restful calls over AJAX
     Backbone.emulateHTTP = true;
-    dashboard = new Dashboard();
-    this.stage = new DashboardView({model: dashboard, el: $('#content')});
+    /*dashboard = new Dashboard();
+    this.stage = new DashboardView({model: dashboard, el: $('#content')});*/
 
     var settings = new Settings();
     settings.fetch({
       success: function (model, response) {
-        console.log(model.toJSON());
         var navTemplate = _.template($("#nav-item-template").html());
         $("#menu > .panel > .links").empty().html(navTemplate(model.toJSON()));
+        Backbone.history.start();
       }
     });
   },
@@ -53,6 +40,7 @@ var Router = Backbone.Router.extend({
   },
 
   routes: {
+    '/plugins/:id' : 'plugin',
     '/:type': 'list',
     '/:type/:id': 'detail',
     '/:type/:id/:context': 'detail',
@@ -67,8 +55,11 @@ var Router = Backbone.Router.extend({
     this.stage.content.model.fetch();
     this.stage.render();
   },
-  
+  plugin: function () {
+    console.log("Plugin");
+  },
   list: function(type) {
+    console.log("list");
     if(!type) {
       return this.config();
     }
@@ -83,13 +74,13 @@ var Router = Backbone.Router.extend({
   detail: function(type, id, context) {
     //TODO: Handle the context passed in somehow
     console.log("Detail()");
-    var model = window[type].get(id);
+    var model = new window[this.models[type]];
     model.set({type: type});
     this.stage.content = new window[this.views[type]]({model: model});
     // model.fetch();
     this.stage.render();
     if (typeof context !== "undefined") this.stage.content.showContext(context);
-  }
+  },
 
   // IDEA: be able to paste a deployed route with /debug and see information about it
   // debug: function() {
@@ -100,3 +91,4 @@ var Router = Backbone.Router.extend({
 
 // boot the application
 new Router();
+

@@ -8,26 +8,6 @@ window.Settings = Backbone.Model.extend({
     });
     delete plugins["undefined"];
 
-    
-    /*
-      Model should look like...
-      {
-        plugins: [
-          {
-            name: "graph",
-            _id: 123,
-            settings: [
-              {
-                name: "whatever",
-                _id: 234,
-                ...
-              }
-            ]
-          }
-        ]
-      }
-    */
-    
     return { plugins: plugins, app: app };
   }
 });
