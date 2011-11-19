@@ -67,7 +67,7 @@ var tests = {
   },
   
   '5. searching users': {
-    route: '/search?type=users&find={"uid": "skawful@gmail.com"}',
+    route: '/search?type=users&find={"email": "skawful@gmail.com"}',
     expect: {
       results: 'toExist', 
       errors: 'toNotExist'
@@ -118,7 +118,7 @@ var tests = {
   },
   
   '10. add a user to group': {
-    route: '/user/test@user.com/group',
+    route: '/user/' + user.email + '/group',
     data: {group: 'author'},
     expect: {
       group: 'author'
@@ -139,12 +139,23 @@ var tests = {
     expect: {
       results: 'toContainOne'
     }
+  },
+  
+  '13. only 1 user': {
+    route: '/search/users', 
+    data: {},
+    expect: {
+      results: 'toContainOne'
+    }
   }
   
 };
 
 var testNames = Object.keys(tests)
-  , sorted = testNames.sort()
+  , sorted = testNames.sort(function(a, b) {
+    // sort by the number in front of the test name
+    return (Number(a.split('.')[0]) < Number(b.split('.')[0])) ? -1 : 1;
+  })
 ;
 
 // execute tests
