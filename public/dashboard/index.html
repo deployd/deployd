@@ -47,46 +47,9 @@
 			</div>
 			<div class="nine columns">
         <!--tabs-nav-template goes here-->
-				<ul class="tabs-content" id="content">
-					<li class="active" id="simple1Tab">
-						<div class="row">
-							
-							
-						</div>
-						
-					</li>
-					<li id="simple2Tab">
-						
-						<table>
-							<thead>
-								<tr>
-									<th>Email</th>
-									<th>Name</th>
-									<th>Password</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr>
-									<td>skawful@gmail.com</td>
-									<td>Ritchie Martori</td>
-									<td class="password">encrypted</td>
-								</tr>
-								<tr>
-									<td>bob@gmail.com</td>
-									<td>Bob Joeson</td>
-									<td class="password">encrypted</td>
-								</tr>
-								<tr>
-									<td>dood@gmail.com</td>
-									<td>Guy Man</td>
-									<td class="password">encrypted</td>
-								</tr>
-							</tbody>
-						</table>
-
-						
-					</li>
-				</ul>
+				<div class="row" id="content">
+					
+				</div>
 			</div>
 		</div>
 		
@@ -422,18 +385,10 @@
     // model
     .script(m + 'app.js')
     .script(m + 'plugin.js')
-    .script(m + 'dashboard.js')
     .script(m + 'form.js')
-    .script(m + 'model.js')
     // partials
-    .script(v + 'view.js')
-    .script(p + 'app-view.js')
-    .script(p + 'list-view.js')
-    .script(p + 'model-view.js')
     .script(p + 'plugin-view.js')
-    .script(p + 'form-view.js')
     // views
-    .script(v + 'dashboard-view.js')
     .script(v + 'app-nav-view.js')
     // router
     .script('js/router.js');

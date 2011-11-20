@@ -3,8 +3,7 @@ window.App = Backbone.Model.extend({
   parse: function (response) {
     var plugins, _pluginsFromResponse, app = [];
 
-    plugins = new Backbone.Collection();
-    plugins.model = Plugin;
+    plugins = new Plugins();
 
     _pluginsFromResponse = _.groupBy(response, function(obj) {
       return obj.plugin;
@@ -12,7 +11,6 @@ window.App = Backbone.Model.extend({
     
     _.each(_pluginsFromResponse, function (value, key, list){
       if (key !== "undefined") {
-        console.log("key: "+key+" & typeof: "+typeof key);
         var _pluginObjects = new Backbone.Collection();
         _pluginObjects.model = PluginObject;
         
@@ -29,8 +27,6 @@ window.App = Backbone.Model.extend({
         });        
       }
     });
-    
-    console.log(plugins);
     
     return { 
       plugins: plugins,

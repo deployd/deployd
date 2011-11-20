@@ -1,4 +1,4 @@
-window.PluginView = View.extend({
+window.PluginView = Backbone.View.extend({
 	
 	item: 'plugin-item-template',
 	template: 'plugin-detail-template',

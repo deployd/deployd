@@ -10,6 +10,20 @@ window.Plugin = Backbone.Model.extend({
 	  this.set({url: this.url()});
 	}
 });
+
+window.Plugins = Backbone.Collection.extend({
+  model: Plugin,
+  getByPluginName: function (name) {
+    var _plugin = {};
+    this.each(function (plugin){
+      if (plugin.get("name") === name) {
+        _plugin = plugin;
+        return;
+      }
+    });
+    return _plugin;
+  }
+});
 /*
 _id: 123,
 name: "graph",

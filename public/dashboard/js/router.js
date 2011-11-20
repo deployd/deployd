@@ -4,24 +4,26 @@ var Router = Backbone.Router.extend({
     $.ajaxSetup({ cache: false });
     // allows to send restful calls over AJAX
     Backbone.emulateHTTP = true;
-    dashboard = new Dashboard();
-    this.stage = new DashboardView({model: dashboard, el: $('#content')});
+    window.app = new App();
+    
+    app.fetch({
+      success: function (model, response) {
+        Backbone.history.start();
+      }
+    });
   },
 
   routes: {
     '/:type': 'plugin',
-    '/plugins/:id': 'plugin'
+    '/plugins/:name': 'plugin'
   },
   
-  plugin: function(id) {
-    var model = new Plugin;
-    this.stage.content = new PluginView({model: model});
-    this.stage.render();
-  },
-
-
+  plugin: function(name) {
+    var model = app.get("plugins").getByPluginName(name);
+    console.log(JSON.stringify(model));
+    $("#content").html(JSON.stringify(model.toJSON()));
+  }
 });
 
 // boot the application
 new Router();
-
