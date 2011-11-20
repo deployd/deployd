@@ -8,15 +8,15 @@ window.PluginView = View.extend({
 	showContext: function (context) {
 	  //Method used to show any configurable object in a plugin, anything other than "overview"
 	  this.contextID = context;
-	  $(this.el).find(".substance").empty();
-	  var contexts = this.model.get("configurable_objects"), modelContext, output;
+	  $(this.el).empty().html(this.model.toJSON());
+    // var contexts = this.model.get("configurable_objects"), modelContext, output;
 
-	  $.each(contexts, function (i, val) {
+	  /*$.each(contexts, function (i, val) {
 	    if (contexts[i].id == context) {
 	      modelContext = contexts[i];
 	      return false; //equivalent to break;
 	    }
-	  });
+	  });*/
 
 	  if (typeof modelContext !== "undefined") {
 	    output =  modelContext.helper_text || "<em>No overview text</em>";

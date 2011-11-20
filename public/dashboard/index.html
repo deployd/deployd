@@ -29,14 +29,7 @@
 	<div class="container">
 		
 		<div id="bread" class="row">
-			<div class="twelve columns">
-				<h4>
-					<a href="" id="app-name">My App</a>
-					>
-					<a href="" id="current-page">Users</a>
-				</h4>
-				<hr />
-			</div>
+			
 		</div>
 		<div class="row">
 			<div id="menu" class="three columns">
@@ -57,139 +50,13 @@
 				<ul class="tabs-content" id="content">
 					<li class="active" id="simple1Tab">
 						<div class="row">
-							<div class="six columns">
-								<div class="panel">
-									<h6>User Description</h6>
-									<hr />
-									<form class="description nice custom">
-										<fieldset>
-												<input class="input-text" type="text" value="email">
-												<span>is a</span>
-												<select>
-												  <option>string</option>
-												  <option SELECTED>email</option>
-												  <option>password</option>
-												  <option>boolean</option>
-												  <option>binary</option>
-												</select>
-												<label for="unique1">
-												  <input type="checkbox" id="unique1" style="display: none;">
-												  <span class="custom checkbox"></span> unique in this collection
-												</label>
-										</fieldset>
-										<fieldset>
-												<input class="input-text" type="text" value="password">
-												<span>is a</span>
-												<select>
-												  <option>string</option>
-												  <option>email</option>
-												  <option SELECTED>password</option>
-												  <option>boolean</option>
-												  <option>binary</option>
-												</select>
-												<label for="unique1">
-												  <input type="checkbox" id="unique1" style="display: none;">
-												  <span class="custom checkbox"></span> unique in this collection
-												</label>
-										</fieldset>
-										<fieldset>
-												<input class="input-text" type="text" value="name">
-												<span>is a</span>
-												<select>
-												  <option SELECTED>string</option>
-												  <option>email</option>
-												  <option>password</option>
-												  <option>boolean</option>
-												  <option>binary</option>
-												</select>
-												<label for="unique1">
-												  <input type="checkbox" id="unique1" style="display: none;">
-												  <span class="custom checkbox"></span> unique in this collection
-												</label>
-										</fieldset>
-										<a href="#" class="nice small radius blue button">Add New Property</a>
-									</form>
-								</div>
-							</div>
-							<div class="six columns">
-							<div class="panel">
-								<h6>User Groups</h6>
-								<hr />
-								<form class="roles nice custom">
-									<fieldset>
-										<input class="input-text" type="text" placeholder="Group Name" value="Authors">
-										<input class="input-text" type="text" placeholder="Group Name" value="Editors">
-										<input class="input-text" type="text" placeholder="Group Name" value="Banned">
-										<input class="input-text" type="text" placeholder="New Group Name">
-									</fieldset>
-								</form>
-							</div>
+							
+							
 						</div>
-						</div>
-						<div class="row">
-							<div class="twelve columns">
-								<div class="panel">
-									<h6>User Permissions</h6>
-									<hr />
-									<form class="description nice custom">
-										<fieldset>
-												<input class="input-text" type="text" value="email">
-												<span>can be <strong>seen</strong> by</span>
-												<select>
-												  <option>You</option>
-												  <option>Authors</option>
-												  <option>Editors</option>
-												  <option SELECTED>Everyone</option>
-												</select>
-												<span> and is <strong>editable</strong> by</span>
-												<select>
-												  <option>You</option>
-												  <option>Authors</option>
-												  <option>Editors</option>
-												  <option>Everyone</option>
-												</select>
-										</fieldset>
-										<fieldset>
-												<input class="input-text" type="text" value="password">
-												<span>is <strong>encrypted</strong> and cannot be changed by anyone but the user.</span>
-										</fieldset>
-										<fieldset>
-												<input class="input-text" type="text" value="name">
-												<span>can be <strong>seen</strong> by</span>
-												<select>
-												  <option>You</option>
-												  <option>Authors</option>
-												  <option>Editors</option>
-												  <option SELECTED>Everyone</option>
-												</select>
-												<span> and is <strong>editable</strong> by</span>
-												<select>
-												  <option>You</option>
-												  <option>Authors</option>
-												  <option>Editors</option>
-												  <option>Everyone</option>
-												</select>
-										</fieldset>
-										<fieldset>
-												<select>
-												  <option>You</option>
-												  <option>Authors</option>
-												  <option>Editors</option>
-												  <option SELECTED>Everyone</option>
-												  <option SELECTED>Its creator</option>
-												</select>
-												<span> can <strong>delete</strong> this.</span>
-										</fieldset>
-										<a href="#" class="nice small radius blue button">Add New Property</a>
-									</form>
-								</div>
-							</div>
-						</div>
+						
 					</li>
 					<li id="simple2Tab">
-						<form class="nice">
-							<input class="large input-text search" type="text" placeholder="Search Users" />
-						</form>
+						
 						<table>
 							<thead>
 								<tr>
@@ -219,9 +86,6 @@
 
 						
 					</li>
-					<li id="simple3Tab">
-					
-					</li>
 				</ul>
 			</div>
 		</div>
@@ -230,6 +94,159 @@
 	<!-- container -->
   
   <!-- PARTIAL TEMPLATES -->
+  <script id="one-dimensional-list" type="html/template">
+    //TODO: Wire this up and add option to delete. 
+    //Good generic way to handle collections with single property
+    <div class="six columns">
+  	<div class="panel">
+  		<h6>User Groups</h6>
+  		<hr />
+  		<form class="roles nice custom">
+  			<fieldset>
+  				<input class="input-text" type="text" placeholder="Group Name" value="Authors">
+  				<input class="input-text" type="text" placeholder="Group Name" value="Editors">
+  				<input class="input-text" type="text" placeholder="Group Name" value="Banned">
+  				<input class="input-text" type="text" placeholder="New Group Name">
+  			</fieldset>
+  		</form>
+  	</div>
+  </div>
+  </script>
+  <script id="model-description-template" type="html/template">
+    <div class="six columns">
+			<div class="panel">
+				<h6>User Description</h6>
+				<hr />
+				<form class="description nice custom">
+					<fieldset>
+							<input class="input-text" type="text" value="email">
+							<span>is a</span>
+							<select>
+							  <option>string</option>
+							  <option SELECTED>email</option>
+							  <option>password</option>
+							  <option>boolean</option>
+							  <option>binary</option>
+							</select>
+							<label for="unique1">
+							  <input type="checkbox" id="unique1" style="display: none;">
+							  <span class="custom checkbox"></span> unique in this collection
+							</label>
+					</fieldset>
+					<fieldset>
+							<input class="input-text" type="text" value="password">
+							<span>is a</span>
+							<select>
+							  <option>string</option>
+							  <option>email</option>
+							  <option SELECTED>password</option>
+							  <option>boolean</option>
+							  <option>binary</option>
+							</select>
+							<label for="unique1">
+							  <input type="checkbox" id="unique1" style="display: none;">
+							  <span class="custom checkbox"></span> unique in this collection
+							</label>
+					</fieldset>
+					<fieldset>
+							<input class="input-text" type="text" value="name">
+							<span>is a</span>
+							<select>
+							  <option SELECTED>string</option>
+							  <option>email</option>
+							  <option>password</option>
+							  <option>boolean</option>
+							  <option>binary</option>
+							</select>
+							<label for="unique1">
+							  <input type="checkbox" id="unique1" style="display: none;">
+							  <span class="custom checkbox"></span> unique in this collection
+							</label>
+					</fieldset>
+					<a href="#" class="nice small radius blue button">Add New Property</a>
+				</form>
+			</div>
+		</div>
+  </script>
+  <script id="breadcrumb-template" type="html/template">
+    //TODO: Wire up this template
+    <div class="twelve columns">
+			<h4>
+				<a href="" id="app-name">My App</a>
+				>
+				<a href="" id="current-page">Users</a>
+			</h4>
+			<hr />
+		</div>
+  </script>
+  <script id="search-template" type="html/template">
+    //TODO: Wire up this template
+    <form class="nice">
+			<input class="large input-text search" type="text" placeholder="Search Users" />
+		</form>
+  </script>
+  <script id="property-permissions-template" type="html/template">
+  //TODO: Wire up this template
+  <div class="row">
+		<div class="twelve columns">
+			<div class="panel">
+				<h6>User Permissions</h6>
+				<hr />
+				<form class="description nice custom">
+					<fieldset>
+							<input class="input-text" type="text" value="email">
+							<span>can be <strong>seen</strong> by</span>
+							<select>
+							  <option>You</option>
+							  <option>Authors</option>
+							  <option>Editors</option>
+							  <option SELECTED>Everyone</option>
+							</select>
+							<span> and is <strong>editable</strong> by</span>
+							<select>
+							  <option>You</option>
+							  <option>Authors</option>
+							  <option>Editors</option>
+							  <option>Everyone</option>
+							</select>
+					</fieldset>
+					<fieldset>
+							<input class="input-text" type="text" value="password">
+							<span>is <strong>encrypted</strong> and cannot be changed by anyone but the user.</span>
+					</fieldset>
+					<fieldset>
+							<input class="input-text" type="text" value="name">
+							<span>can be <strong>seen</strong> by</span>
+							<select>
+							  <option>You</option>
+							  <option>Authors</option>
+							  <option>Editors</option>
+							  <option SELECTED>Everyone</option>
+							</select>
+							<span> and is <strong>editable</strong> by</span>
+							<select>
+							  <option>You</option>
+							  <option>Authors</option>
+							  <option>Editors</option>
+							  <option>Everyone</option>
+							</select>
+					</fieldset>
+					<fieldset>
+							<select>
+							  <option>You</option>
+							  <option>Authors</option>
+							  <option>Editors</option>
+							  <option SELECTED>Everyone</option>
+							  <option SELECTED>Its creator</option>
+							</select>
+							<span> can <strong>delete</strong> this.</span>
+					</fieldset>
+					<a href="#" class="nice small radius blue button">Add New Property</a>
+				</form>
+			</div>
+		</div>
+	</div>
+  </script>
   <script id="tabs-nav-template" type="html/template">
     //Expects model: {baseHref: "/dashboard/#/plugins/graph?section=", navItems: [{name: "linkone", active: true}, {name: "linktwo"}]}
     <dl class="tabs">
@@ -404,14 +421,10 @@
     .script(l + 'foundation.js')
     // model
     .script(m + 'app.js')
-    .script(m + 'list.js')
-    .script(m + 'data-list.js')
     .script(m + 'plugin.js')
-    .script(m + 'search.js')
     .script(m + 'dashboard.js')
     .script(m + 'form.js')
     .script(m + 'model.js')
-    .script(m + 'settings.js')
     // partials
     .script(v + 'view.js')
     .script(p + 'app-view.js')

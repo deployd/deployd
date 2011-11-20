@@ -10,7 +10,7 @@ window.View = Backbone.View.extend({
   
   render: function() {
     // generic render    
-    $(this.el).html(this.compiledTemplate(this.model.toJSON()));
+    // $(this.el).html(this.compiledTemplate(this.model.toJSON()));
     return this;
   }
   
