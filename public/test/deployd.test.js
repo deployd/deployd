@@ -74,13 +74,6 @@ var tests = {
     }
   },
   
-  '6. delete a user': {
-    route: '/me?method=delete',
-    expect: {
-      errors: 'toNotExist'
-    }
-  },
-  
   '7. creating an app': {
     route: '/app',
     data: app,
@@ -117,13 +110,13 @@ var tests = {
     }
   },
   
-  '10. add a user to group': {
-    route: '/user/' + user.email + '/group',
-    data: {group: 'author'},
-    expect: {
-      group: 'author'
-    }
-  },
+  // '10. add a user to group': {
+  //   route: '/user/' + user.email + '/group',
+  //   data: {group: 'author'},
+  //   expect: {
+  //     group: 'author'
+  //   }
+  // },
   
   '11. only 1 user per email': {
     route: '/search/users', 
@@ -146,6 +139,13 @@ var tests = {
     data: {},
     expect: {
       results: 'toContainOne'
+    }
+  },
+
+  '14. delete a user': {
+    route: '/me?method=delete',
+    expect: {
+      errors: 'toNotExist'
     }
   }
   
