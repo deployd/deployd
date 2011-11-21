@@ -14,14 +14,16 @@ var Router = Backbone.Router.extend({
   },
 
   routes: {
-    '/:type': 'plugin',
+    '/plugins': 'plugin',
     '/plugins/:name': 'plugin'
   },
   
   plugin: function(name) {
     var model = app.get("plugins").getByPluginName(name);
-    console.log(JSON.stringify(model));
-    $("#content").html(JSON.stringify(model.toJSON()));
+    var view = new PluginView({
+      model: model
+    });
+    view.render();
   }
 });
 

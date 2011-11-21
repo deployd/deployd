@@ -75,59 +75,43 @@
   	</div>
   </div>
   </script>
-  <script id="model-description-template" type="html/template">
+  <script id="schema-view-template" type="html/template">
     <div class="six columns">
 			<div class="panel">
-				<h6>User Description</h6>
+				<h6><% print(name); %> Schema Description</h6>
+				<p>
+				  Create and edit properties below to control the validation of objects added to the  <%= name %> collection.
+				</p>
+				<p>
+				POST /...<br />
+				GET /...
+				</p>
 				<hr />
 				<form class="description nice custom">
-					<fieldset>
-							<input class="input-text" type="text" value="email">
-							<span>is a</span>
-							<select>
-							  <option>string</option>
-							  <option SELECTED>email</option>
-							  <option>password</option>
-							  <option>boolean</option>
-							  <option>binary</option>
-							</select>
-							<label for="unique1">
-							  <input type="checkbox" id="unique1" style="display: none;">
-							  <span class="custom checkbox"></span> unique in this collection
-							</label>
-					</fieldset>
-					<fieldset>
-							<input class="input-text" type="text" value="password">
-							<span>is a</span>
-							<select>
-							  <option>string</option>
-							  <option>email</option>
-							  <option SELECTED>password</option>
-							  <option>boolean</option>
-							  <option>binary</option>
-							</select>
-							<label for="unique1">
-							  <input type="checkbox" id="unique1" style="display: none;">
-							  <span class="custom checkbox"></span> unique in this collection
-							</label>
-					</fieldset>
-					<fieldset>
-							<input class="input-text" type="text" value="name">
-							<span>is a</span>
-							<select>
-							  <option SELECTED>string</option>
-							  <option>email</option>
-							  <option>password</option>
-							  <option>boolean</option>
-							  <option>binary</option>
-							</select>
-							<label for="unique1">
-							  <input type="checkbox" id="unique1" style="display: none;">
-							  <span class="custom checkbox"></span> unique in this collection
-							</label>
-					</fieldset>
-					<a href="#" class="nice small radius blue button">Add New Property</a>
+				  <input type="hidden" name="_id" value="<%= _id %>" />
+				  <% _.each(description, function (value, key, list){%>
+				    <fieldset>
+  							<input class="input-text" type="text" value="<%= key %>">
+  							<span>is a</span>
+  							<select>
+  							  <option <% if (value === "string" || value.type === "string") { print("SELECTED"); }%>>string</option>
+  							  <option <% if (value === "email" || value.type === "email") { print("SELECTED"); }%>>email</option>
+  							  <option <% if (value === "password" || value.type === "password") { print("SELECTED"); }%>>password</option>
+  							  <option <% if (value === "boolean" || value.type === "boolean") { print("SELECTED"); }%>>boolean</option>
+  							  <option <% if (value === "binary" || value.type === "binary") { print("SELECTED"); }%>>binary</option>
+  							</select>
+  							<label for="unique<%= key %>">
+  							  <input type="checkbox" id="unique<%= key%>" style="display: none;">
+  							  <span class="custom checkbox <% if (value.unique) { print("checked"); } %>"></span> unique in this collection
+  							</label>
+  							<a class="nice small radius white button delete-property">Remove</a>
+  					</fieldset>  					
+				  <%});%>
+
 				</form>
+				<a class="nice small radius white button add-new-property">+ Add New Property</a>
+			  <hr />
+				<a class="nice small radius blue button save-changes">Save Changes</a>
 			</div>
 		</div>
   </script>
@@ -376,7 +360,7 @@
     })
     .script(l + 'underscore-min.js')
     .script(l + 'jquery-1.6.2.js')
-	.script('/deployd.js')
+	  .script('/deployd.js')
     .wait()
     .script(l + 'backbone.js')
     .script(l + 'json.min.js')
@@ -386,8 +370,10 @@
     .script(m + 'app.js')
     .script(m + 'plugin.js')
     .script(m + 'form.js')
+    .script(m + 'schema-model.js')
     // partials
     .script(p + 'plugin-view.js')
+    .script(p + 'schema-view.js')
     // views
     .script(v + 'app-nav-view.js')
     // router

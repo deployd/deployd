@@ -27,7 +27,8 @@ window.App = Backbone.Model.extend({
         });        
       }
     });
-    
+
+    //TODO: Make this return dynamic data.
     return { 
       plugins: plugins,
       name: "app",
