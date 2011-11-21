@@ -75,8 +75,25 @@
   	</div>
   </div>
   </script>
+  <script id="new-schema-property-template" type="html/template">
+    <fieldset>
+				<input class="input-text" type="text" value="<%= key %>">
+				<span>is a</span>
+				<select>
+				  <option <% if (type === "string") { print("SELECTED"); }%>>string</option>
+				  <option <% if (type === "email") { print("SELECTED"); }%>>email</option>
+				  <option <% if (type === "password") { print("SELECTED"); }%>>password</option>
+				  <option <% if (type === "boolean") { print("SELECTED"); }%>>boolean</option>
+				  <option <% if (type === "binary") { print("SELECTED"); }%>>binary</option>
+				</select>
+				<label for="unique<%= key %>" style="display:inline-block; padding: 0 10px;">
+				  <input type="checkbox" id="unique<%= key%>" style="display: none;">
+				  <span class="custom checkbox <% if (typeof unique !== "undefined") { print("checked"); } %>"></span> unique in this collection
+				</label>
+				<a class="nice small radius red button delete-property" style="float: right;">Remove</a>
+  </script>
   <script id="schema-view-template" type="html/template">
-    <div class="six columns">
+    <div class="twelve columns">
 			<div class="panel">
 				<h6><% print(name); %> Schema Description</h6>
 				<p>
@@ -100,17 +117,18 @@
   							  <option <% if (value === "boolean" || value.type === "boolean") { print("SELECTED"); }%>>boolean</option>
   							  <option <% if (value === "binary" || value.type === "binary") { print("SELECTED"); }%>>binary</option>
   							</select>
-  							<label for="unique<%= key %>">
+  							<label for="unique<%= key %>" style="display:inline-block; padding: 0 10px;">
   							  <input type="checkbox" id="unique<%= key%>" style="display: none;">
   							  <span class="custom checkbox <% if (value.unique) { print("checked"); } %>"></span> unique in this collection
   							</label>
-  							<a class="nice small radius white button delete-property">Remove</a>
+  							<a class="nice small radius red button delete-property" style="float: right;">Remove</a>
   					</fieldset>  					
 				  <%});%>
 
 				</form>
 				<a class="nice small radius white button add-new-property">+ Add New Property</a>
 			  <hr />
+			  <div class="alert-box" style="display:none"></div>
 				<a class="nice small radius blue button save-changes">Save Changes</a>
 			</div>
 		</div>
