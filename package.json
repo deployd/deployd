@@ -17,5 +17,8 @@
     "bouncy": ">= 1.0.2",
     "ejs": ">= 0.4.3"
   },
+  "bin":{
+      "deployd":"./bin/deployd"
+  },
   "devDependencies": {}
 }
