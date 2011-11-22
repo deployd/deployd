@@ -1,0 +1,34 @@
+/* top */
+#nav {
+	background: #222;
+	border-bottom: solid 4px #00A5FF;
+	padding: 11px 20px 13px 20px;
+	color: #fff;
+	margin-bottom: 15px;
+}
+
+#nav h1 {font-size: 18px; margin: 0; padding: 0; color: #fff;}
+#nav a {font-size: 14px; line-height: 14px; padding-right: 10px; color: #fff;}
+#nav .button {padding: 5px 20px 6px}
+
+#menu {}
+#menu .active {color: #000; font-weight: bold} 
+#menu .links a {display: block}
+div.panel {margin: 0 0 18px 0; padding: 20px; box-shadow: none; border: solid 1px #e8e8e8;}
+
+#bread h4 {color: #ccc;}
+#bread a {color: #000;}
+
+/* global */
+h6 {font-weight: bold;}
+fieldset {background: #ececec;}
+
+/* tabs */
+dl.tabs dd a {color: #777; font-weight: bold}
+.tabs .active {color: #000;}
+
+/* user */
+.description input {display: inline; width: 114px}
+.description div.custom.dropdown {top: -2px;}
+.roles input {width: 274px}
+.search {width: 99% !important} /* breaks on mobile */
