@@ -43,7 +43,6 @@ window.SchemaView = Backbone.View.extend({
     this.render();
   },
   addNewProperty: function (e) {
-    console.log("addNewProperty()");
     $("form", this.el).append(_.template($("#new-schema-property-template").html(),{key: '', type: ''}));
   },
   render: function () {

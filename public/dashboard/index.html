@@ -34,8 +34,6 @@
 		<div class="row">
 			<div id="menu" class="three columns">
 				<div class="panel">
-				  <h5>App Config</h5>
-          <hr />
 					<h5>Plugins</h5>
 					<div class="links">
 					  <em>No Plugins Loaded</em>
@@ -262,17 +260,11 @@
   </script>
 
   <script id="app-nav-template" type="html/template">
-    <li><a href="#/">Config</a></li>
-    <li><a href="#/plugins">Plugins</a>
       <ul>
         <% _.each(plugins.models, function (plugin) { %>
-          <li><a href="#/plugins/<%= plugin.attributes._id %>"><%= plugin.attributes.name %></a></li>
+          <li><a href="#/plugins/<%= plugin.attributes.name %>"><%= plugin.attributes.name %></a></li>
         <% }); %>
       </ul>
-    </li>
-    <li>
-      <a>Reference</a>
-    </li>
   </script>
   <script id="model-detail-template" type="html/template">
     <div><%= name %></div>
