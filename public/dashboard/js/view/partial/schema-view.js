@@ -2,33 +2,50 @@ window.SchemaView = Backbone.View.extend({
   template: _.template($("#schema-view-template").html()),
   events: {
     "click .save-changes" : "save",
-    "click fieldset > .delete-property" : "deleteProperty"
+    "click fieldset > .delete-property" : "deleteProperty",
+    "click .add-new-property" : "addNewProperty"
+  },
+  schemaChange: function (msg) {
+
+    // $(".save-changes", this.el).html("Save Changes").removeClass("white").addClass("blue");
+    if (msg.get("errors")) {
+      $(".alert-box", this.el).addClass("error").css("display", "block").html(msg.get("errors")[0].message);
+    }
+    else if (msg.get("description")) {
+      $(".alert-box", this.el).addClass("success").css("display", "block").html("Schema saved successfully.");
+    }
+    else {
+      $(".alert-box", this.el).addClass("warning").css("display", "block").html("Couldn't determine if schema was saved.");
+    }
   },
   initialize: function () {
-    this.model.bind("save", function (msg) {
-      console.log("SchemaModel saved");
-    });
+    this.model.bind("change", this.schemaChange, this);
   },
-  save: function (e) {
-    console.log("Submit");
-    console.log(this.model);
+  createFormObject: function () {
     var _newDesc = {};
     $("fieldset", this.el).each(function () {
       var type = $(this).find("select").val();
       _newDesc[$(this).find("input[type=text]").val()] = $(this).find("span.checkbox").hasClass("checked") ? { type: type, unique: true} : type;
     });
-    this.model.set({description: _newDesc});
-    this.model.save();
+    return _newDesc;
   },
-  deleteProperty: function (e) {
-    console.log("Delete");
-    console.log(this);
+  save: function (e) {
+    $(".alert-box", this.el).attr("class", "alert-box").css("display", "none");
+    $(".save-changes", this.el).html("Saving...").removeClass("blue").addClass("white");
+    
+    this.model.save({description: this.createFormObject()});
   },
-  addProperty: function (e) {
-    $(this.el).stylizeForms();
+  deleteProperty: function (e, jq) {
+    var _newDesc = this.createFormObject();
+    delete _newDesc[$(e.currentTarget).parent().find("input[type=text]").val()];
+    this.model.save({description: _newDesc});
+
+    this.render();
+  },
+  addNewProperty: function (e) {
+    $("form", this.el).append(_.template($("#new-schema-property-template").html(),{key: '', type: ''}));
   },
   render: function () {
-    console.log("render() in SchemaView");
     $(this.el).html(this.template(this.model.toJSON()));
     $(this.el).stylizeForms();
   }

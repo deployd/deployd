@@ -25,6 +25,9 @@ jQuery(document).ready(function($) {
 	
     var terminal = $('#terminal').terminal(function(command, term) {
 		switch(command) {
+			case 'exit':
+				window.location = '/dashboard';
+			break;
 			case 'settings':
 				d('/settings');
 			break;
@@ -36,6 +39,15 @@ jQuery(document).ready(function($) {
         greetings: 'Deployd REPL',
 		prompt: 'deployd >'
     });
+
+	terminal.echo('----------------------------------------------------------------------');
+	terminal.echo('Examples:');
+	terminal.echo("\t d('/settings') or just 'settings'");
+	terminal.echo("\t d('/users')");
+	terminal.echo("\t d('/user', {name: 'Joe', email: 'j@joes.com', password: '1234'})");
+	terminal.echo("\t d('/user/login', {email: 'j@joes.com', password: '1234'})");
+	terminal.echo("\t d('/search/users', {email: 'j@joes.com'})");
+	terminal.echo('----------------------------------------------------------------------');
 
 	jQuery.ajaxSetup({
 		complete: function(res) {

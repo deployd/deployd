@@ -5,6 +5,7 @@ window.PluginView = Backbone.View.extend({
 	
 	render: function () {
 	  var _self = this;
+	  $(this.el).empty();
 	  this.model.get("objects").each(function(obj){
 	    if (obj.get("description")) {
 	      //TODO: Plug this in to a view/model/template
