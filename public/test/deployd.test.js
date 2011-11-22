@@ -110,13 +110,13 @@ var tests = {
     }
   },
   
-  // '10. add a user to group': {
-  //   route: '/user/' + user.email + '/group',
-  //   data: {group: 'author'},
-  //   expect: {
-  //     group: 'author'
-  //   }
-  // },
+  '10. add a user to group': {
+    route: '/user/' + user.email + '/group',
+    data: {group: 'author'},
+    expect: {
+      group: 'author'
+    }
+  },
   
   '11. only 1 user per email': {
     route: '/search/users', 
