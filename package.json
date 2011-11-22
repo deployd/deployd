@@ -9,7 +9,7 @@
   "main": "index.js",
   "engines": {
     "node": ">= 0.4.0"
-  },
+  }, 
   "dependencies": {
     "express": ">= 2.0.0",
     "underscore": ">= 1.0.0",
