@@ -27,6 +27,8 @@ jQuery(document).ready(function($) {
 		terminal.echo('----------------------------------------------------------------------');
 		terminal.echo('Usage:');
 		terminal.echo("\t settings - show a list of app and plugin settings");
+		terminal.echo("\t routes   - show a list of app urls");
+		terminal.echo("\t users    - show a list of app users");
 		terminal.echo("\t logout   - go back to the dashboard");
 		terminal.echo("\t clear    - clear the output");
 		terminal.echo("\t help     - show this help message");
@@ -47,6 +49,12 @@ jQuery(document).ready(function($) {
 			break;
 			case 'help':
 				help();
+			break;
+			case 'routes':
+				d('/routes');
+			break;
+			case 'users':
+				d('/users');
 			break;
 			case 'settings':
 				d('/settings');
