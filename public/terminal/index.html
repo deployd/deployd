@@ -1,0 +1,71 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>JSON-RPC Demo for JQuery Terminal Emulator</title>
+    <meta name="author" content="Jakub Jankiewicz - jcubic&#64;onet.pl"/>
+    <meta name="Description" content="Demonstration for JQuery Terminal Emulator using call automaticly JSON-RPC service (in php) with authentication."/>
+    <link rel="sitemap" type="application/xml" title="Sitemap" href=""/>
+    <link rel="shortcut icon" href="favicon.ico"/>
+    <script src="../deployd.js"></script>
+    <script src="js/jquery-1.5.min.js"></script>
+    <script src="js/jquery.terminal-0.4.3.min.js"></script>
+    <script src="js/prettyprint.js"></script>
+    <link href="css/jquery.terminal.css" rel="stylesheet"/>
+  </head>
+<body>
+<div id="terminal"></div>
+<script>
+
+
+jQuery(document).ready(function($) {
+	function scroll(argument) {
+		$('body, html').scrollTop($('html').height())
+	}
+	
+    var terminal = $('#terminal').terminal(function(command, term) {
+		switch(command) {
+			case 'settings':
+				d('/settings');
+			break;
+			default:
+				eval(command);
+			break;
+		}
+    }, {
+        greetings: 'Deployd REPL',
+		prompt: 'deployd >'
+    });
+
+	jQuery.ajaxSetup({
+		complete: function(res) {
+			try {
+				var result = JSON.parse(res.responseText);
+				var print = JSON.stringify(result, null, 2);
+				print = print.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+				    var cls = 'number';
+				    if (/^"/.test(match)) {
+				        if (/:$/.test(match)) {
+				            cls = 'key';
+				        } else {
+				            cls = 'string';
+				        }
+				    } else if (/true|false/.test(match)) {
+				        cls = 'boolean';
+				    } else if (/null/.test(match)) {
+				        cls = 'null';
+				    }
+				    return '<span class="' + cls + '">' + match + '</span>';
+				});
+				$('.terminal-output').append('<pre>' + print + '</pre>');
+			} catch(e) {
+				terminal.error(res.responseText);
+			}
+
+			scroll();
+		}
+	})
+});
+
+</script>
+</body>
