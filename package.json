@@ -1,0 +1,15 @@
+{
+  "author": "ritch",
+  "name": "Deployd",
+  "version": "0.0.0",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/Deployd/Deployd.git"
+  },
+  "main": "index.js",
+  "engines": {
+    "node": "~v0.5.0-pre"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}
