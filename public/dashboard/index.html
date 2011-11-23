@@ -55,6 +55,45 @@
 	<!-- container -->
   
   <!-- PARTIAL TEMPLATES -->
+  <script id="collection-view-template" type="html/template">
+    <div class="twelve columns">
+      <div class="panel">
+        <h6><%= name %> Collection</h6>
+        <p>This is the <%= name %> collection in your database. You and your users (with proper permissions) can interact with this collection in these ways:</p>
+        <ul>
+          <li><strong>Create</strong>: POST /<%= name %>/ { foo: bar }</li>
+          <li><strong>List</strong>: GET /<%= name %>s</li>
+          <li><strong>Search</strong>: GET /search/<%= name %>s</li>
+        </ul>
+      
+        <table>
+          <thead>
+            <% _.each(results[0], function (val, key, list) {%>
+              <th><%= key %></th>
+            <% }); %>
+            <th>edit</th>
+            <th>remove</th>
+          </thead>
+          <tbody>
+            <% _.each(results, function (element, index, list) {%>
+              <tr>
+                <% _.each(element, function (val, key, list) { %>
+                  <td><%= val %></td>
+                <%});%>
+                <td>
+                  <a class="small radius nice white button edit-item">edit</a>
+                </td>
+                <td>
+                  <a class="small radius nice red button remove-item">remove</a>
+                
+              </tr>
+            <%});%>
+          </tbody>
+        </table>
+        <a class="small radius nice blue button">Create New <%= name %></a>
+      </div>
+    </div>
+  </script>
   <script id="one-dimensional-list" type="html/template">
     //TODO: Wire this up and add option to delete. 
     //Good generic way to handle collections with single property
@@ -384,6 +423,7 @@
     // partials
     .script(p + 'plugin-view.js')
     .script(p + 'schema-view.js')
+    .script(p + 'collection-view.js')
     // views
     .script(v + 'app-nav-view.js')
     // router

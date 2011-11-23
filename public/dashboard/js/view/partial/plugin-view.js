@@ -17,8 +17,33 @@ window.PluginView = Backbone.View.extend({
 	        model: _schemaModel
 	      });
 	      _schemaView.render();
-	      return;
+          // return;
 	    }
+	    var _collectionModel = {
+	      name: "user",
+        results: [
+          {
+            password: "1234hash!",
+            name: "Joe",
+            email: "j@joes.com",
+            _id: "4ecbc17230a01d2465000001"
+          },
+          {
+            password: "1234hash!",
+            name: "Ritchie",
+            email: "j@joes.com",
+            _id: "1"
+          }
+        ]
+      };
+      var _collectionEl = $("<div />").attr("id", "id-PLACEHOLDER");
+      $(_self.el).append(_collectionEl);
+      var _collectionView = new CollectionView({
+        el: _collectionEl,
+        model: _collectionModel
+      });
+      _collectionView.render();
+        
 	  });
 	}
 });
