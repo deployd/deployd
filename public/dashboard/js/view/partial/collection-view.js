@@ -1,8 +1,6 @@
 window.CollectionView = Backbone.View.extend({
   template: _.template($("#collection-view-template").html()),
-  events: {},
   schemaChange: function (msg) {
-
     // $(".save-changes", this.el).html("Save Changes").removeClass("white").addClass("blue");
     if (msg.get("errors")) {
       $(".alert-box", this.el).addClass("error").css("display", "block").html(msg.get("errors")[0].message);
@@ -15,17 +13,12 @@ window.CollectionView = Backbone.View.extend({
     }
   },
   initialize: function () {
-    // this.model.bind("change", this.schemaChange, this);
-    console.log("Initialize CollectionView");
-  },
-  save: function (e) {
-    /*$(".alert-box", this.el).attr("class", "alert-box").css("display", "none");
-    $(".save-changes", this.el).html("Saving...").removeClass("blue").addClass("white");
-    
-    this.model.save({description: this.createFormObject()});*/
+    console.log('initialize() in CollectionView');
+    console.log(this.model);
+    this.model.bind("fetch", this.render, this);
   },
   render: function () {
-    // $(this.el).html(this.template(this.model.toJSON()));
-    $(this.el).html(this.template(this.model));
+    console.log('render() in CollectionView');
+    $(this.el).html(this.template(this.model.toJSON()));
   }
 });

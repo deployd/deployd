@@ -62,29 +62,29 @@
         <p>This is the <%= name %> collection in your database. You and your users (with proper permissions) can interact with this collection in these ways:</p>
         <ul>
           <li><strong>Create</strong>: POST /<%= name %>/ { foo: bar }</li>
-          <li><strong>List</strong>: GET /<%= name %>s</li>
-          <li><strong>Search</strong>: GET /search/<%= name %>s</li>
+          <li><strong>List</strong>: GET /<%= name %></li>
+          <li><strong>Search</strong>: GET /search/<%= name %></li>
         </ul>
-      
-        <table>
+        <!--<input class="input-text" placeholder="Search" />-->
+        <table style="table-layout:fixed;">
           <thead>
             <% _.each(results[0], function (val, key, list) {%>
-              <th><%= key %></th>
+              <th style="overflow:hidden;" width="<% print(Math.floor(100 / (numFields + 2))); %>%"><%= key %></th>
             <% }); %>
-            <th>edit</th>
-            <th>remove</th>
+            <th width="<% print(Math.floor(100 / (numFields + 2))); %>%">edit</th>
+            <th width="<% print(Math.floor(100 / (numFields + 2))); %>%">remove</th>
           </thead>
           <tbody>
             <% _.each(results, function (element, index, list) {%>
               <tr>
-                <% _.each(element, function (val, key, list) { %>
-                  <td><%= val %></td>
+                <% _.each(element, function (val, key, obj) { %>
+                  <td style="overflow: hidden;" width="<% print(Math.floor(100 / (numFields + 2))); %>%" ><%= val %></td>
                 <%});%>
-                <td>
-                  <a class="small radius nice white button edit-item">edit</a>
+                <td width="<% print(Math.floor(100 / (numFields + 2))); %>%">
+                  <a class="edit-item">edit</a>
                 </td>
-                <td>
-                  <a class="small radius nice red button remove-item">remove</a>
+                <td width="<% print(Math.floor(100 / (numFields + 2))); %>%">
+                  <a class="remove-item">remove</a>
                 
               </tr>
             <%});%>
@@ -420,6 +420,7 @@
     .script(m + 'plugin.js')
     .script(m + 'form.js')
     .script(m + 'schema-model.js')
+    .script(m + 'collection-model.js')
     // partials
     .script(p + 'plugin-view.js')
     .script(p + 'schema-view.js')
