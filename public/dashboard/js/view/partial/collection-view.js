@@ -15,7 +15,7 @@ window.CollectionView = Backbone.View.extend({
   initialize: function () {
     console.log('initialize() in CollectionView');
     console.log(this.model);
-    this.model.bind("fetch", this.render, this);
+    this.model.bind("all", this.render, this);
   },
   render: function () {
     console.log('render() in CollectionView');
