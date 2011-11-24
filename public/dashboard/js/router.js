@@ -19,14 +19,16 @@ var Router = Backbone.Router.extend({
 
   routes: {
     '/plugins': 'plugin',
-    '/plugins/:name': 'plugin'
+    '/plugins/:name': 'plugin',
+    '/plugins/:name/:tab': 'plugin'
   },
   
-  plugin: function(name) {
+  plugin: function(name, tabId) {
     var model = app.get("plugins").getByPluginName(name);
     var view = new PluginView({
       model: model
     });
+    if (typeof tabId !== "undefined" && tabId !== '') view.tabId = tabId;
     view.render();
   }
 });

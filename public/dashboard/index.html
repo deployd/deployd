@@ -46,10 +46,12 @@
 				</div>
 			</div>
 			<div class="nine columns">
-        <!--tabs-nav-template goes here-->
-				<div class="row" id="content">
+        <dl class="tabs" id="plugin-tabs-nav">
+          
+        </dl>
+				<ul class="tabs-content twelve columns" id="content">
 					
-				</div>
+				</ul>
 			</div>
 		</div>
 		
@@ -67,31 +69,35 @@
           <li><strong>List</strong>: GET /<%= name %></li>
           <li><strong>Search</strong>: GET /search/<%= name %></li>
         </ul>
-        <!--<input class="input-text" placeholder="Search" />-->
-        <table style="table-layout:fixed;">
-          <thead>
-            <% _.each(results[0], function (val, key, list) {%>
-              <th style="overflow:hidden;" width="<% print(Math.floor(100 / (numFields + 2))); %>%"><%= key %></th>
-            <% }); %>
-            <th width="<% print(Math.floor(100 / (numFields + 2))); %>%">edit</th>
-            <th width="<% print(Math.floor(100 / (numFields + 2))); %>%">remove</th>
-          </thead>
-          <tbody>
-            <% _.each(results, function (element, index, list) {%>
-              <tr>
-                <% _.each(element, function (val, key, obj) { %>
-                  <td style="overflow: hidden;" width="<% print(Math.floor(100 / (numFields + 2))); %>%" ><%= val %></td>
-                <%});%>
-                <td width="<% print(Math.floor(100 / (numFields + 2))); %>%">
-                  <a class="edit-item">edit</a>
-                </td>
-                <td width="<% print(Math.floor(100 / (numFields + 2))); %>%">
-                  <a class="remove-item">remove</a>
+        <% if (results.length > 0) { %>
+          <!--<input class="input-text" placeholder="Search" />-->
+          <table style="table-layout:fixed;">
+            <thead>
+              <% _.each(results[0], function (val, key, list) {%>
+                <th style="overflow:hidden;" width="<% print(Math.floor(100 / (numFields + 2))); %>%"><%= key %></th>
+              <% }); %>
+              <th width="<% print(Math.floor(100 / (numFields + 2))); %>%">edit</th>
+              <th width="<% print(Math.floor(100 / (numFields + 2))); %>%">remove</th>
+            </thead>
+            <tbody>
+              <% _.each(results, function (element, index, list) {%>
+                <tr>
+                  <% _.each(element, function (val, key, obj) { %>
+                    <td style="overflow: hidden;" width="<% print(Math.floor(100 / (numFields + 2))); %>%" ><%= val %></td>
+                  <%});%>
+                  <td width="<% print(Math.floor(100 / (numFields + 2))); %>%">
+                    <a class="edit-item">edit</a>
+                  </td>
+                  <td width="<% print(Math.floor(100 / (numFields + 2))); %>%">
+                    <a class="remove-item">remove</a>
                 
-              </tr>
-            <%});%>
-          </tbody>
-        </table>
+                </tr>
+              <%});%>
+            </tbody>
+          </table>
+        <% } else {%>
+          <p><em>No items in collection.</em></p>
+        <% } %>
         <a class="small radius nice blue button">Create New <%= name %></a>
         <a class="small radius nice white button">Export <%= name %></a>
         <a class="small radius nice white button">Upload <%= name %></a>
@@ -158,11 +164,13 @@
   							  <option <% if (value === "boolean" || value.type === "boolean") { print("SELECTED"); }%>>boolean</option>
   							  <option <% if (value === "binary" || value.type === "binary") { print("SELECTED"); }%>>binary</option>
   							</select>
-  							<label for="unique<%= key %>" style="display:inline-block; padding: 0 10px;">
-  							  <input type="checkbox" id="unique<%= key%>" style="display: none;">
-  							  <span class="custom checkbox <% if (value.unique) { print("checked"); } %>"></span> unique in this collection
-  							</label>
-  							<a class="nice small radius red button delete-property" style="float: right;">Remove</a>
+  							<label for="unique<%= key %>" style="display:inline-block; padding: 0 10px;" />
+							  <input type="checkbox" id="unique<%= key%>" style="display: none;">
+							  <span class="custom checkbox <% if (value.unique) { print("checked"); } %>"></span> unique
+							  <label for="required-<%= key %>" style="display:inline-block; padding: 0 10px;" />
+							  <input type="checkbox" id="required-<%= key %>" style="display: none;">
+							  <span class="custom checkbox <% if (value.required) { print("checked"); } %>"></span> required 
+  							<a class="delete-property" style="float: right; margin-top: 7px; cursor: pointer;">Remove</a>
   					</fieldset>  					
 				  <%});%>
 
