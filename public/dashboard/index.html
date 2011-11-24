@@ -57,6 +57,47 @@
 	<!-- container -->
   
   <!-- PARTIAL TEMPLATES -->
+  <script id="collection-view-template" type="html/template">
+    <div class="twelve columns">
+      <div class="panel">
+        <h6><%= name %> Collection</h6>
+        <p>This is the <%= name %> collection in your database. You and your users (with proper permissions) can interact with this collection in these ways:</p>
+        <ul>
+          <li><strong>Create</strong>: POST /<%= name %>/ { foo: bar }</li>
+          <li><strong>List</strong>: GET /<%= name %></li>
+          <li><strong>Search</strong>: GET /search/<%= name %></li>
+        </ul>
+        <!--<input class="input-text" placeholder="Search" />-->
+        <table style="table-layout:fixed;">
+          <thead>
+            <% _.each(results[0], function (val, key, list) {%>
+              <th style="overflow:hidden;" width="<% print(Math.floor(100 / (numFields + 2))); %>%"><%= key %></th>
+            <% }); %>
+            <th width="<% print(Math.floor(100 / (numFields + 2))); %>%">edit</th>
+            <th width="<% print(Math.floor(100 / (numFields + 2))); %>%">remove</th>
+          </thead>
+          <tbody>
+            <% _.each(results, function (element, index, list) {%>
+              <tr>
+                <% _.each(element, function (val, key, obj) { %>
+                  <td style="overflow: hidden;" width="<% print(Math.floor(100 / (numFields + 2))); %>%" ><%= val %></td>
+                <%});%>
+                <td width="<% print(Math.floor(100 / (numFields + 2))); %>%">
+                  <a class="edit-item">edit</a>
+                </td>
+                <td width="<% print(Math.floor(100 / (numFields + 2))); %>%">
+                  <a class="remove-item">remove</a>
+                
+              </tr>
+            <%});%>
+          </tbody>
+        </table>
+        <a class="small radius nice blue button">Create New <%= name %></a>
+        <a class="small radius nice white button">Export <%= name %></a>
+        <a class="small radius nice white button">Upload <%= name %></a>
+      </div>
+    </div>
+  </script>
   <script id="one-dimensional-list" type="html/template">
     //TODO: Wire this up and add option to delete. 
     //Good generic way to handle collections with single property
@@ -383,9 +424,11 @@
     .script(m + 'plugin.js')
     .script(m + 'form.js')
     .script(m + 'schema-model.js')
+    .script(m + 'collection-model.js')
     // partials
     .script(p + 'plugin-view.js')
     .script(p + 'schema-view.js')
+    .script(p + 'collection-view.js')
     // views
     .script(v + 'app-nav-view.js')
     // router
