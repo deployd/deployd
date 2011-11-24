@@ -112,9 +112,9 @@ var tests = {
   
   '10. add a user to group': {
     route: '/user/' + user.email + '/group',
-    data: {group: 'author'},
+    data: {group: 'root'},
     expect: {
-      group: 'author'
+      errors: 'toNotExist'
     }
   },
   
@@ -142,12 +142,12 @@ var tests = {
     }
   },
 
-  '14. delete a user': {
-    route: '/me?method=delete',
-    expect: {
-      errors: 'toNotExist'
-    }
-  }
+  // '14. delete a user': {
+  //   route: '/me?method=delete',
+  //   expect: {
+  //     errors: 'toNotExist'
+  //   }
+  // }
   
 };
 
