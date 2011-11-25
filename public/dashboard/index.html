@@ -104,7 +104,7 @@
                     <td style="overflow: hidden;" width="<% print(Math.floor(100 / (numFields + 2))); %>%" ><%= val %></td>
                   <%});%>
                   <td width="<% print(Math.floor(100 / (numFields + 2))); %>%">
-                    <a class="edit-item">edit</a>
+                    <a id="edit-item-<% print(element._id); %>" class="edit-item">edit</a>
                   </td>
                   <td width="<% print(Math.floor(100 / (numFields + 2))); %>%">
                     <a class="remove-item">remove</a>
