@@ -33,16 +33,15 @@ var tests = {
     }
   },
   
-  '2. find user by id': {
-    route: '/user/' + user.email,
+  '3. add a user to group': {
+    route: '/user/' + user.email + '/group',
+    data: {group: 'root'},
     expect: {
-      _id: 'toExist',
-      password: 'toNotExist',
       errors: 'toNotExist'
     }
   },
   
-  '3. login a user': {
+  '4. login a user': {
     route: '/user/login',
     data: user,
     expect: {
@@ -56,7 +55,7 @@ var tests = {
     }
   },
   
-  '4. get current user': {
+  '5. get current user': {
     route: '/me',
     expect: {
       email: user.email,
@@ -66,7 +65,7 @@ var tests = {
     }
   },
   
-  '5. searching users': {
+  '6. searching users': {
     route: '/search?type=users&find={"email": "skawful@gmail.com"}',
     expect: {
       results: 'toExist', 
@@ -110,15 +109,7 @@ var tests = {
     }
   },
   
-  '10. add a user to group': {
-    route: '/user/' + user.email + '/group',
-    data: {group: 'author'},
-    expect: {
-      group: 'author'
-    }
-  },
-  
-  '11. only 1 user per email': {
+  '10. only 1 user per email': {
     route: '/search/users', 
     data: {email: user.email},
     expect: {
@@ -126,7 +117,7 @@ var tests = {
     }
   },
   
-  '12. only 1 app per name': {
+  '11. only 1 app per name': {
     route: '/search/apps', 
     data: {name: app.name},
     expect: {
@@ -134,20 +125,20 @@ var tests = {
     }
   },
   
-  '13. only 1 user': {
+  '12. only 1 user': {
     route: '/search/users', 
     data: {},
     expect: {
       results: 'toContainOne'
     }
-  },
-
-  '14. delete a user': {
-    route: '/me?method=delete',
-    expect: {
-      errors: 'toNotExist'
-    }
   }
+
+  // '13. delete a user': {
+  //   route: '/me?method=delete',
+  //   expect: {
+  //     errors: 'toNotExist'
+  //   }
+  // }
   
 };
 
