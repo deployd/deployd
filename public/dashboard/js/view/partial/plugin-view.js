@@ -23,11 +23,11 @@ window.PluginView = Backbone.View.extend({
 	      _schemaView.render();
 	    }
 	    if (obj.get("collection")) {
-	      console.log("There is a collection: "+obj.get('collection'));
 	      var _collectionModel = new CollectionModel({
 	        name: obj.get('collection'),
-	        numFields: _.size(obj.get('decsription')),
-	        description: obj.get('decsription'),
+	        plugin: obj.get('plugin'),
+	        numFields: _.size(obj.get('description')),
+	        description: obj.get('description'),
 	        results: []
 	      });
 
@@ -43,13 +43,10 @@ window.PluginView = Backbone.View.extend({
 	  });
 	  
 	  if (typeof this.tabId !== "undefined") {
-	    console.log("tabId is defined");
-	    console.log('#tab-content-'+this.tabId);
 	    $('#tab-content-'+this.tabId).addClass('active').show();
 	    $('#tab-link-'+this.tabId+' > a').addClass('active');
 	  }
 	  else {
-	    console.log("tabId is NOT defined");
 	    $('#plugin-tabs-nav > dd > a').addClass('active');
 	    $('.tabs-content > li').show();
 	  }

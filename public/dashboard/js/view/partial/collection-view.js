@@ -1,5 +1,22 @@
 window.CollectionView = Backbone.View.extend({
   template: _.template($("#collection-view-template").html()),
+  events : {
+    "click .create-collection-item" : "createItem"
+  },
+  createItem: function () {
+    //TODO: Dynamically create a form.
+    console.log(this.model);
+    var _newItemModel = new Backbone.Model({
+      description: this.model.get('description'),
+      name: this.model.get('name'),
+      plugin: this.model.get('plugin')
+    });
+    var _newItemView = new ItemEditView({
+      model: _newItemModel,
+      el: '.reveal-modal'
+    });
+    _newItemView.render();
+  },
   schemaChange: function (msg) {
     // $(".save-changes", this.el).html("Save Changes").removeClass("white").addClass("blue");
     if (msg.get("errors")) {

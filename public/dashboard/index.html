@@ -52,6 +52,8 @@
 				<ul class="tabs-content twelve columns" id="content">
 					
 				</ul>
+				<div class="reveal-modal">
+        </div>
 			</div>
 		</div>
 		
@@ -59,6 +61,22 @@
 	<!-- container -->
   
   <!-- PARTIAL TEMPLATES -->
+  <script id="item-edit-modal-template" type="html/template">
+    <a class="close-reveal-modal">x</a>
+    <h6><%= name %></h6>
+    <p>Fill out the fields below to create/edit an object in the <%= name %> collection.</p>
+    <form class="item-edit-form">
+      <% _.each(description, function (val, key, obj) { 
+        var type = 'text'; %>
+        <fieldset>
+          <label for="item-val-<%= key %>"><%= key %></label>
+          <input id="item-val-<%= key %>" type="<%= type %>" <% if (val.required) print('required="true"'); %> />
+        </fieldset>
+      <% }); %>
+    </form>
+    <a class="nice medium radius blue button save-item">Save Changes</a>
+    <a class="nice medium radius white button discard-changes">Discard Changes</a>
+  </script>
   <script id="collection-view-template" type="html/template">
     <div class="twelve columns">
       <div class="panel">
@@ -98,7 +116,7 @@
         <% } else {%>
           <p><em>No items in collection.</em></p>
         <% } %>
-        <a class="small radius nice blue button">Create New <%= name %></a>
+        <a class="small radius nice blue button create-collection-item">Create New <%= name %></a>
         <a class="small radius nice white button">Export <%= name %></a>
         <a class="small radius nice white button">Upload <%= name %></a>
       </div>
@@ -437,6 +455,7 @@
     .script(p + 'plugin-view.js')
     .script(p + 'schema-view.js')
     .script(p + 'collection-view.js')
+    .script(p + 'item-edit-view.js')
     // views
     .script(v + 'app-nav-view.js')
     // router
