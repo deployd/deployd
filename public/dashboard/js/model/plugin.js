@@ -16,12 +16,11 @@ window.Plugins = Backbone.Collection.extend({
   getByPluginName: function (name) {
     var _plugin;
     this.each(function (plugin){
-      if (plugin.get("name") === name) {
+      if (plugin.get("plugin") === name) {
         _plugin = plugin;
         return;
       }
     });
-
     return _plugin;
   }
 });
@@ -34,8 +33,7 @@ objects: [...]
 
 window.PluginObject = Backbone.Model.extend({
   validate: function (attributes) {
-    if(typeof attributes._id === "undefined"
-      || typeof attributes.name === "undefined") {
+    if(typeof attributes._id === "undefined") {
       return { error: "error validating object", attributes: attributes };
     }
   }

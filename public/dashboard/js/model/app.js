@@ -4,26 +4,24 @@ window.App = Backbone.Model.extend({
     var plugins, _pluginsFromResponse, app = [];
 
     plugins = new Plugins();
-
+    
+    //Group the plugins into an object like {plugin: [{config: object}}
     _pluginsFromResponse = _.groupBy(response, function(obj) {
       return obj.plugin;
     });
     
-    _.each(_pluginsFromResponse, function (value, key, list){
-      if (key !== "undefined") {
-        var _pluginObjects = new Backbone.Collection();
-        _pluginObjects.model = PluginObject;
-        
-        _.each(value, function (element, index, list) {
-          _pluginObjects.add(element);
+    //Iterate through each plugin
+    _.each(_pluginsFromResponse, function (objectsArray, pluginName, list){
+
+      if (pluginName !== "undefined") {
+        var _pluginObjects = new Backbone.Collection(objectsArray, {
+          model: PluginObject
         });
         
         plugins.add({
-          //TODO: Add actual ID
-          _id: 0,
-          name: key,
+          name: pluginName,
+          plugin: pluginName,
           objects: _pluginObjects
-
         });        
       }
     });

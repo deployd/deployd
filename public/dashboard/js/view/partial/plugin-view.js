@@ -5,11 +5,14 @@ window.PluginView = Backbone.View.extend({
 	template: 'plugin-detail-template',
 	
 	render: function () {
+	  console.log('render() in PluginView');
 	  var _self = this;
     $(this.el).empty();
     $(this.tabsEl).empty();
 
 	  this.model.get("objects").each(function(obj){
+	    console.log('object:');
+	    console.log(obj);
 	    var tabContent = _self.addTab(obj.get("name"), obj.get("_id"));
 	    if (obj.get("description")) {
 
@@ -54,7 +57,7 @@ window.PluginView = Backbone.View.extend({
 	addTab: function (tabName, id) {
 	  //Create a new li to add to the tabs nav
 	  var _navItem = $("<dd />").attr('id','tab-link-'+id);
-	  $(_navItem).append($('<a />').attr('href','/dashboard/#/plugins/'+this.model.get('name')+'/'+id).html(tabName));
+	  $(_navItem).append($('<a />').attr('href','/dashboard/#/plugins/'+this.model.get('plugin')+'/'+id).html(tabName));
 	  $(this.tabsEl).append(_navItem);
 	  
     //Create a new container to add to the content area
