@@ -23,7 +23,7 @@ var app = {
 var tests = {
   
   '1. creating a user': {
-    route: '/user',
+    route: '/users',
     data: user,
     expect: {
       _id: 'toExist',
@@ -34,7 +34,7 @@ var tests = {
   },
   
   '3. add a user to group': {
-    route: '/user/' + user.email + '/group',
+    route: '/users/' + user.email + '/group',
     data: {group: 'root'},
     expect: {
       errors: 'toNotExist'
@@ -42,7 +42,7 @@ var tests = {
   },
   
   '4. login a user': {
-    route: '/user/login',
+    route: '/users/login',
     data: user,
     expect: {
       _id: 'toExist',
@@ -102,7 +102,7 @@ var tests = {
   },
   
   '9. validate users': {
-    route: '/user',
+    route: '/users',
     data: {asdf: 1234, uid: {foo: 'bar'}, password: 1111},
     expect: {
       errors: 'toExist'
