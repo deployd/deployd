@@ -68,19 +68,32 @@
     <form class="item-edit-form nice">
       <% _.each(description, function (val, key, obj) { %>
         <fieldset>
-          <label for="item-val-<%= key %>"><%= key %></label>
+          <label for="item-val-<%= key %>"><%= key %></label><% if (val.type === 'object') print('requires valid JSON'); %>
           <% if (val.formType === 'textarea' || val.formType === 'multi-select') { %>
-            <textarea id="item-val-<%= key %>" name="<%= key %>"><% print(values ? values[key] : ''); %></textarea>
+            <textarea 
+              id="item-val-<%= key %>" 
+              name="<%= key %>"><% print(values ? values[key] : ''); %></textarea>
           <% }
           else if (val.formType === 'checkbox') {%>
-            <input type="checkbox" id="item-val-<%= key %>" name="<%= key %>" <% print(val.required ? 'required="true"' : ''); print(values[key] === 'true' ? 'checked' : ''); %> />
+            <input 
+              type="checkbox" 
+              id="item-val-<%= key %>" 
+              name="<%= key %>" 
+              <% print(val.required ? 'required="true"' : ''); 
+              print(values[key] === 'true' ? 'checked' : ''); %> />
           <% }
           else { %>
-            <input type="<% print(val.formType || 'text'); %>" id="item-val-<%= key %>" name="<%= key %>" <% if (val.required) print('required="true"'); %> />
+            <input 
+              type="<% print(val.formType || 'text'); %>" 
+              id="item-val-<%= key %>" 
+              name="<%= key %>" 
+              value="<% print(values && typeof values[key] !== 'undefined' ? values[key] : ''); %>" 
+              <% if (val.required) print('required="true"'); %> />
           <% } %>
         </fieldset>
       <% }); %>
     </form>
+    <div class="alert-box" style="display:none"></div>
     <a class="nice medium radius blue button save-item">Save Changes</a>
     <a class="nice medium radius white button discard-changes">Discard Changes</a>
   </script>
@@ -162,7 +175,7 @@
 				  <input type="checkbox" id="unique<%= key%>" style="display: none;">
 				  <span class="custom checkbox <% if (typeof unique !== "undefined") { print("checked"); } %>"></span> unique in this collection
 				</label>
-				<a class="nice small radius red button delete-property" style="float: right;">Remove</a>
+				<a class="delete-property" style="float: right;">Remove</a>
   </script>
   <script id="schema-view-template" type="html/template">
     <div class="twelve columns">

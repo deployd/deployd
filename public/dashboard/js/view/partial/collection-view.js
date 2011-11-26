@@ -10,13 +10,34 @@ window.CollectionView = Backbone.View.extend({
     //TODO: Implement auto-saving model.
     var values = this.model.getItemById($(e.currentTarget).attr("id").replace('edit-item-',''));
     var description = this.model.get('description');
-    _.each(description.toJSON(), function (val, key, obj){
+    _.each(description, function (val, key, obj) {
       obj[key] = typeof val === "object" ? val : { type: val};
-      console.log(JSON.stringify(obj));
+      
+      switch (obj[key].type) {
+        case "email":
+          type = "email";
+          break;
+        case "password":
+          type = 'password';
+          break;
+        case "object":
+          type = 'textarea';
+          if (typeof values[key] === 'object') values[key] = JSON.stringify(values[key]);
+          values[key].replace(/ /g,'');
+          break;
+        case 'boolean':
+          type = 'checkbox';
+          break;
+        case 'mutli-select':
+          type = 'multi-select';
+          break;
+        default:
+          type = "text";
+      }
+      
+      obj[key].formType = type;
     });
-    console.log(values);
-    console.log('description');
-    console.log(this.model.get('description'));
+    
     var _itemModel = new ItemEditModel({
       description: this.model.get('description'), //schema definition
       name: this.model.get('name'),
@@ -47,7 +68,7 @@ window.CollectionView = Backbone.View.extend({
           type = "email";
           break;
         case "password":
-          type = 'password'
+          type = 'password';
           break;
         case "object":
           type = 'textarea';
