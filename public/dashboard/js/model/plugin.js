@@ -14,13 +14,14 @@ window.Plugin = Backbone.Model.extend({
 window.Plugins = Backbone.Collection.extend({
   model: Plugin,
   getByPluginName: function (name) {
-    var _plugin = {};
+    var _plugin;
     this.each(function (plugin){
       if (plugin.get("name") === name) {
         _plugin = plugin;
         return;
       }
     });
+
     return _plugin;
   }
 });

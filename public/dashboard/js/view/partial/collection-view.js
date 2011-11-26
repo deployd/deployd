@@ -1,5 +1,44 @@
 window.CollectionView = Backbone.View.extend({
   template: _.template($("#collection-view-template").html()),
+  events : {
+    "click .create-collection-item" : "createItem",
+    "click .edit-item" : "editItem",
+    "click .remove-item"  : "deleteItem"
+  },
+  editItem: function (e) {
+    console.log('editItem:'+$(e.currentTarget).attr("id"));
+    //TODO: Implement auto-saving model.
+    var values = this.model.getItemById($(e.currentTarget).attr("id").replace('edit-item-',''));
+    console.log(values);
+    var _itemModel = new ItemEditModel({
+      description: this.model.get('description'), //schema definition
+      name: this.model.get('name'),
+      plugin: this.model.get('plugin'),
+      values: values
+    });
+    this._openItemEditModal(_itemModel);
+  },
+  deleteItem: function (e) {
+    console.log('deleteItem');
+  },
+  _openItemEditModal: function (model) {
+    var _newItemView = new ItemEditView({
+      model: model,
+      el: '.reveal-modal'
+    });
+    _newItemView.render();
+    
+  },
+  createItem: function () {
+    //TODO: Dynamically create a form.
+    var _newItemModel = new ItemEditModel({
+      description: this.model.get('description'), //schema definition
+      name: this.model.get('name'),
+      plugin: this.model.get('plugin'),
+      values: {}
+    });
+    this._openItemEditModal(_newItemModel);
+  },
   schemaChange: function (msg) {
     // $(".save-changes", this.el).html("Save Changes").removeClass("white").addClass("blue");
     if (msg.get("errors")) {
@@ -13,12 +52,9 @@ window.CollectionView = Backbone.View.extend({
     }
   },
   initialize: function () {
-    console.log('initialize() in CollectionView');
-    console.log(this.model);
     this.model.bind("all", this.render, this);
   },
   render: function () {
-    console.log('render() in CollectionView');
     $(this.el).html(this.template(this.model.toJSON()));
   }
 });

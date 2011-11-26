@@ -25,7 +25,9 @@ window.SchemaView = Backbone.View.extend({
     var _newDesc = {};
     $("fieldset", this.el).each(function () {
       var type = $(this).find("select").val();
+      //TODO: Account for required as well
       _newDesc[$(this).find("input[type=text]").val()] = $(this).find("span.checkbox").hasClass("checked") ? { type: type, unique: true} : type;
+      
     });
     return _newDesc;
   },

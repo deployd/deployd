@@ -46,10 +46,14 @@
 				</div>
 			</div>
 			<div class="nine columns">
-        <!--tabs-nav-template goes here-->
-				<div class="row" id="content">
+        <dl class="tabs" id="plugin-tabs-nav">
+          
+        </dl>
+				<ul class="tabs-content twelve columns" id="content">
 					
-				</div>
+				</ul>
+				<div class="reveal-modal">
+        </div>
 			</div>
 		</div>
 		
@@ -57,6 +61,27 @@
 	<!-- container -->
   
   <!-- PARTIAL TEMPLATES -->
+  <script id="item-edit-modal-template" type="html/template">
+    <a class="close-reveal-modal">x</a>
+    <h6><%= name %></h6>
+    <p>Fill out the fields below to create/edit an object in the <%= name %> collection.</p>
+    <form class="item-edit-form nice">
+      <% _.each(description, function (val, key, obj) { 
+        var type = 'text'; %>
+        <fieldset>
+          <label for="item-val-<%= key %>"><%= key %></label>
+          <input 
+            id="item-val-<%= key %>" 
+            name="<%= key %>" 
+            type="<%= type %>" 
+            <% if (val.required) print('required="true"'); 
+            if (typeof values !== "undefined" && typeof values[key] !== "undefined") print('value='+values[key]); %> />
+        </fieldset>
+      <% }); %>
+    </form>
+    <a class="nice medium radius blue button save-item">Save Changes</a>
+    <a class="nice medium radius white button discard-changes">Discard Changes</a>
+  </script>
   <script id="collection-view-template" type="html/template">
     <div class="twelve columns">
       <div class="panel">
@@ -67,32 +92,36 @@
           <li><strong>List</strong>: GET /<%= name %></li>
           <li><strong>Search</strong>: GET /search/<%= name %></li>
         </ul>
-        <!--<input class="input-text" placeholder="Search" />-->
-        <table style="table-layout:fixed;">
-          <thead>
-            <% _.each(results[0], function (val, key, list) {%>
-              <th style="overflow:hidden;" width="<% print(Math.floor(100 / (numFields + 2))); %>%"><%= key %></th>
-            <% }); %>
-            <th width="<% print(Math.floor(100 / (numFields + 2))); %>%">edit</th>
-            <th width="<% print(Math.floor(100 / (numFields + 2))); %>%">remove</th>
-          </thead>
-          <tbody>
-            <% _.each(results, function (element, index, list) {%>
-              <tr>
-                <% _.each(element, function (val, key, obj) { %>
-                  <td style="overflow: hidden;" width="<% print(Math.floor(100 / (numFields + 2))); %>%" ><%= val %></td>
-                <%});%>
-                <td width="<% print(Math.floor(100 / (numFields + 2))); %>%">
-                  <a class="edit-item">edit</a>
-                </td>
-                <td width="<% print(Math.floor(100 / (numFields + 2))); %>%">
-                  <a class="remove-item">remove</a>
+        <% if (results.length > 0) { %>
+          <!--<input class="input-text" placeholder="Search" />-->
+          <table style="table-layout:fixed;">
+            <thead>
+              <% _.each(results[0], function (val, key, list) {%>
+                <th style="overflow:hidden;" width="<% print(Math.floor(100 / (numFields + 2))); %>%"><%= key %></th>
+              <% }); %>
+              <th width="<% print(Math.floor(100 / (numFields + 2))); %>%">edit</th>
+              <th width="<% print(Math.floor(100 / (numFields + 2))); %>%">remove</th>
+            </thead>
+            <tbody>
+              <% _.each(results, function (element, index, list) {%>
+                <tr>
+                  <% _.each(element, function (val, key, obj) { %>
+                    <td style="overflow: hidden;" width="<% print(Math.floor(100 / (numFields + 2))); %>%" ><%= val %></td>
+                  <%});%>
+                  <td width="<% print(Math.floor(100 / (numFields + 2))); %>%">
+                    <a id="edit-item-<% print(element._id); %>" class="edit-item">edit</a>
+                  </td>
+                  <td width="<% print(Math.floor(100 / (numFields + 2))); %>%">
+                    <a class="remove-item">remove</a>
                 
-              </tr>
-            <%});%>
-          </tbody>
-        </table>
-        <a class="small radius nice blue button">Create New <%= name %></a>
+                </tr>
+              <%});%>
+            </tbody>
+          </table>
+        <% } else {%>
+          <p><em>No items in collection.</em></p>
+        <% } %>
+        <a class="small radius nice blue button create-collection-item">Create New <%= name %></a>
         <a class="small radius nice white button">Export <%= name %></a>
         <a class="small radius nice white button">Upload <%= name %></a>
       </div>
@@ -158,11 +187,13 @@
   							  <option <% if (value === "boolean" || value.type === "boolean") { print("SELECTED"); }%>>boolean</option>
   							  <option <% if (value === "binary" || value.type === "binary") { print("SELECTED"); }%>>binary</option>
   							</select>
-  							<label for="unique<%= key %>" style="display:inline-block; padding: 0 10px;">
-  							  <input type="checkbox" id="unique<%= key%>" style="display: none;">
-  							  <span class="custom checkbox <% if (value.unique) { print("checked"); } %>"></span> unique in this collection
-  							</label>
-  							<a class="nice small radius red button delete-property" style="float: right;">Remove</a>
+  							<label for="unique<%= key %>" style="display:inline-block; padding: 0 10px;" />
+							  <input type="checkbox" id="unique<%= key%>" style="display: none;">
+							  <span class="custom checkbox <% if (value.unique) { print("checked"); } %>"></span> unique
+							  <label for="required-<%= key %>" style="display:inline-block; padding: 0 10px;" />
+							  <input type="checkbox" id="required-<%= key %>" style="display: none;">
+							  <span class="custom checkbox <% if (value.required) { print("checked"); } %>"></span> required 
+  							<a class="delete-property" style="float: right; margin-top: 7px; cursor: pointer;">Remove</a>
   					</fieldset>  					
 				  <%});%>
 
@@ -408,8 +439,8 @@
     // dependencies
     $LAB
     .setOptions({
-      AlwaysPreserveOrder: true,
-      CacheBust: true
+      AlwaysPreserveOrder: true
+      // CacheBust: true
     })
     .script(l + 'underscore-min.js')
     .script(l + 'jquery-1.6.2.js')
@@ -424,11 +455,13 @@
     .script(m + 'plugin.js')
     .script(m + 'form.js')
     .script(m + 'schema-model.js')
+    .script(m + 'item-edit-model.js')
     .script(m + 'collection-model.js')
     // partials
     .script(p + 'plugin-view.js')
     .script(p + 'schema-view.js')
     .script(p + 'collection-view.js')
+    .script(p + 'item-edit-view.js')
     // views
     .script(v + 'app-nav-view.js')
     // router
