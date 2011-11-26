@@ -9,7 +9,35 @@ window.CollectionView = Backbone.View.extend({
     console.log('editItem:'+$(e.currentTarget).attr("id"));
     //TODO: Implement auto-saving model.
     var values = this.model.getItemById($(e.currentTarget).attr("id").replace('edit-item-',''));
-    console.log(values);
+    var description = this.model.get('description');
+    _.each(description, function (val, key, obj) {
+      obj[key] = typeof val === "object" ? val : { type: val};
+      
+      switch (obj[key].type) {
+        case "email":
+          type = "email";
+          break;
+        case "password":
+          type = 'password';
+          break;
+        case "object":
+          type = 'textarea';
+          if (typeof values[key] === 'object') values[key] = JSON.stringify(values[key]);
+          values[key].replace(/ /g,'');
+          break;
+        case 'boolean':
+          type = 'checkbox';
+          break;
+        case 'mutli-select':
+          type = 'multi-select';
+          break;
+        default:
+          type = "text";
+      }
+      
+      obj[key].formType = type;
+    });
+    
     var _itemModel = new ItemEditModel({
       description: this.model.get('description'), //schema definition
       name: this.model.get('name'),
@@ -31,8 +59,35 @@ window.CollectionView = Backbone.View.extend({
   },
   createItem: function () {
     //TODO: Dynamically create a form.
+    var description = this.model.get('description');
+    _.each(description, function (val, key, obj) {
+      obj[key] = typeof val === "object" ? val : { type: val};
+      
+      switch (obj[key].type) {
+        case "email":
+          type = "email";
+          break;
+        case "password":
+          type = 'password';
+          break;
+        case "object":
+          type = 'textarea';
+          break;
+        case 'boolean':
+          type = 'checkbox';
+          break;
+        case 'mutli-select':
+          type = 'multi-select';
+          break;
+        default:
+          type = "text";
+      }
+      
+      obj[key].formType = type;
+      console.log(JSON.stringify(obj));
+    });
     var _newItemModel = new ItemEditModel({
-      description: this.model.get('description'), //schema definition
+      description: description, //schema definition
       name: this.model.get('name'),
       plugin: this.model.get('plugin'),
       values: {}
