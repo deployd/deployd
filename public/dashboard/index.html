@@ -66,16 +66,18 @@
     <h6><%= name %></h6>
     <p>Fill out the fields below to create/edit an object in the <%= name %> collection.</p>
     <form class="item-edit-form nice">
-      <% _.each(description, function (val, key, obj) { 
-        var type = 'text'; %>
+      <% _.each(description, function (val, key, obj) { %>
         <fieldset>
           <label for="item-val-<%= key %>"><%= key %></label>
-          <input 
-            id="item-val-<%= key %>" 
-            name="<%= key %>" 
-            type="<%= type %>" 
-            <% if (val.required) print('required="true"'); 
-            if (typeof values !== "undefined" && typeof values[key] !== "undefined") print('value='+values[key]); %> />
+          <% if (val.formType === 'textarea' || val.formType === 'multi-select') { %>
+            <textarea id="item-val-<%= key %>" name="<%= key %>"><% print(values ? values[key] : ''); %></textarea>
+          <% }
+          else if (val.formType === 'checkbox') {%>
+            <input type="checkbox" id="item-val-<%= key %>" name="<%= key %>" <% print(val.required ? 'required="true"' : ''); print(values[key] === 'true' ? 'checked' : ''); %> />
+          <% }
+          else { %>
+            <input type="<% print(val.formType || 'text'); %>" id="item-val-<%= key %>" name="<%= key %>" <% if (val.required) print('required="true"'); %> />
+          <% } %>
         </fieldset>
       <% }); %>
     </form>

@@ -5,8 +5,6 @@ window.CollectionModel = Backbone.Model.extend({
   },
   getItemById: function (id) {
     var _items = this.get('results');
-    console.log('_items');
-    console.log(_items);
     var _item;
     _.each(this.get('results'), function (item, index, list){
       if (item._id === id) {

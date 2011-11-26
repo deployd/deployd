@@ -9,7 +9,14 @@ window.CollectionView = Backbone.View.extend({
     console.log('editItem:'+$(e.currentTarget).attr("id"));
     //TODO: Implement auto-saving model.
     var values = this.model.getItemById($(e.currentTarget).attr("id").replace('edit-item-',''));
+    var description = this.model.get('description');
+    _.each(description.toJSON(), function (val, key, obj){
+      obj[key] = typeof val === "object" ? val : { type: val};
+      console.log(JSON.stringify(obj));
+    });
     console.log(values);
+    console.log('description');
+    console.log(this.model.get('description'));
     var _itemModel = new ItemEditModel({
       description: this.model.get('description'), //schema definition
       name: this.model.get('name'),
@@ -31,8 +38,35 @@ window.CollectionView = Backbone.View.extend({
   },
   createItem: function () {
     //TODO: Dynamically create a form.
+    var description = this.model.get('description');
+    _.each(description, function (val, key, obj) {
+      obj[key] = typeof val === "object" ? val : { type: val};
+      
+      switch (obj[key].type) {
+        case "email":
+          type = "email";
+          break;
+        case "password":
+          type = 'password'
+          break;
+        case "object":
+          type = 'textarea';
+          break;
+        case 'boolean':
+          type = 'checkbox';
+          break;
+        case 'mutli-select':
+          type = 'multi-select';
+          break;
+        default:
+          type = "text";
+      }
+      
+      obj[key].formType = type;
+      console.log(JSON.stringify(obj));
+    });
     var _newItemModel = new ItemEditModel({
-      description: this.model.get('description'), //schema definition
+      description: description, //schema definition
       name: this.model.get('name'),
       plugin: this.model.get('plugin'),
       values: {}
