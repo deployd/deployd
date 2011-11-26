@@ -10,17 +10,16 @@ window.ItemEditView = Backbone.View.extend({
   _closeModal : function () {
     $('.close-reveal-modal').click();
   },
-  _createFormObject: function () {
-    var _newValues = {};
-    $("fieldset", this.el).each(function () {
-      //TODO: Account for required as well
-      //TODO: Get the names/values of all the fields and return.
+  _formObjectFromArray: function (formArray) {
+    var _formObject = {};
+    _.each(formArray, function (item, index, list) {
+      _formObject[item.name] = item.value;
     });
-    return _newValues;
+    return _formObject;
   },
   save: function (e) {
-    console.log('save');
-    this.model.save(this._createFormObject())
+    var _values = this._formObjectFromArray($('form', this.el).serializeArray());
+    this.model.save({values: _values});
   },
   render: function () {
     $(this.el).empty().append(this.template(this.model.toJSON())).reveal();

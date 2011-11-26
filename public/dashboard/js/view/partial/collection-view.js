@@ -8,11 +8,15 @@ window.CollectionView = Backbone.View.extend({
   editItem: function (e) {
     console.log('editItem:'+$(e.currentTarget).attr("id"));
     //TODO: Implement auto-saving model.
-    
-    var _schemaModel = Backbone.model({
-      url: '/'+this.model.get('plugin'),
-      values: this.model.get('results')
-    })
+    var values = this.model.getItemById($(e.currentTarget).attr("id").replace('edit-item-',''));
+    console.log(values);
+    var _itemModel = new ItemEditModel({
+      description: this.model.get('description'), //schema definition
+      name: this.model.get('name'),
+      plugin: this.model.get('plugin'),
+      values: values
+    });
+    this._openItemEditModal(_itemModel);
   },
   deleteItem: function (e) {
     console.log('deleteItem');
@@ -27,9 +31,7 @@ window.CollectionView = Backbone.View.extend({
   },
   createItem: function () {
     //TODO: Dynamically create a form.
-    console.log(this.model);
-    console.log(this.model.get('results'));
-    var _newItemModel = new Backbone.Model({
+    var _newItemModel = new ItemEditModel({
       description: this.model.get('description'), //schema definition
       name: this.model.get('name'),
       plugin: this.model.get('plugin'),

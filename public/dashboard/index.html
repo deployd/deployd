@@ -65,12 +65,17 @@
     <a class="close-reveal-modal">x</a>
     <h6><%= name %></h6>
     <p>Fill out the fields below to create/edit an object in the <%= name %> collection.</p>
-    <form class="item-edit-form">
+    <form class="item-edit-form nice">
       <% _.each(description, function (val, key, obj) { 
         var type = 'text'; %>
         <fieldset>
           <label for="item-val-<%= key %>"><%= key %></label>
-          <input id="item-val-<%= key %>" type="<%= type %>" <% if (val.required) print('required="true"'); %> />
+          <input 
+            id="item-val-<%= key %>" 
+            name="<%= key %>" 
+            type="<%= type %>" 
+            <% if (val.required) print('required="true"'); 
+            if (typeof values !== "undefined" && typeof values[key] !== "undefined") print('value='+values[key]); %> />
         </fieldset>
       <% }); %>
     </form>
@@ -434,8 +439,8 @@
     // dependencies
     $LAB
     .setOptions({
-      AlwaysPreserveOrder: true,
-      CacheBust: true
+      AlwaysPreserveOrder: true
+      // CacheBust: true
     })
     .script(l + 'underscore-min.js')
     .script(l + 'jquery-1.6.2.js')
@@ -450,6 +455,7 @@
     .script(m + 'plugin.js')
     .script(m + 'form.js')
     .script(m + 'schema-model.js')
+    .script(m + 'item-edit-model.js')
     .script(m + 'collection-model.js')
     // partials
     .script(p + 'plugin-view.js')
