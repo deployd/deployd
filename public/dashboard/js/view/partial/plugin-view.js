@@ -47,8 +47,8 @@ window.PluginView = Backbone.View.extend({
 	    $('#tab-link-'+this.tabId+' > a').addClass('active');
 	  }
 	  else {
-	    $('#plugin-tabs-nav > dd > a').addClass('active');
-	    $('.tabs-content > li').show();
+	    $('#plugin-tabs-nav > dd > a:first').addClass('active');
+	    $('.tabs-content > li:first').show();
 	  }
 	},
 	addTab: function (tabName, id) {
