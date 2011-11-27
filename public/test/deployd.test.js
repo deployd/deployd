@@ -75,7 +75,7 @@ var tests = {
   },
   
   '7. creating an app': {
-    route: '/app',
+    route: '/apps',
     data: app,
     expect: {
       _id: 'toExist',
