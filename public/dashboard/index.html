@@ -181,15 +181,16 @@
   <script id="schema-view-template" type="html/template">
     <div class="twelve columns">
 			<div class="panel">
-				<h6><% print(name); %> Schema Description</h6>
+				<h6><%= name %> Schema Description</h6>
 				<p>
 				  Create and edit properties below to control the validation of objects added to the  <%= name %> collection.
 				</p>
-				<p>
+				<p style="color:#c00;">
 				POST /...<br />
 				GET /...
 				</p>
 				<hr />
+				<% print(JSON.stringify(groups)); %>
 				<form class="description nice custom">
 				  <input type="hidden" name="_id" value="<%= _id %>" />
 				  <% _.each(description, function (value, key, list){%>

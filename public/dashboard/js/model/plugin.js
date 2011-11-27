@@ -6,6 +6,21 @@ window.Plugin = Backbone.Model.extend({
 	url: function () {
 	  return '/settings/' + this.get("name");
 	},
+	getObjectByName: function (name) {
+	  var _configObject = false;
+	  console.log('getting by name');
+	  console.log(name)
+	  this.get('objects').each(function (item, index, list){
+	    if (item.get('name') === name) {
+	      _configObject = item;
+	      return;
+	    }
+	    else {
+	      console.log(JSON.stringify(item));
+	    }
+	  });
+	  return _configObject;
+	},
 	initialize: function () {
 	  this.set({url: this.url()});
 	}

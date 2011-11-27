@@ -13,6 +13,7 @@ window.PluginView = Backbone.View.extend({
 	    var tabContent = _self.addTab(obj.get("name"), obj.get("_id"));
 	    if (obj.get("description")) {
 	      var _schemaModel = new SchemaModel(obj);
+	      _schemaModel.set({groups: app.get('plugins').getByPluginName('users').getObjectByName('groups')});
 	      var _schemaEl = $("<div />").attr("id", "id-"+obj.get('_id'));
         $(tabContent).append(_schemaEl);
 	      var _schemaView = new SchemaView({

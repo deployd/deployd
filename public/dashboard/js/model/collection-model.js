@@ -1,7 +1,7 @@
 window.CollectionModel = Backbone.Model.extend({
   url: function () {
-    console.log('/search/'+this.get('name')+'?find={}');
-    return '/search/' + this.get("name") + '?find={}';
+    // console.log('/search/'+this.get('name')+'?find={}');
+    return '/' + this.get('plugin') + '/' + this.get("name");
   },
   getItemById: function (id) {
     var _items = this.get('results');
