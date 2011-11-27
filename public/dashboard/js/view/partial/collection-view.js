@@ -6,8 +6,6 @@ window.CollectionView = Backbone.View.extend({
     "click .remove-item"  : "deleteItem"
   },
   editItem: function (e) {
-    console.log('editItem:'+$(e.currentTarget).attr("id"));
-    //TODO: Implement auto-saving model.
     var values = this.model.getItemById($(e.currentTarget).attr("id").replace('edit-item-',''));
     var description = _.clone(this.model.get('description'));
     if ('_id' in description === false) description._id = {type: 'string'};
@@ -52,7 +50,6 @@ window.CollectionView = Backbone.View.extend({
     this._openItemEditModal(_itemModel);
   },
   deleteItem: function (e) {
-    console.log('deleteItem');
     var _self = this;
     var _id = $(e.currentTarget).attr("id").replace('remove-item-','');
     var _item = this.model.getItemById(_id);
@@ -67,9 +64,6 @@ window.CollectionView = Backbone.View.extend({
           $('#remove-item-'+_id).parent().parent().slideUp();
         }
       });
-    }
-    else {
-      console.log("Play it safe, good call.");
     }
     
   },
@@ -106,9 +100,7 @@ window.CollectionView = Backbone.View.extend({
         default:
           type = "text";
       }
-      
       obj[key].formType = type;
-      console.log(JSON.stringify(obj));
     });
     var _newItemModel = new ItemEditModel({
       description: description, //schema definition

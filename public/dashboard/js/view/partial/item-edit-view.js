@@ -42,7 +42,6 @@ window.ItemEditView = Backbone.View.extend({
     $.each(_values, function(i, field){
       //Convert values to null if they are empty
       if (_values[i].replace(/ /g,'') === '') {
-        console.log('value was empty, '+i);
         _values[i] = null;
         return;
       }

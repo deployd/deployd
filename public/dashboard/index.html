@@ -190,7 +190,31 @@
 				GET /...
 				</p>
 				<hr />
-				<% print(JSON.stringify(groups)); %>
+				<h6>Select User Groups Permissions on This Model</h6>
+				<p>Property-specific permissions can be also be set for the model.</p>
+				<table>
+				  <thead>
+				    <th>Group</th>
+				    <th>Create</th>
+				    <th>Read</th>
+				    <th>Update</th>
+				    <th>Delete</th>
+				  </thead>
+				  <tbody>
+				    <form class="allowed nice custom">
+				    <% _.each(groups.results, function (val, key, obj) { %>
+				      <tr>
+      				  <td><strong><%= val.name %></strong></td>
+      				  <td><input type="radio" name="create" value="<%= val.name %>" <% if(allowed.create === val.name) print('checked="true"'); %> /></td>
+      				  <td><input type="radio" name="read" value="<%= val.name %>" <% if(allowed.read === val.name) print('checked="true"'); %> /></td>
+      				  <td><input type="radio" name="write" value="<%= val.name %>" <% if(allowed.write === val.name) print('checked="true"'); %> /></td>
+      				  <td><input type="radio" name="remove" value="<%= val.name %>" <% if(allowed.remove === val.name) print('checked="true"'); %> /></td>
+    				  </tr>
+    				<% }); %>
+    				</form>
+				  </tbody>
+				</table>
+				<hr />
 				<form class="description nice custom">
 				  <input type="hidden" name="_id" value="<%= _id %>" />
 				  <% _.each(description, function (value, key, list){%>

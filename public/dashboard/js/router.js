@@ -25,7 +25,6 @@ var Router = Backbone.Router.extend({
   
   plugin: function(name, tabId) {
     var model = app.get("plugins").getByPluginName(name);
-    console.log(model);
     var view = new PluginView({
       model: model
     });

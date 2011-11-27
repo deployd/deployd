@@ -13,7 +13,9 @@ window.PluginView = Backbone.View.extend({
 	    var tabContent = _self.addTab(obj.get("name"), obj.get("_id"));
 	    if (obj.get("description")) {
 	      var _schemaModel = new SchemaModel(obj);
-	      _schemaModel.set({groups: app.get('plugins').getByPluginName('users').getObjectByName('groups')});
+        var _groupCollection = new CollectionModel({name: 'groups'});
+        _schemaModel.set({groups: _groupCollection});
+	      
 	      var _schemaEl = $("<div />").attr("id", "id-"+obj.get('_id'));
         $(tabContent).append(_schemaEl);
 	      var _schemaView = new SchemaView({
@@ -21,6 +23,13 @@ window.PluginView = Backbone.View.extend({
 	        model: _schemaModel
 	      });
 	      _schemaView.render();
+        _groupCollection.bind('change', function onGroupUpdate(e){ 
+          console.log('_schemaModel');
+          console.log(_schemaModel.get('groups').get('results'));
+          _schemaModel.get('groups').get('results').push({name:'creator',creator:'root'});
+          _schemaView.render(); 
+        });
+        _groupCollection.fetch();
 	    }
 	    if (obj.get("collection")) {
 	      var _collectionModel = new CollectionModel({

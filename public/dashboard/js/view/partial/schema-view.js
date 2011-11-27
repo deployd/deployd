@@ -5,17 +5,19 @@ window.SchemaView = Backbone.View.extend({
     "click fieldset > .delete-property" : "deleteProperty",
     "click .add-new-property" : "addNewProperty"
   },
+  showAlert: function (status, message) {
+    $(".alert-box", this.el).addClass(status).css("display", "block").html(message);
+    $(".save-changes", this.el).html("Save Changes").removeClass("white").addClass("blue");
+  },
   schemaChange: function (msg) {
-
-    // $(".save-changes", this.el).html("Save Changes").removeClass("white").addClass("blue");
     if (msg.get("errors")) {
-      $(".alert-box", this.el).addClass("error").css("display", "block").html(msg.get("errors")[0].message);
+      this.showAlert('error', JSON.stringify(msg.get('errors')));
     }
     else if (msg.get("description")) {
-      $(".alert-box", this.el).addClass("success").css("display", "block").html("Schema saved successfully.");
+      this.showAlert('success', "Schema saved successfully.");
     }
     else {
-      $(".alert-box", this.el).addClass("warning").css("display", "block").html("Couldn't determine if schema was saved.");
+      this.showAlert('warning', "Couldn't determine if schema was saved.");
     }
   },
   initialize: function () {
@@ -23,7 +25,7 @@ window.SchemaView = Backbone.View.extend({
   },
   createFormObject: function () {
     var _newDesc = {};
-    $("fieldset", this.el).each(function () {
+    $("form.description fieldset", this.el).each(function () {
       var type = $(this).find("select").val();
       //TODO: Account for required as well
       _newDesc[$(this).find("input[type=text]").val()] = $(this).find("span.checkbox").hasClass("checked") ? { type: type, unique: true} : type;
@@ -31,11 +33,19 @@ window.SchemaView = Backbone.View.extend({
     });
     return _newDesc;
   },
+  createAllowedObject: function () {
+    var allowed = {}, _allowedFormValues = $("form.allowed", this.el).serializeArray();
+    _.each(_allowedFormValues, function (val, key, obj) {
+      allowed[val.name] = val.value;
+    });
+    console.log(allowed);
+    return allowed;
+  },
   save: function (e) {
     $(".alert-box", this.el).attr("class", "alert-box").css("display", "none");
     $(".save-changes", this.el).html("Saving...").removeClass("blue").addClass("white");
     
-    this.model.save({description: this.createFormObject()});
+    this.model.save({description: this.createFormObject(), allowed: this.createAllowedObject()});
   },
   deleteProperty: function (e, jq) {
     var _newDesc = this.createFormObject();
@@ -48,7 +58,10 @@ window.SchemaView = Backbone.View.extend({
     $("form", this.el).append(_.template($("#new-schema-property-template").html(),{key: '', type: ''}));
   },
   render: function () {
-    $(this.el).html(this.template(this.model.toJSON()));
+    var _viewModel = this.model.toJSON();    
+    _viewModel.groups = typeof _viewModel.groups !== 'undefined' ? _viewModel.groups.toJSON() : {};
+    
+    $(this.el).html(this.template(_viewModel));
     $(this.el).stylizeForms();
   }
 });
