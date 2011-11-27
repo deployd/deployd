@@ -1,7 +1,7 @@
 window.App = Backbone.Model.extend({
 	url: "/settings",
   parse: function (response) {
-    var plugins, _pluginsFromResponse, app = [];
+    var plugins, _pluginsFromResponse, app = {};
 
     plugins = new Plugins();
     
@@ -24,15 +24,14 @@ window.App = Backbone.Model.extend({
           objects: _pluginObjects
         });
       }
+      else {
+        app = objectsArray[0] || '';
+      }
     });
+    app.plugins = plugins;
 
     //TODO: Make this return dynamic data.
-    return { 
-      plugins: plugins,
-      name: "app",
-      _id: 0,
-      host: "hello-world.myname.deployd.com"
-    };
+    return app;
   }
 });
 
