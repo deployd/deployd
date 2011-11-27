@@ -17,7 +17,8 @@ var user = {
 var auth;
 
 var app = {
-  name: 'My Testing App'
+  name: 'My Testing App',
+  secret: 'tag soup'
 };
 
 var tests = {
@@ -83,7 +84,6 @@ var tests = {
     },
     after: function(result) {
       app = result;
-      console.log(app);
     }
   },
   
