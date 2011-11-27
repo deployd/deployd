@@ -9,6 +9,25 @@ window.PluginView = Backbone.View.extend({
     $(this.el).empty();
     $(this.tabsEl).empty();
 
+    // if its the models plugin
+    if(this.model.get('plugin') === 'models') {
+  	    var tabContent = _self.addTab('overview', 'models-overview');
+  	    tabContent
+  	      .append('<input id="model-name" type="text"" placeholder="Model Name" />')
+  	      .append(
+  	        $('<button>Create</button>')
+    	      .click(function() {
+    	        var name = $('#model-name').val();
+    	        if(!name) return;
+              d('/settings', {plugin: 'models', name: name, collection: name, description: {}, allowed: {}}, function(res) {
+                window.location.hash = '/plugins/models/' + res._id;
+                window.location.reload();
+              });
+    	      })
+	        )
+  	      ;
+    }
+
 	  this.model.get("objects").each(function(obj){
 	    var tabContent = _self.addTab(obj.get("name"), obj.get("_id"));
 	    if (obj.get("description")) {
@@ -24,8 +43,6 @@ window.PluginView = Backbone.View.extend({
 	      });
 	      _schemaView.render();
         _groupCollection.bind('change', function onGroupUpdate(e){ 
-          console.log('_schemaModel');
-          console.log(_schemaModel.get('groups').get('results'));
           _schemaModel.get('groups').get('results').push({name:'creator',creator:'root'});
           _schemaView.render(); 
         });
@@ -60,6 +77,7 @@ window.PluginView = Backbone.View.extend({
 	    $('.tabs-content > li:first').show();
 	  }
 	},
+	
 	addTab: function (tabName, id) {
 	  //Create a new li to add to the tabs nav
 	  var _navItem = $("<dd />").attr('id','tab-link-'+id);
