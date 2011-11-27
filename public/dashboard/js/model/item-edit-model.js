@@ -1,6 +1,6 @@
 window.ItemEditModel = Backbone.Model.extend({
   url: function () {
-    return '/' + this.get('plugin');
+    return this.get('plugin') === this.get('name') ? '/'+this.get('plugin') : '/'+this.get('plugin') + '/' + this.get('name');
   },
   sync: function (method, model, options) {
     var _self = this;

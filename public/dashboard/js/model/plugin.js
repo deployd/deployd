@@ -17,6 +17,17 @@ window.Plugin = Backbone.Model.extend({
 	  });
 	  return _configObject;
 	},
+	getObjectById: function (id) {
+	  var _configObject = false;
+
+	  this.get('objects').each(function (item, index, list){
+	    if (item.get('_id') === id) {
+	      _configObject = item;
+	      return;
+	    }
+	  });
+	  return _configObject;
+	},
 	initialize: function () {
 	  this.set({url: this.url()});
 	}

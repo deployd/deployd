@@ -18,16 +18,24 @@ var Router = Backbone.Router.extend({
   },
 
   routes: {
+    '/': 'home',
     '/plugins': 'plugin',
     '/plugins/:name': 'plugin',
     '/plugins/:name/:tab': 'plugin'
   },
-  
+  home: function () {
+    $('#content').html('welcome home');
+  },
   plugin: function(name, tabId) {
     var model = app.get("plugins").getByPluginName(name);
     var view = new PluginView({
       model: model
     });
+    var _breadcrumbHTML = '<a href="/dashboard">'+app.get('name')+'</a>';
+    if (name) _breadcrumbHTML += ' &raquo; <a href="/dashboard/#/plugins/'+name+'">'+name+'</a>';
+    if (tabId) _breadcrumbHTML += ' &raquo; <a href="/dashboard/#/plugins/'+tabId+'">'+model.getObjectById(tabId).get('name')+'</a>';
+    $('#bread').empty().append(_breadcrumbHTML);
+    
     if (typeof tabId !== "undefined" && tabId !== '') view.tabId = tabId;
     view.render();
   }
