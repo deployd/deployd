@@ -42,6 +42,7 @@ var tests = {
     }
   },
   
+  
   '4. login a user': {
     route: '/users/login',
     data: user,
@@ -56,7 +57,18 @@ var tests = {
     }
   },
   
-  '5. get current user': {
+  '5. create invites': {
+    route: '/apps/invites',
+    data: {
+      secret: 'tag soup',
+      left: 100
+    },
+    expect: {
+      errors: 'toNotExist'
+    }
+  },
+  
+  '6. get current user': {
     route: '/me',
     expect: {
       email: user.email,
@@ -66,7 +78,7 @@ var tests = {
     }
   },
   
-  '6. searching users': {
+  '7. searching users': {
     route: '/search?type=users&find={"email": "skawful@gmail.com"}',
     expect: {
       results: 'toExist', 
@@ -74,7 +86,7 @@ var tests = {
     }
   },
   
-  '7. creating an app': {
+  '8. creating an app': {
     route: '/apps',
     data: app,
     expect: {
@@ -90,7 +102,7 @@ var tests = {
   // search supports GET and POST
   // GET
   // my-app.d.com/search/apps?find={"creator": "someuser"}
-  '8. list my apps': {
+  '9. list my apps': {
     route: '/search/apps',
     data: {
       creator: user.uid
@@ -101,7 +113,7 @@ var tests = {
     }
   },
   
-  '9. validate users': {
+  '10. validate users': {
     route: '/users',
     data: {asdf: 1234, uid: {foo: 'bar'}, password: 1111},
     expect: {
@@ -109,7 +121,7 @@ var tests = {
     }
   },
   
-  '10. only 1 user per email': {
+  '11. only 1 user per email': {
     route: '/search/users', 
     data: {email: user.email},
     expect: {
@@ -117,7 +129,7 @@ var tests = {
     }
   },
   
-  '11. only 1 app per name': {
+  '12. only 1 app per name': {
     route: '/search/apps', 
     data: {name: app.name},
     expect: {
@@ -125,7 +137,7 @@ var tests = {
     }
   },
   
-  '12. only 1 user': {
+  '13. only 1 user': {
     route: '/search/users', 
     data: {},
     expect: {

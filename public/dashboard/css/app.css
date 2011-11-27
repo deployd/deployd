@@ -12,8 +12,9 @@
 #nav .button {padding: 5px 20px 6px}
 
 #menu {}
-#menu .active {color: #000; font-weight: bold} 
-#menu .links a {display: block}
+#menu .active {color: #000; font-weight: bold}
+#menu .links {margin-top: 10px;} 
+#menu .links a {display: block; text-transform: capitalize;}
 div.panel {margin: 0 0 18px 0; padding: 20px; box-shadow: none; border: solid 1px #e8e8e8;}
 
 #bread h4 {color: #ccc;}
@@ -24,7 +25,7 @@ h6 {font-weight: bold;}
 fieldset {background: #ececec;}
 
 /* tabs */
-dl.tabs dd a {color: #777; font-weight: bold}
+dl.tabs dd a {color: #777; font-weight: bold; text-transform: capitalize;}
 .tabs .active {color: #000;}
 
 /* user */
