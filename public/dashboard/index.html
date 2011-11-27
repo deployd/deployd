@@ -111,7 +111,7 @@
           <!--<input class="input-text" placeholder="Search" />-->
           <table style="table-layout:fixed;">
             <thead>
-              <% _.each(results[0], function (val, key, list) {%>
+              <% _.each(description, function (val, key, list) {%>
                 <th style="overflow:hidden;" width="<% print(Math.floor(100 / (numFields + 2))); %>%"><%= key %></th>
               <% }); %>
               <th width="<% print(Math.floor(100 / (numFields + 2))); %>%">edit</th>
@@ -120,14 +120,14 @@
             <tbody>
               <% _.each(results, function (element, index, list) {%>
                 <tr>
-                  <% _.each(element, function (val, key, obj) { %>
-                    <td style="overflow: hidden;" width="<% print(Math.floor(100 / (numFields + 2))); %>%" ><%= val %></td>
+                  <% _.each(description, function (val, key, obj) { %>
+                    <td style="overflow: hidden;" width="<% print(Math.floor(100 / (numFields + 2))); %>%" ><% print(typeof list[index][key] === 'object' ? JSON.stringify(list[index][key]) : list[index][key]); %></td>
                   <%});%>
                   <td width="<% print(Math.floor(100 / (numFields + 2))); %>%">
                     <a id="edit-item-<% print(element._id); %>" class="edit-item">edit</a>
                   </td>
                   <td width="<% print(Math.floor(100 / (numFields + 2))); %>%">
-                    <a class="remove-item">remove</a>
+                    <a id="remove-item-<% print(element._id); %>" class="remove-item">remove</a>
                 
                 </tr>
               <%});%>
@@ -136,6 +136,7 @@
         <% } else {%>
           <p><em>No items in collection.</em></p>
         <% } %>
+        <div class="alert-box" style="display:none;"></div>
         <a class="small radius nice blue button create-collection-item">Create New <%= name %></a>
         <a class="small radius nice white button">Export <%= name %></a>
         <a class="small radius nice white button">Upload <%= name %></a>

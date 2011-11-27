@@ -9,7 +9,8 @@ window.CollectionView = Backbone.View.extend({
     console.log('editItem:'+$(e.currentTarget).attr("id"));
     //TODO: Implement auto-saving model.
     var values = this.model.getItemById($(e.currentTarget).attr("id").replace('edit-item-',''));
-    var description = this.model.get('description');
+    var description = _.clone(this.model.get('description'));
+    if ('_id' in description === false) description._id = {type: 'string'};
     _.each(description, function (val, key, obj) {
       obj[key] = typeof val === "object" ? val : { type: val};
       
@@ -22,8 +23,12 @@ window.CollectionView = Backbone.View.extend({
           break;
         case "object":
           type = 'textarea';
-          if (typeof values[key] === 'object') values[key] = JSON.stringify(values[key]);
-          values[key].replace(/ /g,'');
+          if (typeof values[key] === 'object') {
+            values[key] = JSON.stringify(values[key]);
+          }
+          else if (typeof values[key] === 'string') {
+            values[key].replace(/ /g,'');
+          }
           break;
         case 'boolean':
           type = 'checkbox';
@@ -39,7 +44,7 @@ window.CollectionView = Backbone.View.extend({
     });
     
     var _itemModel = new ItemEditModel({
-      description: this.model.get('description'), //schema definition
+      description: description, //schema definition
       name: this.model.get('name'),
       plugin: this.model.get('plugin'),
       values: values
@@ -48,6 +53,25 @@ window.CollectionView = Backbone.View.extend({
   },
   deleteItem: function (e) {
     console.log('deleteItem');
+    var _self = this;
+    var _id = $(e.currentTarget).attr("id").replace('remove-item-','');
+    var _item = this.model.getItemById(_id);
+    var _confirm = confirm("Are you sure you want to delete this object?:\n"+JSON.stringify(_item));
+    if (_confirm === true) {
+      d('/'+this.model.get('plugin')+'/'+this.model.get('name')+'/'+_id+'?method=delete', function onDelete(e) {
+        if (e.errors) {
+          $('.alert-box', _self.el).empty().attr('class','alert-box').addClass('error').html('Error deleting object: '+JSON.stringify(e)).show();
+        }
+        else {
+          $('.alert-box', _self.el).empty().attr('class','alert-box').addClass('success').html('Object deleted successfully.').show();
+          $('#remove-item-'+_id).parent().parent().slideUp();
+        }
+      });
+    }
+    else {
+      console.log("Play it safe, good call.");
+    }
+    
   },
   _openItemEditModal: function (model) {
     var _newItemView = new ItemEditView({
@@ -59,7 +83,7 @@ window.CollectionView = Backbone.View.extend({
   },
   createItem: function () {
     //TODO: Dynamically create a form.
-    var description = this.model.get('description');
+    var description = _.clone(this.model.get('description'));
     _.each(description, function (val, key, obj) {
       obj[key] = typeof val === "object" ? val : { type: val};
       
