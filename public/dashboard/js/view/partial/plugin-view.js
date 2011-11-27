@@ -5,17 +5,13 @@ window.PluginView = Backbone.View.extend({
 	template: 'plugin-detail-template',
 	
 	render: function () {
-	  console.log('render() in PluginView');
 	  var _self = this;
     $(this.el).empty();
     $(this.tabsEl).empty();
 
 	  this.model.get("objects").each(function(obj){
-	    console.log('object:');
-	    console.log(obj);
 	    var tabContent = _self.addTab(obj.get("name"), obj.get("_id"));
 	    if (obj.get("description")) {
-
 	      var _schemaModel = new SchemaModel(obj);
 	      var _schemaEl = $("<div />").attr("id", "id-"+obj.get('_id'));
         $(tabContent).append(_schemaEl);
