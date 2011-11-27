@@ -163,20 +163,24 @@
   </script>
   <script id="new-schema-property-template" type="html/template">
     <fieldset>
-				<input class="input-text" type="text" value="<%= key %>">
-				<span>is a</span>
-				<select>
-				  <option <% if (type === "string") { print("SELECTED"); }%>>string</option>
-				  <option <% if (type === "email") { print("SELECTED"); }%>>email</option>
-				  <option <% if (type === "password") { print("SELECTED"); }%>>password</option>
-				  <option <% if (type === "boolean") { print("SELECTED"); }%>>boolean</option>
-				  <option <% if (type === "binary") { print("SELECTED"); }%>>binary</option>
-				</select>
-				<label for="unique<%= key %>" style="display:inline-block; padding: 0 10px;">
-				  <input type="checkbox" id="unique<%= key%>" style="display: none;">
-				  <span class="custom checkbox <% if (typeof unique !== "undefined") { print("checked"); } %>"></span> unique in this collection
-				</label>
-				<a class="delete-property" style="float: right;">Remove</a>
+  		<input class="input-text" type="text" />
+  		<span>is a</span>
+  		<select style="display: inline-block;">
+			  <option <% if (type === "string") { print("SELECTED"); }%>>string</option>
+			  <option <% if (type === "email") { print("SELECTED"); }%>>email</option>
+			  <option <% if (type === "password") { print("SELECTED"); }%>>password</option>
+			  <option <% if (type === "boolean") { print("SELECTED"); }%>>boolean</option>
+			  <option <% if (type === "binary") { print("SELECTED"); }%>>binary</option>
+			  <option <% if (type === "number") { print("SELECTED"); }%>>number</option>
+			  <option <% if (type === "long") { print("SELECTED"); }%>>long</option>
+			  <option <% if (type === "function") { print("SELECTED"); }%>>function</option>
+			</select>
+			<label for="unique<%= key %>" style="display:inline-block; padding: 0 10px;" />
+		  <input type="checkbox" class='unique-checkbox' id="unique<%= key %>" <% if (typeof unique !== 'undefined' && unique === true) { print("checked"); } %> /> unique
+		  <label for="required-<%= key %>" style="display:inline-block; padding: 0 10px;" />
+		  <input type="checkbox" class='required-checkbox' id="required-<%= key %>" <% if (typeof required !== 'undefined' && required === true) { print("checked"); } %> /> required 
+			<a class="delete-property" style="float: right; margin-top: 7px; cursor: pointer;">Remove</a>
+  	</fieldset>
   </script>
   <script id="schema-view-template" type="html/template">
     <div class="twelve columns">
@@ -192,28 +196,31 @@
 				<hr />
 				<h6>Select User Groups Permissions on This Model</h6>
 				<p>Property-specific permissions can be also be set for the model.</p>
+				<form class="allowed nice custom">
 				<table>
 				  <thead>
+				    <tr>
 				    <th>Group</th>
 				    <th>Create</th>
 				    <th>Read</th>
 				    <th>Update</th>
 				    <th>Delete</th>
+				    </tr>
 				  </thead>
 				  <tbody>
-				    <form class="allowed nice custom">
+				    
 				    <% _.each(groups.results, function (val, key, obj) { %>
 				      <tr>
       				  <td><strong><%= val.name %></strong></td>
-      				  <td><input type="radio" name="create" value="<%= val.name %>" <% if(allowed.create === val.name) print('checked="true"'); %> /></td>
-      				  <td><input type="radio" name="read" value="<%= val.name %>" <% if(allowed.read === val.name) print('checked="true"'); %> /></td>
-      				  <td><input type="radio" name="write" value="<%= val.name %>" <% if(allowed.write === val.name) print('checked="true"'); %> /></td>
-      				  <td><input type="radio" name="remove" value="<%= val.name %>" <% if(allowed.remove === val.name) print('checked="true"'); %> /></td>
+      				  <td align="center"><input type="radio" name="create" value="<%= val.name %>" <% if(allowed.create === val.name) print('checked'); %> /></td>
+      				  <td align="center"><input type="radio" name="read" value="<%= val.name %>" <% if(allowed.read === val.name) print('checked'); %> /></td>
+      				  <td align="center"><input type="radio" name="write" value="<%= val.name %>" <% if(allowed.write === val.name) print('checked'); %> /></td>
+      				  <td align="center"><input type="radio" name="remove" value="<%= val.name %>" <% if(allowed.remove === val.name) print('checked'); %> /></td>
     				  </tr>
     				<% }); %>
-    				</form>
 				  </tbody>
 				</table>
+				</form>
 				<hr />
 				<form class="description nice custom">
 				  <input type="hidden" name="_id" value="<%= _id %>" />
@@ -221,19 +228,20 @@
 				    <fieldset>
   							<input class="input-text" type="text" value="<%= key %>">
   							<span>is a</span>
-  							<select>
+  							<select style="display: inline-block;">
   							  <option <% if (value === "string" || value.type === "string") { print("SELECTED"); }%>>string</option>
   							  <option <% if (value === "email" || value.type === "email") { print("SELECTED"); }%>>email</option>
   							  <option <% if (value === "password" || value.type === "password") { print("SELECTED"); }%>>password</option>
   							  <option <% if (value === "boolean" || value.type === "boolean") { print("SELECTED"); }%>>boolean</option>
   							  <option <% if (value === "binary" || value.type === "binary") { print("SELECTED"); }%>>binary</option>
+  							  <option <% if (value === "number" || value.type === "number") { print("SELECTED"); }%>>number</option>
+  							  <option <% if (value === "long" || value.type === "long") { print("SELECTED"); }%>>long</option>
+  							  <option <% if (value === "function" || value.type === "function") { print("SELECTED"); }%>>function</option>
   							</select>
   							<label for="unique<%= key %>" style="display:inline-block; padding: 0 10px;" />
-							  <input type="checkbox" id="unique<%= key%>" style="display: none;">
-							  <span class="custom checkbox <% if (value.unique) { print("checked"); } %>"></span> unique
+							  <input type="checkbox" class='unique-checkbox' id="unique<%= key%>" <% if (value.unique) { print("checked"); } %> /> unique
 							  <label for="required-<%= key %>" style="display:inline-block; padding: 0 10px;" />
-							  <input type="checkbox" id="required-<%= key %>" style="display: none;">
-							  <span class="custom checkbox <% if (value.required) { print("checked"); } %>"></span> required 
+							  <input type="checkbox" class='required-checkbox' id="required-<%= key %>" <% if (value.required) { print("checked"); } %> /> required 
   							<a class="delete-property" style="float: right; margin-top: 7px; cursor: pointer;">Remove</a>
   					</fieldset>  					
 				  <%});%>
@@ -260,70 +268,8 @@
   <script id="search-template" type="html/template">
     //TODO: Wire up this template
     <form class="nice">
-			<input class="large input-text search" type="text" placeholder="Search Users" />
+			<input class="large input-text search" type="text" placeholder="Search" />
 		</form>
-  </script>
-  <script id="property-permissions-template" type="html/template">
-  //TODO: Wire up this template
-  <div class="row">
-		<div class="twelve columns">
-			<div class="panel">
-				<h6>User Permissions</h6>
-				<hr />
-				<form class="description nice custom">
-					<fieldset>
-							<input class="input-text" type="text" value="email">
-							<span>can be <strong>seen</strong> by</span>
-							<select>
-							  <option>You</option>
-							  <option>Authors</option>
-							  <option>Editors</option>
-							  <option SELECTED>Everyone</option>
-							</select>
-							<span> and is <strong>editable</strong> by</span>
-							<select>
-							  <option>You</option>
-							  <option>Authors</option>
-							  <option>Editors</option>
-							  <option>Everyone</option>
-							</select>
-					</fieldset>
-					<fieldset>
-							<input class="input-text" type="text" value="password">
-							<span>is <strong>encrypted</strong> and cannot be changed by anyone but the user.</span>
-					</fieldset>
-					<fieldset>
-							<input class="input-text" type="text" value="name">
-							<span>can be <strong>seen</strong> by</span>
-							<select>
-							  <option>You</option>
-							  <option>Authors</option>
-							  <option>Editors</option>
-							  <option SELECTED>Everyone</option>
-							</select>
-							<span> and is <strong>editable</strong> by</span>
-							<select>
-							  <option>You</option>
-							  <option>Authors</option>
-							  <option>Editors</option>
-							  <option>Everyone</option>
-							</select>
-					</fieldset>
-					<fieldset>
-							<select>
-							  <option>You</option>
-							  <option>Authors</option>
-							  <option>Editors</option>
-							  <option SELECTED>Everyone</option>
-							  <option SELECTED>Its creator</option>
-							</select>
-							<span> can <strong>delete</strong> this.</span>
-					</fieldset>
-					<a href="#" class="nice small radius blue button">Add New Property</a>
-				</form>
-			</div>
-		</div>
-	</div>
   </script>
   <script id="tabs-nav-template" type="html/template">
     //Expects model: {baseHref: "/dashboard/#/plugins/graph?section=", navItems: [{name: "linkone", active: true}, {name: "linktwo"}]}
@@ -480,8 +426,8 @@
     // dependencies
     $LAB
     .setOptions({
-      AlwaysPreserveOrder: true
-      // CacheBust: true
+      AlwaysPreserveOrder: true,
+      CacheBust: true
     })
     .script(l + 'underscore-min.js')
     .script(l + 'jquery-1.6.2.js')

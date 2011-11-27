@@ -27,9 +27,16 @@ window.SchemaView = Backbone.View.extend({
     var _newDesc = {};
     $("form.description fieldset", this.el).each(function () {
       var type = $(this).find("select").val();
+      var key = $(this).find("input[type=text]").val();
       //TODO: Account for required as well
-      _newDesc[$(this).find("input[type=text]").val()] = $(this).find("span.checkbox").hasClass("checked") ? { type: type, unique: true} : type;
-      
+      if ($('input[type=checkbox]',this).is(':checked')) {
+        _newDesc[key] = { type: type};
+        if ($('.unique-checkbox', this).is(':checked')) _newDesc[key].unique = true;
+        if ($('.required-checkbox', this).is(':checked')) _newDesc[key].required = true;
+      }
+      else {
+        _newDesc[key] = type;
+      }
     });
     return _newDesc;
   },
@@ -55,13 +62,13 @@ window.SchemaView = Backbone.View.extend({
     this.render();
   },
   addNewProperty: function (e) {
-    $("form", this.el).append(_.template($("#new-schema-property-template").html(),{key: '', type: ''}));
+    $("form.description", this.el).append(_.template($("#new-schema-property-template").html(),{key: Math.round(Math.random() * 1000000000000).toString(), type: 'string'}));
   },
   render: function () {
     var _viewModel = this.model.toJSON();    
     _viewModel.groups = typeof _viewModel.groups !== 'undefined' ? _viewModel.groups.toJSON() : {};
     
     $(this.el).html(this.template(_viewModel));
-    $(this.el).stylizeForms();
+    // $('form.description', this.el).stylizeForms();
   }
 });

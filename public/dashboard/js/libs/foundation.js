@@ -950,4 +950,4 @@ new function($) {
   
 })(jQuery);
 
-jQuery(document).ready(jQuery.stylizeForms);
+// jQuery(document).ready(jQuery.stylizeForms);

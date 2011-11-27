@@ -28,7 +28,7 @@ dl.tabs dd a {color: #777; font-weight: bold}
 .tabs .active {color: #000;}
 
 /* user */
-.description input {display: inline; width: 114px}
+.description input[type=text] {display: inline; width: 114px}
 .description div.custom.dropdown {top: -2px;}
 .roles input {width: 274px}
 .search {width: 99% !important} /* breaks on mobile */

@@ -1,7 +1,7 @@
 var Router = Backbone.Router.extend({
   initialize: function() {
     // prevent caching
-    // $.ajaxSetup({ cache: false });
+    $.ajaxSetup({ cache: false });
     // allows to send restful calls over AJAX
     Backbone.emulateHTTP = true;
     window.app = new App();
