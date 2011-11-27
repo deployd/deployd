@@ -75,7 +75,7 @@ window.PluginView = Backbone.View.extend({
 	  else {
 	    $('#plugin-tabs-nav > dd > a:first').addClass('active');
 	    $('.tabs-content > li:first').show();
-	    $('#bread').append(' &raquo; <a href="/dashboard/#/plugins/'+this.model.get('plugin')+'/'+$('#plugin-tabs-nav > dd:first').attr('id').replace('tab-link-','')+'">'+$('#plugin-tabs-nav > dd > a:first').html()+'</a>');
+	    $('#bread > h4').append(' &raquo; <a href="/dashboard/#/plugins/'+this.model.get('plugin')+'/'+$('#plugin-tabs-nav > dd:first').attr('id').replace('tab-link-','')+'">'+$('#plugin-tabs-nav > dd > a:first').html()+'</a>');
 	  }
 	},
 	
