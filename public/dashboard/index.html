@@ -167,12 +167,13 @@
   		<span>is a</span>
   		<select style="display: inline-block;">
 			  <option <% if (type === "string") { print("SELECTED"); }%>>string</option>
-			  <option <% if (type === "email") { print("SELECTED"); }%>>email</option>
-			  <option <% if (type === "password") { print("SELECTED"); }%>>password</option>
+			  <option <% if (type === "object") { print("SELECTED"); }%>>object</option>
 			  <option <% if (type === "boolean") { print("SELECTED"); }%>>boolean</option>
 			  <option <% if (type === "binary") { print("SELECTED"); }%>>binary</option>
 			  <option <% if (type === "number") { print("SELECTED"); }%>>number</option>
 			  <option <% if (type === "long") { print("SELECTED"); }%>>long</option>
+			  <option <% if (type === "email") { print("SELECTED"); }%>>email</option>
+			  <option <% if (type === "password") { print("SELECTED"); }%>>password</option>
 			  <option <% if (type === "function") { print("SELECTED"); }%>>function</option>
 			</select>
 			<label for="unique<%= key %>" style="display:inline-block; padding: 0 10px;" />
@@ -228,14 +229,16 @@
 				    <fieldset>
   							<input class="input-text" type="text" value="<%= key %>">
   							<span>is a</span>
+        			  
   							<select style="display: inline-block;">
   							  <option <% if (value === "string" || value.type === "string") { print("SELECTED"); }%>>string</option>
-  							  <option <% if (value === "email" || value.type === "email") { print("SELECTED"); }%>>email</option>
-  							  <option <% if (value === "password" || value.type === "password") { print("SELECTED"); }%>>password</option>
+  							  <option <% if (value === "object" || value.type === "object") { print("SELECTED"); }%>>object</option>
   							  <option <% if (value === "boolean" || value.type === "boolean") { print("SELECTED"); }%>>boolean</option>
   							  <option <% if (value === "binary" || value.type === "binary") { print("SELECTED"); }%>>binary</option>
   							  <option <% if (value === "number" || value.type === "number") { print("SELECTED"); }%>>number</option>
   							  <option <% if (value === "long" || value.type === "long") { print("SELECTED"); }%>>long</option>
+  							  <option <% if (value === "email" || value.type === "email") { print("SELECTED"); }%>>email</option>
+  							  <option <% if (value === "password" || value.type === "password") { print("SELECTED"); }%>>password</option>
   							  <option <% if (value === "function" || value.type === "function") { print("SELECTED"); }%>>function</option>
   							</select>
   							<label for="unique<%= key %>" style="display:inline-block; padding: 0 10px;" />
