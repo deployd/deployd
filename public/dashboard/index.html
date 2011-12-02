@@ -102,7 +102,7 @@
   <script id="collection-view-template" type="html/template">
     <div class="twelve columns collection-view">
       <div class="panel">
-        <h6><%= name %> Collection</h6>
+        <h2><%= name %> Collection</h2>
         <p>This is the <%= name %> collection in your database. You and your users (with proper permissions) can interact with this collection with these HTTP verbs and routes:</p>
         <ul>
           <li>
@@ -155,7 +155,7 @@
           <p class="no-items"><em>No items in collection.</em></p>
         <% } %>
         <div class="alert-box" style="display:none;"></div>
-        <a class="small radius nice blue button create-collection-item">Create New <%= name %></a>
+        <a class="medium radius nice blue button create-collection-item">Create New <%= name %></a>
         <a class="small radius nice white button">Export <%= name %></a>
         <a class="small radius nice white button">Upload <%= name %></a>
       </div>
@@ -204,39 +204,13 @@
   <script id="schema-view-template" type="html/template">
     <div class="twelve columns">
 			<div class="panel">
-				<h6><%= name %> Schema Description</h6>
-				<p>
-				  Create and edit properties below to control the validation of objects added to the  <%= name %> collection.
-				</p>
-				<hr />
-				<h6>Select User Groups Permissions on This Model</h6>
-				<p>Property-specific permissions can be also be set for the model.</p>
-				<form class="allowed nice custom">
-				<table>
-				  <thead>
-				    <tr>
-				    <th>Group</th>
-				    <th>Create</th>
-				    <th>Read</th>
-				    <th>Update</th>
-				    <th>Delete</th>
-				    </tr>
-				  </thead>
-				  <tbody>
-				    
-				    <% _.each(groups.results, function (val, key, obj) { %>
-				      <tr>
-      				  <td><strong><%= val.name %></strong></td>
-      				  <td align="center"><input type="radio" name="create" value="<%= val.name %>" <% if(allowed.create === val.name) print('checked'); %> /></td>
-      				  <td align="center"><input type="radio" name="read" value="<%= val.name %>" <% if(allowed.read === val.name) print('checked'); %> /></td>
-      				  <td align="center"><input type="radio" name="write" value="<%= val.name %>" <% if(allowed.write === val.name) print('checked'); %> /></td>
-      				  <td align="center"><input type="radio" name="remove" value="<%= val.name %>" <% if(allowed.remove === val.name) print('checked'); %> /></td>
-    				  </tr>
-    				<% }); %>
-				  </tbody>
-				</table>
-				</form>
-				<hr />
+			  <h2><%= name %> Schema</h2>
+			  <p>Define the allowed properties of the <%= name %> schema, and who is allowed to read and manipulate objects in the <%= name %> collection.</p>
+			  <hr />
+  			<h4><%= name %> Schema Description</h4>
+  			<p>
+  			  Create and edit properties below to control the validation of objects added to the  <%= name %> collection.
+  			</p>
 				<form class="description nice custom">
 				  <input type="hidden" name="_id" value="<%= _id %>" />
 				  <% if (description && _.keys(description).length <= 0) { %>
@@ -267,10 +241,36 @@
 				  <%});%>
 
 				</form>
-				<a class="nice small radius white button add-new-property">+ Add New Property</a>
-			  <hr />
+				<a class="nice small radius white button add-new-property">+ Add New Property</a><br /><br />
+				<h4>Group Permissions</h4>
+				<p>Set who can do what to this model.</p>
+				<form class="allowed nice custom">
+				<table>
+				  <thead>
+				    <tr>
+				    <th>Group</th>
+				    <th>Create</th>
+				    <th>Read</th>
+				    <th>Update</th>
+				    <th>Delete</th>
+				    </tr>
+				  </thead>
+				  <tbody>
+				    
+				    <% _.each(groups.results, function (val, key, obj) { %>
+				      <tr>
+      				  <td><strong><%= val.name %></strong></td>
+      				  <td align="center"><input type="radio" name="create" value="<%= val.name %>" <% if(allowed.create === val.name) print('checked'); %> /></td>
+      				  <td align="center"><input type="radio" name="read" value="<%= val.name %>" <% if(allowed.read === val.name) print('checked'); %> /></td>
+      				  <td align="center"><input type="radio" name="write" value="<%= val.name %>" <% if(allowed.write === val.name) print('checked'); %> /></td>
+      				  <td align="center"><input type="radio" name="remove" value="<%= val.name %>" <% if(allowed.remove === val.name) print('checked'); %> /></td>
+    				  </tr>
+    				<% }); %>
+				  </tbody>
+				</table>
+				</form>
 			  <div class="alert-box" style="display:none"></div>
-				<a class="nice small radius blue button save-changes">Save Changes</a>
+				<a class="nice medium radius blue button save-changes">Save All Schema Changes</a>
 			</div>
 		</div>
   </script>

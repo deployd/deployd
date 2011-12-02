@@ -30,24 +30,6 @@ window.PluginView = Backbone.View.extend({
 
 	  this.model.get("objects").each(function(obj){
 	    var tabContent = _self.addTab(obj.get("name"), obj.get("_id"));
-	    if (obj.get("description")) {
-	      var _schemaModel = new SchemaModel(obj);
-        var _groupCollection = new CollectionModel({name: 'groups'});
-        _schemaModel.set({groups: _groupCollection});
-	      
-	      var _schemaEl = $("<div />").attr("id", "id-"+obj.get('_id'));
-        $(tabContent).append(_schemaEl);
-	      var _schemaView = new SchemaView({
-	        el: _schemaEl,
-	        model: _schemaModel
-	      });
-	      _schemaView.render();
-        _groupCollection.bind('change', function onGroupUpdate(e){ 
-          _schemaModel.get('groups').get('results').push({name:'creator',creator:'root'});
-          _schemaView.render(); 
-        });
-        _groupCollection.fetch();
-	    }
 	    if (obj.get("collection")) {
 	      var _collectionModel = new CollectionModel({
 	        name: obj.get('collection'),
@@ -65,7 +47,25 @@ window.PluginView = Backbone.View.extend({
         });
         _collectionModel.fetch();
         _collectionView.render();
-	    }        
+	    }
+	    if (obj.get("description")) {
+	      var _schemaModel = new SchemaModel(obj);
+        var _groupCollection = new CollectionModel({name: 'groups'});
+        _schemaModel.set({groups: _groupCollection});
+	      
+	      var _schemaEl = $("<div />").attr("id", "id-"+obj.get('_id'));
+        $(tabContent).append(_schemaEl);
+	      var _schemaView = new SchemaView({
+	        el: _schemaEl,
+	        model: _schemaModel
+	      });
+	      _schemaView.render();
+        _groupCollection.bind('change', function onGroupUpdate(e){ 
+          _schemaModel.get('groups').get('results').push({name:'creator',creator:'root'});
+          _schemaView.render(); 
+        });
+        _groupCollection.fetch();
+	    }    
 	  });
 	  
 	  if (typeof this.tabId !== "undefined") {
