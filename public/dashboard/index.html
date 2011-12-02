@@ -227,6 +227,9 @@
 				<hr />
 				<form class="description nice custom">
 				  <input type="hidden" name="_id" value="<%= _id %>" />
+				  <% if (description && _.keys(description).length <= 0) { %>
+				    <strong><em>This model does not have any properties yet. Create some below to start adding models to your collection.</em></strong>
+				  <% }%>
 				  <% _.each(description, function (value, key, list){%>
 				    <fieldset>
   							<input class="input-text" type="text" value="<%= key %>">
