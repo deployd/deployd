@@ -100,15 +100,31 @@
     <a class="nice medium radius white button discard-changes">Discard Changes</a>
   </script>
   <script id="collection-view-template" type="html/template">
-    <div class="twelve columns">
+    <div class="twelve columns collection-view">
       <div class="panel">
         <h6><%= name %> Collection</h6>
-        <p>This is the <%= name %> collection in your database. You and your users (with proper permissions) can interact with this collection in these ways:</p>
+        <p>This is the <%= name %> collection in your database. You and your users (with proper permissions) can interact with this collection with these HTTP verbs and routes:</p>
         <ul>
-          <li><strong>Create</strong>: POST /<%= name %>/ { foo: bar }</li>
-          <li><strong>List</strong>: GET /<%= name %></li>
-          <li><strong>Search</strong>: GET /search/<%= name %></li>
+          <li>
+            <abbr title="Get a specific item in the collection by id."><strong>GET: /<%= plugin %>/<%= name %>/:id </strong></abbr>
+          </li>
+          <li>
+            <abbr title="Load models in a collection."><strong>GET: /search/<%= name %> </strong></abbr>
+          </li>
+          <li>
+            <abbr title="Load models, matching query. Can be queried by adding ?find={}, and including matching parameters in the object, such as ?find={email:'user@email'}"><strong>POST: /search/<%= name %></strong></abbr>
+          </li>
+          <li>
+            <abbr title="Add a new object to the <%= name %> collection."><strong>POST: /<%= plugin %>/<%= name %></strong></abbr>
+          </li>
+          <li>
+            <abbr title="Update a specific object by id in the collection. POST at this route is also supported, or alternatively attaching method=put to the querystring."><strong>PUT: /<%= plugin %>/<%= name %>/:id </strong></abbr>
+          </li>
+          <li>
+            <abbr title="Delete an object in a collection. Alternatively, POST is supported as long as ?method=delete is attached to the querystring."><strong>DELETE: /<%= plugin %>/<%= name %>/:id </strong></abbr>
+          </li>
         </ul>
+        <hr />
         <% if (results.length > 0) { %>
           <!--<input class="input-text" placeholder="Search" />-->
           <table style="table-layout:fixed;">
@@ -136,7 +152,7 @@
             </tbody>
           </table>
         <% } else {%>
-          <p><em>No items in collection.</em></p>
+          <p class="no-items"><em>No items in collection.</em></p>
         <% } %>
         <div class="alert-box" style="display:none;"></div>
         <a class="small radius nice blue button create-collection-item">Create New <%= name %></a>
@@ -191,10 +207,6 @@
 				<h6><%= name %> Schema Description</h6>
 				<p>
 				  Create and edit properties below to control the validation of objects added to the  <%= name %> collection.
-				</p>
-				<p style="color:#c00;">
-				POST /...<br />
-				GET /...
 				</p>
 				<hr />
 				<h6>Select User Groups Permissions on This Model</h6>

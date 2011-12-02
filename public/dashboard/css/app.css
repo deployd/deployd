@@ -35,3 +35,20 @@ dl.tabs dd a {color: #777; font-weight: bold; text-transform: capitalize;}
 .description div.custom.dropdown {top: -2px;}
 .roles input {width: 274px}
 .search {width: 99% !important} /* breaks on mobile */
+
+/* collection */
+.collection-view {}
+.collection-view ul {
+	margin-left: 0;
+}
+.collection-view ul li {
+	margin-bottom: 2px;
+}
+.collection-view ul li strong {
+	font-size: 1.1em;
+}
+.collection-view p.no-items {
+	font-size: 1.1em;
+	font-weight: bold;
+	margin: 30px 0;
+}
