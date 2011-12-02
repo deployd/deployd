@@ -20,11 +20,12 @@ div.panel {margin: 0 0 18px 0; padding: 20px; box-shadow: none; border: solid 1p
 #bread h4 {color: #ccc;}
 #bread a {color: #000; text-transform: capitalize;}
 
-.tabs-content .panel h6, .tabs-content .panel a.button { text-transform: capitalize; }
+.tabs-content .panel h6, .tabs-content .panel h6 abbr, .tabs-content .panel h2 abbr, .tabs-content .panel a.button { text-transform: capitalize; }
 
 /* global */
-h6 {font-weight: bold;}
+h6 {font-weight: bold; text-transform: capitalize;}
 fieldset {background: #ececec;}
+.empty-result { color:#000; font-style: oblique;}
 
 /* tabs */
 dl.tabs dd a {color: #777; font-weight: bold; text-transform: capitalize;}
@@ -51,4 +52,10 @@ dl.tabs dd a {color: #777; font-weight: bold; text-transform: capitalize;}
 	font-size: 1.1em;
 	font-weight: bold;
 	margin: 30px 0;
+}
+
+/* schema view */
+.schema-view .permissions-summary {
+	font-size: 1.1em;
+	font-weight: bold;
 }

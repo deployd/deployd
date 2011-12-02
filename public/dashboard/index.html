@@ -102,8 +102,7 @@
   <script id="collection-view-template" type="html/template">
     <div class="twelve columns collection-view">
       <div class="panel">
-        <h2><%= name %> Collection</h2>
-        <p>This is the <%= name %> collection in your database. You and your users (with proper permissions) can interact with this collection with these HTTP verbs and routes:</p>
+        <h2><abbr title="This is the <%= name %> collection in your database. You and your users (with proper permissions) can interact with this collection with the below HTTP verbs and routes."><%= name %> Collection</h2>
         <ul>
           <li>
             <abbr title="Get a specific item in the collection by id."><strong>GET: /<%= plugin %>/<%= name %>/:id </strong></abbr>
@@ -152,10 +151,10 @@
             </tbody>
           </table>
         <% } else {%>
-          <p class="no-items"><em>No items in collection.</em></p>
+          <div class="alert-box">No items in collection.</div>
         <% } %>
         <div class="alert-box" style="display:none;"></div>
-        <a class="medium radius nice blue button create-collection-item">Create New <%= name %></a>
+        <a class="small radius nice blue button create-collection-item">Create New <%= name %></a>
         <a class="small radius nice white button">Export <%= name %></a>
         <a class="small radius nice white button">Upload <%= name %></a>
       </div>
@@ -202,19 +201,14 @@
   	</fieldset>
   </script>
   <script id="schema-view-template" type="html/template">
-    <div class="twelve columns">
+    <div class="twelve columns schema-view">
 			<div class="panel">
-			  <h2><%= name %> Schema</h2>
-			  <p>Define the allowed properties of the <%= name %> schema, and who is allowed to read and manipulate objects in the <%= name %> collection.</p>
-			  <hr />
-  			<h4><%= name %> Schema Description</h4>
-  			<p>
-  			  Create and edit properties below to control the validation of objects added to the  <%= name %> collection.
-  			</p>
+			  <h2><abbr title="Define the allowed properties of the <%= name %> schema, and who is allowed to read and manipulate objects in the <%= name %> collection."><%= name %> Schema</abbr></h2>
+  			<h4><abbr title="Create and edit properties below to control the validation of objects added to the  <%= name %> collection."><%= name %> Schema Description</abbr></h4>
 				<form class="description nice custom">
 				  <input type="hidden" name="_id" value="<%= _id %>" />
 				  <% if (description && _.keys(description).length <= 0) { %>
-				    <strong><em>This model does not have any properties yet. Create some below to start adding models to your collection.</em></strong>
+				    <div class="alert-box">This model does not have any properties yet. Add some?</div>
 				  <% }%>
 				  <% _.each(description, function (value, key, list){%>
 				    <fieldset>
@@ -242,34 +236,37 @@
 
 				</form>
 				<a class="nice small radius white button add-new-property">+ Add New Property</a><br /><br />
-				<h4>Group Permissions</h4>
-				<p>Set who can do what to this model.</p>
-				<form class="allowed nice custom">
-				<table>
-				  <thead>
-				    <tr>
-				    <th>Group</th>
-				    <th>Create</th>
-				    <th>Read</th>
-				    <th>Update</th>
-				    <th>Delete</th>
-				    </tr>
-				  </thead>
-				  <tbody>
+				<h4><abbr title="View and edit the permissions that different groups have on objects in this collection.">Group Permissions</abbr></h4>
+				<span class="permissions-summary">Create: <% print(allowed.create || 'not set'); %>, Read: <% print(allowed.read || 'not set'); %>, Update: <% print(allowed.write || 'not set'); %>, Delete: <% print(allowed.remove || 'not set'); %><br /><br /></span> 
+				<a class="small white radius nice button edit-permissions">edit permissions</a>
+				<form class="allowed nice custom" style="display:none;">
+  				<table>
+  				  <thead>
+  				    <tr>
+  				    <th>Group</th>
+  				    <th>Create</th>
+  				    <th>Read</th>
+  				    <th>Update</th>
+  				    <th>Delete</th>
+  				    </tr>
+  				  </thead>
+  				  <tbody>
 				    
-				    <% _.each(groups.results, function (val, key, obj) { %>
-				      <tr>
-      				  <td><strong><%= val.name %></strong></td>
-      				  <td align="center"><input type="radio" name="create" value="<%= val.name %>" <% if(allowed.create === val.name) print('checked'); %> /></td>
-      				  <td align="center"><input type="radio" name="read" value="<%= val.name %>" <% if(allowed.read === val.name) print('checked'); %> /></td>
-      				  <td align="center"><input type="radio" name="write" value="<%= val.name %>" <% if(allowed.write === val.name) print('checked'); %> /></td>
-      				  <td align="center"><input type="radio" name="remove" value="<%= val.name %>" <% if(allowed.remove === val.name) print('checked'); %> /></td>
-    				  </tr>
-    				<% }); %>
-				  </tbody>
-				</table>
+  				    <% _.each(groups.results, function (val, key, obj) { %>
+  				      <tr>
+        				  <td><strong><%= val.name %></strong></td>
+        				  <td align="center"><input type="radio" name="create" value="<%= val.name %>" <% if(allowed.create === val.name) print('checked'); %> /></td>
+        				  <td align="center"><input type="radio" name="read" value="<%= val.name %>" <% if(allowed.read === val.name) print('checked'); %> /></td>
+        				  <td align="center"><input type="radio" name="write" value="<%= val.name %>" <% if(allowed.write === val.name) print('checked'); %> /></td>
+        				  <td align="center"><input type="radio" name="remove" value="<%= val.name %>" <% if(allowed.remove === val.name) print('checked'); %> /></td>
+      				  </tr>
+      				<% }); %>
+  				  </tbody>
+  				</table>
+  				<a style="cursor:pointer;" class="hide-edit-permissions">hide permissions</a>
 				</form>
-			  <div class="alert-box" style="display:none"></div>
+				<hr />
+			  <div class="alert-box sync-status" style="display:none"></div>
 				<a class="nice medium radius blue button save-changes">Save All Schema Changes</a>
 			</div>
 		</div>
