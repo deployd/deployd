@@ -1,4 +1,5 @@
 var Router = Backbone.Router.extend({
+  currentView: '',
   initialize: function() {
     // prevent caching
     $.ajaxSetup({ cache: false });
@@ -31,7 +32,7 @@ var Router = Backbone.Router.extend({
   },
   plugin: function(name, tabId) {
     var model = app.get("plugins").getByPluginName(name);
-    var view = new PluginView({
+    this.currentView = new PluginView({
       model: model
     });
     var _breadcrumbHTML = '<a href="/dashboard">'+app.get('name')+'</a>';
@@ -39,8 +40,8 @@ var Router = Backbone.Router.extend({
     if (tabId) _breadcrumbHTML += ' &raquo; <a href="/dashboard/#/plugins/'+tabId+'">'+model.getObjectById(tabId).get('name')+'</a>';
     $('#bread > h4').empty().append(_breadcrumbHTML);
     
-    if (typeof tabId !== "undefined" && tabId !== '') view.tabId = tabId;
-    view.render();
+    if (tabId && tabId !== '') this.currentView.tabId = tabId;
+    this.currentView.render();
   }
 });
 

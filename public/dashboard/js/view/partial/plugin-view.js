@@ -11,7 +11,7 @@ window.PluginView = Backbone.View.extend({
 
     // if its the models plugin
     if(this.model.get('plugin') === 'models') {
-  	    var tabContent = _self.addTab('overview', 'models-overview');
+  	    var tabContent = _self.addTab('overview', '');
   	    tabContent
   	      .append('<input id="model-name" type="text"" placeholder="Model Name" />')
   	      .append(
@@ -24,8 +24,7 @@ window.PluginView = Backbone.View.extend({
                 window.location.reload();
               });
     	      })
-	        )
-  	      ;
+	        );
     }
 
 	  this.model.get("objects").each(function(obj){

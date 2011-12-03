@@ -26,14 +26,17 @@ window.SchemaView = Backbone.View.extend({
     $(".save-changes", this.el).html("Save All Schema Changes").removeClass("white").addClass("blue");
   },
   schemaChange: function (msg) {
-    if (msg.get("errors")) {
-      this.showAlert('error', JSON.stringify(msg.get('errors')));
-    }
-    else if (msg.get("description")) {
-      this.showAlert('success', "Schema saved successfully.");
+    console.log(JSON.stringify(msg));
+    if (!msg.description) {
+      if (msg.errors) {
+        this.showAlert('error', JSON.stringify(msg.get('errors')));
+      }
+      else {
+        this.showAlert('error', 'The schema wasn\'t saved but no error messages were received. Make sure the server is online.');
+      }
     }
     else {
-      this.showAlert('warning', "Couldn't determine if schema was saved.");
+      this.showAlert('success', "Schema saved successfully.");
     }
   },
   initialize: function () {
