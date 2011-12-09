@@ -29,8 +29,10 @@
 	<div class="container">
 		
 		<div id="bread" class="row">
-			
+			<h4></h4>
+			<hr />
 		</div>
+
 		<div class="row">
 			<div id="menu" class="three columns">
 				<div class="panel">
@@ -98,15 +100,30 @@
     <a class="nice medium radius white button discard-changes">Discard Changes</a>
   </script>
   <script id="collection-view-template" type="html/template">
-    <div class="twelve columns">
+    <div class="twelve columns collection-view">
       <div class="panel">
-        <h6><%= name %> Collection</h6>
-        <p>This is the <%= name %> collection in your database. You and your users (with proper permissions) can interact with this collection in these ways:</p>
+        <h2><abbr title="This is the <%= name %> collection in your database. You and your users (with proper permissions) can interact with this collection with the below HTTP verbs and routes."><%= name %> Collection</h2>
         <ul>
-          <li><strong>Create</strong>: POST /<%= name %>/ { foo: bar }</li>
-          <li><strong>List</strong>: GET /<%= name %></li>
-          <li><strong>Search</strong>: GET /search/<%= name %></li>
+          <li>
+            <abbr title="Get a specific item in the collection by id."><strong>GET: /<%= plugin %>/<%= name %>/:id </strong></abbr>
+          </li>
+          <li>
+            <abbr title="Load models in a collection."><strong>GET: /search/<%= name %> </strong></abbr>
+          </li>
+          <li>
+            <abbr title="Load models, matching query. Can be queried by adding ?find={}, and including matching parameters in the object, such as ?find={email:'user@email'}"><strong>POST: /search/<%= name %></strong></abbr>
+          </li>
+          <li>
+            <abbr title="Add a new object to the <%= name %> collection."><strong>POST: /<%= plugin %>/<%= name %></strong></abbr>
+          </li>
+          <li>
+            <abbr title="Update a specific object by id in the collection. POST at this route is also supported, or alternatively attaching method=put to the querystring."><strong>PUT: /<%= plugin %>/<%= name %>/:id </strong></abbr>
+          </li>
+          <li>
+            <abbr title="Delete an object in a collection. Alternatively, POST is supported as long as ?method=delete is attached to the querystring."><strong>DELETE: /<%= plugin %>/<%= name %>/:id </strong></abbr>
+          </li>
         </ul>
+        <hr />
         <% if (results.length > 0) { %>
           <!--<input class="input-text" placeholder="Search" />-->
           <table style="table-layout:fixed;">
@@ -134,7 +151,7 @@
             </tbody>
           </table>
         <% } else {%>
-          <p><em>No items in collection.</em></p>
+          <div class="alert-box">No items in collection.</div>
         <% } %>
         <div class="alert-box" style="display:none;"></div>
         <a class="small radius nice blue button create-collection-item">Create New <%= name %></a>
@@ -184,47 +201,15 @@
   	</fieldset>
   </script>
   <script id="schema-view-template" type="html/template">
-    <div class="twelve columns">
+    <div class="twelve columns schema-view">
 			<div class="panel">
-				<h6><%= name %> Schema Description</h6>
-				<p>
-				  Create and edit properties below to control the validation of objects added to the  <%= name %> collection.
-				</p>
-				<p style="color:#c00;">
-				POST /...<br />
-				GET /...
-				</p>
-				<hr />
-				<h6>Select User Groups Permissions on This Model</h6>
-				<p>Property-specific permissions can be also be set for the model.</p>
-				<form class="allowed nice custom">
-				<table>
-				  <thead>
-				    <tr>
-				    <th>Group</th>
-				    <th>Create</th>
-				    <th>Read</th>
-				    <th>Update</th>
-				    <th>Delete</th>
-				    </tr>
-				  </thead>
-				  <tbody>
-				    
-				    <% _.each(groups.results, function (val, key, obj) { %>
-				      <tr>
-      				  <td><strong><%= val.name %></strong></td>
-      				  <td align="center"><input type="radio" name="create" value="<%= val.name %>" <% if(allowed.create === val.name) print('checked'); %> /></td>
-      				  <td align="center"><input type="radio" name="read" value="<%= val.name %>" <% if(allowed.read === val.name) print('checked'); %> /></td>
-      				  <td align="center"><input type="radio" name="write" value="<%= val.name %>" <% if(allowed.write === val.name) print('checked'); %> /></td>
-      				  <td align="center"><input type="radio" name="remove" value="<%= val.name %>" <% if(allowed.remove === val.name) print('checked'); %> /></td>
-    				  </tr>
-    				<% }); %>
-				  </tbody>
-				</table>
-				</form>
-				<hr />
+			  <h2><abbr title="Define the allowed properties of the <%= name %> schema, and who is allowed to read and manipulate objects in the <%= name %> collection."><%= name %> Schema</abbr></h2>
+  			<h4><abbr title="Create and edit properties below to control the validation of objects added to the  <%= name %> collection."><%= name %> Schema Description</abbr></h4>
 				<form class="description nice custom">
 				  <input type="hidden" name="_id" value="<%= _id %>" />
+				  <% if (description && _.keys(description).length <= 0) { %>
+				    <div class="alert-box">This model does not have any properties yet. Add some?</div>
+				  <% }%>
 				  <% _.each(description, function (value, key, list){%>
 				    <fieldset>
   							<input class="input-text" type="text" value="<%= key %>">
@@ -250,10 +235,39 @@
 				  <%});%>
 
 				</form>
-				<a class="nice small radius white button add-new-property">+ Add New Property</a>
-			  <hr />
-			  <div class="alert-box" style="display:none"></div>
-				<a class="nice small radius blue button save-changes">Save Changes</a>
+				<a class="nice small radius white button add-new-property">+ Add New Property</a><br /><br />
+				<h4><abbr title="View and edit the permissions that different groups have on objects in this collection.">Group Permissions</abbr></h4>
+				<span class="permissions-summary">Create: <% print(allowed.create || 'not set'); %>, Read: <% print(allowed.read || 'not set'); %>, Update: <% print(allowed.write || 'not set'); %>, Delete: <% print(allowed.remove || 'not set'); %><br /><br /></span> 
+				<a class="small white radius nice button edit-permissions">edit permissions</a>
+				<form class="allowed nice custom" style="display:none;">
+  				<table>
+  				  <thead>
+  				    <tr>
+  				    <th>Group</th>
+  				    <th>Create</th>
+  				    <th>Read</th>
+  				    <th>Update</th>
+  				    <th>Delete</th>
+  				    </tr>
+  				  </thead>
+  				  <tbody>
+				    
+  				    <% _.each(groups.results, function (val, key, obj) { %>
+  				      <tr>
+        				  <td><strong><%= val.name %></strong></td>
+        				  <td align="center"><input type="radio" name="create" value="<%= val.name %>" <% if(allowed.create === val.name) print('checked'); %> /></td>
+        				  <td align="center"><input type="radio" name="read" value="<%= val.name %>" <% if(allowed.read === val.name) print('checked'); %> /></td>
+        				  <td align="center"><input type="radio" name="write" value="<%= val.name %>" <% if(allowed.write === val.name) print('checked'); %> /></td>
+        				  <td align="center"><input type="radio" name="remove" value="<%= val.name %>" <% if(allowed.remove === val.name) print('checked'); %> /></td>
+      				  </tr>
+      				<% }); %>
+  				  </tbody>
+  				</table>
+  				<a style="cursor:pointer;" class="hide-edit-permissions">hide permissions</a>
+				</form>
+				<hr />
+			  <div class="alert-box sync-status" style="display:none"></div>
+				<a class="nice medium radius blue button save-changes">Save All Schema Changes</a>
 			</div>
 		</div>
   </script>

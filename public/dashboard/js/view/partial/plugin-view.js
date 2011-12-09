@@ -11,7 +11,7 @@ window.PluginView = Backbone.View.extend({
 
     // if its the models plugin
     if(this.model.get('plugin') === 'models') {
-  	    var tabContent = _self.addTab('overview', 'models-overview');
+  	    var tabContent = _self.addTab('overview', '');
   	    tabContent
   	      .append('<input id="model-name" type="text"" placeholder="Model Name" />')
   	      .append(
@@ -24,30 +24,11 @@ window.PluginView = Backbone.View.extend({
                 window.location.reload();
               });
     	      })
-	        )
-  	      ;
+	        );
     }
 
 	  this.model.get("objects").each(function(obj){
 	    var tabContent = _self.addTab(obj.get("name"), obj.get("_id"));
-	    if (obj.get("description")) {
-	      var _schemaModel = new SchemaModel(obj);
-        var _groupCollection = new CollectionModel({name: 'groups'});
-        _schemaModel.set({groups: _groupCollection});
-	      
-	      var _schemaEl = $("<div />").attr("id", "id-"+obj.get('_id'));
-        $(tabContent).append(_schemaEl);
-	      var _schemaView = new SchemaView({
-	        el: _schemaEl,
-	        model: _schemaModel
-	      });
-	      _schemaView.render();
-        _groupCollection.bind('change', function onGroupUpdate(e){ 
-          _schemaModel.get('groups').get('results').push({name:'creator',creator:'root'});
-          _schemaView.render(); 
-        });
-        _groupCollection.fetch();
-	    }
 	    if (obj.get("collection")) {
 	      var _collectionModel = new CollectionModel({
 	        name: obj.get('collection'),
@@ -65,7 +46,25 @@ window.PluginView = Backbone.View.extend({
         });
         _collectionModel.fetch();
         _collectionView.render();
-	    }        
+	    }
+	    if (obj.get("description")) {
+	      var _schemaModel = new SchemaModel(obj);
+        var _groupCollection = new CollectionModel({name: 'groups'});
+        _schemaModel.set({groups: _groupCollection});
+	      
+	      var _schemaEl = $("<div />").attr("id", "id-"+obj.get('_id'));
+        $(tabContent).append(_schemaEl);
+	      var _schemaView = new SchemaView({
+	        el: _schemaEl,
+	        model: _schemaModel
+	      });
+	      _schemaView.render();
+        _groupCollection.bind('change', function onGroupUpdate(e){ 
+          _schemaModel.get('groups').get('results').push({name:'creator',creator:'root'});
+          _schemaView.render(); 
+        });
+        _groupCollection.fetch();
+	    }    
 	  });
 	  
 	  if (typeof this.tabId !== "undefined") {
@@ -75,7 +74,7 @@ window.PluginView = Backbone.View.extend({
 	  else {
 	    $('#plugin-tabs-nav > dd > a:first').addClass('active');
 	    $('.tabs-content > li:first').show();
-	    $('#bread').append(' &raquo; <a href="/dashboard/#/plugins/'+this.model.get('plugin')+'/'+$('#plugin-tabs-nav > dd:first').attr('id').replace('tab-link-','')+'">'+$('#plugin-tabs-nav > dd > a:first').html()+'</a>');
+	    $('#bread > h4').append(' &raquo; <a href="/dashboard/#/plugins/'+this.model.get('plugin')+'/'+$('#plugin-tabs-nav > dd:first').attr('id').replace('tab-link-','')+'">'+$('#plugin-tabs-nav > dd > a:first').html()+'</a>');
 	  }
 	},
 	

@@ -3,21 +3,40 @@ window.SchemaView = Backbone.View.extend({
   events: {
     "click .save-changes" : "save",
     "click fieldset > .delete-property" : "deleteProperty",
-    "click .add-new-property" : "addNewProperty"
+    "click .add-new-property" : "addNewProperty",
+    "click .edit-permissions" : "editPermissions",
+    "click .hide-edit-permissions" : "hideEditPermissions"
+  },
+  editPermissions: function (e) {
+    console.log('show edit permissions');
+    $('.edit-permissions', this.el).hide();
+    $('.hide-edit-permissions', this.el).show();
+    $('.permissions-summary', this.el).hide();
+    $('form.allowed', this.el).show();
+  },
+  hideEditPermissions: function (e) {
+    $('.hide-edit-permissions', this.el).hide();
+    $('.edit-permissions', this.el).show();
+    $('.permissions-summary', this.el).show();
+    $('form.allowed', this.el).hide();
+    console.log('hide edit permissions');
   },
   showAlert: function (status, message) {
-    $(".alert-box", this.el).addClass(status).css("display", "block").html(message);
-    $(".save-changes", this.el).html("Save Changes").removeClass("white").addClass("blue");
+    $(".sync-status", this.el).addClass(status).css("display", "block").html(message);
+    $(".save-changes", this.el).html("Save All Schema Changes").removeClass("white").addClass("blue");
   },
   schemaChange: function (msg) {
-    if (msg.get("errors")) {
-      this.showAlert('error', JSON.stringify(msg.get('errors')));
-    }
-    else if (msg.get("description")) {
-      this.showAlert('success', "Schema saved successfully.");
+    console.log(JSON.stringify(msg));
+    if (!msg.description) {
+      if (msg.errors) {
+        this.showAlert('error', JSON.stringify(msg.get('errors')));
+      }
+      else {
+        this.showAlert('error', 'The schema wasn\'t saved but no error messages were received. Make sure the server is online.');
+      }
     }
     else {
-      this.showAlert('warning', "Couldn't determine if schema was saved.");
+      this.showAlert('success', "Schema saved successfully.");
     }
   },
   initialize: function () {
@@ -49,7 +68,7 @@ window.SchemaView = Backbone.View.extend({
     return allowed;
   },
   save: function (e) {
-    $(".alert-box", this.el).attr("class", "alert-box").css("display", "none");
+    $(".sync-status", this.el).attr("class", "alert-box sync-status").css("display", "none");
     $(".save-changes", this.el).html("Saving...").removeClass("blue").addClass("white");
     
     this.model.save({description: this.createFormObject(), allowed: this.createAllowedObject()});
@@ -62,6 +81,7 @@ window.SchemaView = Backbone.View.extend({
     this.render();
   },
   addNewProperty: function (e) {
+    $('.empty-result', this.el).hide();
     $("form.description", this.el).append(_.template($("#new-schema-property-template").html(),{key: Math.round(Math.random() * 1000000000000).toString(), type: 'string'}));
   },
   render: function () {
