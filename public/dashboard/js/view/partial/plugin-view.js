@@ -13,18 +13,23 @@ window.PluginView = Backbone.View.extend({
     if(this.model.get('plugin') === 'models') {
   	    var tabContent = _self.addTab('overview', '');
   	    tabContent
-  	      .append('<input id="model-name" type="text"" placeholder="Model Name" />')
   	      .append(
-  	        $('<button>Create</button>')
-    	      .click(function() {
-    	        var name = $('#model-name').val();
-    	        if(!name) return;
-              d('/settings', {plugin: 'models', name: name, collection: name, description: {}, allowed: {}}, function(res) {
-                window.location.hash = '/plugins/models/' + res._id;
-                window.location.reload();
-              });
-    	      })
-	        );
+  	        $('<form class="nice" />')
+  	        .append('<label>Create a custom model</label>')
+    	      .append('<input id="model-name" class="oversize input-text" type="text"" placeholder="Model Name" />')
+    	      .append(
+    	        $('<a class="nice small radius blue button save-item">Create</button>')
+      	      .click(function() {
+      	        var name = $('#model-name').val();
+      	        if(!name) return;
+                d('/settings', {plugin: 'models', name: name, collection: name, description: {}, allowed: {}}, function(res) {
+                  window.location.hash = '/plugins/models/' + res._id;
+                  window.location.reload();
+                });
+      	      })
+  	        )
+  	      )
+  	    ;
     }
 
 	  this.model.get("objects").each(function(obj){

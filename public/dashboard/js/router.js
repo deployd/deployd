@@ -24,12 +24,12 @@ var Router = Backbone.Router.extend({
     '/plugins/:name': 'plugin',
     '/plugins/:name/:tab': 'plugin'
   },
+  
   home: function () {
-    console.log('home');
-    $('#content').html('welcome home');
-    var _breadcrumbHTML = '<a href="/dashboard">'+app.get('name')+'</a>';
-    $('#bread > h4').empty().append(_breadcrumbHTML);
+    $('#content')
+      .append('<h2>Your App Dashboard</h2>')
   },
+  
   plugin: function(name, tabId) {
     var model = app.get("plugins").getByPluginName(name);
     this.currentView = new PluginView({

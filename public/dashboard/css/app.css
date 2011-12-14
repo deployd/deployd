@@ -59,3 +59,7 @@ dl.tabs dd a {color: #777; font-weight: bold; text-transform: capitalize;}
 	font-size: 1.1em;
 	font-weight: bold;
 }
+
+abbr {
+  text-transform: capitalize;
+}

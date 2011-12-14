@@ -9,7 +9,7 @@ beforeEach(function() {
 
 // sample data
 var user = {
-  email: 'skawful@gmail.com',
+  email: 'user@email.com',
   name: 'Ritchie Martori',
   password: '1234'
 };
@@ -23,6 +23,20 @@ var app = {
 
 var tests = {
   
+  '-1. logout': {
+    route: '/users/logout',
+    expect: {
+      errors: 'toNotExist'
+    }
+  },
+  
+  '0. me': {
+    route: '/me',
+    expect: {
+      email: 'toNotExist'
+    }
+  },
+  
   '1. creating a user': {
     route: '/users',
     data: user,
@@ -34,16 +48,33 @@ var tests = {
     }
   },
   
-  '3. add a user to group': {
+  '2. add a user to root group': {
     route: '/users/' + user.email + '/group',
     data: {group: 'root'},
+    expect: {
+      errors: 'toExist'
+    }
+  },
+  
+  '3. add a user to group': {
+    route: '/users/' + user.email + '/group',
+    data: {group: 'testers'},
     expect: {
       errors: 'toNotExist'
     }
   },
   
+  '4. login as a faux user': {
+    route: '/users/login',
+    data: {email: 'a', password: 'a'},
+    expect: {
+      _id: 'toNotExist',
+      auth: 'toNotExist',
+      errors: 'toExist'
+    },
+  },
   
-  '4. login a user': {
+  '5. login a user': {
     route: '/users/login',
     data: user,
     expect: {
@@ -57,7 +88,7 @@ var tests = {
     }
   },
   
-  '5. create invites': {
+  '6. create invites': {
     route: '/apps/invites',
     data: {
       secret: 'tag soup',
@@ -68,7 +99,7 @@ var tests = {
     }
   },
   
-  '6. get current user': {
+  '7. get current user': {
     route: '/me',
     expect: {
       email: user.email,
@@ -78,15 +109,23 @@ var tests = {
     }
   },
   
-  '7. searching users': {
-    route: '/search?type=users&find={"email": "skawful@gmail.com"}',
+  '8. searching users': {
+    route: '/search?type=users&find={"email": "user@email.com"}',
     expect: {
       results: 'toExist', 
       errors: 'toNotExist'
     }
   },
   
-  '8. creating an app': {
+  '9. delete an app': {
+    route: '/apps?method=delete',
+    data: app,
+    expect: {
+      _id: 'toNotExist'
+    }
+  },
+  
+  '10. creating an app': {
     route: '/apps',
     data: app,
     expect: {
@@ -102,7 +141,7 @@ var tests = {
   // search supports GET and POST
   // GET
   // my-app.d.com/search/apps?find={"creator": "someuser"}
-  '9. list my apps': {
+  '11. list my apps': {
     route: '/search/apps',
     data: {
       creator: user.uid
@@ -113,7 +152,7 @@ var tests = {
     }
   },
   
-  '10. validate users': {
+  '12. validate users': {
     route: '/users',
     data: {asdf: 1234, uid: {foo: 'bar'}, password: 1111},
     expect: {
@@ -121,7 +160,7 @@ var tests = {
     }
   },
   
-  '11. only 1 user per email': {
+  '13. only 1 user per email': {
     route: '/search/users', 
     data: {email: user.email},
     expect: {
@@ -129,7 +168,7 @@ var tests = {
     }
   },
   
-  '12. only 1 app per name': {
+  '14. only 1 app per name': {
     route: '/search/apps', 
     data: {name: app.name},
     expect: {
@@ -137,20 +176,20 @@ var tests = {
     }
   },
   
-  '13. only 1 user': {
+  '15. only 1 user': {
     route: '/search/users', 
     data: {},
     expect: {
       results: 'toContainOne'
     }
-  }
+  },
 
-  // '13. delete a user': {
-  //   route: '/me?method=delete',
-  //   expect: {
-  //     errors: 'toNotExist'
-  //   }
-  // }
+  '16. delete a user': {
+    route: '/me?method=delete',
+    expect: {
+      errors: 'toNotExist'
+    }
+  }
   
 };
 

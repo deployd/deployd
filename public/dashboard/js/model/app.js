@@ -13,7 +13,7 @@ window.App = Backbone.Model.extend({
     //Iterate through each plugin
     _.each(_pluginsFromResponse, function (objectsArray, pluginName, list) {
 
-      if (pluginName !== "undefined") {
+      if (pluginName !== "undefined" && pluginName !== "settings" && pluginName !== "apps") {
         var _pluginObjects = new Backbone.Collection(objectsArray, {
           model: PluginObject
         });
