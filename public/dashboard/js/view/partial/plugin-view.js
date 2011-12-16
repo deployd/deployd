@@ -22,7 +22,7 @@ window.PluginView = Backbone.View.extend({
       	      .click(function() {
       	        var name = $('#model-name').val();
       	        if(!name) return;
-                d('/settings', {plugin: 'models', name: name, collection: name, description: {}, allowed: {}}, function(res) {
+                dpd('/settings', {plugin: 'models', name: name, collection: name, description: {}, allowed: {}}, function(res) {
                   window.location.hash = '/plugins/models/' + res._id;
                   window.location.reload();
                 });

@@ -55,7 +55,7 @@ window.CollectionView = Backbone.View.extend({
     var _item = this.model.getItemById(_id);
     var _confirm = confirm("Are you sure you want to delete this object?:\n"+JSON.stringify(_item));
     if (_confirm === true) {
-      d('/'+this.model.get('plugin')+'/'+this.model.get('name')+'/'+_id+'?method=delete', function onDelete(e) {
+      dpd('/'+this.model.get('plugin')+'/'+this.model.get('name')+'/'+_id+'?method=delete', function onDelete(e) {
         if (e.errors) {
           $('.alert-box', _self.el).empty().attr('class','alert-box').addClass('error').html('Error deleting object: '+JSON.stringify(e)).show();
         }

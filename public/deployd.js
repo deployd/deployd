@@ -1,7 +1,7 @@
-function d(route, data, callback) {
+function dpd(route, data, callback) {
   var arg
     , i = 0
-    , host = d.host()
+    , host = dpd.host()
     , options = {
         dataType: 'json',
         contentType: 'application/json'
@@ -25,10 +25,10 @@ function d(route, data, callback) {
   
   if(host && host !== window.location.host) {
     options.url = window.location.protocol + '//' + host + options.url;
-    if(d.can('use cors')) {
-      options.beforeSend = function(xhr) {
-        xhr.withCredentials = true;
-      };
+    if(dpd.can('use cors')) {
+      options.xhrFields = {
+        withCredentials: true
+      }
     } else {
       options.dataType = 'jsonp';
     }
@@ -37,20 +37,20 @@ function d(route, data, callback) {
   $.ajax(options);
 }
 
-d.host = function(host) {
-  host && (d._host = host);
-  return d._host || '';
+dpd.host = function(host) {
+  host && (dpd._host = host);
+  return dpd._host || '';
 };
 
-d.can = function(feature) {
+dpd.can = function(feature) {
   // cache test results
-  d.results = d.results || {};
-  d.tests = d.tests || {
+  dpd.results = dpd.results || {};
+  dpd.tests = dpd.tests || {
     'use cors': function() {
       var fauxXHR = new XMLHttpRequest();
       return typeof fauxXHR.withCredentials !== 'undefined';
     }
   };
   
-  return d.results[feature] || (d.results[feature] = d.tests[feature]());
+  return dpd.results[feature] || (dpd.results[feature] = dpd.tests[feature]());
 };

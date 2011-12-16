@@ -40,9 +40,9 @@
 				
 			if(email && password) {
 				if($(this).attr('id') == 'register-btn') {
-					d('/users', user, function(res) {
+					dpd('/users', user, function(res) {
 						if(!res.errors) {
-							d('/users/login', user, function(res) {
+							dpd('/users/login', user, function(res) {
 								if(res.errors) {
 									alert(res.errors[0].message);
 								} else {

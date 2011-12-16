@@ -35,12 +35,12 @@ jQuery(document).ready(function($) {
 		terminal.echo("\t help     - show this help message");
 		terminal.echo('                     ')
 		terminal.echo('Code Examples:');
-		terminal.echo("\t d('/settings')");
-		terminal.echo("\t d('/users')");
-		terminal.echo("\t d('/user', {name: 'Joe', email: 'j@joes.com', password: '1234'})");
-		terminal.echo("\t d('/user/login', {email: 'j@joes.com', password: '1234'})");
-		terminal.echo("\t d('/search/users', {email: 'j@joes.com'})");
-		terminal.echo("\t d('/search/groups', {})");
+		terminal.echo("\t dpd('/settings')");
+		terminal.echo("\t dpd('/users')");
+		terminal.echo("\t dpd('/user', {name: 'Joe', email: 'j@joes.com', password: '1234'})");
+		terminal.echo("\t dpd('/user/login', {email: 'j@joes.com', password: '1234'})");
+		terminal.echo("\t dpd('/search/users', {email: 'j@joes.com'})");
+		terminal.echo("\t dpd('/search/groups', {})");
 		terminal.echo('----------------------------------------------------------------------');
 	}
 	
@@ -53,16 +53,16 @@ jQuery(document).ready(function($) {
 				help();
 			break;
 			case 'me':
-				d('/me');
+				dpd('/me');
 			break;
 			case 'routes':
-				d('/routes');
+				dpd('/routes');
 			break;
 			case 'users':
-				d('/users');
+				dpd('/users');
 			break;
 			case 'settings':
-				d('/settings');
+				dpd('/settings');
 			break;
 			default:
 				var result = eval(command);

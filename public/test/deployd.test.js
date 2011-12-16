@@ -247,8 +247,8 @@ for(var i = 0; i < sorted.length; i++) {
         test.data && args.push(test.data);
         args.push(callback);
         
-        // call d()
-        d.apply(this, args);
+        // call dpd()
+        dpd.apply(this, args);
         
         // wait for response
         waitsFor(function() {
