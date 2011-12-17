@@ -1,10 +1,10 @@
 {
   "author": "ritch",
-  "name": "Deployd",
+  "name": "deployd",
   "version": "0.0.0",
   "repository": {
     "type": "git",
-    "url": "git://github.com/Deployd/Deployd.git"
+    "url": "git://github.com/deployd/deployd.git"
   },
   "main": "index.js",
   "engines": {
