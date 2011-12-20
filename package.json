@@ -14,8 +14,7 @@
     "express": ">= 2.0.0",
     "underscore": ">= 1.0.0",
     "mongodb": ">= 0.9.0",
-    "ejs": ">= 0.4.3",
-    "connect-mongodb": ">= 1.0.0"
+    "ejs": ">= 0.4.3"
   },
   "bin":{
       "deployd":"./bin/deployd"
