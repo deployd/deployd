@@ -19,20 +19,15 @@
 	<div class="container">
 		<div class="row">
 			<form class="nice five columns centered">
-				<div class="row">
-				  <h2 class="three columns">
-  				  Login
-  				</h2>
-  			  <h5 class="six columns" style="position: relative; top: 17px;">
-  			    or <a href="/register.html">Join for Free</a>
-  			  </h5>
-			  </div>
-				<div id="info" class="panel">
+			  <h2>
+				  Register
+				</h2>
+				<div id="panel" class="panel">
 				  <label>Email</label>
   				<input id="email" type="text" class="oversize input-text" />
   				<label>Password</label>
   				<input id="password" type="password" class="oversize input-text" />
-  				<a id="login-btn" class="small radius nice blue button">Login</a>
+  				<a id="register-btn" class="small radius nice blue button">Create an Account</a>
   			</div>
 			</form>
 		</div>
@@ -50,11 +45,14 @@
 				if($(this).attr('id') == 'register-btn') {
 					dpd('/users', user, function(res) {
 						if(!res.errors) {
+						  
+						  $('#panel').text('Logging you in...');
+						  
 							dpd('/users/login', user, function(res) {
 								if(res.errors) {
 									alert(res.errors[0].message);
 								} else {
-    							window.location = '/dashboard';
+    						  window.location = '/dashboard';
 								}
 							});
 						} else {
