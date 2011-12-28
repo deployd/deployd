@@ -1,7 +1,10 @@
 
-# Deployd
-      
-  Plugin loader, MongoDB Object Document Mapper, and thin JSON server built on express.
+# Deployd 
+## v0.1.0      
+
+Application stack built specifically for UI developers. Everything is available from client JavaScript.
+  
+Plugin loader, MongoDB Object Document Mapper, and thin JSON server built on express.
   
 ## Plugins
 
