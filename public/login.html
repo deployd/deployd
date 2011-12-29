@@ -41,11 +41,23 @@
 	<script src="/deployd.js"></script>
 	
 	<script>
+		function query(name) {
+		  name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+		  var regexS = "[\\?&]" + name + "=([^&#]*)";
+		  var regex = new RegExp(regexS);
+		  var results = regex.exec(window.location.href);
+		  if(results == null)
+		    return "";
+		  else
+		    return decodeURIComponent(results[1].replace(/\+/g, " "));
+		}
+	
 		$('#login-btn, #register-btn').click(function() {
 			var email = $('#email').val(),
 				password = $('#password').val(),
-				user = {email: email, password: password};
-				
+				user = {email: email, password: password}
+				redirect = query('redirect') || '/dashboard';
+			
 			if(email && password) {
 				if($(this).attr('id') == 'register-btn') {
 					dpd('/users', user, function(res) {
@@ -64,7 +76,7 @@
 				} else {
 					dpd('/users/login', user, function(res) {
 						if(!res.errors && res._id) {
-							window.location = '/dashboard';
+							window.location = redirect;
 						} else {
 							alert(res.errors[0] && res.errors[0].message);
 						}
