@@ -6,6 +6,5 @@ bin/test
 
 .DS_Store
 .sass-cache/
-node_modules/
 
 public/npm-debug.log

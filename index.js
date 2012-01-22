@@ -1,1 +1,1 @@
-require('./lib/boot');
+require('deployd');

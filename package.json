@@ -1,7 +1,7 @@
 {
   "author": "ritch",
   "name": "deployd",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "repository": {
     "type": "git",
     "url": "git://github.com/deployd/deployd.git"
@@ -9,12 +9,20 @@
   "main": "index.js",
   "engines": {
     "node": ">= 0.4.0"
-  },   
+  },
   "dependencies": {
     "express": ">= 2.0.0",
-    "underscore": ">= 1.0.0",
-    "mongodb": ">= 0.9.0",
-    "ejs": ">= 0.4.3"
+    "ejs": ">= 0.4.3",
+    "models-dpd": "*",
+    "users-dpd": "*",
+    "search-dpd": "*",
+    "settings-dpd": "*",
+    "sample-dpd": "*"
+  },
+  "deployd": {
+    "name": "foo",
+    "host": "localhost",
+    "port": 3000
   },
   "devDependencies": {}
 }
