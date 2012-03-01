@@ -1,0 +1,14 @@
+{
+  "author": "Ritchie Martori",
+  "name": "deployd",
+  "version": "0.0.0",
+  "repository": {
+    "url": "git://github.com/deployd/deployd.git"
+  },
+  "engines": {
+    "node": ">= 0.6.x"
+  },
+  "main":"index",
+  "dependencies": {},
+  "devDependencies": {}
+}
