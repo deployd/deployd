@@ -14,8 +14,8 @@ Extensible, distributed resource server.
 ## Hello World
 
     var dpd = require('deployd')
-      , server = dpd()
-      , client = require('mdoq').require('mdoq-http').use('http://localhost:3000')
+      , server = dpd('My Todo App')
+      , client = require('mdoq').require('mdoq-http').use('http://user:pass@localhost:3000')
       , resources = client.use('/resources')
       , todos = client.use('/todos')
     ;
@@ -36,25 +36,21 @@ Extensible, distributed resource server.
       }
     };
 
-    resources.use('/todos').post(description, function(err, description) {
-      console.info('added todo description to resource graph');
-    });
-
     server.listen('localhost', 3000);
 
 Once the server is listening, we can interact with resources over http:
 
-    server.on('listening', function () {
-      todos.post({title: 'feed the dog'}, function(err, todo) {
-        console.log(todo._id); // the todos unique identifier
-        todos
-          .use('/' + todo._id)
-          .put({completed: true}, function (err, todo) {
-            console.log(todo); // {title: 'feed the dog', completed: true}
-          })
-        ;
-      })
-    })
+    server.on('listening', function() {
+      // describe a new type of resource
+      resources.use('/todos').post(description, function(err, description) {
+        console.info('added todo description to resource graph');
+        
+        // todos are now available
+        todos.post({title: 'feed the dog'}, function(err, todo) {
+          console.log(todo._id); // the todos unique identifier
+        });
+      });
+    });
 
 ## Resource Graph
 

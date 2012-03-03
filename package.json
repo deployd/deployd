@@ -1,7 +1,7 @@
 {
   "author": "Ritchie Martori",
   "name": "deployd",
-  "version": "0.0.0",
+  "version": "0.3.0",
   "repository": {
     "url": "git://github.com/deployd/deployd.git"
   },
@@ -9,6 +9,11 @@
     "node": ">= 0.6.x"
   },
   "main":"index",
-  "dependencies": {},
+  "dependencies": {
+    "mdoq-http": "0.2.2",
+    "mdoq-mongodb": "0.2.2",
+    "revalidator": "0.1.0",
+    "express": "2.5.8"
+  },
   "devDependencies": {}
 }
