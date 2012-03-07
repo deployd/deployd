@@ -1,89 +1,55 @@
-var resources = require('../')
-  , expect = require('chai').expect
-  , resources = require('../lib/resources')
-;
-
-var description = {
-  type: 'Data',
-  properties: {
-    title: {
-      description: 'the title of the todo',
-      type: 'string',
-      required: true
-    },
-    completed: {
-      description: 'the state of the todo',
-      type: 'boolean',
-      default: false
-    }
-  }
-};
-
-function clean() {
-  describe('resources clean', function(){
-    it('should remove all resources', function(done) {
-      resources.del(function (err, res) {
-        resources.get(function (err, res) {
-          expect(res).to.not.exist;
-          done(err);
-        })
-      })
-    })
-  })
-}
-
-describe('Resource Actions', function(){
-      
-  clean();
-  
-  describe('Adding', function(){
-    it('should add a new resource', function(done) {
-      resources.post(description, function (err, r) {
-        description._id = r._id;
-        expect(r._id).to.exist;
-        resources.get({_id: r._id}, function (err, r) {
-          expect(r).to.exist;
-          done(err);
-        })
-      })
-    })
-  })
-  
-  describe('resources.put()', function(){
-    it('should update the resource', function(done) {
-      resources
-        .get({_id: description._id})
-        // change title to task
-        .put({$set: {'properties.title': null, 'properties.task': description.properties.title}}, function (err, r) {
-          resources.get({_id: description._id}, function (err, r) {
-            expect(r.properties.task).to.eql(description.properties.title);
-            done(err);
-          })
-        })
-    })
-  })
-  
-  describe('resources.get()', function(){
-    it('should get the resource', function(done) {
-      resources.get({_id: description._id}, function (err, r) {
-        expect(r).to.exist;
+describe('Resources', function(){
+  describe('GET /resources', function(){
+    it('should return a list of resources', function(done) {
+      resources.get(function(err, res) {
+        data.resources.todos._id = res[0]._id;
+        expect(res[0]).to.eql(data.resources.todos);
         done(err);
       })
     })
   })
-
-  describe('resources.del()', function(){
-    it('should delete the resource', function(done) {
-      resources.del({_id: description._id}, function (err, r) {
-        resources.get({_id: description._id}, function (err, r) {
-          expect(r).to.not.exist;
-          done(err);
+  
+  describe('GET /resources?path=', function(){
+    it('should return a single result', function(done) {
+      resources.get({path: '/users'}, function (err, res) {
+        expect(res).to.have.length(1);
+        done(err);
+      })
+    })
+  })
+  
+  describe('POST /resources', function(){
+    it('should add a new resource', function(done) {
+      clear(function (e) {        
+        resources.post(data.resources.todos, function (err, res) {
+          resources.get({path: data.resources.todos.path}, function (error, r) {
+            expect(r[0]).to.eql(res);
+            done(error || err);
+          })
         })
       })
     })
   })
-
-  clean();
   
+  describe('PUT /resources', function(){
+    it('should updated the resources that match the query', function(done) {
+      resources.get({path: data.resources.todos.path}).put({$set: {path: '/foo'}}, function (err) {
+        resources.get({path: '/foo'}, function (error, res) {
+          expect(res).to.have.length(1);
+          done(error || err);
+        })
+      })
+    })
+  })
+  
+  describe('DELETE /resources', function(){
+    it('should remove all resources or those that match the query', function(done) {
+      resources.del(function (err) {
+        resources.get(function (error, all) {
+          expect(all).to.not.exist;
+          done(error || err);
+        })
+      })
+    })
+  })
 })
-

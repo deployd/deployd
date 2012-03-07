@@ -1,24 +1,11 @@
-var expect = require('chai').expect
-  , client = require('../lib/client').use('http://localhost:3003')
-  , dpd = require('../')
-  , server = dpd('My Todo App')
-  , types = client.use('/types')
-;
-
-describe('GET /types', function(){
-  it('should respond with a list of resource definitions', function(done) {
-    types.get(function (err, types) {
-      expect(types).to.eql({
-        Collection: {
-          defaultPath: '/my-objects'
-        },
-        UserCollection: {
-          label: 'Users Collection',
-          defaultPath: '/users'
-        }
-      });
-      
-      done(err);
+describe('Types', function(){
+  describe('GET /types', function(){
+    it('should return an object describing all the available types', function(done) {
+      types.get(function (err, all) {
+        expect(all).to.be.a('object');
+        expect(all).to.eql(require('../lib/types'));
+        done(err);
+      })
     })
   })
 })
