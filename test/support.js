@@ -2,9 +2,14 @@
 
 expect = require('chai').expect
 dpd = require('../')
+root = {key: 'foo', secret: 'bar'}
 server = dpd.use('http://localhost:3003')
-client = require('../lib/client').use('http://localhost:3003')
+client = require('mdoq').use('http://localhost:3003').use(function (req, res, next) {
+  req.headers['x-dssh-key'] = root.key;
+  next();
+}).use(require('../lib/client'));
 resources = client.use('/resources')
+keys = dpd.use('/keys');
 types = client.use('/types')
 users = client.use('/users')
 todos = client.use('/todos')
@@ -40,13 +45,23 @@ data = {
 
 clear = function(done) {
   todos.del(function (e) {
-    // sessions.del(function (err) {
+    sessions.del(function (err) {
       resources.del(function (error) {
         done()
       })
-    // })
+    })
   })
 };
+
+before(function(done){
+  // remove old key
+  keys.del(function () {
+    // authorize root key
+    dpd.use('/keys').post(root, function (err) {
+      done(err)
+    })
+  })
+})
 
 beforeEach(function(done){
   server.listen(function () {

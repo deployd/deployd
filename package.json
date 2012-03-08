@@ -10,10 +10,14 @@
   },
   "main":"index",
   "dependencies": {
-    "mdoq-http": "0.2.2",
-    "mdoq-mongodb": "0.3.0",
-    "revalidator": "0.1.0",
-    "express": "2.5.8"
+    "mdoq": "0.8.x",
+    "mdoq-http": "0.3.x",
+    "mdoq-mongodb": "0.3.x",
+    "revalidator": "0.1.x",
+    "express": "2.5.x"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "mocha": "*",
+    "chai": "*"
+  }
 }

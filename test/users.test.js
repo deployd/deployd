@@ -32,6 +32,18 @@ describe('Users', function(){
     })
   })
   
+  describe('GET /users/me', function(){
+    it('should return the current session', function(done) {
+      client.use('/users/me').get(function (err, session) {
+        expect(session).to.exist;
+        expect(session._id).to.have.length(24);
+        expect(session.user).to.be.a('object');
+        expect(session.user.password).to.not.exist;
+        done(err);
+      })
+    })
+  })
+  
   describe('DELETE /users/logout', function(){
     it('should logout the current user', function(done) {
       // TODO fix mdoq-http bug - loses context if replace client with users
