@@ -14,7 +14,8 @@
     "mdoq-http": "0.3.x",
     "mdoq-mongodb": "0.3.x",
     "revalidator": "0.1.x",
-    "express": "2.5.x"
+    "express": "2.5.x",
+    "commander": "0.5.x"
   },
   "devDependencies": {
     "mocha": "*",

@@ -17,7 +17,12 @@ Extensible, distributed resource server.
     
 ## Starting / Stopping
 
-You can start and stop the server with the `dpd` CLI or with the node module.
+You can start and stop the server with the `dpd` CLI
+
+    $ dpd
+    $ deployd is running at http://localhost:2304
+
+or the node module
 
     var dpd = require('deployd')
       .use('http://localhost:3333')
@@ -27,11 +32,6 @@ You can start and stop the server with the `dpd` CLI or with the node module.
       // tell deployd to listen
       .listen()
     ;
-    
-or
-
-    $ dpd
-    $ deployd is running at http://localhost:2304
 
 ## Client
 

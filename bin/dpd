@@ -1,0 +1,29 @@
+#!/usr/bin/env node
+
+/**
+ * Dependencies
+ */
+
+var dpd = require('commander');
+
+// Start
+
+dpd
+  .command('start')
+  .description('start the deployd server at port (2304)')
+  .action(function () {
+    console.log(dpd.port);
+  })
+;
+
+// Options
+
+dpd
+  .version('0.3.0-pre')
+  .option('-p, --port <port>', 'specify the port (2304)')
+  .option('-s, --storage', 'specify where to store resources (mongodb://localhost/deployd)')
+;
+
+// Parse
+
+dpd.parse(process.argv);
