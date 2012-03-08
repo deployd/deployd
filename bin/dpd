@@ -4,26 +4,39 @@
  * Dependencies
  */
 
-var dpd = require('commander');
+var program = require('commander')
+  , dpd = require('../')
 
 // Start
 
-dpd
-  .command('start')
-  .description('start the deployd server at port (2304)')
-  .action(function () {
-    console.log(dpd.port);
-  })
-;
+// program
+//   .command('start')
+//   .description('start the deployd server at port (2304)')
+//   .action(function () {
+//     
+//   })
+// ;
 
 // Options
 
-dpd
+program
   .version('0.3.0-pre')
   .option('-p, --port <port>', 'specify the port (2304)')
-  .option('-s, --storage', 'specify where to store resources (mongodb://localhost/deployd)')
+  .option('-s, --storage <url>', 'specify where to store resources (mongodb://localhost/deployd)')
 ;
 
 // Parse
 
-dpd.parse(process.argv);
+program.parse(process.argv);
+
+// Boot
+
+var port = program.port || 2304;
+
+if(program.storage) {
+  dpd.storage(program.storage);
+}
+
+dpd.use('http://localhost:' + port).listen(function () {
+  console.log('deployd is listening on port %s and storing resources at %s', port, dpd.storage());
+});
