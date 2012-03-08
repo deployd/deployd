@@ -7,16 +7,6 @@
 var program = require('commander')
   , dpd = require('../')
 
-// Start
-
-// program
-//   .command('start')
-//   .description('start the deployd server at port (2304)')
-//   .action(function () {
-//     
-//   })
-// ;
-
 // Options
 
 program
@@ -25,18 +15,141 @@ program
   .option('-s, --storage <url>', 'specify where to store resources (mongodb://localhost/deployd)')
 ;
 
+/**
+ * List all administration keys (users).
+ */
+
+program
+  .command('keys')
+  .description(' - list all admin keys')
+  .action(function () {
+    var port = program.port || 2304;
+
+    if(program.storage) {
+      dpd.storage(program.storage);
+    }
+
+    dpd.use('http://localhost:' + port).use('/keys').get(function (err, keys) {
+      console.log(keys || 'no keys found! see dpd --help');
+      process.exit();
+    })
+  })
+
+/**
+ * Add a new admin key.
+ */
+
+program
+  .command('addkey [key]')
+  .description(" - add a new admin key eg. dpd addkey '{\"user\": \"foo\", \"label\": \"admin\"}'")
+  .action(function (key) {
+    try {
+      key = JSON.parse(key);
+      strength = Object.keys(key).length;
+    } catch(e) {
+      key = undefined;
+    }
+    
+    if(typeof key == 'object' && strength > 1) {
+      if(program.storage) {
+        dpd.storage(program.storage);
+      }
+      
+      var port = program.port || 2304;
+      
+      dpd.use('http://localhost:' + port).use('/keys').post(key, function (err, newKey) {
+        if(err) {
+          console.log('Could not add key', err);
+        } else {
+          console.log('added key', newKey);          
+        }
+        process.exit();
+      })
+    } else {
+      console.log('key must be a valid JSON object with more than one attribute!');
+    }
+  })
+;
+
+/**
+ * Keygen
+ */
+ 
+function keygen() {
+  // TODO added randomness
+  return Math.random().toString().split('.')[1];
+}
+
+/**
+ * Generate a key
+ */
+ 
+program
+  .command('key')
+  .description(" - generate, add, and print a random admin key")
+  .action(function () {
+    var port = program.port || 2304;
+    var key = {}, strength = Math.floor(Math.random() * 5) + 2;
+    
+    while(strength--) {
+      key[keygen()] = keygen() + keygen() + keygen();
+    }
+
+    dpd.use('http://localhost:' + port).use('/keys').post(key, function (err, newKey) {
+      if(err) {
+        console.log('Could not add key', err);
+      } else {
+        console.log('added key:\n\n' + JSON.stringify(newKey) + '\n');          
+      }
+      process.exit();
+    })
+  })
+;
+
+/**
+ * Remove an admin key by id.
+ */
+
+ program
+   .command('rm [_id]')
+   .description(" - remove an admin key by _id'")
+   .action(function (_id) {
+     if(!_id) return console.log('you must provide the _id of they key you want to remove');
+     
+     if(program.storage) {
+       dpd.storage(program.storage);
+     }
+     
+     var port = program.port || 2304;
+     
+     dpd.use('http://localhost:' + port).use('/keys').del({_id: _id}, function (err) {
+       if(err) console.log(err);
+       else console.log('removed key with _id', _id);
+       process.exit();
+     })
+   });
+
+/**
+ * Start the http server and listen.
+ */
+
+program
+  .command('listen')
+  .description(' - start listening over http at the provided port')
+  .action(function (cmd) {
+    
+    var port = program.port || 2304;
+    
+    if(program.storage) {
+      dpd.storage(program.storage);
+    }
+
+    dpd.use('http://localhost:' + port).listen(function () {
+      console.log('deployd is listening on port %s and storing resources at %s', port, dpd.storage());
+    });
+  })
+;
+
 // Parse
 
 program.parse(process.argv);
-
-// Boot
-
-var port = program.port || 2304;
-
-if(program.storage) {
-  dpd.storage(program.storage);
-}
-
-dpd.use('http://localhost:' + port).listen(function () {
-  console.log('deployd is listening on port %s and storing resources at %s', port, dpd.storage());
-});

@@ -17,10 +17,9 @@ Extensible, distributed resource server.
     
 ## Starting / Stopping
 
-You can start and stop the server with the `dpd` CLI
+You can start and stop the server with the `dpd` CLI. For more commands see `dpd -h`.
 
-    $ dpd
-    $ deployd is running at http://localhost:2304
+    $ dpd listen
 
 or the node module
 
@@ -101,7 +100,9 @@ Register a user by `POST`ing a valid user object to `/users`.
     
 ### Login
 
-Login a user by `POST`ing a valid credentials object to `/users/login`.
+Login a user by `POST`ing a valid credentials object to `/users/login` over HTTPS.
+Once a user is logged in (has created a session) all requests as the user must be
+made over HTTPS. Resources that do not require a user can still be made over HTTP.
 
     var credentials = {email: 'foo@bar.com', password: 'foobar'};
 
