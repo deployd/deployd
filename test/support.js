@@ -3,7 +3,7 @@
 expect = require('chai').expect
 dpd = require('../')
 root = {key: 'foo', secret: 'bar'}
-server = dpd.use('http://localhost:3003')
+server = dpd.use('http://localhost:3003').storage('mongodb://localhost/deployd-testing-db')
 client = require('mdoq').use('http://localhost:3003').use(function (req, res, next) {
   req.headers['x-dssh-key'] = root.key;
   next();
