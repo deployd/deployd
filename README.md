@@ -15,7 +15,20 @@ Extensible, distributed resource server.
 
     $ [sudo] npm install deployd -g
     
-## CLI
+## Starting / Stopping
+
+You can start and stop the server with the `dpd` CLI or with the node module.
+
+    var dpd = require('deployd')
+      .use('http://localhost:3333')
+      // optionally specify which storage resource to use
+      // currently only mongodb is supported
+      .storage('mongodb://localhost/my-dpd-storage')
+      // tell deployd to listen
+      .listen()
+    ;
+    
+or
 
     $ dpd
     $ deployd is running at http://localhost:2304
