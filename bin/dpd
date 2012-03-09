@@ -11,7 +11,7 @@ var program = require('commander')
 
 program
   .version('0.3.0-pre')
-  .option('-p, --port <port>', 'specify the port (2304)')
+  .option('-p, --port <port>', 'specify the port (2403)')
   .option('-s, --storage <url>', 'specify where to store resources (mongodb://localhost/deployd)')
 ;
 
@@ -23,7 +23,7 @@ program
   .command('keys')
   .description(' - list all admin keys')
   .action(function () {
-    var port = program.port || 2304;
+    var port = program.port || 2403;
 
     if(program.storage) {
       dpd.storage(program.storage);
@@ -55,7 +55,7 @@ program
         dpd.storage(program.storage);
       }
       
-      var port = program.port || 2304;
+      var port = program.port || 2403;
       
       dpd.use('http://localhost:' + port).use('/keys').post(key, function (err, newKey) {
         if(err) {
@@ -88,7 +88,7 @@ program
   .command('key')
   .description(" - generate, add, and print a random admin key")
   .action(function () {
-    var port = program.port || 2304;
+    var port = program.port || 2403;
     var key = {}, strength = Math.floor(Math.random() * 5) + 2;
     
     while(strength--) {
@@ -120,7 +120,7 @@ program
        dpd.storage(program.storage);
      }
      
-     var port = program.port || 2304;
+     var port = program.port || 2403;
      
      dpd.use('http://localhost:' + port).use('/keys').del({_id: _id}, function (err) {
        if(err) console.log(err);
@@ -138,7 +138,7 @@ program
   .description(' - start listening over http at the provided port')
   .action(function (cmd) {
     
-    var port = program.port || 2304;
+    var port = program.port || 2403;
     
     if(program.storage) {
       dpd.storage(program.storage);
