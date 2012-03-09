@@ -69,7 +69,7 @@ beforeEach(function(done){
   server.listen(function () {
     clear(function () {
       resources.post(data.resources.todos, function (e) {
-        resources.post(data.resources.users, function (err) {
+        resources.post(data.resources.users, function (err, b, req, res) {
           done(err || e);
         })
       })

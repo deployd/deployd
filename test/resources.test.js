@@ -42,6 +42,31 @@ describe('Resources', function(){
     })
   })
   
+  describe('PUT /resources/<ObjectID>', function(){
+    it('should updated the resources that match the query', function(done) {
+      resources.get(function (e, all) {
+        var res = all[0];
+        
+        res.order = 777;
+        resources.get({_id: res._id}).put(res, function (err, upd) {
+          // FIXES NESTED MDOQ-HTTP BUG :(
+          resources.req = {};
+          resources.get(function (error, chgd) {
+            var i;
+            
+            // REMOVE ONCE MDOQ-HTTP IS PATCHED!
+            while(i = chgd.shift()) {
+              if(i._id == res._id) break;
+            }
+            
+            expect(i.order).to.equal(777);
+            done(err);
+          })
+        })
+      })
+    })
+  })
+  
   describe('DELETE /resources', function(){
     it('should remove all resources or those that match the query', function(done) {
       resources.del(function (err) {

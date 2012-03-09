@@ -30,4 +30,18 @@ describe('Validation', function(){
       })
     })
   })
+  
+  describe('PUT /todos/<ObjectID>', function(){
+    it('should update a single item', function(done) {
+      todos.post({title: 'a random todo'}, function (e, t) {
+        t.title = 'foobar';
+        todos.use('/' + t._id).put(t, function (error, todo) {
+          todos.use('/' + todo._id).get(function (err) {
+            expect(t.title).to.equal('foobar');
+            done(err);
+          })
+        })
+      })
+    })
+  })
 })
