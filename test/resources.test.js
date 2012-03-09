@@ -1,4 +1,4 @@
-describe('Resources', function(){
+describe('Application Resrouce Types', function(){
   describe('GET /resources', function(){
     it('should return a list of resources', function(done) {
       resources.get(function(err, res) {

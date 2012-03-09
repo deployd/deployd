@@ -1,4 +1,15 @@
-describe('Validation', function(){
+describe('Resource Actions', function(){
+  describe('GET /todos', function(){
+    it('should return the todos', function(done) {
+      todos.post({title: 'foo todo'}, function (err) {
+        todos.get(function (error, all) {
+          expect(all).to.have.length(1);
+          done(error || err);
+        })
+      })
+    })
+  })
+  
   describe('POST /todos', function(){
     it('should return an error when provided invalid data', function(done) {
       todos.post({foo: 'bar', bat: 'baz'}, function (err, todo, req, res) {

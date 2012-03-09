@@ -1,4 +1,4 @@
-describe('Types', function(){
+describe('Available Types', function(){
   describe('GET /types', function(){
     it('should return an object describing all the available types', function(done) {
       types.get(function (err, all) {
