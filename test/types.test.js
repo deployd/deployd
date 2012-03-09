@@ -9,3 +9,14 @@ describe('Available Types', function(){
     })
   })
 })
+
+describe('Property Types', function(){
+  describe('GET /property-types', function(){
+    it('should return an object describing the availalbe property types', function(done) {
+      client.use('/property-types').get(function (err, res) {
+        expect(res).to.eql(require('../lib/property-types'));
+        done(err);
+      })
+    })
+  })
+})
