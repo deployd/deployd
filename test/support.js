@@ -20,7 +20,7 @@ data = {
     todos: {
       type: 'Collection',
       path: '/todos',
-      settings: {
+      properties: {
         title: {
           description: "the title of the todo",
           type: "string",
@@ -36,7 +36,7 @@ data = {
     users: {
       type: 'UserCollection',
       path: UserCollection.defaultPath,
-      settings: UserCollection.settings
+      properties: UserCollection.properties
     }
   },
   users: [{email: 'foo@bar.com', password: 'foobar'}],
