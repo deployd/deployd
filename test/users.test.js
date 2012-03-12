@@ -13,8 +13,10 @@ describe('Users', function(){
       })
     })
     
-    it('should fail without a valid user', function(done) {
-      users.post({foo: 'bar'}, function (err, res) {
+    it('should fail without a valid user (and not requested as root)', function(done) {
+      var unAuthed = require('../lib/client').use('http://localhost:3003/users');
+      
+      unAuthed.post({foo: 'bar'}, function (err, res) {
         expect(err).to.exist;
         done();
       });

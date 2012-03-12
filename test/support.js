@@ -12,7 +12,8 @@ resources = client.use('/resources')
 keys = dpd.use('/keys');
 types = client.use('/types')
 users = client.use('/users')
-todos = client.use('/todos')
+// use non-root for todos
+todos = require('../lib/client').use('http://localhost:3003/todos')
 sessions = client.use('/sessions')
 UserCollection = require('../lib/types').UserCollection
 data = {
