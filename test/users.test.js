@@ -70,9 +70,18 @@ describe('Users', function(){
     })
     
     it('should not return a user when an _id is not provided', function(done) {
-      client.use('/users').get(function (err, res) {
+      var unAuthed = require('../lib/client').use('http://localhost:3003/users');
+      
+      unAuthed.get(function (err, res) {
         expect(err).to.exist;
         expect(res).to.not.exist;
+        done();
+      })
+    })
+    
+    it('should return a user when an _id is not provided and requested as root', function(done) {
+      client.use('/users').get(function (err, res) {
+        expect(res).to.exist;
         done();
       })
     })
