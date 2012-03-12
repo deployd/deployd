@@ -5,7 +5,7 @@ describe('Cross Domain Support', function(){
         , req = {method: 'OPTIONS', url: todos.url, headers: {'Access-Control-Request-Headers': hdrs}}
       ;
       todos.exec(req, function (err, body, req, res) {
-        expect(res.headers['Access-Control-Allow-Headers'.toLowerCase()]).to.equal(hdrs);
+        expect(res.headers['Access-Control-Allow-Headers'.toLowerCase()]).to.equal('*');
         done(err);
       })
     })
