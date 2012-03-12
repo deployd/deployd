@@ -43,25 +43,60 @@ describe('Application Resrouce Types', function(){
   })
   
   describe('PUT /resources/<ObjectID>', function(){
-    it('should updated the resources that match the query', function(done) {
+    it('should updated the resources by id', function(done) {
       resources.get(function (e, all) {
         var res = all[0];
-        
         res.order = 777;
-        resources.get({_id: res._id}).put(res, function (err, upd) {
+        res.properties.foo = {
+          type: 'string'
+        };
+        
+        resources.use('/' + res._id).put(res, function (err, upd) {
           // FIXES NESTED MDOQ-HTTP BUG :(
           resources.req = {};
-          resources.get(function (error, chgd) {
+          resources.get(function (error, chgd) {            
             var i;
             
             // REMOVE ONCE MDOQ-HTTP IS PATCHED!
             while(i = chgd.shift()) {
               if(i._id == res._id) break;
+              else expect(i.properties.foo).to.not.exist;
             }
             
             expect(i.order).to.equal(777);
             done(err);
           })
+        })
+      })
+    })
+  })
+  
+  describe('PUT /resources/<ObjectID>', function(){
+    it('should rename change properties on any existing data', function(done) {
+      var exTodo = {title: 'feed fido', completed: true};
+      todos.post(exTodo, function (err, res) {
+        expect(err).to.not.exist;
+        expect(res._id).to.exist;
+        resources.get({path: '/todos'}, function (e, all) {
+          var res = all[0]
+            , titleProp = res.properties.title;
+            
+          titleProp.$renameFrom = 'title';
+          res.properties.task = titleProp;
+          // remove title prop
+          delete res.properties.title;
+
+          resources.use('/' + res._id).put(res, function (err, upd) {
+            expect(err).to.not.exist;
+            expect(upd.properties.task).to.eql(res.properties.task);
+            todos.get(function (error, all) {
+              all.forEach(function (todo) {
+                expect(todo.title).to.not.exist;
+                expect(todo.task).to.exist;
+              })
+              done(error || err);
+            })
+          });
         })
       })
     })
