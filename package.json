@@ -11,10 +11,9 @@
   "main":"index",
   "dependencies": {
     "mdoq": "0.8.x",
-    "mdoq-http": "0.3.x",
-    "mdoq-mongodb": "0.3.x",
+    "mdoq-http": "0.4.x",
+    "mdoq-mongodb": "0.4.x",
     "revalidator": "0.1.x",
-    "express": "2.5.x",
     "commander": "0.5.x"
   },
   "devDependencies": {

@@ -60,7 +60,7 @@ describe('Application Resrouce Types', function(){
             // REMOVE ONCE MDOQ-HTTP IS PATCHED!
             while(i = chgd.shift()) {
               if(i._id == res._id) break;
-              else expect(i.properties.foo).to.not.exist;
+              else i.properties && expect(i.properties.foo).to.not.exist;
             }
             
             expect(i.order).to.equal(777);

@@ -38,6 +38,10 @@ data = {
       type: 'UserCollection',
       path: UserCollection.defaultPath,
       properties: UserCollection.properties
+    },
+    avatars: {
+      type: 'Static',
+      path: '/avatars'
     }
   },
   users: [{email: 'foo@bar.com', password: 'foobar'}],
@@ -70,8 +74,10 @@ beforeEach(function(done){
   server.listen(function () {
     clear(function () {
       resources.post(data.resources.todos, function (e) {
-        resources.post(data.resources.users, function (err, b, req, res) {
-          done(err || e);
+        resources.post(data.resources.avatars, function (er) {
+          resources.post(data.resources.users, function (err, b, req, res) {
+            done(err || er || e);
+          })
         })
       })
     })
