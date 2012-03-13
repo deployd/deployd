@@ -10,6 +10,15 @@ describe('Static', function(){
         })
       })
     })
+    
+    it('should only allow root user access', function(done) {
+      var file = require('fs').createReadStream(__dirname + '/support/eg.jpg');
+      unauthed.use('/avatars/eg.jpg').post(file, function (err) {
+        expect(err).to.exist;
+        done();
+      })
+    })
+    
   })
   
   describe('GET /avatars/eg.jpg', function(){
@@ -37,6 +46,24 @@ describe('Static', function(){
         })
       })
     })
+    
+    it('should only allow root user access', function(done) {
+      var file = require('fs').createReadStream(__dirname + '/support/eg.jpg');
+      unauthed.use('/avatars/eg.jpg').put(file, function (err) {
+        expect(err).to.exist;
+        done();
+      })
+    })
+  })
+  
+  describe('GET /avatars', function(){
+    it('should return a directory listing', function(done) {
+      client.use('/avatars').get(function (err, body, req, res) {
+        expect(body).to.exist;
+        expect(body).to.have.length(1);
+        done(err)
+      })
+    })
   })
   
   describe('DELETE /avatars/eg.jpg', function(){
@@ -46,6 +73,13 @@ describe('Static', function(){
           expect(body).to.not.exist;
           done(err);
         })
+      })
+    })
+    
+    it('should only allow root user access', function(done) {
+      unauthed.use('/avatars/eg.jpg').del(function (err) {
+        expect(err).to.exist;
+        done();
       })
     })
   })

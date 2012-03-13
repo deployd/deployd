@@ -8,12 +8,14 @@ client = require('mdoq').use('http://localhost:3003').use(function (req, res, ne
   req.headers['x-dssh-key'] = JSON.stringify(root);
   next();
 }).use(require('../lib/client'));
+// non-root access
+unauthed = require('../lib/client').use('http://localhost:3003')
 resources = client.use('/resources')
 keys = dpd.use('/keys');
 types = client.use('/types')
 users = client.use('/users')
 // use non-root for todos
-todos = require('../lib/client').use('http://localhost:3003/todos')
+todos = unauthed.use('/todos')
 sessions = client.use('/sessions')
 UserCollection = require('../lib/types').UserCollection
 data = {
