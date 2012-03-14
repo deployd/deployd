@@ -54,5 +54,32 @@ describe('Resource Actions', function(){
         })
       })
     })
+    
+    it('should error when an id is not included', function(done) {
+      unauthed.use('/todos').put({title: 'foo'}, function (err) {
+        expect(err).to.exist;
+        done();
+      })
+    })
+  })
+  
+  describe('DELETE /todos/<ObjectID>', function(){
+    it('should delete the todo', function(done) {
+      todos.post({title: 'a random todo'}, function (e, t) {
+        todos.use('/' + t._id).del(function (error) {
+          todos.use('/' + t._id).get(function (err, todo) {
+            expect(todo).to.not.exist;
+            done(err);
+          })
+        })
+      })
+    })
+    
+    it('should error when an id is not included', function(done) {
+      unauthed.use('/todos').del(function (err) {
+        expect(err).to.exist;
+        done();
+      })
+    })
   })
 })

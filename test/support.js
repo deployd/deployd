@@ -34,7 +34,21 @@ data = {
           type: "boolean",
           default: false
         }
-      }
+      },
+      onGet: (function () {
+        this.isGet = true;
+      }).toString(),
+      onDelete: (function () {
+        if(this.title === 'dont delete') {
+          return false;
+        }
+      }).toString(),
+      onPut: (function () {
+        this.isPut = true;
+      }).toString(),
+      onPost: (function () {
+        this.isPost = true;
+      }).toString(),
     },
     users: {
       type: 'UserCollection',
@@ -51,7 +65,7 @@ data = {
 }
 
 clear = function(done) {
-  todos.del(function (e) {
+  client.use('/todos').del(function (e) {
     sessions.del(function (err) {
       resources.del(function (error) {
         done()
@@ -83,7 +97,7 @@ beforeEach(function(done){
         })
       })
     })
-  });
+  })
 })
 
 afterEach(function(done){

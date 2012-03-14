@@ -1,4 +1,4 @@
-describe('Application Resrouce Types', function(){
+describe('Application Resource Types', function(){
   describe('GET /resources', function(){
     it('should return a list of resources', function(done) {
       resources.get(function(err, res) {
@@ -52,19 +52,10 @@ describe('Application Resrouce Types', function(){
         };
         
         resources.use('/' + res._id).put(res, function (err, upd) {
-          // FIXES NESTED MDOQ-HTTP BUG :(
-          resources.req = {};
-          resources.get(function (error, chgd) {            
-            var i;
-            
-            // REMOVE ONCE MDOQ-HTTP IS PATCHED!
-            while(i = chgd.shift()) {
-              if(i._id == res._id) break;
-              else i.properties && expect(i.properties.foo).to.not.exist;
-            }
-            
-            expect(i.order).to.equal(777);
-            done(err);
+          client.use('/resources').use('/' + res._id).get(function (e, re) {
+            expect(re).to.be.a('object');
+            expect(re.order).to.equal(res.order);
+            done(e || err);
           })
         })
       })
