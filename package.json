@@ -1,20 +1,24 @@
 {
-  "author": "ritch",
+  "author": "Ritchie Martori",
   "name": "deployd",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "repository": {
-    "type": "git",
     "url": "git://github.com/deployd/deployd.git"
   },
-  "main": "index.js",
   "engines": {
-    "node": ">= 0.4.0"
-  },   
-  "dependencies": {
-    "express": ">= 2.0.0",
-    "underscore": ">= 1.0.0",
-    "mongodb": ">= 0.9.0",
-    "ejs": ">= 0.4.3"
+    "node": ">= 0.6.x"
   },
-  "devDependencies": {}
+  "main":"index",
+  "dependencies": {
+    "mdoq": "0.8.x",
+    "mdoq-http": "0.4.x",
+    "mdoq-mongodb": "0.4.x",
+    "revalidator": "0.1.x",
+    "commander": "0.5.x"
+  },
+  "devDependencies": {
+    "mocha": "*",
+    "chai": "*"
+  },
+  "bin": {"dpd": "./bin/dpd"}
 }

@@ -1,11 +1,15 @@
-# code coverage
 lib-cov
+*.seed
+*.log
+*.csv
+*.dat
+*.out
+*.pid
+*.gz
 
-# dev testing
-bin/test
+pids
+logs
+results
 
-.DS_Store
-.sass-cache/
-node_modules/
-
-public/npm-debug.log
+node_modules
+npm-debug.log
