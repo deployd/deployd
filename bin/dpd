@@ -11,9 +11,26 @@ var program = require('commander')
 
 program
   .version('0.3.0-pre')
+  .option('-j, --json', 'output as json')
   .option('-p, --port <port>', 'specify the port (2403)')
   .option('-s, --storage <url>', 'specify where to store resources (mongodb://localhost/deployd)')
 ;
+
+/**
+ * A method to output json.
+ */
+
+function json(obj) {
+  if(program && program.json) process.stdout.write(JSON.stringify(obj));
+}
+
+/**
+ * Silent if in json mode.
+ */
+ 
+function log() {
+  if(!program.json) console.log.apply(console, arguments);
+}
 
 /**
  * List all administration keys (users).
@@ -30,7 +47,10 @@ program
     }
 
     dpd.use('http://localhost:' + port).use('/keys').get(function (err, keys) {
-      console.log(keys || 'no keys found! see dpd --help');
+
+      json(keys);
+      log(keys || 'no keys found! see dpd --help');
+      
       process.exit();
     })
   })
@@ -59,14 +79,17 @@ program
       
       dpd.use('http://localhost:' + port).use('/keys').post(key, function (err, newKey) {
         if(err) {
-          console.log('Could not add key', err);
+          json(err);
+          log('Could not add key', err);
         } else {
-          console.log('added key', newKey);          
+          log('added key', newKey);          
         }
         process.exit();
       })
     } else {
-      console.log('key must be a valid JSON object with more than one attribute!');
+      var msg = 'key must be a valid JSON object with more than one attribute!';
+      json(new Error(msg))
+      log(msg);
     }
   })
 ;
@@ -88,18 +111,21 @@ program
   .command('key')
   .description(" - generate, add, and print a random admin key")
   .action(function () {
+    
     var port = program.port || 2403;
     var key = {}, strength = Math.floor(Math.random() * 5) + 2;
     
     while(strength--) {
       key[keygen()] = keygen() + keygen() + keygen();
     }
-
+    
     dpd.use('http://localhost:' + port).use('/keys').post(key, function (err, newKey) {
       if(err) {
-        console.log('Could not add key', err);
+        json(err);
+        log('Could not add key', err);
       } else {
-        console.log('added key:\n\n' + JSON.stringify(newKey) + '\n');          
+        json(newKey);
+        log('added key:\n\n' + JSON.stringify(newKey) + '\n');          
       }
       process.exit();
     })
@@ -123,8 +149,13 @@ program
      var port = program.port || 2403;
      
      dpd.use('http://localhost:' + port).use('/keys').del({_id: _id}, function (err) {
-       if(err) console.log(err);
-       else console.log('removed key with _id', _id);
+       if(err) {
+         json(err);
+         log(err);
+       } else {
+         json({removed: _id});
+         log('removed key with _id', _id);
+       }
        process.exit();
      })
    });
@@ -145,7 +176,8 @@ program
     }
 
     dpd.use('http://localhost:' + port).listen(function () {
-      console.log('deployd is listening on port %s and storing resources at %s', port, dpd.storage());
+      json({port: port, storage: dpd.storage()});
+      log('deployd is listening on port %s and storing resources at %s', port, dpd.storage());
     });
   })
 ;

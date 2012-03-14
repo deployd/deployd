@@ -35,20 +35,13 @@ data = {
           default: false
         }
       },
-      onGet: (function () {
-        this.isGet = true;
-      }).toString(),
-      onDelete: (function () {
-        if(this.title === 'dont delete') {
-          return false;
-        }
-      }).toString(),
-      onPut: (function () {
-        this.isPut = true;
-      }).toString(),
-      onPost: (function () {
-        this.isPost = true;
-      }).toString(),
+      onGet: 'this.isGet = true;',
+      onDelete: '' +
+        'if(this.title === "dont delete") {' +
+        '  return false;' +
+        '}',
+      onPut: 'this.isPut = true;',
+      onPost: 'this.isPost = true;',
     },
     users: {
       type: 'UserCollection',
