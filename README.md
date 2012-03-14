@@ -1,6 +1,6 @@
 # deployd
 
-Extensible, distributed, streaming resource server.
+Extensible, distributed, resource server.
 
 ## features
 
