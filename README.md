@@ -1,10 +1,10 @@
 # deployd
 
-Extensible, distributed resource server.
+Extensible, distributed, streaming resource server.
 
 ## features
 
- - Any-Size File Storage
+ - Streaming, Any-Size File Storage
  - Queryable JSON Collections
  - Validation
  - Authentication
@@ -125,3 +125,8 @@ Remove a user by sending a `DELETE` request to `/users?_id=<user._id>`.
     client.use('/users').get({_id: user._id}).del(function(err) {
       console.info(err || 'deleted user id: ' + user._id);
     });
+    
+## Static Resources (Files)
+
+POST, PUT, DELETE, and GET files over http. Only root authenticated or local requests (using the node module)
+are allowed to POST, PUT, or DELETE. All files are otherwise public.
