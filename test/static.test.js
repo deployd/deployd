@@ -1,7 +1,7 @@
 describe('Static', function(){
   describe('POST /avatars/eg.jpg', function(){
     it('should upload the file at the url', function(done) {
-      var file = require('fs').createReadStream(__dirname + '/support/eg.jpg');
+      var file = require('fs').createReadStream(__dirname + '/support/eg.jpg', {encoding: 'base64'});
       
       client.use('/avatars/eg.jpg').post(file, function (err, body, req, res) {
         client.use('/avatars/eg.jpg').get(function (err, body, req, res) {
@@ -12,7 +12,7 @@ describe('Static', function(){
     })
     
     it('should only allow root user access', function(done) {
-      var file = require('fs').createReadStream(__dirname + '/support/eg.jpg');
+      var file = require('fs').createReadStream(__dirname + '/support/eg.jpg', {encoding: 'base64'});
       unauthed.use('/avatars/eg.jpg').post(file, function (err) {
         expect(err).to.exist;
         done();
@@ -23,12 +23,13 @@ describe('Static', function(){
   
   describe('GET /avatars/eg.jpg', function(){
     it('should return the newly uploaded file', function(done) {
-      var file = require('fs').createReadStream(__dirname + '/support/eg.jpg');
+      var fs = require('fs')
+        , file = fs.createReadStream(__dirname + '/support/eg.jpg', {encoding: 'base64'})
+        , out = fs.createWriteStream(__dirname + '/support/out-eg.jpg')
+      ;
       
-      client.use('/avatars/eg.jpg').post(file, function (err, body, req, res) {
-        client.use('/avatars/eg.jpg').get(function (err, body, req, res) {
-          expect(res.headers['transfer-encoding']).to.equal('chunked');
-          expect(body).to.exist;
+      client.use('/avatars/eg.jpg').post(file, function (err, body, req, res) { 
+        client.use('/avatars/eg.jpg').pipe(out).get(function (err) {
           done(err)
         })
       })
@@ -37,7 +38,7 @@ describe('Static', function(){
   
   describe('PUT /avatars/eg.jpg', function(){
     it('should replace the file', function(done) {
-      var file = require('fs').createReadStream(__dirname + '/support/eg.jpg');
+      var file = require('fs').createReadStream(__dirname + '/support/eg.jpg', {encoding: 'base64'});
       
       client.use('/avatars/eg.jpg').put(file, function (err, body, req, res) {
         client.use('/avatars/eg.jpg').get(function (err, body, req, res) {
@@ -48,7 +49,7 @@ describe('Static', function(){
     })
     
     it('should only allow root user access', function(done) {
-      var file = require('fs').createReadStream(__dirname + '/support/eg.jpg');
+      var file = require('fs').createReadStream(__dirname + '/support/eg.jpg', {encoding: 'base64'});
       unauthed.use('/avatars/eg.jpg').put(file, function (err) {
         expect(err).to.exist;
         done();

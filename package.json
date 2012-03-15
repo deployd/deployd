@@ -10,8 +10,8 @@
   },
   "main":"index",
   "dependencies": {
-    "mdoq": "0.8.x",
-    "mdoq-http": "0.4.x",
+    "mdoq": "0.8.6",
+    "mdoq-http": "0.4.1",
     "mdoq-mongodb": "0.4.x",
     "revalidator": "0.1.x",
     "commander": "0.5.x",

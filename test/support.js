@@ -4,10 +4,17 @@ expect = require('chai').expect
 dpd = require('../')
 root = {user: 'foo', must: 'have', multiple: 'keys'}
 server = dpd.use('http://localhost:3003').storage('mongodb://localhost/deployd-testing-db')
-client = require('mdoq').use('http://localhost:3003').use(function (req, res, next) {
+client = require('mdoq').use(function (req, res, next) {
   req.headers['x-dssh-key'] = JSON.stringify(root);
   next();
-}).use(require('../lib/client'));
+}).use(require('../lib/client')).use('http://localhost:3003');
+
+// mdoq-http pipe patch
+client.pipe = function (d) {
+  (this.req || (this.req = {})).destinationStream = d;
+  return this;
+}
+
 // non-root access
 unauthed = require('../lib/client').use('http://localhost:3003')
 resources = client.use('/resources')
