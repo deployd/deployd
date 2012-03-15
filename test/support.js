@@ -58,6 +58,10 @@ data = {
     avatars: {
       type: 'Static',
       path: '/avatars'
+    },
+    index: {
+      type: 'Static',
+      path: '/'
     }
   },
   users: [{email: 'foo@bar.com', password: 'foobar'}],
@@ -90,9 +94,11 @@ beforeEach(function(done){
   server.listen(function () {
     clear(function () {
       resources.post(data.resources.todos, function (e) {
-        resources.post(data.resources.avatars, function (er) {
-          resources.post(data.resources.users, function (err, b, req, res) {
-            done(err || er || e);
+        resources.post(data.resources.index, function (ee) {
+          resources.post(data.resources.avatars, function (er) {
+            resources.post(data.resources.users, function (err, b, req, res) {
+              done(err || er || e);
+            })
           })
         })
       })
