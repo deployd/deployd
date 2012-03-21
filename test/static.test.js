@@ -6,7 +6,7 @@ describe('Static', function(){
       client.use('/avatars/eg.jpg').post(file, function (err, body, req, res) {
         client.use('/avatars/eg.jpg').get(function (err, body, req, res) {
           expect(body).to.exist;
-          done(err)
+          done(err);
         })
       })
     })
@@ -67,10 +67,10 @@ describe('Static', function(){
     })
   })
   
-  describe('DELETE /avatars/eg.jpg', function(){
+  describe('DELETE /avatars/test.txt', function(){
     it('should remove the file', function(done) {
-      client.use('/avatars/eg.jpg').del(function (err, body, req, res) {
-        client.use('/avatars/eg.jpg').get(function (err, body, req, res) {
+      client.use('/avatars/test.txt').del(function (err, body, req, res) {
+        client.use('/avatars/test.txt').get(function (err, body, req, res) {
           expect(body).to.not.exist;
           done(err);
         })

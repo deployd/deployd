@@ -12,7 +12,7 @@
   "dependencies": {
     "mdoq": "0.8.6",
     "mdoq-http": "0.4.1",
-    "mdoq-mongodb": "0.4.x",
+    "mdoq-mongodb": "0.4.3",
     "revalidator": "0.1.x",
     "commander": "0.5.x",
     "express": "2.5.x"
