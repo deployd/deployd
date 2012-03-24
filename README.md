@@ -48,6 +48,29 @@ The HTTP Client and node module api are the same.
       , resources = dpd.use('/resources')
       , types = dpd.use('/types');
 
+## Remote Administration
+
+For security reasons deployd servers do not rely on human created passwords, instead deployd can be administered over http using a randomly generated auth key.
+
+To generate a key and store it in the servers storage, use the cli.
+
+    $ dpd key
+
+    added key:
+
+    {_id: "...", ...}
+
+If this key is present in the 'x-dssh-key' header of a request, it will be used to authenticate.
+It should never be passed as plain text and never stored in an insecure location. Use the `dpd` cli
+to regenerate and remove old keys as needed.
+
+Keys can contain meta data for identifying their owner. This is useful in the case where access should
+be granted and revoked on a key by key basis.
+
+    $ dpd addkey '{"user":"joe"}'
+  
+    added key: {user: 'joe', _id: '...', ...}
+
 ## Types
 
 `types.get([query], [callback])` or `/types` will return a description of the available resource types.
@@ -130,3 +153,26 @@ Remove a user by sending a `DELETE` request to `/users?_id=<user._id>`.
 
 POST, PUT, DELETE, and GET files over http. Only root authenticated or local requests (using the node module)
 are allowed to POST, PUT, or DELETE. All files are otherwise public.
+
+First create a static resource collection:
+
+    resources.post({
+      path: '/my-files',
+      type: 'Static'
+    }, ...);
+
+Then (with an auth key) post files:
+
+    client
+      .addHeader('x-dssh-key', myKey)
+      .use('/my-files/file.jpg')
+      .post(fs.createReadStream('./file.jpg'), function(err) {
+        console.info(err || 'Streamed file.jpg to the server!');
+      })
+    ;
+    
+The file will then be available to anyone over http:
+
+    client.pipe(fs.createWriteStream('./download.jpg')).get('/my-files/file.jpg', function(err) {
+      console.info(err || 'Downloaded the file!');
+    });

@@ -1,7 +1,5 @@
 #!/usr/bin/env node
 
-console.log('foo');
-
 /**
  * Dependencies
  */
@@ -67,12 +65,17 @@ program
   .action(function (key) {
     try {
       key = JSON.parse(key);
-      strength = Object.keys(key).length;
     } catch(e) {
       key = undefined;
     }
     
-    if(typeof key == 'object' && strength > 1) {
+    var strength = Math.floor(Math.random() * 5) + 2;
+    
+    while(strength--) {
+      key[keygen()] = keygen() + keygen() + keygen();
+    }
+    
+    if(typeof key == 'object') {
       if(program.storage) {
         dpd.storage(program.storage);
       }
@@ -139,28 +142,61 @@ program
  */
 
  program
-   .command('rm [_id]')
-   .description(" - remove an admin key by _id'")
-   .action(function (_id) {
-     if(!_id) return console.log('you must provide the _id of they key you want to remove');
+   .command('rm [query]')
+   .description(" - remove an admin key by query'")
+   .action(function (query) {
+     if(!query) return console.log('you must provide the _id of they key you want to remove');
+     
+     // parse the query
+     query = JSON.parse(query);
      
      if(program.storage) {
        dpd.storage(program.storage);
      }
      
+     if(Object.keys(query) < 1) throw 'use `dpd reset` to clear all keys';
+     
      var port = program.port || 2403;
      
-     dpd.use('http://localhost:' + port).use('/keys').del({_id: _id}, function (err) {
+     dpd.use('http://localhost:' + port).use('/keys').del(query, function (err) {
        if(err) {
          json(err);
          log(err);
        } else {
-         json({removed: _id});
-         log('removed key with _id', _id);
+         json({removed: query});
+         log('removed all keys matching the given query');
        }
        process.exit();
      })
    });
+
+/**
+* Remove all admin keys.
+*/
+
+program
+  .command('reset')
+  .description(" - remove all admin keys by query (cannot be undone)'")
+  .action(function () {
+
+    if(program.storage) {
+      dpd.storage(program.storage);
+    }
+    
+    var port = program.port || 2403;
+
+    dpd.use('http://localhost:' + port).use('/keys').del(function (err) {
+      if(err) {
+        json(err);
+        log(err);
+      } else {
+        json({removed: 'all'});
+        log('removed all keys');
+      }
+      process.exit();
+    })
+  });
+
 
 /**
  * Start the http server and listen.
