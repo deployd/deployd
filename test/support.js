@@ -24,6 +24,7 @@ users = client.use('/users')
 // use non-root for todos
 todos = unauthed.use('/todos')
 sessions = client.use('/sessions')
+dashboard = client.use('/__dashboard');
 UserCollection = require('../lib/types').UserCollection
 data = {
   resources: {
