@@ -63,6 +63,26 @@ describe('Application Resource Types', function(){
   })
   
   describe('PUT /resources/<ObjectID>', function(){
+    it('should rename the resource collection', function(done) {
+      resources.get(function (e, all) {
+        var res = all[0];
+        res.path = '/tasks';
+        
+        todos.post({title: 'foo'}, function () {
+          resources.use('/' + res._id).put(res, function (err, upd) {
+            unauthed.use('/tasks').get(function (ee, r) {
+              expect(r).to.exist;
+              client.use('/tasks').del(function () {
+                done(ee || e || err);
+              })
+            })
+          })
+        })
+      })
+    })
+  })
+  
+  describe('PUT /resources/<ObjectID>', function(){
     it('should rename change properties on any existing data', function(done) {
       var exTodo = {title: 'feed fido', completed: true};
       todos.post(exTodo, function (err, res) {
