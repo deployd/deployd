@@ -66,14 +66,14 @@ describe('Application Resource Types', function(){
     it('should rename the resource collection', function(done) {
       resources.get(function (e, all) {
         var res = all[0];
+        res.$renameFrom = res.path;
         res.path = '/tasks';
         
         todos.post({title: 'foo'}, function () {
-          resources.use('/' + res._id).put(res, function (err, upd) {
+          resources.use('/' + res._id).put(res, function (err) {
             unauthed.use('/tasks').get(function (ee, r) {
-              expect(r).to.exist;
-              client.use('/tasks').del(function () {
-                done(ee || e || err);
+              client.use('/tasks').del(function (err) {
+                done();
               })
             })
           })
