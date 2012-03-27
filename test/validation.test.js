@@ -12,10 +12,11 @@ describe('Resource Actions', function(){
   
   describe('POST /todos', function(){
     it('should return an error when provided invalid data', function(done) {
-      todos.post({title: 123}, function (err, todo, req, res) {
+      todos.post({foo: 123, completed: 'flarg'}, function (err, todo, req, res) {
         expect(err).to.exist;
         expect(err.valid).to.equal(false);
-        expect(err.errors).to.have.length(1);
+        expect(err.validation).to.have.length(2);
+        expect(err.errors).to.be.a('object');
         expect(todo).to.not.exist;
         done();
       })
