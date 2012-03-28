@@ -1,18 +1,18 @@
 {
   "author": "Ritchie Martori",
   "name": "deployd",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "repository": {
     "url": "git://github.com/deployd/deployd.git"
   },
   "engines": {
-    "node": ">= 0.6.x"
+    "node": ">= 0.7.x"
   },
   "main":"index",
   "dependencies": {
     "mdoq": "0.8.6",
-    "mdoq-http": "0.4.1",
-    "mdoq-mongodb": "0.4.3",
+    "mdoq-http": "0.4.x",
+    "mdoq-mongodb": "0.4.x",
     "revalidator": "0.1.x",
     "commander": "0.5.x",
     "express": "2.5.x",
