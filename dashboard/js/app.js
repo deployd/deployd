@@ -490,7 +490,7 @@ require.define("/app.js", function (require, module, exports, __dirname, __filen
 var App = Backbone.Model.extend({
   defaults: {
     appName: 'My App',
-    appUrl: 'https://myapp.deploydapp.com'
+    appUrl: ''
   }
 });
 
@@ -499,14 +499,14 @@ module.exports = new App();
 
 require.define("/view/save-status-view.js", function (require, module, exports, __dirname, __filename) {
 var $span;
-var currentText = "Up to date";
+var currentText = "";
 
 function init(preventReset) {
   $span = $('#save-status');
   if (preventReset) {
     $span.text(currentText);
   } else {
-    set("Up to date");
+    set("");
   }
 }
 
@@ -676,10 +676,7 @@ var AppView = module.exports = Backbone.View.extend({
 
     this.$modal = $('#authModal').modal();
 
-    var appUrl = $.cookie('DPDAppUrl');
-    if (appUrl && appUrl.lastIndexOf('/') === appUrl.length - 1) {
-      appUrl = appUrl.slice(0,-1);
-    }
+    var appUrl = location.protocol + '//' + location.host;
 
     app.set({
       appUrl: appUrl,
@@ -1071,6 +1068,11 @@ var Resource = module.exports = Backbone.Model.extend({
   defaults: {
     path: '',
     order: 0
+  },
+
+  parse: function(json) {
+    json.$renameFrom = json.path;
+    return json;
   },
 
   initialize: function() {
@@ -2096,7 +2098,7 @@ var HeaderView = module.exports = Backbone.View.extend({
     var newName = prompt('Enter a new name for this ' + resource.get('type'), resource.get('path'));
     if (newName) {
       newName = Resource.sanitizePath(newName);
-      resource.save({path: newName});
+      resource.save({path: newName, $renameFrom: resource.get('path')});
       this.model.set('resourceName', newName);
     }
     return false;
