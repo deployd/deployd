@@ -82,16 +82,14 @@
 </script> 
     <script type="x-ejs-template" id="collection-template" >
 <div id="model-editor">
-  <div class="navbar">
-    <div class="navbar-inner">
-      <div class="full-width-container">
-        <ul class="nav nav-tabs">
-          <li class="active"><a href="#property-panel" data-toggle='tab'>Properties</a></li>
-          <li><a class='event-tab' href="#events-panel" data-toggle='tab'>Events</a></li>
-        </ul>
-        <div class="pull-right">
-          <button id="undo-btn" class="btn btn-warning">Undo <span class="action-label"></span></button>
-        </div>
+  <div class="subnav subnav-fixed">
+    <div class="full-width-container">
+      <ul class="nav nav-pills">
+        <li class="active"><a href="#property-panel" data-toggle='tab'>Properties</a></li>
+        <li><a class='event-tab' href="#events-panel" data-toggle='tab'>Events</a></li>
+      </ul>
+      <div class="pull-right">
+        <button id="undo-btn" class="btn btn-warning">Undo <span class="action-label"></span></button>
       </div>
     </div>
   </div>
@@ -145,9 +143,14 @@
 <div id="resource-editor">
   <div class="ide-container">
       <div id="resource-sidebar" class="component-type-sidebar sidebar">
-        <h2>Upload</h2>
-        <div id="file-upload">
-          <input type="file" multiple="multiple" />
+        <div class="well">
+          <div id="file-upload">
+            <span class="btn btn-success fileinput-button">
+                <i class="icon-plus icon-white"></i>
+                <span>Add files</span>
+                <input type="file" multiple="multiple" />
+            </span>
+          </div>
         </div>
       </div>
       <div class="main-area mid header-offset">
