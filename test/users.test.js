@@ -25,7 +25,7 @@ describe('Users', function(){
   
   describe('POST /users/login', function(){
     it('should login if provided the correct credentials', function(done) {
-      users.use('/login').post(data.users[0], function (err, session, req, res) {
+      users.use('/login').post({email: data.users[0].email, password: data.users[0].password}, function (err, session, req, res) {
         expect(session._id).to.have.length(24);
         expect(session.user.password).to.not.exist;
         expect(res.headers['set-cookie'][0].indexOf(session._id) > -1).to.equal(true);

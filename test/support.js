@@ -20,9 +20,9 @@ unauthed = require('../lib/client').use('http://localhost:3003')
 resources = client.use('/resources')
 keys = dpd.use('/keys');
 types = client.use('/types')
-users = client.use('/users')
 // use non-root for todos
 todos = unauthed.use('/todos')
+users = unauthed.use('/users')
 sessions = client.use('/sessions')
 dashboard = client.use('/__dashboard');
 UserCollection = require('../lib/types').UserCollection
@@ -54,7 +54,29 @@ data = {
     users: {
       type: 'UserCollection',
       path: UserCollection.defaultPath,
-      properties: UserCollection.properties
+      properties: {
+        email: {
+          description: 'the unique email of the user',
+          type: 'string',
+          pattern: "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?",
+          required: true,
+          unique: true,
+          minLength: 5,
+          order: 0
+        },
+        password: {
+          description: "the user's password",
+          type: 'string',
+          required: true,
+          minLength: 5,
+          order: 1
+        },
+        age: {
+          type: 'number',
+          required: true,
+          order: 2
+        }
+      }
     },
     avatars: {
       type: 'Static',
@@ -65,7 +87,7 @@ data = {
       path: '/'
     }
   },
-  users: [{email: 'foo@bar.com', password: 'foobar'}],
+  users: [{email: 'foo@bar.com', password: 'foobar', age: 21}],
   todos: [{title: 'feed the dog', complete: false}, {title: 'wash the car', complete: false}, {title: 'finish some stuff', complete: false}]
 }
 
