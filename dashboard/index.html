@@ -8,7 +8,7 @@
   </head> 
   <body> 
  
-    <div id="header" class="clearfix"></div> 
+    <div id="header" class="subnav clearfix"></div> 
  
     <div id="body"></div> 
  
@@ -28,24 +28,31 @@
     </div> 
  
     <script type="x-ejs-template" id="header-template" >
-<h1><a href="#"><%= appName %> - Dashboard</a></h1>
-<% if (typeof resourceName !== 'undefined' && resourceName) { %>
-  <h2><a href="#<%= resourceId %>" class="resourceName"><%= resourceName %>&nbsp;&nbsp;<span class="type">(<%= resourceType %>)</span></a></h2>
-<% } %>
+<div>
+  <ul class="nav nav-pills">
+    <li><a href="#">Resources</a></li>
+    <% if (typeof resourceName !== 'undefined' && resourceName) { %>
+      <li class="active">
+        <a href="#<%= resourceId %>" class="resourceName"><%= resourceName %></a>
+      </li>
+    <% } %>
+  </ul>
 <span class="pull-right" id="save-status">Loading...</span>
+
+</div>
 </script> 
  
     <script type="x-ejs-template" id="resources-template" >
 <div id="resource-editor">
   <div class="ide-container">
-      <div id="resource-sidebar" class="component-type-sidebar sidebar">
+      <div id="resource-sidebar" class="component-type-sidebar sidebar well">
       </div>
-      <div class="main-area mid header-offset">
-        <h2>Resources</h2>
+      <div class="main-area mid header-offset well">
+        <h3>Resources</h3>
         <ul id="resource-list" class="component-list" style="display: none;">
         </ul>
         <div id="resource-list-empty" class="well" style="display: none;">
-          <h2>Welcome to your Deployd app</h2>
+          <h4>Welcome to your Deployd app</h4>
           <p>
             <i class="icon-white icon-arrow-left"></i>&nbsp;
             These are the resources you can use to build your app.<br />
@@ -55,7 +62,7 @@
       </div>
       <div class="right-sidebar">
         <div class="well">
-          <h2>App Settings</h2>
+          <h3>App Settings</h3>
           <form>
               <label>App name</label>
               <input type="text" readonly="readonly" value="<%- appName %>" />
@@ -65,7 +72,7 @@
         </div>
 
         <div class="well">
-          <h2>What's next?</h2>
+          <h3>What's next?</h3>
           <p>Deployd is in early alpha. More features are planned for upcoming releases, such as:</p>
           <ul>
             <li>Data relationships</li>
@@ -82,50 +89,52 @@
 </script> 
     <script type="x-ejs-template" id="collection-template" >
 <div id="model-editor">
-  <div class="subnav subnav-fixed">
-    <div class="full-width-container">
-      <ul class="nav nav-pills">
-        <li class="active"><a href="#property-panel" data-toggle='tab'>Properties</a></li>
-        <li><a class='event-tab' href="#events-panel" data-toggle='tab'>Events</a></li>
-      </ul>
-      <div class="pull-right">
-        <button id="undo-btn" class="btn btn-warning">Undo <span class="action-label"></span></button>
-      </div>
-    </div>
-  </div>
-  <div class="ide-container has-nav tab-content">
-    <div class="tab-pane active" id="property-panel">
-      <div id="property-sidebar" class="component-type-sidebar sidebar">
+  <div class="ide-container has-nav">
+    <div id="property-panel">
+      <div id="property-sidebar" class="component-type-sidebar sidebar well">
       </div>
       <div class="main-area vertical-split">
-
         <div class="top-panel">
-          <h2>Properties</h2>
-          <ul id="property-list" class="component-list">  
-            <li class="component-item locked">
-              <div class="header">
-                  <span class="label label-info">_id</span>
-              </div>
-            </li>
-            <% if (typeof resourceTypeId !== 'undefined' && resourceTypeId === 'UserCollection') { %>
-              <li class="component-item locked">
-                <div class="header">
-                    <span class="label label-info">email</span>
+          <div class="split-panel">
+            <div id="property-list-cont" class="well">
+              <h3>
+                <div class="pull-right">
+                  <a id="undo-btn" class="btn btn-warning"><i class="icon-exclamation-sign icon-white"></i> Undo <span class="action-label"></span></a>
                 </div>
-              </li>
-              <li class="component-item locked">
-                <div class="header">
-                    <span class="label label-info">password</span>
+                <div>
+                  Properties
                 </div>
-              </li>
-            <%} %>
-          </ul>
+              </h3>
+              <ul id="property-list" class="component-list">  
+                <li class="component-item locked">
+                  <div class="header">
+                      <span class="label label-info">_id</span>
+                  </div>
+                </li>
+                <% if (typeof resourceTypeId !== 'undefined' && resourceTypeId === 'UserCollection') { %>
+                  <li class="component-item locked">
+                    <div class="header">
+                        <span class="label label-info">email</span>
+                    </div>
+                  </li>
+                  <li class="component-item locked">
+                    <div class="header">
+                        <span class="label label-info">password</span>
+                    </div>
+                  </li>
+                <% } %>
+              </ul>
+            </div>
+          </div>
+          <div class="split-panel">
+            <div id="events-panel" class="well">
+
+            </div>
+          </div>
         </div>
-        
         
         <div class="divider"></div>
         <div class="bottom-panel">
-          <h2>Data</h2>
           <div id="current-data">
             <table class="table table-bordered table-striped">
             </table>
@@ -133,9 +142,6 @@
         </div>
       </div>
     </div>    
-    <div class="tab-pane" id="events-panel">
-      
-    </div>
   </div>
 </div>
 </script> 
@@ -180,7 +186,7 @@
 </script> 
      
     <script type="x-ejs-template" id="resource-sidebar-template" >
-<h2 class="component-type-header">Resource Types</h2>
+<h3 class="component-type-header">Resource Types</h3>
 <ul class="component-type-list">
 <% types.each(function(typeModel) { var type = typeModel.toJSON() %>
    <li class="component-type-item" data-cid="<%- typeModel.cid %>"><%- type.label %></li>
@@ -210,7 +216,7 @@
 </script> 
  
     <script type="x-ejs-template" id="property-sidebar-template" >
-<h2 class="component-type-header">Types</h2>
+<h3 class="component-type-header">Types</h3>
 <ul class="component-type-list">
 <% types.each(function(typeModel) { var type = typeModel.toJSON() %>
    <li class="component-type-item" data-cid="<%- typeModel.cid %>"><%- type.label %></li>
@@ -241,27 +247,32 @@
 <% } %>
 </script> 
     <script type="x-ejs-template" id="events-template" >
-<div class="container">
-  <div class="well">
-    <h2>On Get</h2>
+<h3>
+  Events
+</h3>
+<ul class="nav nav-tabs">
+  <li class="active"><a href="#get-panel" data-toggle='tab'>GET</a></li>
+  <li><a href="#post-panel" data-toggle='tab'>POST</a></li>
+  <li><a href="#put-panel" data-toggle='tab'>PUT</a></li>
+  <li><a href="#delete-panel" data-toggle='tab'>DELETE</a></li>
+</ul>
+<div class="tab-content">
+  <div class="tab-pane active" id="get-panel">
     <div class="editor-container">
       <div id="onGet"><%= onGet %></div>
     </div>
   </div>
-  <div class="well" >
-    <h2>On Post</h2>
+  <div class="tab-pane" id="post-panel">
     <div class="editor-container">
       <div id="onPost"><%= onPost %></div>
     </div>
   </div>
-  <div class="well">
-    <h2>On Put</h2>
+  <div class="tab-pane" id="put-panel">
     <div class="editor-container">
       <div id="onPut"><%= onPut %></div>
     </div>
   </div>
-  <div class="well">
-    <h2>On Delete</h2>
+  <div class="tab-pane" id="delete-panel">
     <div class="editor-container">
       <div id="onDelete"><%= onDelete %></div>
     </div>
@@ -359,7 +370,7 @@
  
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script> 
     <script type="text/javascript" src="js/lib/jquery-ui.min.js"></script> 
-    <script type="text/javascript" src="js/lib/jquery.cookie.js"></script> 
+    <script type="text/javascript" src="js/lib/jquery.plugins.js"></script> 
     <script type="text/javascript" src="js/lib/bootstrap.js"></script> 
     <script type="text/javascript" src="js/lib/underscore.js"></script> 
     <script type="text/javascript" src="js/lib/underscore.string.min.js"></script> 

@@ -604,7 +604,7 @@ module.exports = function() {
 			
 
 			setDividerPoint(y);
-
+  		
 			return false;
 		}
 
@@ -623,6 +623,7 @@ module.exports = function() {
 		var percent = dividerPoint / totalHeight;
 		totalHeight = $area.innerHeight();
 		setDividerPoint(totalHeight*percent);
+		
 	});
 
 	function setDividerPoint(y) {
@@ -632,9 +633,13 @@ module.exports = function() {
 				y = MIN_AREA;
 			}
 			dividerPoint = y;
-			$top.height(y - dividerHeight/2);
-			$bottom.height(totalHeight - y - dividerHeight);
+			$top.outerHeight(y - dividerHeight/2);
+			$bottom.outerHeight(totalHeight - y - dividerHeight);
 			$divider.css('top', y);
+			
+			
+  		// fill panels
+  		$('.main-area .well').height($top.innerHeight() - 44);
 	}
 		
 
@@ -696,6 +701,8 @@ var AppView = module.exports = Backbone.View.extend({
       authKey: this.$modal.find('[name=key]').val()
     });
 
+    $.cookie('DPDAuthKey', app.get('authKey'), {expires: 7});
+
     this.$modal.modal('hide');
     this.render();
 
@@ -744,6 +751,8 @@ var AppView = module.exports = Backbone.View.extend({
     var body = $('<div id="body">').html(template(model));
     $('#body').replaceWith(body);
     require('./divider-drag')();
+    
+    $(window).resize();
 
     if (this.bodyView) {
       this.bodyView.close();
@@ -1296,7 +1305,6 @@ var ModelEditorView = module.exports = Backbone.View.extend({
 
   initialize: function() {
     this.propertyTypes = new PropertyTypeCollection();
-    // this.model.resourcePath = '/todos';
 
     this.dataCollection = new Backbone.Collection([]);
     this.dataCollection.url = this.model.get('path');
