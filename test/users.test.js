@@ -25,7 +25,7 @@ describe('Users', function(){
   
   describe('POST /users/login', function(){
     it('should login if provided the correct credentials', function(done) {
-      users.use('/login').post(data.users[0], function (err, session, req, res) {
+      users.use('/login').post({email: data.users[0].email, password: data.users[0].password}, function (err, session, req, res) {
         expect(session._id).to.have.length(24);
         expect(session.user.password).to.not.exist;
         expect(res.headers['set-cookie'][0].indexOf(session._id) > -1).to.equal(true);
@@ -36,12 +36,14 @@ describe('Users', function(){
   
   describe('GET /users/me', function(){
     it('should return the current session', function(done) {
-      client.use('/users/me').get(function (err, session) {
-        expect(session).to.exist;
-        expect(session._id).to.have.length(24);
-        expect(session.user).to.be.a('object');
-        expect(session.user.password).to.not.exist;
-        done(err);
+      users.use('/login').post({email: data.users[0].email, password: data.users[0].password}, function (err, session, req, res) {
+        client.use('/users/me').get(function (err, session) {
+          expect(session).to.exist;
+          expect(session._id).to.have.length(24);
+          expect(session.user).to.be.a('object');
+          expect(session.user.password).to.not.exist;
+          done(err);
+        })
       })
     })
   })
@@ -49,7 +51,12 @@ describe('Users', function(){
   describe('DELETE /users/logout', function(){
     it('should logout the current user', function(done) {
       // TODO fix mdoq-http bug - loses context if replace client with users
-      client.use('/users/logout').del(done);
+      users.use('/login').post({email: data.users[0].email, password: data.users[0].password}, function (err, session, req, res) {
+        // SHOULD BE USERS
+        unauthed.use('/users/logout').del(function (err, res) {
+          done(err);
+        });
+      })
     })
     
     it('should return an error if trying to logout twice', function(done) {

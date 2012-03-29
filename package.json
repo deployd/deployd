@@ -1,12 +1,12 @@
 {
   "author": "Ritchie Martori",
   "name": "deployd",
-  "version": "0.3.3",
+  "version": "0.3.7",
   "repository": {
     "url": "git://github.com/deployd/deployd.git"
   },
   "engines": {
-    "node": ">= 0.7.x"
+    "node": ">= 0.6.0"
   },
   "main":"index",
   "dependencies": {
