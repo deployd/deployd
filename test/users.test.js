@@ -53,7 +53,7 @@ describe('Users', function(){
       // TODO fix mdoq-http bug - loses context if replace client with users
       users.use('/login').post({email: data.users[0].email, password: data.users[0].password}, function (err, session, req, res) {
         // SHOULD BE USERS
-        client.use('/users/logout').del(function (err, res) {
+        unauthed.use('/users/logout').del(function (err, res) {
           done(err);
         });
       })
