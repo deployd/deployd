@@ -37,8 +37,7 @@ data = {
           optional: false
         },
         completed: {
-          type: "boolean",
-          optional: true
+          type: "boolean"
         },
         order: {
           type: "number",
