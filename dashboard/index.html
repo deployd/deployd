@@ -1,0 +1,395 @@
+<!DOCTYPE html> 
+<html> 
+  <head> 
+    <title>Deployd Dashboard</title> 
+     
+        <link rel='stylesheet' type="text/css" href='stylesheets/style.css' /> 
+     
+  </head> 
+  <body> 
+ 
+    <div id="header" class="subnav clearfix"></div> 
+ 
+    <div id="body"></div> 
+ 
+    <div class="modal" id="authModal" style="display: none"> 
+      <div class="modal-header"> 
+        <h3>Deployd Dashboard</h3> 
+      </div> 
+      <div class="modal-body"> 
+        <p>Authenticate with your deployd app:</p> 
+        <form> 
+            <label>Authentication key: <textarea name="key"></textarea></label> 
+        </form> 
+      </div> 
+      <div class="modal-footer"> 
+        <a href="#" class="btn btn-primary save">Authenticate</a> 
+      </div> 
+    </div> 
+ 
+    <script type="x-ejs-template" id="header-template" >
+<div class="full-width-container">
+  <ul class="nav nav-pills pull-left">
+    <li><a href="#">Resources</a></li>
+    <% if (typeof resourceName !== 'undefined' && resourceName) { %>
+      <li class="active">
+        <a href="#<%= resourceId %>" class="resourceName"><%= resourceName %></a>
+      </li>
+    <% } %>
+  </ul>
+  <div class="pull-right">
+    <button id="undo-btn" class="btn btn-warning"><i class="icon-exclamation-sign icon-white"></i> Undo <span class="action-label"></span></button>
+    <span id="save-status"></span>
+  </div>
+</div>
+</script> 
+ 
+    <script type="x-ejs-template" id="resources-template" >
+<div id="resource-editor">
+  <div class="ide-container">
+      <div id="resource-sidebar" class="component-type-sidebar sidebar well">
+      </div>
+      <div class="main-area mid header-offset well">
+        <h3>Resources</h3>
+        <ul id="resource-list" class="component-list" style="display: none;">
+        </ul>
+        <div id="resource-list-empty" class="well" style="display: none;">
+          <h4>Welcome to your Deployd app</h4>
+          <p>
+            <i class="icon-white icon-arrow-left"></i>&nbsp;
+            These are the resources you can use to build your app.<br />
+            <div class="placeholder">Drag one here to get started!</div>
+          </p>  
+        </div>
+      </div>
+      <div class="right-sidebar">
+        <div class="well">
+          <h3>App Settings</h3>
+          <form>
+              <label>App name</label>
+              <input type="text" readonly="readonly" value="<%- appName %>" />
+              <label>App URL</label>
+              <input type="text" readonly="readonly" value="<%- appUrl %>" />
+          </form>
+        </div>
+
+        <div class="well">
+          <h3>What's next?</h3>
+          <p>Deployd is in early alpha. More features are planned for upcoming releases, such as:</p>
+          <ul>
+            <li>Data relationships</li>
+            <li>Custom plugin support</li>
+            <li>Advanced querying</li>
+            <li>Automatic properties</li>   
+            <li>Hosting static content</li>
+            <li>Rendering HTML</li>
+          </ul>
+        </div>
+      </div>
+  </div>
+</div>
+</script> 
+    <script type="x-ejs-template" id="collection-template" >
+<div id="model-editor">
+  <div class="ide-container has-nav">
+    <div id="property-panel">
+      <div id="property-sidebar" class="component-type-sidebar sidebar well">
+      </div>
+      <div class="main-area vertical-split">
+        <div class="top-panel">
+          <div class="split-panel">
+            <div id="property-list-cont" class="well">
+              <h3>
+                <div>
+                  Properties
+                </div>
+              </h3>
+              <ul id="property-list" class="component-list">  
+                <li class="component-item locked">
+                  <div class="header">
+                      <span class="label label-info">_id</span>
+                  </div>
+                </li>
+                <% if (typeof resourceTypeId !== 'undefined' && resourceTypeId === 'UserCollection') { %>
+                  <li class="component-item locked">
+                    <div class="header">
+                        <span class="label label-info">email</span>
+                    </div>
+                  </li>
+                  <li class="component-item locked">
+                    <div class="header">
+                        <span class="label label-info">password</span>
+                    </div>
+                  </li>
+                <% } %>
+              </ul>
+            </div>
+          </div>
+          <div class="split-panel">
+            <div id="events-panel" class="well">
+
+            </div>
+          </div>
+        </div>
+        
+        <div class="divider"></div>
+        <div class="bottom-panel">
+          <div id="current-data">
+            <div class="table-container">
+              <table class="table table-bordered table-striped">
+              </table>
+            </div>
+            <input id="current-data-querystring" type="text" placeholder="Query string" />
+          </div>
+
+        </div>
+      </div>
+    </div>    
+  </div>
+</div>
+</script> 
+    <script type="x-ejs-template" id="static-template" >
+<div id="resource-editor">
+  <div class="ide-container">
+      <div id="resource-sidebar" class="component-type-sidebar sidebar">
+        <div class="well">
+          <div id="file-upload">
+            <span class="btn btn-success fileinput-button">
+                <i class="icon-plus icon-white"></i>
+                <span>Add files</span>
+                <input type="file" multiple="multiple" />
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="main-area mid header-offset">
+        <table id="files" class="table table-bordered table-striped">
+          <thead>
+            <th>Filename</th>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+</script> 
+    <script type="x-ejs-template" id="file-template" >
+<tr class="component-item">
+  <td>
+    <a href="<%= url %>"><%= filename %></a>
+  </td>
+  <td>
+    <% if(isEditable) { %> 
+      <a class="edit" href="#" filename="<%= filename %>">edit</a>
+    <% } %>
+    <a class="delete" href="#" filename="<%= filename %>">delete</a>
+  </td>
+</tr>
+</script> 
+     
+    <script type="x-ejs-template" id="resource-sidebar-template" >
+<h3 class="component-type-header">Resource Types</h3>
+<ul class="component-type-list">
+<% types.each(function(typeModel) { var type = typeModel.toJSON() %>
+   <li class="component-type-item" data-cid="<%- typeModel.cid %>"><%- type.label %></li>
+<% }); %>
+</ul>
+</script> 
+    <script type="x-ejs-template" id="resource-template" >
+<div class="header">
+  <% if (resource.c_active) { %>
+    <input type="text" class="code" name="path" value="<%- resource.path %>" />
+    <a href="#" class="save-btn">save</a>
+    <a href="#" class="cancel-btn">cancel</a>
+  <% } else { %>
+    <span class="code path"><%- resource.path %></span>
+  <% } %>
+  <div class="pull-right">
+    <a class="edit-btn" href="#">edit</a>
+    &nbsp;
+    <a href="#" class="rename-btn">rename</a>
+    &nbsp;
+    <a href="#" class="delete-btn">delete</a>
+  </div>
+  <div class="tags pull-right">
+    <span class="label label-info type"><%- resource.typeLabel %></span>
+  </div>
+</div>
+</script> 
+ 
+    <script type="x-ejs-template" id="property-sidebar-template" >
+<h3 class="component-type-header">Types</h3>
+<ul class="component-type-list">
+<% types.each(function(typeModel) { var type = typeModel.toJSON() %>
+   <li class="component-type-item" data-cid="<%- typeModel.cid %>"><%- type.label %></li>
+<% }); %>
+</ul>
+</script> 
+    <script type="x-ejs-template" id="property-template" >
+<div class="header <%= property.c_active ? 'active' : '' %>">
+  <% if (property.c_active) { %>
+    <input type="text" class="code" name="name" value="<%- property.name %>" />
+  <% } else { %>
+    <span class="code name"><%- property.name %></span>
+  <% } %>
+ 	<a href="#" class="pull-right delete-btn">delete</a>
+  <div class="tags pull-right">
+  	<% if (property.optional) { %>
+  		<span class="label optional">Optional</span>
+  	<% } %>
+    <span class="label label-info type"><%- property.typeLabel %></span>
+  </div>
+</div>
+<% if (property.c_active) { %>
+  <div class="detail form-inline">
+    <% if (property.type !== 'boolean') { %>
+    <label>Optional <input type="checkbox" name='optional' <%= property.optional ? 'checked="checked"' : '' %> /></label>
+    <% } %>
+  </div>
+<% } %>
+</script> 
+    <script type="x-ejs-template" id="events-template" >
+<h3>
+  Events
+</h3>
+<ul class="nav nav-tabs">
+  <li class="active"><a href="#get-panel" data-toggle='tab'>GET</a></li>
+  <li><a href="#post-panel" data-toggle='tab'>POST</a></li>
+  <li><a href="#put-panel" data-toggle='tab'>PUT</a></li>
+  <li><a href="#delete-panel" data-toggle='tab'>DELETE</a></li>
+</ul>
+<div class="tab-content">
+  <div class="tab-pane active" id="get-panel">
+    <div class="editor-container">
+      <div id="onGet"><%= onGet %></div>
+    </div>
+  </div>
+  <div class="tab-pane" id="post-panel">
+    <div class="editor-container">
+      <div id="onPost"><%= onPost %></div>
+    </div>
+  </div>
+  <div class="tab-pane" id="put-panel">
+    <div class="editor-container">
+      <div id="onPut"><%= onPut %></div>
+    </div>
+  </div>
+  <div class="tab-pane" id="delete-panel">
+    <div class="editor-container">
+      <div id="onDelete"><%= onDelete %></div>
+    </div>
+  </div>
+</div>
+</script> 
+ 
+    <script type="x-ejs-template" id="model-table-template" >
+<thead>
+  <tr>
+    <th class="code">_id</th>
+    <% if (resourceType == "UserCollection") { %>
+      <th class="code">email</th>
+      <th class="code">password</th>
+    <% } %>
+    <% _.each(properties, function(property) { %>
+      <th class="code"><%- property.name %></th>
+    <% }); %>
+    <th></th>
+  </tr>
+</thead>
+<tbody>
+  <% if (!collectionModel.length) { %> 
+    <tr>
+      <td colspan="<%= properties.length + (resourceType == "UserCollection" ? 4 : 2) %>">This collection is empty</td>
+    </tr>
+  <% } %>
+  <% collectionModel.each(function(rowModel) { if (!rowModel.get('c_delete')) { %>
+    <% var row = rowModel.toJSON(); %>
+    <tr data-cid="<%= rowModel.cid %>">
+      <td>
+        <%- row._id || '...' %>
+      </td>
+      <% if (resourceType == "UserCollection") { %>
+        <td data-prop="email">
+          <% if (row.c_errors && row.c_errors.email) { %>
+            <a class="error-tooltip" rel="tooltip" title="<%- row.c_errors.email %>">
+              <i class="icon-warning-sign icon-white"></i>
+            </a>
+          <% } %>
+          <% if (row.c_active) { %>
+            <input type="text" name="email" value="<%- row.email || '' %>" />
+          <% } else { %>
+            <%- row.email || '...' %>
+          <% } %>
+        </td>
+        <td data-prop="password">
+          <% if (row.c_errors && row.c_errors.password) { %>
+            <a class="error-tooltip" rel="tooltip" title="<%- row.c_errors.password %>">
+              <i class="icon-warning-sign icon-white"></i>
+            </a>
+          <% } %>
+          <% if (row.c_active) { %>
+            <input type="password" name="password" placeholder="*******" />
+          <% } else { %>
+            ...
+          <% } %>
+        </td>
+      <% } %>
+      <% _.each(properties, function(property) { %>
+        <% var val = row[property.name]; %>
+        <% if (typeof val === 'undefined') { val = row[property.$renameFrom]; } %>
+        <td data-prop="<%- property.name %>">
+          <% if (row.c_errors && row.c_errors[property.name]) { %>
+            <a class="error-tooltip" rel="tooltip" title="<%- row.c_errors[property.name] %>">
+              <i class="icon-warning-sign icon-white"></i>
+            </a>
+          <% }
+            if (row.c_active) { %>
+            <% if (typeof val === 'undefined') { val = '' } %>
+            <% if (property.type == 'number') { %>
+              <input type="number" name="<%- property.name %>" value="<%- val %>" />
+            <% } else if (property.type == 'boolean') { %>
+              <input type="checkbox" name="<%- property.name %>" <% val ? 'checked="checked"' : ''%> />
+            <% } else if (property.type == 'date') {  %>
+              <input type="datetime" name="<%- property.name %>" value="<%- val %>" />
+            <% } else { %>
+              <input type="text" name="<%- property.name %>" value="<%- val %>" />
+            <% } %>
+          <% } else { %>
+            <% if (typeof val === 'undefined') { val = '...' } %>
+            <%- val %>
+          <% } %>
+        </td>
+      <% }); %>
+      <td>
+        <% if (row.c_active) { %>
+          <a href="#" class="done-btn">done</a>
+        <% } else { %>
+          <a href="#" class="edit-btn">edit</a>
+        <% } %>
+        <a href="#" class="delete-btn">delete</a>
+      </td>
+    </tr>
+  <% }}); %>
+</tbody>
+<tfoot>
+  <tr>
+    <td colspan="<%= properties.length + (resourceType == "UserCollection" ? 4 : 2) %>"><button class="btn add-btn pull-right">Add</a></td>
+  </tr>
+</tfoot>
+</script> 
+ 
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script> 
+    <script type="text/javascript" src="js/lib/jquery-ui.min.js"></script> 
+    <script type="text/javascript" src="js/lib/jquery.plugins.js"></script> 
+    <script type="text/javascript" src="js/lib/bootstrap.js"></script> 
+    <script type="text/javascript" src="js/lib/underscore.js"></script> 
+    <script type="text/javascript" src="js/lib/underscore.string.min.js"></script> 
+    <script type="text/javascript" src="js/lib/backbone.js"></script> 
+    <script type="text/javascript" src="js/lib/ace-noconflict.js"></script> 
+    <script type="text/javascript" src="js/lib/ace-mode-javascript-noconflict.js"></script> 
+    <script type="text/javascript" src="js/lib/ace-theme-vibrant_ink-noconflict.js"></script> 
+ 
+    <script src="js/app.js"></script> 
+  </body> 
+</html>

@@ -33,20 +33,26 @@ data = {
       path: '/todos',
       properties: {
         title: {
-          description: "the title of the todo",
           type: "string",
-          required: true
+          optional: false
         },
         completed: {
-          description: "the state of the todo",
           type: "boolean",
-          default: false
+          optional: true
+        },
+        order: {
+          type: "number",
+          optional: true
+        },
+        dateCompleted: {
+          type: "date",
+          optional: true
         }
       },
       onGet: 'this.isGet = true;',
       onDelete: '' +
         'if(this.title === "dont delete") {' +
-        '  return false;' +
+        '  cancel("dont delete");' +
         '}',
       onPut: 'this.isPut = true;',
       onPost: 'this.isPost = true;',

@@ -21,6 +21,30 @@ describe('Resource Actions', function(){
         done();
       })
     })
+
+    it('should post a date in a standard format', function(done) {
+      todos.post({title: 'foo', dateCompleted: '12/12/12'}, function(err, todo, req, res) {
+        expect(err).to.not.exist;
+        expect(new Date(todo.dateCompleted) - new Date('12/12/12')).to.equal(0);
+        done(err);
+      });
+    });
+
+    it('should return an error for an invalid date', function(done) {
+      todos.post({title: 'foo', dateCompleted: 'bad date'}, function(err, todo, req, res) {
+        expect(err).to.exist;
+        expect(err.errors.dateCompleted).to.exist;
+        done();
+      });
+    });
+
+    it('should accept null as a value for an optional property', function(done) {
+      todos.post({title: 'foo', order: null}, function(err, todo, req, res) {
+        expect(err).to.not.exist;
+        expect(todo.order).to.not.be.ok
+        done(err);
+      });
+    });
     
     it('should ignore properties outside the schema', function(done) {
       todos.post({title: 'foo', bat: 'baz'}, function (err, todo, req, res) {
