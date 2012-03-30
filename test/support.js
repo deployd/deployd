@@ -95,10 +95,15 @@ clear = function(done) {
   client.use('/todos').del(function (e) {
     sessions.del(function (err) {
       resources.del(function (error) {
+        clearTimeout(to);
         done()
       })
     })
   })
+  
+  var to = setTimeout(function () {
+    done()
+  }, 1000)
 };
 
 before(function(done){
