@@ -8,14 +8,35 @@ describe('Resource Actions', function(){
         })
       })
     })
+
+    it('should support the $orderby flag', function(done) {
+      var query = {
+        $orderby: {title: 1}
+      };
+      var queryJson = encodeURI(JSON.stringify(query));
+
+      todos.post({title: 'c'}, function(e1) {
+        todos.post({title: 'b'}, function(e2) {
+          todos.post({title: 'a'}, function(e3) {
+            todos.use('?q=' + queryJson).get(function(err, body, req, res) {
+              expect(body).to.exist;
+              expect(body.length).to.equal(3);
+              expect(body[0].title).to.equal('a');
+              expect(body[1].title).to.equal('b');
+              expect(body[2].title).to.equal('c');
+              done(e1, e2, e3, err);
+            });
+          });
+        });
+      });
+
+    });
   })
   
   describe('POST /todos', function(){
     it('should return an error when provided invalid data', function(done) {
       todos.post({foo: 123, completed: 'flarg'}, function (err, todo, req, res) {
         expect(err).to.exist;
-        expect(err.valid).to.equal(false);
-        expect(err.validation).to.have.length(2);
         expect(err.errors).to.be.a('object');
         expect(todo).to.not.exist;
         done();
