@@ -37,6 +37,14 @@ describe('Resource Actions', function(){
         done();
       });
     });
+
+    it('should accept null as a value for an optional property', function(done) {
+      todos.post({title: 'foo', order: null}, function(err, todo, req, res) {
+        expect(err).to.not.exist;
+        expect(todo.order).to.not.be.ok
+        done(err);
+      });
+    });
     
     it('should ignore properties outside the schema', function(done) {
       todos.post({title: 'foo', bat: 'baz'}, function (err, todo, req, res) {
