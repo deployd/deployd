@@ -1,6 +1,9 @@
 body {
-  /*padding-top: 80px;*/
-  
+
+}
+
+#index {
+  margin-top: 80px;
 }
 
 body, p, li {
