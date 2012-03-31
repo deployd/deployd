@@ -1434,6 +1434,7 @@ var ModelEditorView = module.exports = Backbone.View.extend({
     // Backbone.history.off('load', this.onNavigate);
     Backbone.View.prototype.close.call(this);
     this.dataView.close();
+    this.eventsView.close();
   }
 
 
@@ -1677,6 +1678,7 @@ var PropertyView = module.exports = Backbone.View.extend({
 
 require.define("/view/collection-data-view.js", function (require, module, exports, __dirname, __filename) {
 var undoBtn = require('./undo-button-view');
+var statusTooltip = require('./status-tooltip');
 
 var app = require('../app');
 
@@ -1690,7 +1692,9 @@ var CollectionDataView = module.exports = Backbone.View.extend({
     'click .add-btn': 'addRow',
     'click .delete-btn': 'deleteRow',
     'click .edit-btn': 'editRow',
-    'dblclick td': 'editRow',
+    'click .cancel-btn': 'cancelEditingRow',
+    'dblclick td:not(.id)': 'editRow',
+    'dblclick .id': 'copyId',
     'click .done-btn': 'commitRow',
     'keyup input': 'onFieldKeypress',
     'dblclick input': 'cancelEvent',
@@ -1780,6 +1784,15 @@ var CollectionDataView = module.exports = Backbone.View.extend({
     return false;
   },
 
+  copyId: function(e) {
+    var row = this._getRow(e);
+    console.log(row.id);
+
+    prompt('Copy the id to your clipboard:', row.id);
+
+    return false;
+  },
+
   editRow: function(e) {
     var row = this._getRow(e);
     row.set({c_active: true});
@@ -1837,6 +1850,17 @@ var CollectionDataView = module.exports = Backbone.View.extend({
     return false;
   },
 
+  cancelEditingRow: function(e) {
+    var row = this._getRow(e);
+
+    row.fetch({success: function() {
+      row.set({c_active: false});
+      self.editing = false;
+    }});
+
+    return false;
+  },
+
   saveRow: function(row, changes) {
     var self = this;
 
@@ -1875,13 +1899,15 @@ var CollectionDataView = module.exports = Backbone.View.extend({
 
   changeQuerystring: function() {
     this.collection.querystring = this.$('#current-data-querystring').val();
-    
   },
 
 
   onFieldKeypress: function(e) {
-    if (e.which == '13' || e.which == '27') { //enter or esc
+    console.log(e.which);
+    if (e.which === 13) { //enter
       this.commitRow(e);
+    } else if ( e.which === 27) { //esc
+      this.cancelEditingRow(e);
     }
   },
 
@@ -1914,12 +1940,41 @@ var CollectionDataView = module.exports = Backbone.View.extend({
 });
 });
 
+require.define("/view/status-tooltip.js", function (require, module, exports, __dirname, __filename) {
+module.exports = function(message, x, y, length) {
+
+  length = length || 3000;
+
+  var $host = $('<div>')
+    .css('position', 'absolute')
+    .css('z-index', 1000)
+    .css('top', y)
+    .css('left', x)
+    .tooltip({
+      title: message,
+      trigger: 'manual'
+    })
+  ;
+
+  $host.appendTo('body').tooltip('show');
+
+  setTimeout(function() {
+    $host.tooltip('hide').remove();
+  }, length);
+
+};
+});
+
 require.define("/view/collection-event-view.js", function (require, module, exports, __dirname, __filename) {
 var CodeEditorView = require('./code-editor-view.js');
 
 var CollectionEventView = module.exports = Backbone.View.extend({
 
   template: _.template($('#events-template').html()),
+
+  events: {
+    'shown .nav-tabs a': 'resize'
+  },
 
   initialize: function() {
     this._editors = {
@@ -1945,7 +2000,7 @@ var CollectionEventView = module.exports = Backbone.View.extend({
   render: function() {
     var self = this;
 
-    setInterval(_.bind(this.resize, this), 1000);
+    this._resizeInterval = setInterval(_.bind(this.resize, this), 100);
 
     $(this.el).html(this.template(this.model.toJSON()));
 
@@ -1962,26 +2017,35 @@ var CollectionEventView = module.exports = Backbone.View.extend({
     return this;
   },
 
-  resize: function() {
-    var $editors = $(this.el).find('.editor-container');
-    $editors.height(0);
+  resize: function(force) {
+  
+    var height = $(this.el).height();
 
-    var availableSpace = $(this.el).height();
+    if (this._lastHeight !== height || force) {
+      var $editors = $(this.el).find('.editor-container');
+      $editors.height(0);
 
-    $(this.el).children().each(function() {
-      availableSpace -= $(this).outerHeight(true);
-    });
+      var availableSpace = height;
 
-    $editors.height(availableSpace);
+      $(this.el).children().each(function() {
+        availableSpace -= $(this).outerHeight(true);
+      });
 
-    _.each(this._editors, function(editor, name) {
-      if (editor) {
-        editor.resize();  
-      }
-    });
+      $editors.height(availableSpace);
+
+      _.each(this._editors, function(editor, name) {
+        if (editor) {
+          editor.resize();  
+        }
+      });
+
+      this._lastHeight = height;
+    }
+    
   },
 
   close: function() {
+    clearInterval(this._resizeInterval);
     _.each(this._editors, function(editor, name) {
       if (editor) {
         editor.off();  
@@ -2091,12 +2155,19 @@ var ModelEditorView = module.exports = Backbone.View.extend({
     
     _.each(files, function (file) {
       var f = new File({info: file, path: path});
-      
+
+      var $status = $('<div>').text('Uploading ' + file.fileName + '...')
+        .appendTo(self.$('#currentUploads'));
+
       f.on('sync', function () {
         self.files.fetch();
+        $status.fadeOut(500, function() {
+          $status.remove();
+        })
       });
-      
+
       f.save();
+    
     });
   },
   
