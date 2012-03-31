@@ -159,9 +159,11 @@ describe('Resource Actions', function(){
       todos.post({title: 'foo', order: 1}, function(ep, todo) {
         todos.use('/' + todo._id).put({completed: true}, function(epu, updatedTodo) {
           expect(epu).to.not.exist;
+
           expect(updatedTodo.title).to.equal('foo');
           expect(updatedTodo.order).to.equal(1);
           expect(updatedTodo.completed).to.equal(true);
+          done(ep, epu);
         });  
       });
     });
