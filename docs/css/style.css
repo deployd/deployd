@@ -1,0 +1,26 @@
+body {
+  /*padding-top: 80px;*/
+  
+}
+
+body, p, li {
+  font-size: 12pt;
+  line-height: 1.5em;
+}
+
+.navbar .brand a {
+  display: inline-block;
+  padding: 15px 0 0;
+}
+
+h1 {
+  margin-top: 80px;
+}
+
+h2 {
+  margin-top: 50px; 
+}
+
+pre {
+  padding: 20px;
+}
