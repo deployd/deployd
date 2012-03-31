@@ -60,22 +60,6 @@ data = {
       type: 'UserCollection',
       path: UserCollection.defaultPath,
       properties: {
-        email: {
-          description: 'the unique email of the user',
-          type: 'string',
-          pattern: "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?",
-          required: true,
-          unique: true,
-          minLength: 5,
-          order: 0
-        },
-        password: {
-          description: "the user's password",
-          type: 'string',
-          required: true,
-          minLength: 5,
-          order: 1
-        },
         age: {
           type: 'number',
           required: true,
@@ -100,15 +84,10 @@ clear = function(done) {
   client.use('/todos').del(function (e) {
     sessions.del(function (err) {
       resources.del(function (error) {
-        clearTimeout(to);
         done()
       })
     })
   })
-  
-  var to = setTimeout(function () {
-    done()
-  }, 1000)
 };
 
 before(function(done){
