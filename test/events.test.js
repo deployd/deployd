@@ -39,6 +39,15 @@ describe('Resource Events', function(){
         expect(err).to.exist;
         done();
       })
-    })
+    });
+
+    it('should not cancel as root', function(done) {
+      todos.post({title: 'dont delete'}, function(err, todo, req, res) {
+        client.use('/todos/' + todo._id).del(function(err) {
+          expect(err).to.not.exist;
+          done(err);
+        });
+      })
+    });
   })
 })
