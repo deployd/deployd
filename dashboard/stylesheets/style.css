@@ -633,10 +633,11 @@ a.thumbnail:hover{border-color:#eeeeee;-webkit-box-shadow:0 1px 4px rgba(0, 105,
 .show{display:block;}
 .invisible{visibility:hidden;}
 h1{padding:10px;}
+p a{text-decoration:underline;}
 .well{margin-bottom:0;}
 .right-sidebar .well{position:absolute;top:0;width:195px;}
 .right-sidebar .well input{width:185px;}
-.right-sidebar .well+.well{margin-top:10px;top:224px;bottom:0;min-height:100px;}
+.right-sidebar .well+.well{margin-top:10px;top:165px;bottom:0;min-height:100px;}
 ::-webkit-scrollbar{width:8px;height:8px;margin:10px;}
 ::-webkit-scrollbar-thumb{background:#0d0403;-webkit-border-radius:5px;-moz-border-radius:5px;border-radius:5px;}
 ::-webkit-scrollbar-corner{display:none;}
@@ -677,3 +678,4 @@ table .error-tooltip:hover{text-decoration:none;cursor:pointer;}
 table input{margin:0;width:150px;}table input[type=number]{width:75px;}
 #file-upload{text-align:center;}
 #file-upload input{position:absolute;top:0;right:0;margin:0;border:solid transparent;opacity:0;filter:alpha(opacity=0);-moz-transform:translate(-300px, 0) scale(4);direction:ltr;cursor:pointer;border-width:0 0 100px 200px;}
+#file-upload #currentUploads div{margin-top:30px;}
