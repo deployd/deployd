@@ -20,7 +20,8 @@
   },
   "devDependencies": {
     "mocha": "*",
-    "chai": "*"
+    "chai": "*",
+    "shelljs": "*"
   },
   "bin": {"dpd": "./bin/dpd"}
 }
