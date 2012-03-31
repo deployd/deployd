@@ -1712,10 +1712,6 @@ var CollectionDataView = module.exports = Backbone.View.extend({
     this.collection.on('remove', this.render, this);
     this.collection.on('change', this.render, this);
 
-    this.properties.on('reset', function() {
-      this.collection.fetch();
-    }, this);
-
     $(this.el).on('focus', 'input', _.bind(function(e) {
       this._lastFocusedInput = e.currentTarget;
     }, this));

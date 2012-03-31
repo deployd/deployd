@@ -59,11 +59,44 @@ describe('Resource Actions', function(){
       });
     });
 
+
     it('should accept null as a value for an optional property', function(done) {
       todos.post({title: 'foo', order: null}, function(err, todo, req, res) {
         expect(err).to.not.exist;
         expect(todo.order).to.not.be.ok
         done(err);
+      });
+    });
+
+    it('should accept null as a value for an optional date property', function(done) {
+      todos.post({title: 'foo', dateCompleted: ''}, function(err, todo, req, res) {
+        expect(err).to.not.exist;
+        expect(todo.dateCompleted).to.not.be.ok
+        done(err);
+      });
+    });
+
+    it('should parse strings for number properties', function(done) {
+      todos.post({title: 'foo', order: '3'}, function(err, todo, req, res) {
+        expect(err).to.not.exist;
+        expect(todo.order).to.equal(3);
+        done(err);
+      });
+    });
+
+    it('should error for a non-numeric string on a number property', function(done) {
+      todos.post({title: 'foo', order: 'foo'}, function(err, todo, req, res) {
+        expect(err).to.exist;
+        expect(err.errors.order).to.exist;
+        done();
+      });
+    });
+
+    it('should not allow an empty string for a non-optional property', function(done) {
+      todos.post({title: ''}, function(err, todo, req, res) {
+        expect(err).to.exist;
+        expect(err.errors.title).to.exist;
+        done();
       });
     });
     
