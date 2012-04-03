@@ -4,6 +4,7 @@
     <title>Deployd Documentation</title>
     <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <link href="css/style.css" rel="stylesheet" type="text/css" />
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
   </head>
   <body>
     <div class="navbar navbar-fixed-top">
@@ -13,15 +14,280 @@
             <a href="index.html"><img src="img/logo-text.png" alt="Deployd"></a>
           </span>
           <ul class="nav">
-            <li class="active"><a href="collection.html">Collection</a></li>
+            <li><a href="collection.html">Collection</a></li>
             <li><a href="usercollection.html">User Collection</a></li>
-            <li><a href="static.html">Static</a></li>
+            <li><a href="static.html">Files</a></li>
           </ul>
+          <script>
+            $('.nav a').each(function () {
+              var url = window.location.toString();
+              if(url.indexOf($(this).attr('href')) === (url.lastIndexOf('/') + 1))
+                $(this).parent().addClass('active');
+            });
+          </script>
         </div>
       </div>
     </div>
 
-    <div class="container">/bin/sh: markdown: command not found
+    <div class="container"><h1>Collection Resource</h1>
+
+<p>A Collection resource allows your app to save and load data in a simple schema.</p>
+
+<h2>Setting up a collection</h2>
+
+<p>After creating a Collection resource in the dashboard, you can set up the schema by dragging properties into the database and naming them. </p>
+
+<p>The grid view below the property list allows you to edit the Collection manually.</p>
+
+<h2>Property types</h2>
+
+<p>You can currently use the following property types:</p>
+
+<ul>
+<li><strong>String</strong> - Arbritrary text data</li>
+<li><strong>Number</strong> - Numeric value, supports floating points</li>
+<li><strong>Boolean</strong> - True or false</li>
+<li><strong>Date</strong> - A specific point in time</li>
+</ul>
+
+<h2>Formats</h2>
+
+<p>You must format the request body as a JSON string and pass the header "Content-Type: application/json".</p>
+
+<h2>Saving data</h2>
+
+<p>To save data, send a POST request to the root of the Collection:</p>
+
+<pre><code>POST /people
+Content-Type: application/json
+{
+  "age": 23,
+  "firstName": "Joe",
+  "lastName": "Smith"
+}
+</code></pre>
+
+<p>The server will respond with the object, which will have a new <code>_id</code> property. </p>
+
+<pre><code>200 OK
+{
+  "_id": "4f71fc7c2ba744786f000001",
+  "age": 23,
+  "firstName": "Joe",
+  "lastName": "Smith"
+}
+</code></pre>
+
+<p>This <code>_id</code> is used to find the object's URL (i.e. <code>/people/4f71fc7c2ba744786f000001</code>)</p>
+
+<h2>Listing data</h2>
+
+<p>A GET request to the root of the Collection will return an array of objects in the collection:</p>
+
+<pre><code>GET /people
+
+200 OK
+[
+  {
+    "_id": "4f71fc7c2ba744786f000001",
+    "age": 23,
+    "firstName": "Joe",
+    "lastName": "Smith"
+  },
+  {
+    "_id": "4f71fe8b2ba744786f000002",
+    "age": 36,
+    "firstName": "John",
+    "lastName": "Doe"
+  }
+]
+</code></pre>
+
+<h2>Retrieving a specific object</h2>
+
+<p>A GET request at an object's URL will return the properties of that object:</p>
+
+<pre><code>GET /people/4f71fc7c2ba744786f000001
+
+200 OK
+{
+  "_id": "4f71fc7c2ba744786f000001",
+  "age": 23,
+  "firstName": "Joe",
+  "lastName": "Smith"
+}
+</code></pre>
+
+<h2>Updating an object</h2>
+
+<p>A PUT request at an object's URL will update the object. You must include all properties except for <code>_id</code>.</p>
+
+<pre><code>PUT /people/4f71fc7c2ba744786f000001
+Content-Type: application/json
+{
+  "age": 24,
+  "firstName": "Fred",
+  "lastName": "Smith"
+}
+</code></pre>
+
+<p>The server will respond with the entire object:</p>
+
+<pre><code>200 OK
+{
+  "_id": "4f71fc7c2ba744786f000001",
+  "age": 24,
+  "firstName": "Fred",
+  "lastName": "Smith"
+}
+</code></pre>
+
+<h2>Deleting an object</h2>
+
+<p>A DELETE request at an object's URL will permanently remove that object from the collection:</p>
+
+<pre><code>DELETE /people/4f71fc7c2ba744786f000001
+
+204 No Content
+</code></pre>
+
+<h2>Filtering results</h2>
+
+<p>You can add querystring parameters to a GET request at the root to filter the results by properties specified:</p>
+
+<pre><code>GET /people?firstName=Joe&amp;lastName=Smith
+</code></pre>
+
+<p><strong>NOTE</strong>: This currently only works for String properties.</p>
+
+<h2>Advanced querying</h2>
+
+<p>If you need to query additional types of properties, pass a JSON object as the <code>q</code> parameter with the properties you wish to filter:</p>
+
+<pre><code>GET /people?q={
+  "age": 23
+}
+</code></pre>
+
+<p>The <code>q</code> parameter supports <a href="http://www.mongodb.org/display/DOCS/Advanced+Queries">MongoDB's query language</a> for particularly advanced queries. Note that Collections do not currently support embedded documents or arrays.</p>
+
+<pre><code>GET /people?q={
+  "$orderby": { "age": 1 },
+  "name": {
+    "$regex": "^j"
+    "$options": "i",
+  }
+}
+</code></pre>
+
+<h1>Collection Event Handlers</h1>
+
+<p>You can attach micro-scripts to events to add logic and validation to your objects. Collections currently support the following events:</p>
+
+<ul>
+<li><strong>On Get</strong> - called when data is read</li>
+<li><strong>On Post</strong> - called when data is created</li>
+<li><strong>On Put</strong> - called when data is updated</li>
+<li><strong>On Delete</strong> - called when data is destroyed</li>
+</ul>
+
+<h2>Reading and setting properties</h2>
+
+<p>In an event micro-script, the <code>this</code> object refers to the current object, and has all of the properties of the object.</p>
+
+<p>You can set values on the <code>this</code> object during an On Post or On Put event. These changes will be saved to the database.</p>
+
+<pre><code>// On Post:
+this.dateCreated = new Date();
+
+// On Put:
+this.totalScore = this.level1Points + this.level2Points;
+</code></pre>
+
+<h2>Accessing the current user</h2>
+
+<p>If the request is coming from a logged in User, you can use the "me" object to access their properties.</p>
+
+<pre><code>// On Post:
+this.creator = me._id;
+</code></pre>
+
+<h2>Cancelling an event</h2>
+
+<p>You can stop any event by calling the <code>cancel(message, [code])</code> method.</p>
+
+<pre><code>//On Delete:
+if (this.protected) {
+  cancel('This post is protected and cannot be deleted');
+}
+
+DELETE /posts/123456
+
+400 Bad Request
+{
+  "message": "This post is protected and cannot be deleted"
+}
+</code></pre>
+
+<p>You can pass an integer to the <code>cancel()</code> method as the second parameter to set the HTTP status code. For example, 401 means "Unauthorized".</p>
+
+<pre><code>//On Put
+if (this.creator !== me._id) {
+  cancel("You cannot view this post because it is not yours!", 401);
+}
+
+PUT /posts/13456
+Content-Type: application/json
+{ ... }
+
+401 Unauthorized
+{
+  "message": "You cannot view this post because it is not yours!"
+}
+</code></pre>
+
+<h2>Validation</h2>
+
+<p>Use the <code>error(name, message)</code> function to add a validation error.</p>
+
+<pre><code>//On Post
+if (this.age &lt; 18) {
+  error('age', 'must be older than 18')
+}
+
+POST /people
+{
+  "firstName": "Joe",
+  "lastName": "Smith",
+  "age": 12
+}
+
+400 Bad Request
+{
+  errors: {
+    "age": "must be older than 18"
+  }
+}
+</code></pre>
+
+<h2>Hiding properties</h2>
+
+<p>If you wish to hide certain properties from a user, use the <code>hide(propertyName)</code> function.</p>
+
+<pre><code>//On Get
+if (this.creator !== me._id) {
+  hide('lastName');
+  hide('age');
+}
+</code></pre>
+
+<h2>Protecting properties from modification</h2>
+
+<p>Use the <code>protect(propertyName)</code> function to protect specified properties during a POST or PUT.</p>
+
+<pre><code>//On Put
+protect('createdDate');
+</code></pre>
     </div>
   </body>
 

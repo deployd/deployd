@@ -1,17 +1,14 @@
-Collection Resource
-===================
+# Collection Resource
 
 A Collection resource allows your app to save and load data in a simple schema.
 
-Setting up a collection
------------------------
+## Setting up a collection
 
 After creating a Collection resource in the dashboard, you can set up the schema by dragging properties into the database and naming them. 
 
 The grid view below the property list allows you to edit the Collection manually.
 
-Property types
---------------
+## Property types
 
 You can currently use the following property types:
 
@@ -20,13 +17,11 @@ You can currently use the following property types:
   * **Boolean** - True or false
   * **Date** - A specific point in time
 
-Formats
--------
+## Formats
 
 You must format the request body as a JSON string and pass the header "Content-Type: application/json".
 
-Saving data
------------
+## Saving data
 
 To save data, send a POST request to the root of the Collection:
 
@@ -38,7 +33,7 @@ To save data, send a POST request to the root of the Collection:
       "lastName": "Smith"
     }
 
-The server will respond with the object, which will have a new "_id" property. 
+The server will respond with the object, which will have a new `_id` property. 
 
     200 OK
     {
@@ -48,10 +43,9 @@ The server will respond with the object, which will have a new "_id" property.
       "lastName": "Smith"
     }
 
-This _id is used to find the object's URL (i.e. /people/4f71fc7c2ba744786f000001)
+This `_id` is used to find the object's URL (i.e. `/people/4f71fc7c2ba744786f000001`)
 
-Listing data
-------------
+## Listing data
 
 A GET request to the root of the Collection will return an array of objects in the collection:
 
@@ -73,8 +67,7 @@ A GET request to the root of the Collection will return an array of objects in t
       }
     ]
 
-Retrieving a specific object
-----------------------------
+## Retrieving a specific object
 
 A GET request at an object's URL will return the properties of that object:
 
@@ -89,10 +82,9 @@ A GET request at an object's URL will return the properties of that object:
     }
 
 
-Updating an object
-------------------
+## Updating an object
 
-A PUT request at an object's URL will update the object. You must include all properties except for "_id".
+A PUT request at an object's URL will update the object. You must include all properties except for `_id`.
 
     PUT /people/4f71fc7c2ba744786f000001
     Content-Type: application/json
@@ -112,8 +104,8 @@ The server will respond with the entire object:
       "lastName": "Smith"
     }
 
-Deleting an object
-------------------
+## Deleting an object
+
 
 A DELETE request at an object's URL will permanently remove that object from the collection:
 
@@ -122,8 +114,7 @@ A DELETE request at an object's URL will permanently remove that object from the
     204 No Content
 
 
-Filtering results
------------------
+## Filtering results
 
 You can add querystring parameters to a GET request at the root to filter the results by properties specified:
 
@@ -131,16 +122,15 @@ You can add querystring parameters to a GET request at the root to filter the re
 
 **NOTE**: This currently only works for String properties.
 
-Advanced querying
------------------
+## Advanced querying
 
-If you need to query additional types of properties, pass a JSON object as the "q" parameter with the properties you wish to filter:
+If you need to query additional types of properties, pass a JSON object as the `q` parameter with the properties you wish to filter:
 
     GET /people?q={
       "age": 23
     }
 
-The "q" parameter supports [MongoDB's query language](http://www.mongodb.org/display/DOCS/Advanced+Queries) for particularly advanced queries. Note that Collections do not currently support embedded documents or arrays.
+The `q` parameter supports [MongoDB's query language](http://www.mongodb.org/display/DOCS/Advanced+Queries) for particularly advanced queries. Note that Collections do not currently support embedded documents or arrays.
 
     GET /people?q={
       "$orderby": { "age": 1 },
@@ -151,8 +141,7 @@ The "q" parameter supports [MongoDB's query language](http://www.mongodb.org/dis
     }
 
 
-Collection Event Handlers
-=========================
+# Collection Event Handlers
 
 You can attach micro-scripts to events to add logic and validation to your objects. Collections currently support the following events:
 
@@ -161,12 +150,11 @@ You can attach micro-scripts to events to add logic and validation to your objec
   * **On Put** - called when data is updated
   * **On Delete** - called when data is destroyed
 
-Reading and setting properties
-------------------------------
+## Reading and setting properties
 
-In an event micro-script, the "this" object refers to the current object, and has all of the properties of the object.
+In an event micro-script, the `this` object refers to the current object, and has all of the properties of the object.
 
-You can set values on the "this" object during an On Post or On Put event. These changes will be saved to the database.
+You can set values on the `this` object during an On Post or On Put event. These changes will be saved to the database.
 
     // On Post:
     this.dateCreated = new Date();
@@ -174,8 +162,7 @@ You can set values on the "this" object during an On Post or On Put event. These
     // On Put:
     this.totalScore = this.level1Points + this.level2Points;
 
-Accessing the current user
---------------------------
+## Accessing the current user
 
 If the request is coming from a logged in User, you can use the "me" object to access their properties.
 
@@ -183,10 +170,9 @@ If the request is coming from a logged in User, you can use the "me" object to a
     this.creator = me._id;
 
 
-Cancelling an event
--------------------
+## Cancelling an event
 
-You can stop any event by calling the cancel(message, [code]) method.
+You can stop any event by calling the `cancel(message, [code])` method.
 
     //On Delete:
     if (this.protected) {
@@ -200,7 +186,7 @@ You can stop any event by calling the cancel(message, [code]) method.
       "message": "This post is protected and cannot be deleted"
     }
 
-You can pass an integer to the cancel() method as the second parameter to set the HTTP status code. For example, 401 means "Unauthorized".
+You can pass an integer to the `cancel()` method as the second parameter to set the HTTP status code. For example, 401 means "Unauthorized".
 
     //On Put
     if (this.creator !== me._id) {
@@ -217,10 +203,9 @@ You can pass an integer to the cancel() method as the second parameter to set th
     }
 
 
-Validation
-----------
+## Validation
 
-Use the error(name, message) function to add a validation error.
+Use the `error(name, message)` function to add a validation error.
 
     //On Post
     if (this.age < 18) {
@@ -241,10 +226,9 @@ Use the error(name, message) function to add a validation error.
       }
     }
 
-Hiding properties
------------------
+## Hiding properties
 
-If you wish to hide certain properties from a user, use the hide(propertyName) function.
+If you wish to hide certain properties from a user, use the `hide(propertyName)` function.
 
     //On Get
     if (this.creator !== me._id) {
@@ -252,10 +236,9 @@ If you wish to hide certain properties from a user, use the hide(propertyName) f
       hide('age');
     }
 
-Protecting properties from modification
----------------------------------------
+## Protecting properties from modification
 
-Use the protect(propertyName) function to protect specified properties during a POST or PUT.
+Use the `protect(propertyName)` function to protect specified properties during a POST or PUT.
   
     //On Put
     protect('createdDate');

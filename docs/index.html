@@ -4,6 +4,7 @@
     <title>Deployd Documentation</title>
     <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <link href="css/style.css" rel="stylesheet" type="text/css" />
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
   </head>
   <body>
     <div class="navbar navbar-fixed-top">
@@ -13,15 +14,81 @@
             <a href="index.html"><img src="img/logo-text.png" alt="Deployd"></a>
           </span>
           <ul class="nav">
-            <li class="active"><a href="collection.html">Collection</a></li>
+            <li><a href="collection.html">Collection</a></li>
             <li><a href="usercollection.html">User Collection</a></li>
-            <li><a href="static.html">Static</a></li>
+            <li><a href="static.html">Files</a></li>
           </ul>
+          <script>
+            $('.nav a').each(function () {
+              var url = window.location.toString();
+              if(url.indexOf($(this).attr('href')) === (url.lastIndexOf('/') + 1))
+                $(this).parent().addClass('active');
+            });
+          </script>
         </div>
       </div>
     </div>
 
-    <div class="container">/bin/sh: markdown: command not found
+    <div class="container"><div id="index">
+  <div class="hero-unit">
+    <h1>Deployd</h1>
+    <p>A modern web server for front-end developers.</p>
+  </div>
+</div>
+
+<h2>Basics</h2>
+
+<p>Deployd is a web server built on resources, in the style of REST. In the dashboard, you can build your app by creating resources and configuring them to work the way the want.</p>
+
+<h2>Routing</h2>
+
+<p>When Deployd receives an HTTP request, it checks the first part of the URL to see which resource should handle the request:</p>
+
+<ul>
+<li><strong>/todos</strong>/12345 - handled by the <strong>/todos</strong> resource</li>
+<li><strong>/admin</strong>/users/12345 - handled by the <strong>/admin</strong> resource, if it exists (you cannot create multi-part resource names)</li>
+<li><strong>/img</strong>/bg.jpg - handled by the <strong>/img</strong> resource</li>
+<li><strong>/</strong>index.html - handled by the <strong>/</strong> resource</li>
+</ul>
+
+<h2>Reserved resource names</h2>
+
+<p>Certain resource paths are used internally by Deployd. You should not create resources with these names:</p>
+
+<ul>
+<li>/keys</li>
+<li>/types</li>
+<li>/resources</li>
+<li>/sessions</li>
+<li>/property-types</li>
+<li>/__dashboard</li>
+</ul>
+
+<h2>REST</h2>
+
+<p>REST is a web service design pattern that conforms closely to HTTP itself. In Deployd, HTTP methods or verbs have meaning:</p>
+
+<ul>
+<li><strong>GET</strong> - Load a resource without modifying it (this is a browser's default method)</li>
+<li><strong>POST</strong> - Create a resource, or send data to a special that doesn't fit within these methods</li>
+<li><strong>PUT</strong> - Update an existing resource</li>
+<li><strong>DELETE</strong> - Destroy an existing resource</li>
+</ul>
+
+<p>In Deployd, HTTP response codes are also important:</p>
+
+<ul>
+<li><strong>200</strong> OK - The request succeeded</li>
+<li><strong>204</strong> No Content - The request succeeded, but there is no content to return (for example, after a deletion, or requesting an empty list)</li>
+<li><strong>400</strong> Bad Request - The request did not pass validation. Change the parameters and try again.</li>
+<li><strong>401</strong> Unauthorized - The request's session does not have permission to access that resource. </li>
+<li><strong>404</strong> Not Found - That URL does not reference an existing resource</li>
+<li><strong>500</strong> Internal Server Error - Deployd has failed to process the request due to an unexpected error.</li>
+</ul>
+
+<h2>Cross-Origin AJAX</h2>
+
+<p>Deployd is configured so that you can easily develop a web app locally on your computer. It will send Access-Control-Allow-Origin HTTP headers if a request is coming from localhost or your filesystem, which will allow modern web browsers to use AJAX normally. It will not send these headers for any other domain.</p>
     </div>
   </body>
 

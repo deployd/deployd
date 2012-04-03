@@ -29,4 +29,27 @@
       </div>
     </div>
 
-    <div class="container">
+    <div class="container"><h1>Files Resource</h1>
+
+<p>The Files Resource allows you host static files from your app, such as HTML, browser JavaScript, CSS, images, and videos. </p>
+
+<h2>Accessing files</h2>
+
+<p>Send a GET request with the filename to load the raw file. This is how browsers request pages and files by default.</p>
+
+<pre><code>GET /files/bg.jpg
+</code></pre>
+
+<h2>Folders</h2>
+
+<p>If you prefer to have separate folders for Javascript, CSS, and images, create multiple Static Resources at the paths you want to store the files.</p>
+
+<p>You can also give a Static Resource an empty path <code>/</code>. This will assign it to the root of your app.</p>
+
+<h2>Home page</h2>
+
+<p>If a Static Resource receives a request without a filename, it will automatically redirect to "index.html" if available.</p>
+    </div>
+  </body>
+
+</html>
