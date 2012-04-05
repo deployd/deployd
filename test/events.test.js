@@ -35,9 +35,23 @@ describe('Resource Events', function(){
   })
   describe('DELETE /todos', function(){
     it('should execute the todos DELETE event handler', function(done) {
-      todos.get({title: 'dont delete'}).del(function (err) {
-        expect(err).to.exist;
-        done();
+      todos.post({title: 'dont delete'}, function (e, r) {
+        todos.use('/' + r._id).get(function (err, res) {
+          todos.get({_id: res._id}).del(function (err) {
+            expect(err).to.exist;
+            expect(err.message).to.equal('dont delete');
+            done();
+          })
+        })
+      })
+    });
+
+    it('should execute the todos DELETE event handler and cancel', function(done) {
+      todos.post({title: 'blank cancel'}, function (e, r) {
+        todos.use('/' + r._id).del(function (err) {
+          expect(err).to.exist;
+          done();
+        })
       })
     });
 

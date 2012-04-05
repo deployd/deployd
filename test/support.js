@@ -52,6 +52,9 @@ data = {
       onDelete: '' +
         'if(this.title === "dont delete") {' +
         '  cancel("dont delete");' +
+        '}' +
+        'if(this.title === "blank cancel") {' +
+        '  cancel();' +
         '}',
       onPut: 'this.isPut = true;',
       onPost: 'this.isPost = true;',
@@ -77,7 +80,7 @@ data = {
     }
   },
   users: [{email: 'foo@bar.com', password: 'foobar', age: 21}],
-  todos: [{title: 'feed the dog', complete: false}, {title: 'wash the car', complete: false}, {title: 'finish some stuff', complete: false}]
+  todos: [{title: 'feed the dog', complete: false}, {title: 'blank cancel', complete: false}, {title: 'finish some stuff', complete: false}]
 }
 
 clear = function(done) {
