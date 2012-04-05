@@ -46,11 +46,10 @@ describe('Users', function(){
   describe('GET /users/me', function(){
     it('should return the current session', function(done) {
       users.use('/login').post({email: data.users[0].email, password: data.users[0].password}, function (err, session, req, res) {
-        client.use('/users/me').get(function (err, session) {
-          expect(session).to.exist;
-          expect(session._id).to.have.length(24);
-          expect(session.user).to.be.a('object');
-          expect(session.user.password).to.not.exist;
+        client.use('/users/me').get(function (err, user) {
+          expect(user).to.exist;
+          expect(user._id).to.have.length(24);
+          expect(user.password).to.not.exist;
           done(err);
         })
       })
