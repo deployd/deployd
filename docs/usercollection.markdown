@@ -1,18 +1,15 @@
-User Collection Resource
-========================
+# User Collection Resource
 
 A User Collection resource behaves much like the standard Collection resource, but adds the ability to authenticate with a username and password.
 
-Special properties
-------------------
+## Special properties
 
 The User Collection contains two special properties:
 
   * **email** - For security, hidden by default on all users except the current user.
   * **password** - Never readable under any circumstances. Can only be set when the user is logged in, when creating a new user, or from the Dashboard.
 
-Authenticating a user
----------------------
+## Registering a user
 
 First create a user by POSTing it to the root of the collection.
 For this example our collection will be called `/users`.
@@ -23,6 +20,8 @@ For this example our collection will be called `/users`.
       "email": "foo@bar.com",
       "password": "barfoo"
     }
+
+## Authenticating a user
 
 To login a user, send a POST request to `/<collection name>/login`:
 
@@ -40,6 +39,8 @@ The server will respond with the user, without the password.
       "_id": "4f71fc7c2ba744786f000001",
       "email": "foo@bar.com"
     }
+
+## Logging out
 
 To logout a user send a DELETE request to `/<collection name>/logout`:
 

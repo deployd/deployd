@@ -4,6 +4,7 @@
     <title>Deployd Documentation</title>
     <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <link href="css/style.css" rel="stylesheet" type="text/css" />
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
   </head>
   <body>
     <div class="navbar navbar-fixed-top">
@@ -13,15 +14,76 @@
             <a href="index.html"><img src="img/logo-text.png" alt="Deployd"></a>
           </span>
           <ul class="nav">
-            <li class="active"><a href="collection.html">Collection</a></li>
+            <li><a href="collection.html">Collection</a></li>
             <li><a href="usercollection.html">User Collection</a></li>
-            <li><a href="static.html">Static</a></li>
+            <li><a href="files.html">Files</a></li>
           </ul>
+          <script>
+            $('.nav a').each(function () {
+              var url = window.location.toString();
+              if(url.indexOf($(this).attr('href')) === (url.lastIndexOf('/') + 1))
+                $(this).parent().addClass('active');
+            });
+          </script>
         </div>
       </div>
     </div>
 
-    <div class="container">/bin/sh: markdown: command not found
+    <div class="container"><h1>User Collection Resource</h1>
+
+<p>A User Collection resource behaves much like the standard Collection resource, but adds the ability to authenticate with a username and password.</p>
+
+<h2>Special properties</h2>
+
+<p>The User Collection contains two special properties:</p>
+
+<ul>
+<li><strong>email</strong> - For security, hidden by default on all users except the current user.</li>
+<li><strong>password</strong> - Never readable under any circumstances. Can only be set when the user is logged in, when creating a new user, or from the Dashboard.</li>
+</ul>
+
+<h2>Registering a user</h2>
+
+<p>First create a user by POSTing it to the root of the collection.
+For this example our collection will be called <code>/users</code>.</p>
+
+<pre><code>POST /users/login
+Content-Type: application/json
+{
+  "email": "foo@bar.com",
+  "password": "barfoo"
+}
+</code></pre>
+
+<h2>Authenticating a user</h2>
+
+<p>To login a user, send a POST request to <code>/&lt;collection name&gt;/login</code>:</p>
+
+<pre><code>POST /users/login
+Content-Type: application/json
+{
+  "email": "foo@bar.com",
+  "password": "barfoo"
+}
+</code></pre>
+
+<p>The server will respond with the user, without the password.</p>
+
+<pre><code>200 OK
+{
+  "_id": "4f71fc7c2ba744786f000001",
+  "email": "foo@bar.com"
+}
+</code></pre>
+
+<h2>Logging out</h2>
+
+<p>To logout a user send a DELETE request to <code>/&lt;collection name&gt;/logout</code>:</p>
+
+<pre><code>204 No Content
+</code></pre>
+
+<p>The currently logged in user is available when GETing <code>/users/me</code>.</p>
     </div>
   </body>
 
