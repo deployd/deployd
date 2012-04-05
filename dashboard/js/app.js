@@ -481,6 +481,10 @@ Backbone.Utils.toJSONDictionary = function(json, options) {
   return result;
 };
 
+Backbone.Utils.cancelEvent = function(e) {
+  return false;
+};
+
 function isArray(o) {
   return Object.prototype.toString.call(o) === '[object Array]';
 }
@@ -651,9 +655,8 @@ module.exports = function() {
 			$bottom.outerHeight(totalHeight - y - dividerHeight);
 			$divider.css('top', y);
 			
-			
   		// fill panels
-  		$('.main-area .well').height($top.innerHeight() - 44);
+  		$('.main-area .panel').height($top.innerHeight() - 44);
 	}
 		
 
@@ -990,7 +993,6 @@ var ResourceListView = module.exports = Backbone.View.extend({
 
       receive: _.bind(function() {
         if ($(this.el).is(':visible')) {
-          console.log('receive');
           var $newItem = $($(this.el).data().sortable.currentItem);
           var index = $(this.el).children(':not(.placeholder)').index($newItem);
           this.onReceiveComponent($newItem, index);
@@ -1139,13 +1141,11 @@ var ResourceView = module.exports = Backbone.View.extend({
   
   events: {
     'click .delete-btn': 'delete',
-    'click .edit-btn': 'gotoDetail',
-    'dblclick .header': 'gotoDetail',
-    'dblclick .path': 'activate',
+    'click .header': 'onClickHeader',
+    'click .path': 'activate',
     'click .rename-btn': 'activate',
     'click .cancel-btn': 'deactivate',
     'click .save-btn': 'save',
-    'click input[name="path"]': 'onFocus',
     'keypress input[name="path"]': 'onKeypress',
     'keyup input[name="path"]': 'onKeyup'
   },
@@ -1222,8 +1222,22 @@ var ResourceView = module.exports = Backbone.View.extend({
     return false;
   },
 
+  onClickHeader: function(e) {
+    console.log($(e.target));
+    if ($(e.target).hasClass('header')) {
+      if (this.model.get('c_active')) {
+        this.deactivate();
+      } else {
+        this.gotoDetail();
+      }
+      return false;
+    } else {
+      this.onFocus(e);
+    }
+  },
+
   onFocus: function(e) {
-    $(e.currentTarget).focus();
+    $(e.target).focus();
   },
 
   onKeypress: function(e) {
@@ -1479,6 +1493,7 @@ var PropertyView = require('./property-view');
 
 var PropertyListView = module.exports = Backbone.View.extend({
   el: '#property-list',
+  emptyEl: '#property-list-empty',
 
   initialize: function() {
     this.parentView = this.options.parentView;
@@ -1498,8 +1513,25 @@ var PropertyListView = module.exports = Backbone.View.extend({
       items: '> li:not(.locked)',
       distance: 10,
 
-      receive: _.bind(this.onReceiveItem, this),
+      receive: _.bind(function() {
+        if ($(this.el).is(':visible')) {
+          var $newItem = $($(this.el).data().sortable.currentItem);
+          var index = $(this.el).children(':not(.placeholder, .locked)').index($newItem); 
+          this.onReceiveItem($newItem, index);
+        }
+      }, this),
       update: _.bind(this.updateOrder, this)
+    });
+
+    $('.placeholder', this.emptyEl).droppable({
+      hoverClass: 'highlight',
+
+      drop: _.bind(function(event, ui) {
+        if (this.collection.length === 0) {
+          var $newItem = $(ui.helper);
+          this.onReceiveItem($newItem);
+        }
+      }, this)
     });
   },
 
@@ -1536,21 +1568,28 @@ var PropertyListView = module.exports = Backbone.View.extend({
       subView.destroy();
     });
     $(self.el).children(':not(.locked)').remove();
-    self.subViews = self.collection.map(function(property) {
-      var view = new PropertyView({model: property, parentView: self});
-      $(self.el).append(view.el);
-      view.render();
-      return view;
-    });    
 
-    if ($focus) {
-      self.$('input[name="name"][value="' + focusName + '"]').focus();
+    if (self.collection.length) {
+      $(self.el).show();
+      $(self.emptyEl).hide();
+      self.subViews = self.collection.map(function(property) {
+        var view = new PropertyView({model: property, parentView: self});
+        $(self.el).append(view.el);
+        view.render();
+        return view;
+      });    
+
+      if ($focus) {
+        self.$('input[name="name"][value="' + focusName + '"]').focus();
+      }
+    } else {
+      $(self.el).hide();
+      $(self.emptyEl).show();
     }
   },
 
-  onReceiveItem: function() {
-    var $newItem = $($(this.el).data().sortable.currentItem);
-    var index = $(this.el).children(':not(.placeholder, .locked)').index($newItem);  
+  onReceiveItem: function($newItem, index) {
+    index = 0 || index;
     var typeCid = $newItem.attr('data-cid');
     var type = this.parentView.propertyTypes.getByCid(typeCid);
 
