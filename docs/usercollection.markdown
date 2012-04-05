@@ -40,13 +40,21 @@ The server will respond with the user, without the password.
       "email": "foo@bar.com"
     }
 
+## Current user
+
+The currently logged in user is available by sending a GET request to `/users/me`.
+
+    200 OK
+    {
+      "_id": "4f71fc7c2ba744786f000001",
+      "email": "foo@bar.com"
+    }
+    
 ## Logging out
 
-To logout a user send a DELETE request to `/<collection name>/logout`:
+To logout a user send a POST request to `/<collection name>/logout`:
 
     204 No Content
-    
-The currently logged in user is available when GETing `/users/me`.
 
 
 

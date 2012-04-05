@@ -57,12 +57,10 @@ describe('Users', function(){
     })
   })
   
-  describe('DELETE /users/logout', function(){
+  describe('POST /users/logout', function(){
     it('should logout the current user', function(done) {
-      // TODO fix mdoq-http bug - loses context if replace client with users
       users.use('/login').post({email: data.users[0].email, password: data.users[0].password}, function (err, session, req, res) {
-        // SHOULD BE USERS
-        unauthed.use('/users/logout').del(function (err, res) {
+        unauthed.use('/users/logout').post(function (err, res) {
           done(err);
         });
       })
