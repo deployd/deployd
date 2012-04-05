@@ -24,36 +24,42 @@ describe('Users', function(){
   })
   
   describe('POST /users/login', function(){
+    var login = users.use('/login');
+    
     it('should login if provided the correct credentials', function(done) {
-      users.use('/login').post({email: data.users[0].email, password: data.users[0].password}, function (err, session, req, res) {
+      login.post({email: data.users[0].email, password: data.users[0].password}, function (err, session, req, res) {
         expect(session._id).to.have.length(24);
         expect(session.user.password).to.not.exist;
         expect(res.headers['set-cookie'][0].indexOf(session._id) > -1).to.equal(true);
         done(err);
       });
     })
+    
+    it('should not respond to a GET', function(done) {
+      login.get(function (err, res) {
+        expect(err).to.exist;
+        done();
+      })
+    })
   })
   
   describe('GET /users/me', function(){
     it('should return the current session', function(done) {
       users.use('/login').post({email: data.users[0].email, password: data.users[0].password}, function (err, session, req, res) {
-        client.use('/users/me').get(function (err, session) {
-          expect(session).to.exist;
-          expect(session._id).to.have.length(24);
-          expect(session.user).to.be.a('object');
-          expect(session.user.password).to.not.exist;
+        client.use('/users/me').get(function (err, user) {
+          expect(user).to.exist;
+          expect(user._id).to.have.length(24);
+          expect(user.password).to.not.exist;
           done(err);
         })
       })
     })
   })
   
-  describe('DELETE /users/logout', function(){
+  describe('POST /users/logout', function(){
     it('should logout the current user', function(done) {
-      // TODO fix mdoq-http bug - loses context if replace client with users
       users.use('/login').post({email: data.users[0].email, password: data.users[0].password}, function (err, session, req, res) {
-        // SHOULD BE USERS
-        unauthed.use('/users/logout').del(function (err, res) {
+        unauthed.use('/users/logout').post(function (err, res) {
           done(err);
         });
       })

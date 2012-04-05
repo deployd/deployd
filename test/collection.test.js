@@ -1,4 +1,4 @@
-describe('Resource Actions', function(){
+describe('Collection Actions', function(){
   describe('GET /todos', function(){
     it('should return the todos', function(done) {
       todos.post({title: 'foo todo'}, function (err) {
@@ -185,6 +185,21 @@ describe('Resource Actions', function(){
       unauthed.use('/todos').del(function (err) {
         expect(err).to.exist;
         done();
+      })
+    })
+  })
+  
+  describe('DELETE /todos', function(){
+    it('should drop the entire collection when using a root auth key', function(done) {
+      todos.post({title: 'foo'}, function(err) {
+        expect(err).to.not.exist;
+        // use root key
+        client.use('/todos').del(function (error) {
+          todos.get(function (err, todos) {
+            expect(todos).to.not.exist;
+            done(err);
+          })
+        })
       })
     })
   })
