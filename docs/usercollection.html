@@ -76,14 +76,23 @@ Content-Type: application/json
 }
 </code></pre>
 
+<h2>Current user</h2>
+
+<p>The currently logged in user is available by sending a GET request to <code>/users/me</code>.</p>
+
+<pre><code>200 OK
+{
+  "_id": "4f71fc7c2ba744786f000001",
+  "email": "foo@bar.com"
+}
+</code></pre>
+
 <h2>Logging out</h2>
 
-<p>To logout a user send a DELETE request to <code>/&lt;collection name&gt;/logout</code>:</p>
+<p>To logout a user send a POST request to <code>/&lt;collection name&gt;/logout</code>:</p>
 
 <pre><code>204 No Content
 </code></pre>
-
-<p>The currently logged in user is available when GETing <code>/users/me</code>.</p>
     </div>
   </body>
 
