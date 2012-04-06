@@ -654,7 +654,7 @@ p a{text-decoration:underline;}
 .ide-container .component-type-sidebar .component-type-list{margin:0;list-style:none;}.ide-container .component-type-sidebar .component-type-list li.component-type-item{width:auto;background:#200200;}.ide-container .component-type-sidebar .component-type-list li.component-type-item:hover{background:#060000;}
 li.component-type-item{list-style:none;padding:10px;height:19px;width:180px;background:#060000;margin-bottom:4px;border-radius:3px;cursor:move;}
 .header-offset{padding-bottom:38px;}
-#resource-list-empty{margin:60px;}
+.component-list-empty{margin:60px;}
 .ide-container .main-area{position:absolute;right:0;top:0;left:260px;bottom:0;}.ide-container .main-area.mid{right:260px;}
 .ide-container .main-area.vertical-split .top-panel,.ide-container .main-area.vertical-split .bottom-panel{position:absolute;overflow-y:auto;left:0;right:0;}
 .ide-container .main-area.vertical-split .top-panel{top:0;overflow-y:hidden;}
