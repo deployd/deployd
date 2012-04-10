@@ -60,15 +60,30 @@ describe('Users', function(){
     it('should logout the current user', function(done) {
       users.use('/login').post({email: data.users[0].email, password: data.users[0].password}, function (err, session, req, res) {
         unauthed.use('/users/logout').post(function (err, res) {
-          done(err);
+          expect(err).to.not.exist;
+          unauthed.use('/users/me').get(function (err, res) {
+            expect(err).to.exist;
+            done();
+          });
+        });
+      })
+    })
+    
+    it('should not respond to DELETE', function(done) {
+      users.use('/login').post({email: data.users[0].email, password: data.users[0].password}, function (err, session, req, res) {
+        unauthed.use('/users/logout').del(function (err, res) {
+          expect(err).to.exist;
+          unauthed.use('/users/me').get(function (err, res) {
+            expect(err).to.not.exist;
+            done();
+          });
         });
       })
     })
     
     it('should return an error if trying to logout twice', function(done) {
-      client.use('/users/logout').del(function (err, body, req, res) {
+      client.use('/users/logout').post(function (err, body, req, res) {
         expect(err).to.exist;
-        // TODO confirm cookie is gone - mdoq-http doesnt include res for del()
         done();
       });
     })
