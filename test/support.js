@@ -32,6 +32,10 @@ data = {
       type: 'Collection',
       path: '/todos',
       properties: {
+        creator: {
+          type: "string",
+          optional: true
+        },
         title: {
           type: "string",
           optional: false
@@ -57,16 +61,21 @@ data = {
         '  cancel();' +
         '}',
       onPut: 'this.isPut = true;',
-      onPost: 'this.isPost = true;',
+      onPost: 'this.isPost = true;' + 
+      'if (me) {' + 
+      '  this.creator = me._id;' +
+      '}',
     },
     users: {
       type: 'UserCollection',
       path: UserCollection.defaultPath,
       properties: {
+        username: {
+          type: 'string',
+          optional: true
+        },
         age: {
-          type: 'number',
-          required: true,
-          order: 2
+          type: 'number'
         }
       }
     },
@@ -79,7 +88,7 @@ data = {
       path: '/'
     }
   },
-  users: [{email: 'foo@bar.com', password: 'foobar', age: 21}],
+  users: [{email: 'foo@bar.com', password: 'foobar', age: 21, username: "Foo Bar"}],
   todos: [{title: 'feed the dog', complete: false}, {title: 'blank cancel', complete: false}, {title: 'finish some stuff', complete: false}]
 }
 
@@ -87,7 +96,7 @@ clear = function(done) {
   client.use('/todos').del(function (e) {
     sessions.del(function (err) {
       resources.del(function (error) {
-        done()
+        done();
       })
     })
   })

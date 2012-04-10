@@ -24,10 +24,9 @@ describe('Users', function(){
   })
   
   describe('POST /users/login', function(){
-    var login = users.use('/login');
     
     it('should login if provided the correct credentials', function(done) {
-      login.post({email: data.users[0].email, password: data.users[0].password}, function (err, session, req, res) {
+      users.use('/login').post({email: data.users[0].email, password: data.users[0].password}, function (err, session, req, res) {
         expect(session._id).to.have.length(24);
         expect(session.user.password).to.not.exist;
         expect(res.headers['set-cookie'][0].indexOf(session._id) > -1).to.equal(true);
@@ -36,7 +35,7 @@ describe('Users', function(){
     })
     
     it('should not respond to a GET', function(done) {
-      login.get(function (err, res) {
+      users.use('/login').get(function (err, res) {
         expect(err).to.exist;
         done();
       })

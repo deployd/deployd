@@ -6,7 +6,18 @@ describe('Resource Events', function(){
         expect(todo.isPost).to.equal(true);
         done(err);
       })
-    })
+    });
+
+    it('should detect the current user', function(done) {
+      users.use('/login').post({email: 'foo@bar.com', password: 'foobar'}, function(errL, user) {
+        var id = user.user._id;
+        todos.post({title: "Logged in todo"}, function(err, todo, req, res) {
+          expect(todo).to.exist;
+          expect(todo.creator).to.equal(id);
+          done(errL, err);
+        });
+      });
+    });
   })
   describe('GET /todos', function(){
     it('should execute the todos GET event handler', function(done) {
@@ -20,7 +31,7 @@ describe('Resource Events', function(){
         })
       })
     })
-  })
+  });
   describe('PUT /todos', function(){
     it('should execute the todos PUT event handler', function(done) {
       todos.post({title: 'foo'}, function (e, t) {        
