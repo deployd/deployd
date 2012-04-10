@@ -1,15 +1,15 @@
-
-
 describe('Internal Collections', function(){
   describe('* /keys', function(){
     it('should not be available over http without a dpd key', function(done) {
       var ex = {key: 'foo', secret: 'bar'}
-        , unauthed = require('../lib/client').use(client.url);
+        , unauthed = require('../lib/client').use(client.url)
+        , keys = unauthed.use('/keys')
+      ;
 
-      unauthed.use('/keys').post(ex, function (e, r) {
-        unauthed.use('/keys').put(ex, function (err, res) {
-          unauthed.use('/keys').del(function (error, resp) {
-            unauthed.use('/keys').get(function (gerror, gresp) {
+      keys.post(ex, function (e, r) {
+        keys.put(ex, function (err, res) {
+          keys.del(function (error, resp) {
+            keys.get(function (gerror, gresp) {
               expect(e && err && error && gerror).to.exist;
               expect(r || res || resp || gresp).to.not.exist;
               done();
@@ -19,6 +19,7 @@ describe('Internal Collections', function(){
       })
     })
   })
+  
   describe('* /resources', function(){
     it('should not be available over http without a dpd key', function(done) {
       var ex = {key: 'foo', secret: 'bar'}

@@ -22,10 +22,10 @@ describe("Dashboard", function() {
     });
   });
 
-  // it('should return a 404 for a bad filename', function(done) {
-  //   dashboard.use('/bogus/file').get(function(err, result) {
-  //     expect(result).to.not.exist;
-  //     done();
-  //   });
-  // });
+  it('should return a 404 for a bad filename', function(done) {
+    dashboard.use('/bogus/file').get(function(err, result) {
+      expect(result).to.not.exist;
+      done();
+    });
+  });
 });
