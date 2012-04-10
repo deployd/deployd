@@ -36,6 +36,7 @@
         <a href="#<%= resourceId %>" class="resourceName"><%= resourceName %></a>
       </li>
     <% } %>
+    <li><a href="<%= documentation %>" target="_blank">Documentation</a></li>
   </ul>
   <div class="pull-right">
     <button id="undo-btn" class="btn btn-warning"><i class="icon-exclamation-sign icon-white"></i> Undo <span class="action-label"></span></button>
@@ -401,6 +402,6 @@
     <script type="text/javascript" src="js/lib/ace-mode-javascript-noconflict.js"></script> 
     <script type="text/javascript" src="js/lib/ace-theme-vibrant_ink-noconflict.js"></script> 
  
-    <script src="js/app.js"></script> 
+    <script src="js/lib/require.js" data-main="js/app/entry.js"></script> 
   </body> 
 </html>
