@@ -57,6 +57,9 @@ data = {
         'if(this.title === "dont delete") {' +
         '  cancel("dont delete");' +
         '}' +
+        'if(this.creator && this.creator !== me._id) {' +
+          'cancel("not your comment");' +
+        '}' +
         'if(this.title === "blank cancel") {' +
         '  cancel();' +
         '}',

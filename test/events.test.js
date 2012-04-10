@@ -74,5 +74,29 @@ describe('Resource Events', function(){
         });
       })
     });
+
+    it ('should properly match me._id to a creator property', function(done) {
+      users.use('/login').post({email: 'foo@bar.com', password: 'foobar'}, function(errL, user) {
+        var id = user.user._id;
+        todos.post({title: "Logged in todo"}, function(errT, todo, req, res) {
+          todos.use('/' + todo._id).del(function(errD) {
+            expect(errD).to.not.exist;
+            done(errL, errT, errD);
+          });
+        });
+      });
+    });
+
+    it ('should properly match me._id to a creator property', function(done) {
+      users.use('/login').post({email: 'foo@bar.com', password: 'foobar'}, function(errL, user) {
+        var id = user.user._id;
+        todos.post({title: "Logged in todo"}, function(errT, todo, req, res) {
+          todos.use('/' + todo._id).del(function(errD) {
+            expect(errD).to.not.exist;
+            done(errL, errT, errD);
+          });
+        });
+      });
+    });
   })
 })

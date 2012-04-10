@@ -24,6 +24,13 @@ describe('Users', function(){
   })
   
   describe('POST /users/login', function(){
+
+    it('should not login if email and password are not provided', function(done) {
+      users.use('/login').post({}, function (err, session, req, res) {
+        expect(err).to.exist;
+        done();
+      });
+    });
     
     it('should login if provided the correct credentials', function(done) {
       users.use('/login').post({email: data.users[0].email, password: data.users[0].password}, function (err, session, req, res) {
