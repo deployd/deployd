@@ -5,6 +5,7 @@
      
         <link rel='stylesheet' type="text/css" href='stylesheets/style.css' /> 
      
+    <link href='http://fonts.googleapis.com/css?family=Bitter:400,700,400italic' rel='stylesheet' type='text/css'> 
   </head> 
   <body> 
  
@@ -36,7 +37,14 @@
         <a href="#<%= resourceId %>" class="resourceName"><%= resourceName %></a>
       </li>
     <% } %>
-    <li><a href="<%= documentation %>" target="_blank">Documentation</a></li>
+    <li><a href="<%= documentation %>" target="_blank">
+      <% if (resourceType) { %>
+        <%= resourceType %> Resource
+      <% } else { %>
+        Documentation
+      <% } %>
+      
+    </a></li>
   </ul>
   <div class="pull-right">
     <button id="undo-btn" class="btn btn-warning"><i class="icon-exclamation-sign icon-white"></i> Undo <span class="action-label"></span></button>
@@ -128,7 +136,7 @@
               <div id="property-list-empty" class="component-list-empty well">
                 <h4>New collection</h4>
                 <p>
-                  <i class="icon-white icon-arrow-left"></i>&nbsp;
+                  <i class="icon-arrow-left"></i>&nbsp;
                   Build your collection with these properties.<br />
                   <div class="placeholder">Drag one here to get started!</div>
                 </p>  
@@ -204,7 +212,7 @@
 <h3 class="component-type-header">Resource Types</h3>
 <ul class="component-type-list">
 <% types.each(function(typeModel) { var type = typeModel.toJSON() %>
-   <li class="component-type-item" data-cid="<%- typeModel.cid %>"><%- type.label %></li>
+   <li class="component-type-item" data-cid="<%- typeModel.cid %>" title="<%= type.tooltip %>"><%- type.label %></li>
 <% }); %>
 </ul>
 </script> 
@@ -232,7 +240,7 @@
 <h3 class="component-type-header">Types</h3>
 <ul class="component-type-list">
 <% types.each(function(typeModel) { var type = typeModel.toJSON() %>
-   <li class="component-type-item" data-cid="<%- typeModel.cid %>"><%- type.label %></li>
+   <li class="component-type-item" data-cid="<%- typeModel.cid %>" title="<%= type.tooltip %>"><%- type.label %></li>
 <% }); %>
 </ul>
 </script> 
