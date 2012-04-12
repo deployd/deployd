@@ -7,14 +7,19 @@ target.all = function() {
 
 target.docs = function() {
   cd('docs');
-  ls('*.markdown').forEach(function(file) {
-    var target = path.basename(file, path.extname(file)) + '.html';
-
-    var header = cat('layout/header.html');
-    var body = exec('markdown ' + file, {silent: true}).output;
-    var footer = cat('layout/footer.html');
-
-    (header + body + footer).to(target);
+  var header = cat('layout/header.html')
+    , body = '';
+  
+  // index should be first
+  body += exec('markdown ' + 'index.markdown', {silent: true}).output;
+  
+  ls('*.markdown').forEach(function(file, i, arr) {
+    if(file != 'index.markdown') {
+      body += exec('markdown ' + file, {silent: true}).output;
+      if(i < arr.length - 1) body += '<hr />';
+    }
   });
+  var footer = cat('layout/footer.html');
+  (header + body + footer).to('index.html');
   cd('..');
 }

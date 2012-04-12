@@ -1,4 +1,26 @@
-    </div>
+        </div> <!-- /span9 -->
+      </div> <!-- /row -->
+    </div> <!-- /container -->
   </body>
+
+  <script>
+    var nav = $('.nav').empty();
+    
+    // build out navigation
+    $('h1, h2').each(function () {
+      var key = $(this).text().replace(/ /g, '-');
+      $(this).prepend('<a name="'+ key + '"></a>');
+      console.log(this);
+      nav.append('<li class="'+ (this.nodeName === 'H1' ? 'nav-header' : '') +'"><a href="#' + key + '">' + $(this).text() + '</a></li>');
+    })
+    
+    function fill() {
+      $('#side .well').height($(window).height() - 100);
+    }
+    
+    $(window).resize(fill)
+    
+    fill();
+  </script>
 
 </html>

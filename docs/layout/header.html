@@ -5,28 +5,18 @@
     <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <link href="css/style.css" rel="stylesheet" type="text/css" />
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <link href='http://fonts.googleapis.com/css?family=Bitter:400,700,400italic' rel='stylesheet' type='text/css'>
   </head>
   <body>
-    <div class="navbar navbar-fixed-top">
-      <div class="navbar-inner">
-        <div class="container">
-          <span class="brand">
-            <a href="index.html"><img src="img/logo-text.png" alt="Deployd"></a>
-          </span>
-          <ul class="nav">
-            <li><a href="collection.html">Collection</a></li>
-            <li><a href="usercollection.html">User Collection</a></li>
-            <li><a href="files.html">Files</a></li>
-          </ul>
-          <script>
-            $('.nav a').each(function () {
-              var url = window.location.toString();
-              if(url.indexOf($(this).attr('href')) === (url.lastIndexOf('/') + 1))
-                $(this).parent().addClass('active');
-            });
-          </script>
-        </div>
-      </div>
-    </div>
+    <div class="container-fluid">
+      <div class="row-fluid">
+              <div class="span3" style="height: 1px;">
+              </div><!--/span-->
+              <div id="side">
+                <div class="well sidebar-nav">
+                  <ul class="nav nav-list">
 
-    <div class="container">
+                  </ul>
+                </div><!--/.well -->
+              </div><!-- /#side -->
+              <div class="span9" style="max-width: 1000px;">
