@@ -14,7 +14,7 @@ The User Collection contains two special properties:
 First create a user by POSTing it to the root of the collection.
 For this example our collection will be called `/users`.
 
-    POST /users/login
+    POST /users
     Content-Type: application/json
     {
       "email": "foo@bar.com",
