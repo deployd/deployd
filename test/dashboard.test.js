@@ -16,7 +16,7 @@ describe("Dashboard", function() {
   });  
 
   it('should return a static asset from a folder', function(done) {
-    dashboard.use('/js/app.js').get(function(err, result) {
+    dashboard.use('/stylesheets/style.css').get(function(err, result) {
       expect(result).to.exist;
       done(err);
     });
