@@ -384,6 +384,7 @@ program
                           if(!remaining) {
                             json({status: 'done.'});
                             log('done.');
+                            process.kill(process.pid);
                           }
                         })
                       })
