@@ -353,14 +353,17 @@ program
         
         dest.post(resources, function (err) {
           if(err) throw err;
-          
           var remaining = 0;
           
           resources.forEach(function (resource) {
             if(resource.type === 'Static') {
               dpd.storage(program.storage);
-              var srcFiles = require('mdoq').require('mdoq-mongodb').use(program.storage).use(resource.path);
-              var destFiles = require('mdoq').require('mdoq-mongodb').use(program.destination).use(resource.path);
+              // / is an alias for /index
+              var collection = resource.path;
+              if(collection === '/') collection = '/index';
+              
+              var srcFiles = require('mdoq').require('mdoq-mongodb').use(program.storage).use(collection);
+              var destFiles = require('mdoq').require('mdoq-mongodb').use(program.destination).use(collection);
               
               dpd.use(resource.path).get({}, function (err, files) {
                 files.forEach(function (file) {
@@ -369,27 +372,29 @@ program
                   var id = {_id: file};
                   
                   srcFiles.get(id, function (err, res) {
-                    var temp = require('fs').createWriteStream('/tmp/' + file);
+                    if(err) log(err);
+                    if(!err && res) {
                     
-                    res.file.stream(true).pipe(temp).on('end', function () {
-                      console.log('end');
-                    });
+                      var temp = require('fs').createWriteStream('/tmp/' + file);
                     
-                    destFiles.get({}).file(require('fs').createReadStream('/tmp/' + file)).post(function (err) {
-                      remaining--;
-                      
-                      if(!remaining) {
-                        json({status: 'done.'});
-                        log('done.');
-                      }
-                    })
-                  });
+                      res.file.stream(true).pipe(temp).on('close', function () {
+                        destFiles.get({}).file(require('fs').createReadStream('/tmp/' + file)).post(function (err) {
+                          remaining--;
+
+                          if(!remaining) {
+                            json({status: 'done.'});
+                            log('done.');
+                          }
+                        })
+                      })
+                    }
+                  })
                 })
               })
             }
           })
-        });
-      });
+        })
+      })
     })
   ;
 
