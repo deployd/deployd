@@ -227,105 +227,6 @@ program
   })
 ;
 
-/**
- * Mount a file collection on the local file system.
- */
-
-program
-  .command('mount [path]')
-  .description(" - mount a file collection on the local file system")
-  .action(function (path) {
-    var port = program.port || 2403;
-
-    if(program.storage) {
-      dpd.storage(program.storage);
-    }
-
-    var files = dpd.use('http://localhost:' + port).use(path);
-    
-    
-    var watching = {};
-
-    function watch(file, path) {
-      var fd = '.' + path + '/' + file;
-
-      if(watching[fd]) return;
-
-      watching[fd] = fs
-        .watch(fd, function (type, filename) {
-          if(type === 'change') {
-            // upload changed file
-            files
-              .use('/' + file)
-              .use(function (req, res, next) {
-                req.file = fs.createReadStream('.' + path + '/' + file)
-                req.file.pause();
-                next();
-              })
-              .post(function (err, res) {
-                console.log('uploaded', file);
-              })
-            ;
-          }
-        })
-        .on('error', function (err) {
-          console.log(err);
-        })
-      ;
-    }
-    
-    files
-      .use(function (req, res, next) {
-        fs.exists('.' + path, function (exists) {
-          if(!exists) {
-            fs.mkdir('.' + path, function (err) {
-              next(err);
-            })
-          } else {
-            next();
-          }
-        })
-      })
-      .get(function (err, dir) {
-        if(err) console.error(err);
-      
-        if(Array.isArray(dir)) {
-          dir.forEach(function (file) {
-            files
-              .use('/' + file)
-              .use(function (req, res, next) {
-                fs.exists('.' + path + '/' + file, function (exists) {
-                  next(exists ? {file: require('path').resolve('.' + path + '/' + file), message: 'already exists'} : null);
-                });
-              })
-              .get({}, function (err, res) {
-                if(err) return console.log('.' + path + '/' + file, err.message, '- using local version');
-                
-                console.log('downloading', '.' + path + '/' + file);
-                
-                res.stream()
-                  .pipe(fs.createWriteStream('.' + path + '/' + file))
-                  .on('close', function () {
-                    watch(file, path);
-                  })
-              })
-            ;
-          })
-        }
-      })
-    ;
-    
-    // watch files
-    var wFiles = fs.readdirSync('.' + path);
-    
-    wFiles.forEach(function (file) {
-      console.log('watching', '.' + path + '/' + file);
-      watch(file, path);
-    })
-  
-  })
-
-
   /**
    * Clone one dpd configuration into another.
    */
@@ -396,6 +297,204 @@ program
           })
         })
       })
+    })
+  ;
+
+  program
+    .command('init [remote] [key]')
+    .description(' - initialize a set of local files')
+    .action(function (remote, key) {      
+      if(!remote) {
+        log('A remote host is required');
+      }
+      if(!key) {
+        log('A valid JSON auth key is required');
+      }
+      
+      if(!key || !remote) {
+        log('example:');
+        log('\tdpd init http://localhost:2403 \'{"foo":"bar"}\'');
+        return;
+      }
+      
+      try {
+        JSON.parse(key);
+      } catch(e) {
+        log('invalid JSON for key, make sure it is a string: \'{"foo": "bar"}\'');
+        return;
+      }
+      
+      var config = {
+        key: key,
+        remote: remote
+      };
+      fs.writeFileSync('./.dpd', JSON.stringify(config));
+    })
+  ;
+
+  program
+    .command('pull')
+    .description(' - download a remote instance configuration and files into the current directory')
+    .action(function () {
+      try {
+        var config = JSON.parse(fs.readFileSync('./.dpd'));
+      } catch(e) {
+        log('you must run dpd init before pull');
+      }
+      
+      var key = config.key
+        , remote = config.remote;
+      
+      var client = require('mdoq')
+        .use(function (req, res, next) {
+          req.headers['x-dssh-key'] = key;
+          next();
+        })
+        .require('mdoq-http')
+        .use(remote)
+      ;
+      
+      var remaining = 0;
+      
+      client
+        .use('/resources').get(function (err, resources) {
+          if(err || resources && resources.status) return log(err || resources);
+          if(!resources) {
+            log('done.');
+            process.kill(process.pid);
+            return;
+          }
+          resources.forEach(function (resource) {
+            if(resource.type === 'Static') {                
+              client.use(resource.path).get(function (err, files) {
+                if(resource.path === '/') resource.path = '';
+                
+                if(files) {
+                  try {
+                    fs.mkdirSync('.' + resource.path); 
+                  } catch(e) {}
+                  files.forEach(function (file) {
+                    remaining++;
+                    log('PULL', resource.path + '/' + file);
+                    client.use(resource.path + '/' + file)
+                    .get()
+                    .pipe(fs.createWriteStream('.' + resource.path + '/' + file))
+                    .get(function () {
+                      remaining--;
+                      if(!remaining) {
+                        log('done.');
+                        process.kill(process.pid);
+                      }
+                    })
+                  })
+                }
+              })
+            }
+          })
+        })
+
+    })
+  ;
+
+  program
+    .command('push')
+    .description(' - push the current directories first level of files to the remote instance')
+    .action(function () {
+      try {
+        var config = JSON.parse(fs.readFileSync('./.dpd'));
+      } catch(e) {
+        log('you must run dpd init before push');
+      }
+      
+      var key = config.key
+        , remote = config.remote;
+        
+      var client = require('mdoq')
+        .use(function (req, res, next) {
+          req.headers['x-dssh-key'] = key;
+          next();
+        })
+        .require('mdoq-http')
+        .use(remote)
+      ;
+
+      
+      client
+        .use('/resources').get(function (err, resources) {
+          if(err || resources && resources.status) return log(err || resources);
+      
+          var resourceMap = {};
+          
+          // create resource map
+          resources.forEach(function (resource) {
+            if(resource.type === 'Static') {
+              resourceMap[resource.path] = true;
+            }
+          })
+          
+          function uploadDir(path) {
+            if(path === '/') path = '';
+            
+            fs.readdirSync('.' + path).forEach(function (file) {
+              if(fs.statSync('.' + path + '/' + file).isFile()) {
+                uploadFile(path + '/' + file);
+              }
+            })
+          }
+          
+          var remaining = 0;
+          function uploadFile(path) {
+            if(path[0] === '.') return; // skip hidden files
+            remaining++;
+            console.log('PUSH', path);
+            client.use(path).post(fs.createReadStream('.' + path), function (err) {
+              if(err) {
+                log(err);
+                return process.kill();
+              }
+
+              if(!--remaining) {
+                log('done.');
+                process.kill(process.pid);
+              }
+            });
+          }
+          
+          var creatingIndex;
+          
+          fs.readdirSync('.').forEach(function (path) {
+            if(path[0] === '.') return; // skip hidden files
+            
+            path = '/' + path;
+            if(fs.statSync('.' + path).isFile() && !creatingIndex) {
+              if(resourceMap['/']) {
+                uploadFile(path);
+              } else {
+                console.log('CREATE /');
+                creatingIndex = true;
+                // create the resource
+                client.use('/resources').post({path: '/', typeLabel: 'Files', type: 'Static'}, function (err) {
+                  // then upload the directory
+                  uploadDir('/');
+                });
+              }
+            } else {
+              // folder
+              if(resourceMap[path]) {
+                // exists as a resource
+                uploadDir(path); 
+              } else {
+                // create the resource
+                console.log('CREATE', path);
+                client.use('/resources').post({path: path, typeLabel: 'Files', type: 'Static'}, function (err) {
+                  // then upload the directory
+                  uploadDir(path);
+                });
+              }
+            }
+          })
+        })
+      ;
     })
   ;
 
