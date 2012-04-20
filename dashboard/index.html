@@ -31,7 +31,8 @@
     <script type="x-ejs-template" id="header-template" >
 <div class="full-width-container">
   <ul class="nav nav-pills pull-left">
-    <li><a href="#">Resources</a></li>
+    <li <%= (typeof resourceName === 'undefined' || !resourceName) ? 'class="active"' : '' %>><a href="#">Resources</a></li>
+    <li><a href="<%- appUrl %>" target="_blank"><%- appUrl %></a></li>
     <% if (typeof resourceName !== 'undefined' && resourceName) { %>
       <li class="active">
         <a href="#<%= resourceId %>" class="resourceName"><%= resourceName %></a>
@@ -47,51 +48,35 @@
     </a></li>
   </ul>
   <div class="pull-right">
-    <button id="undo-btn" class="btn btn-warning"><i class="icon-exclamation-sign icon-white"></i> Undo <span class="action-label"></span></button>
     <span id="save-status"></span>
+    <button id="undo-btn" class="btn btn-warning"><i class="icon-exclamation-sign icon-white"></i> Undo <span class="action-label"></span></button>
   </div>
 </div>
 </script> 
  
     <script type="x-ejs-template" id="resources-template" >
 <div id="resource-editor">
-  <div class="ide-container">
-      <div id="resource-sidebar" class="component-type-sidebar sidebar well">
-      </div>
-      <div class="main-area mid header-offset well">
-        <h3>Resources</h3>
+  <div class="container">
+      <div class="header-offset well">
+        <div class="clearfix">
+          <h3 class="pull-left">Resources</h3>
+          <div class="btn-group pull-right">
+            <a class="btn btn-success dropdown-toggle" data-toggle="dropdown" href="#">
+              Add New Resource
+              <span class="caret"></span>
+            </a>
+            <ul id="property-types" class="dropdown-menu">
+            </ul>
+          </div>
+        </div>
         <ul id="resource-list" class="component-list" style="display: none;">
         </ul>
         <div id="resource-list-empty" class="component-list-empty well" style="display: none;">
           <h4>Welcome to your Deployd app</h4>
           <p>
-            <i class="icon-arrow-left"></i>&nbsp;
-            These are the resources you can use to build your app.<br />
-          </p>  
-        </div>
-      </div>
-      <div class="right-sidebar">
-        <div class="well">
-          <h3>App Settings</h3>
-          <form>
-              <label>App URL</label>
-              <input type="text" readonly="readonly" value="<%- appUrl %>" />
-          </form>
-        </div>
-
-        <div class="well">
-          <h3>What's next?</h3>
-          <p>Deployd is still in development. More features are planned for upcoming releases, such as:</p>
-          <ul>
-            <li>Data relationships</li>
-            <li>Custom plugin support</li>
-            <li>Automatic properties</li>
-            <li>Rendering HTML</li>
-          </ul>
-          <p>Watch for these updates on <a href="https://github.com/deployd/deployd">github</a>. Pull requests welcome!</p>
-
-          <iframe src="http://markdotto.github.com/github-buttons/github-btn.html?user=deployd&repo=deployd&type=watch&count=true" allowtransparency="true" frameborder="0" scrolling="0" width="110px" height="20px"></iframe>
-          <iframe src="http://markdotto.github.com/github-buttons/github-btn.html?user=deployd&repo=deployd&type=fork&count=true" allowtransparency="true" frameborder="0" scrolling="0" width="95px" height="20px"></iframe>
+            Your app does not currently have any resources. Add one to get started!
+            <i class="icon-arrow-up"></i>&nbsp;
+          </p>
         </div>
       </div>
   </div>
@@ -99,142 +84,100 @@
 </script> 
     <script type="x-ejs-template" id="collection-template" >
 <div id="model-editor">
-  <div class="ide-container has-nav">
-    <div id="property-panel">
-      <div id="property-sidebar" class="component-type-sidebar sidebar well">
+  <div class="container-fluid">
+    <div class="row-fluid">
+      <div class="span2">&nbsp;</div>
+      <div class="fixed2">
+        <div class="well sidebar-nav">
+          <ul id="page-nav" class="nav nav-pills nav-stacked">
+            <li class="active"><a href="#properties" data-toggle="tab">Properties</a></li>
+            <li><a href="#data" data-toggle="tab">Data</a></li>
+            <li><a href="#api" data-toggle="tab">API</a></li>
+            <li><a href="#events" data-toggle="tab">Events</a></li>
+          </ul>
+        </div>
       </div>
-      <div class="main-area vertical-split">
-        <div class="top-panel">
-          <div class="split-panel">
-            <div id="property-list-cont" class="panel well">
+      
+      <div class="span10">
+        <div class="tab-content">
+          <div id="properties" class="tab-pane active">
+            <div class="panel well stacked">
               <h3>
-                <div>
-                  Properties
-                </div>
+                Properties
               </h3>
-              <ul id="property-list" class="component-list">  
-                <li class="component-item locked">
-                  <div class="header">
-                      <i class="icon-white string"></i>
-                      <span class="code name">_id</span>
-                      <i class="icon-white icon-lock pull-right"></i>
-                  </div>
-                </li>
-                <% if (typeof resourceTypeId !== 'undefined' && resourceTypeId === 'UserCollection') { %>
-                  <li class="component-item locked">
-                    <div class="header">
-                        <i class="icon-white string"></i>
-                        <span class="code name">email</span>
-                        <i class="icon-white icon-lock pull-right"></i>
-                    </div>
-                  </li>
-                  <li class="component-item locked">
-                    <div class="header">
-                        <i class="icon-white string"></i>
-                        <span class="code name">password</span>
-                        <i class="icon-white icon-lock pull-right"></i>
-                    </div>
-                  </li>
-                <% } %>
-              </ul>
-              <div id="property-list-empty" class="component-list-empty">                
-                <div style="margin-bottom: 20px;">
-                  <div class="well">
-                    <% if (typeof resourceTypeId !== 'undefined' && resourceTypeId === 'UserCollection') { %>
-                      <h4>Managing Users</h4>
-                      <p>A <strong>user collection</strong> allows your app to create and authenticate users.</p>
-                      <p>
-                        <i class="icon-arrow-left"></i>&nbsp;
-                        Add custom properties to describe the type of user you want to store.
-                      </p>
-                    <% } else { %>
-                      <h4>Storing Objects</h4>
-                      <p>A <strong>collection</strong> allows your app to securely store data as objects.</p>
-                      <p>
-                        <i class="icon-arrow-left"></i>&nbsp;
-                        Add properties to describe the object you want to store.
-                      </p>
-                    <% } %>
-                  </div>
+              <div id="property-list">
+              </div>
+            </div>
+
+            <div id="property-now-what" class="alert alert-info hide">
+              When you're done adding properties, you should <a href="#data" class="cta-link">add some data</a> to this collection.
+            </div>
+          </div>
+          <div id="data" class="tab-pane">
+            <div class="well stacked">
+              <h3>Data</h3>
+              <div id="current-data">
+                <div class="table-container">
+                  <table class="table table-bordered table-striped">
+                  </table>
                 </div>
-                <div>
-                  <div class="well">
-                    <h4>Custom Validation</h4>
-                    <p>Use <strong>events</strong> to run JavaScript on the server. This is useful for server specific validation, simple calculations, and running arbitrary scripts when data changes.</p>
-                    <p>
-                      Use the editor on the right to edit each event.&nbsp;<i class="icon-arrow-right"></i>
-                    </p>
-                    <p>
-                      Here is a simple example based on a popular social network.
-                      <pre class="code">
-// on post
-
-// the current object is available as 'this'
-var tweet = this;
-
-// the current user is available as 'me'
-if(!me) cancel('unauthorized!', 401);
-
-// modify the object before it is saved
-tweet.creator = me._id;
-
-// validate and call 'error()' to send error information
-if(tweet.body.length > 140) {
-  error('body', 'must be under 141 characters');
-}
-                      </pre>
-                    </p>
-                  </div>
-                </div>
+                <input id="current-data-querystring" type="text" placeholder="Query string" />
               </div>
             </div>
           </div>
-          <div class="split-panel">
-            <div id="events-panel" class="panel well">
 
-            </div>
-          </div>
-        </div>
-        
-        <div class="divider"></div>
-        <div class="bottom-panel">
-          <div id="current-data">
-            <div class="table-container">
-              <table class="table table-bordered table-striped">
-              </table>
-            </div>
-            <input id="current-data-querystring" type="text" placeholder="Query string" />
-          </div>
+          <div id="api" class="tab-pane well stacked">
+                  
+          </div>    
 
+          <div id="events" class="tab-pane">
+            <div class="row-fluid">
+            <div class="span9">
+              <div id="events-panel" class="well stacked">
+              </div>
+                    
+            </div>
+            <div class="span3">
+              <div id="property-reference" class="well">
+
+              </div>
+          </div>          
         </div>
+
       </div>
-    </div>    
+    </div>
   </div>
 </div>
+
 </script> 
     <script type="x-ejs-template" id="static-template" >
 <div id="resource-editor">
-  <div class="ide-container">
-      <div id="resource-sidebar" class="component-type-sidebar sidebar">
-        <div class="well">
-          <div id="file-upload">
+  <div class="container">
+      <div class="header-offset well">
+        <div class="clearfix">
+          <h3 class="pull-left">Files</h3>
+          <div id="file-upload" class="pull-right">
             <span class="btn btn-success fileinput-button">
                 <i class="icon-plus icon-white"></i>
                 <span>Add files</span>
                 <input type="file" multiple="multiple" />
             </span>
-            <div id="currentUploads">
-            </div>
+            
           </div>
         </div>
-      </div>
-      <div class="main-area mid header-offset">
+        <div id="files-empty" class="well">
+          <p>
+            You have not uploaded any files to this resource
+          </p>
+        </div>
         <table id="files" class="table table-bordered table-striped">
           <thead>
             <th>Filename</th>
           </thead>
           <tbody></tbody>
         </table>
+        <div id="currentUploads">
+        </div>
       </div>
     </div>
   </div>
@@ -255,21 +198,19 @@ if(tweet.body.length > 140) {
 </tr>
 </script> 
      
-    <script type="x-ejs-template" id="resource-sidebar-template" >
-<h3 class="component-type-header">Resource Types</h3>
-<ul class="component-type-list">
+    <script type="x-ejs-template" id="resource-types-template" >
 <% types.each(function(typeModel) { var type = typeModel.toJSON() %>
-   <li class="component-type-item" data-cid="<%- typeModel.cid %>" rel="popover" data-content="<%= type.tooltip %>" data-original-title="<%- type.tooltipTitle %>">
-    <i class="<%= type.label.toLowerCase().replace(' ', '-') %> icon-white"></i>
-    <h6><%- type.label.toLowerCase() %></h6>
-    <i class="icon-white icon-plus pull-right"></i>
+   <li class="type-icons" data-cid="<%- typeModel.cid %>" rel="popover" data-content="<%= type.tooltip %>" data-original-title="<%- type.tooltipTitle %>">
+    <a href="#">
+      <i class="<%= type.label.toLowerCase().replace(' ', '-') %> icon-hack"></i>
+      <%- type.label %>
+    </a>
    </li>
 <% }); %>
-</ul>
 </script> 
     <script type="x-ejs-template" id="resource-template" >
-<div class="header">
-  <i class="icon-white <%= resource.typeLabel.toLowerCase() %>"></i>
+<div class="component-item-header">
+  <i title="<%= resource.typeLabel %>" class="icon-white <%= resource.typeLabel.toLowerCase().replace(' ', '-') %>"></i>
   <% if (resource.c_active) { %>
     <input type="text" class="code" name="path" value="<%- resource.path %>" />
     <a href="#" class="btn btn-primary save-btn">save</a>
@@ -286,17 +227,182 @@ if(tweet.body.length > 140) {
 </div>
 </script> 
  
-    <script type="x-ejs-template" id="property-sidebar-template" >
-<h3 class="component-type-header">Types</h3>
-<ul class="component-type-list">
-<% types.each(function(typeModel) { var type = typeModel.toJSON() %>
-   <li class="component-type-item" data-cid="<%- typeModel.cid %>" data-content="<%= type.tooltip %>" data-original-title="<%= type.tooltipTitle %>">
-    <i class="<%= type.label %> icon-white"></i>
-    <h6><%- type.label %></h6>
-    <i class="icon-white icon-plus pull-right"></i>
-  </li>
-<% }); %>
+    <script type="x-ejs-template" id="collection-routes-template" >
+<h3>API</h3>
+<table class="table table-bordered table-striped">
+  <thead>
+    <tr>
+      <th>Task</th>
+      <th>Method</th>
+      <th>Route</th>
+      <th>Accepts</th>
+      <th>Returns</th>
+    </tr>
+    <tbody>
+      <tr>
+        <td><a href="http://deployd.github.com/deployd/#Listing-data" target="_blank">Listing data</a></td>
+        <td>GET</td>
+        <td><a href="<%- path %>" target="_blank"><%- path %></a></td>
+        <td><em>Nothing</em></td>
+        <td>An array of objects</td>
+      </tr>
+      <tr>
+        <td><a href="http://deployd.github.com/deployd/#Saving-data" target="_blank">Creating an object</a></td>
+        <td>POST</td>
+        <td><%- path %></td>
+        <td>A single object</td>
+        <td>The saved object (or errors)</td>
+      </tr>
+      <tr>
+        <td><a href="http://deployd.github.com/deployd/#Retrieving-a-specific-object" target="_blank">Getting an object</a></td>
+        <td>GET</td>
+        <td><%- path %>/&lt;_id&gt;</td>
+        <td><em>Nothing</em></td>
+        <td>A single object</td>
+      </tr>
+      <tr>
+        <td><a href="http://deployd.github.com/deployd/#Updating-an-object" target="_blank">Updating an object</a></td>
+        <td>PUT</td>
+        <td><%- path %>/&lt;_id&gt;</td>
+        <td>A single object</td>
+        <td>The saved object (or errors)</td>
+      </tr>
+      <tr>
+        <td><a href="http://deployd.github.com/deployd/#Deleting-an-object" target="_blank">Deleting an object</a></td>
+        <td>DELETE</td>
+        <td><%- path %>/&lt;_id&gt;</td>
+        <td>A single object</td>
+        <td><em>Nothing</em></td>
+      </tr>
+      <% if (type === 'UserCollection') { %>
+        <tr>
+          <td><a href="http://deployd.github.com/deployd/#Authenticating-a-user" target="_blank">Logging in</a></td>
+          <td>POST</td>
+          <td><%- path %>/login</td>
+          <td><code>email</code> and <code>password</code> of user</td>
+          <td>The user, plus session cookie (or error)</td>
+        </tr>
+        <tr>
+          <td><a href="http://deployd.github.com/deployd/#Logging-out" target="_blank">Logging out</a></td>
+          <td>POST</td>
+          <td><%- path %>/logout</td>
+          <td><em>Nothing</em></td>
+          <td><em>Nothing</em></td>
+        </tr>
+        <tr>
+          <td><a href="http://deployd.github.com/deployd/#Current-user" target="_blank">Getting the current user</a></td>
+          <td>GET</td>
+          <td><a href="<%- path %>/me" target="_blank"><%- path %>/me</a></td>
+          <td><em>Nothing</em></td>
+          <td>A single object</td>
+        </tr>
+      <% } %>
+    </tbody>
+  </thead>
+</table>
+</script> 
+ 
+    <script type="x-ejs-template" id="property-list-template" >
+<ul class="component-list">
+  <li class="component-item locked"><div class="component-item-header">
+    <i class="icon-white string" data-bind="tooltip: {placement: 'left', title: 'string'}"></i>
+    <span class="code name">_id</span>
+    <div class="pull-right">
+      <i class="icon-white icon-lock" title="Locked"></i>
+    </div>
+  </div></li>
+  <% if (typeof resourceTypeId !== 'undefined' && resourceTypeId === 'UserCollection') { %>
+  <li class="component-item locked"><div class="component-item-header">
+    <i class="icon-white string" data-bind="tooltip: {placement: 'left', title: 'string'}"></i>
+    <span class="code name">email</span>
+    <div class="pull-right">
+      <i class="icon-white icon-lock" title="Locked"></i>
+    </div>
+  </div></li>
+  <li class="component-item"><div class="component-item-header">
+    <i class="icon-white string" data-bind="tooltip: {placement: 'left', title: 'string'}"></i>
+    <span class="code name">password</span>
+    <div class="pull-right">
+      <i class="icon-white icon-lock" title="Locked"></i>
+    </div>
+  </div></li>
+  <% } %>
+  <!-- ko foreach: properties -->
+    <li class="component-item" data-bind="css: {active: editing}"><div class="component-item-header clearfix" data-bind="click: onClickHeader">
+      <div data-bind="template: 'property-single-template', visible: editing"></div>
+      <div data-bind="visible: !editing()">
+        <i class="icon-white" data-bind="tooltip: {placement: 'left', title: typeLabel}, cssNamed: type"></i>
+        <span class="code name" data-bind="text: name, click: toggleEditing"></span>
+        <div class="pull-right">
+          <span class="label" data-bind="visible: optional">Optional</span>
+          <a href="#" data-bind="click: $root.removeProperty"><i class="icon-white icon-remove"></i></a>
+        </div>
+      </div>
+    </div></li>
+  <!-- /ko -->
+  <div class="placeholder component-item-header">
+    <div class="alert alert-info" data-bind="visible: !properties().length">Add properties to describe the data you want to store.</div>
+    <div data-bind="template: {name: 'property-single-template', data: newProperty}"></div>
+  </div>
 </ul>
+
+<script type="text/html" id="property-single-template">
+  <div class="btn-group pull-left type-selector">
+    <a class="btn dropdown-toggle" href="#" data-bind="tooltip: {placement: 'left', title: typeLabel()}" data-toggle="dropdown">
+      <i class="icon-hack" data-bind="cssNamed: type()"></i>
+      <span class="caret"></span>
+    </a>
+    <ul class="dropdown-menu" data-bind="foreach: $root.propertyTypes">
+      <li data-bind="css: {active: $parent.type() == _id()}, popover: {placement: 'right', title: label, content: tooltip}">
+        <a href="#" data-bind="click: $parent.setType">
+          <i class="icon-hack" data-bind="cssNamed: _id"></i>&nbsp;
+          <span data-bind="text:label"></span></a>
+      </li>
+    </ul>
+  </div>
+  <input type="text" data-bind="value: name, hasfocus: nameFocus, event: { keypress: onNameKeypress }" />
+  <div class="pull-right">
+    <label data-bind="if: type() !== 'boolean'" class="checkbox pull-left"><input type="checkbox" data-bind="checked: optional" />Optional</label>
+    <a href="#" class="delete-btn" data-bind="click: $root.removeProperty, visible: !isNew"><i class="icon-white icon-remove"></i></a>
+    <button class="btn btn-success" data-bind="click: $root.addProperty, visible: isNew"><i class="icon-white icon-plus"></i>&nbsp;add</button>
+  </div>
+</script>
+
+</script> 
+    <script type="x-ejs-template" id="property-reference-template" >
+<h3>Properties</h3>
+<ul class="component-list">
+  <li class="component-item locked">
+    <div class="component-item-header">
+      <i class="icon-white string" title="string"></i>&nbsp;
+      <span class="code">_id</span>
+    </div>
+  </li>
+  <% if (model.get('type') == 'UserCollction') { %>
+  <li class="component-item locked">
+    <div class="component-item-header">
+      <i class="icon-white string" title="string"></i>&nbsp;
+      <span class="code">email</span>
+    </div>
+  </li>
+  <li class="component-item locked">
+    <div class="component-item-header">
+      <i class="icon-white string" title="string"></i>&nbsp;
+      <span class="code">password</span>
+    </div>
+  </li>
+  <% } %>
+  <% model.get('properties').forEach(function(propModel) { var prop = propModel.toJSON();  %>
+    <li class="component-item locked">
+      <div class="component-item-header">
+        <i class="icon-white <%- prop.type %>" title="<%- prop.typeLabel %>"></i>&nbsp;
+        <span class="code"><%- prop.name %></span>
+      </div>
+    </li>
+  <% }) %>
+</ul>
+
+     
 </script> 
     <script type="x-ejs-template" id="property-template" >
 <div class="header <%= property.c_active ? 'active' : '' %>">
@@ -322,22 +428,25 @@ if(tweet.body.length > 140) {
 <% } %>
 </script> 
     <script type="x-ejs-template" id="events-template" >
-<h3>
-  Events
+
+<h3 class="clearfix">
+  Events 
+  <a class="pull-right header-link" target="_blank" href="http://deployd.github.com/deployd/#Collection-Event-Handlers">Documentation</a> 
 </h3>
+  
 <ul class="nav nav-tabs">
-  <li class="active"><a href="#get-panel" data-toggle='tab'>GET</a></li>
-  <li><a href="#post-panel" data-toggle='tab'>POST</a></li>
-  <li><a href="#put-panel" data-toggle='tab'>PUT</a></li>
-  <li><a href="#delete-panel" data-toggle='tab'>DELETE</a></li>
+  <li><a href="#get-panel" data-toggle='tab'>On GET</a></li>
+  <li class="active"><a href="#post-panel" data-toggle='tab'>On POST</a></li>
+  <li><a href="#put-panel" data-toggle='tab'>On PUT</a></li>
+  <li><a href="#delete-panel" data-toggle='tab'>On DELETE</a></li>
 </ul>
 <div class="tab-content">
-  <div class="tab-pane active" id="get-panel">
+  <div class="tab-pane" id="get-panel">
     <div class="editor-container">
       <div id="onGet"><%= onGet %></div>
     </div>
   </div>
-  <div class="tab-pane" id="post-panel">
+  <div class="tab-pane active" id="post-panel">
     <div class="editor-container">
       <div id="onPost"><%= onPost %></div>
     </div>
@@ -356,30 +465,20 @@ if(tweet.body.length > 140) {
 </script> 
  
     <script type="x-ejs-template" id="model-table-template" >
-<% if(properties.length) { %>
-<thead>
+<thead class="type-icons">
   <tr>
-    <th class="code">_id</th>
+    <th class="code"><i class="icon-hack string" title="string"></i> _id</th>
     <% if (resourceType == "UserCollection") { %>
-      <th class="code">email</th>
-      <th class="code">password</th>
+      <th class="code"><i class="icon-hack string" title="string"></i> email</th>
+      <th class="code"><i class="icon-hack string" title="string"></i> password</th>
     <% } %>
     <% _.each(properties, function(property) { %>
-      <th class="code"><%- property.name %></th>
+      <th class="code"><i class="icon-hack <%- property.type %>" title=" <%- property.typeLabel %>"></i> <%- property.name %></th>
     <% }); %>
     <th></th>
   </tr>
 </thead>
 <tbody>
-  <% if (!collectionModel.length) { %> 
-    <tr>
-      <td colspan="<%= properties.length + (resourceType == "UserCollection" ? 4 : 2) %>">
-        <h4 style="margin-bottom:10px"><i class="icon-exclamation-sign" style="position: relative; top: 3px;"></i> This collection is empty</h4>
-        <p>Once your collection has some data you can edit and delete objects.</p>
-        <button class="btn btn-primary add-btn"><i class="icon-white icon-plus"></i> add an object</a>
-      </td>
-    </tr>
-  <% } %>
   <% collectionModel.each(function(rowModel) { if (!rowModel.get('c_delete')) { %>
     <% var row = rowModel.toJSON(); %>
     <tr data-cid="<%= rowModel.cid %>">
@@ -390,7 +489,7 @@ if(tweet.body.length > 140) {
         <td data-prop="email">
           <% if (row.c_errors && row.c_errors.email) { %>
             <a class="error-tooltip" rel="tooltip" title="<%- row.c_errors.email %>">
-              <i class="icon-warning-sign icon-white"></i>
+              <i class="icon-warning-sign"></i>
             </a>
           <% } %>
           <% if (row.c_active) { %>
@@ -402,7 +501,7 @@ if(tweet.body.length > 140) {
         <td data-prop="password">
           <% if (row.c_errors && row.c_errors.password) { %>
             <a class="error-tooltip" rel="tooltip" title="<%- row.c_errors.password %>">
-              <i class="icon-warning-sign icon-white"></i>
+              <i class="icon-warning-sign"></i>
             </a>
           <% } %>
           <% if (row.c_active) { %>
@@ -418,7 +517,7 @@ if(tweet.body.length > 140) {
         <td data-prop="<%- property.name %>">
           <% if (row.c_errors && row.c_errors[property.name]) { %>
             <a class="error-tooltip" rel="tooltip" title="<%- row.c_errors[property.name] %>">
-              <i class="icon-warning-sign icon-white"></i>
+              <i class="icon-warning-sign"></i>
             </a>
           <% }
             if (row.c_active) { %>
@@ -453,10 +552,14 @@ if(tweet.body.length > 140) {
 </tbody>
 <tfoot>
   <tr>
-    <td colspan="<%= properties.length + (resourceType == "UserCollection" ? 4 : 2) %>"><button class="btn btn-primary add-btn pull-right"><i class="icon-white icon-plus"></i> add</a></td>
+    <td colspan="<%= properties.length + (resourceType == "UserCollection" ? 4 : 2) %>">
+      <% if (!collectionModel.length) { %> 
+        <div class="alert alert-info">This collection is empty. Add an object to start storing data.</div>
+      <% } %>
+      <button class="btn btn-success add-btn"><i class="icon-white icon-plus"></i> add</a>
+    </td>
   </tr>
 </tfoot>
-<% } %>
 </script> 
  
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script> 
@@ -466,6 +569,8 @@ if(tweet.body.length > 140) {
     <script type="text/javascript" src="js/lib/underscore.js"></script> 
     <script type="text/javascript" src="js/lib/underscore.string.min.js"></script> 
     <script type="text/javascript" src="js/lib/backbone.js"></script> 
+    <script type="text/javascript" src="js/lib/knockout-2.0.0.js"></script> 
+    <script type="text/javascript" src="js/lib/knockout.mapping.js"></script> 
     <script type="text/javascript" src="js/lib/ace-noconflict.js"></script> 
     <script type="text/javascript" src="js/lib/ace-mode-javascript-noconflict.js"></script> 
  
