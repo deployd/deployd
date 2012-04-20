@@ -404,6 +404,7 @@ program
         var config = JSON.parse(fs.readFileSync('./.dpd'));
       } catch(e) {
         log('you must run dpd init before push');
+        return;
       }
       
       var key = config.key
@@ -426,7 +427,7 @@ program
           var resourceMap = {};
           
           // create resource map
-          resources.forEach(function (resource) {
+          resources && resources.forEach(function (resource) {
             if(resource.type === 'Static') {
               resourceMap[resource.path] = true;
             }
@@ -448,12 +449,13 @@ program
             remaining++;
             console.log('PUSH', path);
             client.use(path).post(fs.createReadStream('.' + path), function (err) {
+              remaining--;
               if(err) {
                 log(err);
                 return process.kill();
               }
 
-              if(!--remaining) {
+              if(!remaining) {
                 log('done.');
                 process.kill(process.pid);
               }
@@ -486,7 +488,9 @@ program
               } else {
                 // create the resource
                 console.log('CREATE', path);
+                remaining++;
                 client.use('/resources').post({path: path, typeLabel: 'Files', type: 'Static'}, function (err) {
+                  remaining--;
                   // then upload the directory
                   uploadDir(path);
                 });
