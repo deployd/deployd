@@ -704,7 +704,7 @@ p a{text-decoration:underline;}
 ::-webkit-scrollbar-thumb{background:#363535;border:solid 2px #fffff7;-webkit-border-radius:5px;-moz-border-radius:5px;border-radius:5px;}
 ::-webkit-scrollbar-corner{display:none;}
 .code{font-family:'Courier New',monospace;}
-#header h1,#header h2{display:inline-block;margin-right:20px;}#header h1 .type,#header h2 .type{font-style:italic;}
+#header{margin-top:15px;}#header h1,#header h2{display:inline-block;margin-right:20px;}#header h1 .type,#header h2 .type{font-style:italic;}
 #undo-btn{margin:4px;}
 #save-status{margin:8px;display:inline-block;}#save-status.inactive{opacity:0.5;}
 .full-width-container{margin-left:auto;margin-right:auto;*zoom:1;width:auto;}.full-width-container:before,.full-width-container:after{display:table;content:"";}
