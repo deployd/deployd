@@ -52,7 +52,7 @@ data = {
           optional: true
         }
       },
-      onGet: 'this.isGet = true;',
+      onGet: 'this.isGet = true; //This is a comment',
       onDelete: '' +
         'if(this.title === "dont delete") {' +
         '  cancel("dont delete");' +
