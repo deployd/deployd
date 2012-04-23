@@ -23,6 +23,22 @@ describe('Users', function(){
     })
   })
   
+  describe('PUT /users/:id', function(){
+    it('should update the user', function(done) {
+      data.users[0].username = 'foobar';
+      users.use('/' + data.users[0]._id).put(data.users[0], function (err) {     
+
+        users.use('/' + data.users[0]._id).get(function (err, user) {
+          expect(user.email).to.eql(data.users[0].email);
+          expect(user.password).to.not.exist;
+          expect(user.username).to.equal('foobar');
+          done(err);
+        })
+
+      })
+    })
+  })
+  
   describe('POST /users/login', function(){
     it('should not login if email and password are not provided', function(done) {
       users.use('/login').post({}, function (err, session, req, res) {
