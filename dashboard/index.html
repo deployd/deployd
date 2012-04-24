@@ -113,17 +113,8 @@
               When you're done adding properties, you should <a href="#data" class="cta-link">add some data</a> to this collection.
             </div>
           </div>
-          <div id="data" class="tab-pane">
-            <div class="well stacked">
-              <h3>Data</h3>
-              <div id="current-data">
-                <div class="table-container">
-                  <table class="table table-bordered table-striped">
-                  </table>
-                </div>
-                <input id="current-data-querystring" type="text" placeholder="Query string" />
-              </div>
-            </div>
+          <div id="data" class="tab-pane well stacked">
+            
           </div>
 
           <div id="api" class="tab-pane well stacked">
@@ -346,6 +337,76 @@
 </table>
 <div class="alert alert-info">Use these routes in your app code to save and load data from this Collection.</div>
 </script> 
+    <script type="x-ejs-template" id="collection-data-template" >
+<h3>Data</h3>
+<div id="current-data">
+  <div class="table-container">
+    <table class="table table-bordered table-striped">
+      <thead class="type-icons">
+        <tr>
+        <td class="code">
+          <i class="icon-hack string" data-bind="tooltip: 'string'"></i>
+          _id
+        </td>
+        <!-- ko foreach: properties -->
+          <td class="code">
+            <i class="icon-hack" data-bind="tooltip: typeLabel, cssNamed: type"></i>
+            <span data-bind="text: name"></span>
+          </td>
+        <!-- /ko -->
+          <td></td>
+        </tr>
+        <tbody data-bind="foreach: collection">
+          <tr>
+            <td data-bind="text: _id"></td>
+            <!-- ko foreach: $root.properties -->
+            <td data-bind="event: {dblclick: $parent._onDoubleclick}">
+              <span data-bind="text: $parent.c_formatted(name(), type()), visible: !$parent.c_editing()"></span>
+              <div data-bind="visible: $parent.c_editing, template: 'data-cell-edit-template'"></div>
+            </td>
+            <!-- /ko -->
+            <td>
+              <a href="#" class="btn" data-bind="click: c_toggleEditing, visible: !c_editing()"><i class="icon-edit"></i> edit</a>
+              <a href="#" class="btn" data-bind="click: $root.deleteRow, visible: !c_editing()"><i class="icon-remove-sign"></i> delete</a>
+
+              <a href="#" class="btn btn-primary" data-bind="click: $root.saveRow, visible: c_editing"><i class="icon-white icon-ok-sign"></i> done</a>
+              <a href="#" class="btn" data-bind="click: c_toggleEditing, visible: c_editing">cancel</a>
+            </td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr data-bind="visible: !collection().length">
+            <td data-bind="attr: {colspan: properties().length + 2}">
+              <div class="alert alert-info">This collection is empty. Add an object to start storing data.</div>
+            </td>
+            
+          </tr>
+          <tr data-bind="with: newRow">
+            <td>...</td>
+            <!-- ko foreach: $root.properties -->
+              <td>
+                <div data-bind="template: 'data-cell-edit-template'"></div>
+              </td>
+            <!-- /ko -->
+            <td>
+              <a href="#" class="btn btn-success" data-bind="click: $root.saveRow"><i class="icon-white icon-plus"></i> add</a>
+            </td>
+          </tr>
+        </tfoot>
+    </table>
+  </div>
+  <input id="current-data-querystring" data-bind="value: queryString, valueUpdate: 'afterkeydown', tooltip: {placement: 'left', title: queryError, trigger: 'focus'}" type="text" placeholder="Query string" />
+</div>
+
+<script type="text/html" id="data-cell-edit-template">
+  <i class="icon-warning-sign" data-bind="tooltip: {title: $parent.c_errors()[name()]}, visible: $parent.c_errors()[name()]"></i>
+  <!-- ko if: type() === 'string' --> <input type="text" data-bind="value: $parent[name()], hasfocus: $parent.c_focus() === name(), event: {keydown: $parent._onKeypress}", /> <!-- /ko -->
+  <!-- ko if: type() === 'boolean' --> <input type="checkbox" data-bind="checked: $parent[name()]" /> <!-- /ko -->
+  <!-- ko if: type() === 'date' --> <input type="datetime" data-bind="value: $parent[name()], hasfocus: $parent.c_focus() === name(), event: {keydown: $parent._onKeypress}" /> <!-- /ko -->
+  <!-- ko if: type() === 'number' --> <input type="number" data-bind="value: $parent[name()], hasfocus: $parent.c_focus() === name(), event: {keydown: $parent._onKeypress}" /> <!-- /ko -->
+  <!-- ko if: type() === 'password' --> <input type="password" placeholder="*******" data-bind="value: $parent[name()], hasfocus: $parent.c_focus() === name(), event: {keydown: $parent._onKeypress}" /> <!-- /ko -->
+</script>
+</script> 
  
     <script type="x-ejs-template" id="property-list-template" >
 <ul class="component-list">
@@ -508,104 +569,6 @@
     </div>
   </div>
 </div>
-</script> 
- 
-    <script type="x-ejs-template" id="model-table-template" >
-<thead class="type-icons">
-  <tr>
-    <th class="code"><i class="icon-hack string" title="string"></i> _id</th>
-    <% if (resourceType == "UserCollection") { %>
-      <th class="code"><i class="icon-hack string" title="string"></i> email</th>
-      <th class="code"><i class="icon-hack string" title="string"></i> password</th>
-    <% } %>
-    <% _.each(properties, function(property) { %>
-      <th class="code"><i class="icon-hack <%- property.type %>" title=" <%- property.typeLabel %>"></i> <%- property.name %></th>
-    <% }); %>
-    <th></th>
-  </tr>
-</thead>
-<tbody>
-  <% collectionModel.each(function(rowModel) { if (!rowModel.get('c_delete')) { %>
-    <% var row = rowModel.toJSON(); %>
-    <tr data-cid="<%= rowModel.cid %>">
-      <td class='id'>
-        <%- row._id || '...' %>
-      </td>
-      <% if (resourceType == "UserCollection") { %>
-        <td data-prop="email">
-          <% if (row.c_errors && row.c_errors.email) { %>
-            <a class="error-tooltip" rel="tooltip" title="<%- row.c_errors.email %>">
-              <i class="icon-warning-sign"></i>
-            </a>
-          <% } %>
-          <% if (row.c_active) { %>
-            <input type="text" name="email" value="<%- row.email || '' %>" />
-          <% } else { %>
-            <%- row.email || '...' %>
-          <% } %>
-        </td>
-        <td data-prop="password">
-          <% if (row.c_errors && row.c_errors.password) { %>
-            <a class="error-tooltip" rel="tooltip" title="<%- row.c_errors.password %>">
-              <i class="icon-warning-sign"></i>
-            </a>
-          <% } %>
-          <% if (row.c_active) { %>
-            <input type="password" name="password" placeholder="*******" />
-          <% } else { %>
-            ...
-          <% } %>
-        </td>
-      <% } %>
-      <% _.each(properties, function(property) { %>
-        <% var val = row[property.name]; %>
-        <% if (typeof val === 'undefined') { val = row[property.$renameFrom]; } %>
-        <td data-prop="<%- property.name %>">
-          <% if (row.c_errors && row.c_errors[property.name]) { %>
-            <a class="error-tooltip" rel="tooltip" title="<%- row.c_errors[property.name] %>">
-              <i class="icon-warning-sign"></i>
-            </a>
-          <% }
-            if (row.c_active) { %>
-            <% if (typeof val === 'undefined') { val = '' } %>
-            <% if (property.type == 'number') { %>
-              <input type="number" name="<%- property.name %>" value="<%- val %>" />
-            <% } else if (property.type == 'boolean') { %>
-              <input type="checkbox" name="<%- property.name %>" <% val ? 'checked="checked"' : ''%> />
-            <% } else if (property.type == 'date') {  %>
-              <input type="datetime" name="<%- property.name %>" value="<%- val %>" />
-            <% } else { %>
-              <input type="text" name="<%- property.name %>" value="<%- val %>" />
-            <% } %>
-          <% } else { %>
-            <% if (typeof val === 'undefined') { val = '...' } %>
-            <%- val %>
-          <% } %>
-        </td>
-      <% }); %>
-      <td>
-        <% if (row.c_active) { %>
-          <a href="#" class="done-btn btn btn-primary"><i class="icon-ok-sign icon-white"></i> save</a>
-          <a href="#" class="cancel-btn btn">cancel</a>
-        <% } else { %>
-          <a href="#" class="edit-btn btn"><i class="icon-edit"></i> edit</a>
-          <a href="#" class="delete-btn btn"><i class="icon-remove-sign"></i> delete</a>
-        <% } %>
-        
-      </td>
-    </tr>
-  <% }}); %>
-</tbody>
-<tfoot>
-  <tr>
-    <td colspan="<%= properties.length + (resourceType == "UserCollection" ? 4 : 2) %>">
-      <% if (!collectionModel.length) { %> 
-        <div class="alert alert-info">This collection is empty. Add an object to start storing data.</div>
-      <% } %>
-      <button class="btn btn-success add-btn"><i class="icon-white icon-plus"></i> add</a>
-    </td>
-  </tr>
-</tfoot>
 </script> 
  
     <script type="text/javascript" src="js/lib/jquery-1.7.2.js"></script> 
