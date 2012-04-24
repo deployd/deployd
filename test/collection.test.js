@@ -137,7 +137,7 @@ describe('Collection Actions', function(){
       todos.post({title: 'a random todo', completed: true}, function (e, t) {
         t.title = 'foobar';
         todos.use('/' + t._id).put(t, function (error, todo) {
-          todos.use('/' + todo._id).get(function (err, todo) {
+          todos.use('/' + t._id).get(function (err, todo) {
             expect(todo).to.exist;
             expect(todo._id).to.exist;
             expect(todo.completed).to.equal(true);
@@ -157,13 +157,13 @@ describe('Collection Actions', function(){
 
     it('should only update and validate the properties provided', function(done) {
       todos.post({title: 'foo', order: 1}, function(ep, todo) {
-        todos.use('/' + todo._id).put({completed: true}, function(epu, updatedTodo) {
+        todos.use('/' + todo._id).put({title: 'bar'}, function(epu) {
           expect(epu).to.not.exist;
-
-          expect(updatedTodo.title).to.equal('foo');
-          expect(updatedTodo.order).to.equal(1);
-          expect(updatedTodo.completed).to.equal(true);
-          done(ep, epu);
+          todos.use('/' + todo._id).get(function (err, updatedTodo) {
+            expect(updatedTodo.title).to.equal('bar');
+            expect(updatedTodo.order).to.equal(1);
+            done(err);
+          })
         });  
       });
     });
