@@ -30,9 +30,13 @@
  
     <script type="x-ejs-template" id="header-template" >
 <div class="full-width-container">
-  <ul class="nav nav-pills pull-left">
-    <li <%= (typeof resourceName === 'undefined' || !resourceName) ? 'class="active"' : '' %>><a href="#">Resources</a></li>
-    <li><a href="<%- appUrl %>" target="_blank"><%- appUrl %></a></li>
+  <ul class="nav nav-pills pull-left" style="margin-left: 19px;">
+    <li <%= (typeof resourceName === 'undefined' || !resourceName) ? 'class="active"' : '' %>>
+      <a href="#">Resources</a>
+    </li>
+    <li>
+    <a href="<%- appUrl %>" target="_blank"><%- appUrl %></a>
+    </li>
     <% if (typeof resourceName !== 'undefined' && resourceName) { %>
       <li class="active">
         <a href="#<%= resourceId %>" class="resourceName"><%= resourceName %></a>
@@ -55,14 +59,16 @@
 </script> 
  
     <script type="x-ejs-template" id="resources-template" >
-<div id="resource-editor">
+<div id="resource-editor" class="resource-list">
   <div class="container">
-      <div class="header-offset well">
+      <div class="well">
         <div class="clearfix">
           <h3 class="pull-left">Resources</h3>
           <div class="btn-group pull-right">
-            <a class="btn btn-success dropdown-toggle" data-toggle="dropdown" href="#">
+            <a class="btn btn-success" data-toggle="dropdown" href="#">
               <i class="icon-white icon-plus"></i> Add New Resource
+            </a>
+            <a class="btn btn-success dropdown-toggle" data-toggle="dropdown" href="#">
               <span class="caret"></span>
             </a>
             <ul id="property-types" class="dropdown-menu">
@@ -72,10 +78,26 @@
         <ul id="resource-list" class="component-list" style="display: none;">
         </ul>
         <div id="resource-list-empty" class="component-list-empty" style="display: none;">
-          <div class="alert alert-info">
-            <p>This app is empty. Add a resource to get started.<p>
-            <p>If you're new to Deployd, check out our tutorial to quickly build your first app.</p>
-            <a href="http://www.deployd.com/tutorial/step1" target="_blank" class="btn btn-primary">Go to Tutorial</a>
+          <div>
+            <div class="alert alert-info" style="text-align: center;"><strong>This app is empty.</strong> Add a resource to get started.</div>
+            <div class="get-started">
+              <p>
+                <strong><i class="icon-th-large icon-white"></i> Resources</strong> - Give your JavaScript direct access to a powerful database, user management and more by adding resources.
+              </p>
+              <p>
+                <strong><i class="icon-folder-close icon-white"></i> Files</strong> - Add a <i>files resource</i> to upload and serve your html, css, JavaScript, and other assets.
+              </p>
+              <p>
+                <strong><i class="icon-th-list icon-white"></i> Collection</strong> - Add a <i>collection resource</i> to save and query data over a simple http api.
+              </p>
+              <p>
+                <strong><i class="icon-user icon-white"></i> Users Collection</strong> - Add a <i>users collection</i> resource to create and authenticate users over http.
+              </p>
+            </div>
+            <div class="tutorial-help">
+              <p>If you're new to Deployd, check out our tutorial to quickly build your first app.</p>
+              <a href="http://www.deployd.com/tutorial/step1" target="_blank" class="btn btn-primary"><i class="icon-question-sign icon-white"></i> Go to Tutorial</a>
+            </div>
           </div>
         </div>
       </div>
@@ -142,9 +164,9 @@
 
 </script> 
     <script type="x-ejs-template" id="static-template" >
-<div id="resource-editor">
+<div id="resource-editor" class="file-list">
   <div class="container">
-      <div class="header-offset well">
+      <div class="well">
         <div class="clearfix">
           <h3 class="pull-left">Files</h3>
           <div id="file-upload" class="pull-right">
@@ -158,8 +180,19 @@
             </span>
           </div>
         </div>
-        <div id="files-empty" class="hide alert alert-info">
-          This resource does not have any files.
+        <div id="files-empty" class="hide">
+          <div class="alert alert-info"><strong>This folder is empty.</strong> Create or upload some files to get started.</div>
+          <div class="get-started" style="margin-bottom: 0;">
+             <p>
+               <strong><i class="icon-upload icon-white"></i> Uploading</strong> - There are a couple of ways to upload files. The easiest way is to use the "Quick Upload Files" button.
+             </p>
+             <p>
+               <strong><i class="icon-pencil icon-white"></i> Editing</strong> - Once you have uploaded files, you can click on a filename to edit with deployd's built in text editor.
+             </p>
+             <p>
+                <strong><i class="icon-download-alt icon-white"></i> Working Locally</strong> - Setup the <a href="#sync-info-modal" data-toggle="modal">deployd command line tool</a> to easily sync your local files with deployd.
+              </p>
+          </div>
         </div>
         <table id="files" class="table table-bordered table-striped">
           <thead>
@@ -180,7 +213,7 @@
     <h3>Setup Local Sync</h3>
   </div>
   <div class="modal-body">
-		<p>To download your app's files, first install the <code>dpd</code> command line utility. <em>It requires <a href="http://nodejs.org/#download">Node.js</a>.</em></p>
+		<p>To sync your app's files with your local filesystem, first install the <code>dpd</code> command line utility. <em>It requires <a href="http://nodejs.org/#download">Node.js</a>.</em></p>
 
 		<p>Run the following commands from the command line to install the utility and setup your app.</p>
 
@@ -212,25 +245,24 @@
     <i class="icon-file"></i>
     <a href="#edit<%= path %>"><%= filename %></a>
   </td>
-  <td>
-    <a class="view" href="<%= path %>"  target="_blank"><i class="icon-eye-open"></i></a>
-    <a class="delete" href="#" filename="<%= filename %>"><i class="icon-remove"></i></a>
+  <td style="width: 149px;">
+    <a class="view btn" href="<%= path %>"  target="_blank"><i class="icon-eye-open"></i> View</a>
+    <a class="delete btn" href="#" filename="<%= filename %>"><i class="icon-remove"></i> Delete</a>
   </td>
 </tr>
 </script> 
     <script type="x-ejs-template" id="file-editor-template" >
-<div class="container">
-  <div class="well">
-    <div id="file-nav" class="clearfix">
-      <button class="pull-left btn back">Back</button>
-      <div class="pull-left" id="file-status"></div>
-      <button id="save-btn" class="pull-right btn btn-success">Save</button>
-    </div>
-    <div class="editor-container">
-      <div id="editor"></div>
-    </div>
+<div class="well" style="margin: 20px;">
+  <div id="file-nav" class="clearfix">
+    <button class="pull-left btn back"><i class="icon-folder-open"></i> Back</button>
+    <div class="pull-left" id="file-status"></div>
+    <button id="save-btn" class="pull-right btn btn-success">Save</button>
+  </div>
+  <div class="editor-container">
+    <div id="editor"></div>
   </div>
 </div>
+
 </script> 
      
     <script type="x-ejs-template" id="resource-types-template" >
@@ -247,15 +279,15 @@
 <div class="component-item-header">
   <i title="<%= resource.typeLabel %>" class="icon-white <%= resource.typeLabel.toLowerCase().replace(' ', '-') %>"></i>
   <% if (resource.c_active) { %>
-    <input type="text" class="code" name="path" value="<%- resource.path %>" />
-    <a href="#" class="btn btn-primary save-btn">save</a>
+    <input style="margin-left: 3px; width: 225px;" type="text" class="code" name="path" value="<%- resource.path %>" />
+    <a style="margin-right: 3px;" href="#" class="btn btn-primary save-btn">save</a>
     <a href="#" class="btn cancel-btn">cancel</a>
   <% } else { %>
     <span class="code path"><%- resource.path %></span>
+    <div class="pull-right">
+      <i class="icon-white icon-remove delete-btn"></i>
+    </div>
   <% } %>
-  <div class="pull-right">
-    <i class="icon-white icon-remove delete-btn"></i>
-  </div>
   <div class="tags pull-right">
     <!-- <span class="label label-info type"><%- resource.typeLabel %></span> -->
   </div>
@@ -264,70 +296,72 @@
  
     <script type="x-ejs-template" id="collection-routes-template" >
 <h3>API</h3>
+
+<div class="alert alert-info" style="width: 456px; padding-right: 15px;">Use these routes in your app to save and load data from this Collection.</div>
 <table class="table table-bordered table-striped">
   <thead>
     <tr>
+      <th>Task</th>
       <th>Method</th>
       <th>Route</th>
-      <th>Task</th>
       <th>Accepts</th>
       <th>Returns</th>
     </tr>
     <tbody>
       <tr>
+        <td><a href="http://deployd.github.com/deployd/#Listing-data" target="_blank">Listing data</a></td>
         <td>GET</td>
         <td><a href="<%- path %>" target="_blank"><%- path %></a></td>
-        <td><a href="http://deployd.github.com/deployd/#Listing-data" target="_blank">Listing data</a></td>
         <td><em>Nothing</em></td>
         <td>An array of objects</td>
       </tr>
       <tr>
+        <td><a href="http://deployd.github.com/deployd/#Saving-data" target="_blank">Creating an object</a></td>
         <td>POST</td>
         <td><%- path %></td>
-        <td><a href="http://deployd.github.com/deployd/#Saving-data" target="_blank">Creating an object</a></td>
         <td>A single object</td>
         <td>The saved object (or errors)</td>
       </tr>
       <tr>
+        <td><a href="http://deployd.github.com/deployd/#Retrieving-a-specific-object" target="_blank">Getting an object</a></td>
         <td>GET</td>
         <td><%- path %>/&lt;_id&gt;</td>
-        <td><a href="http://deployd.github.com/deployd/#Retrieving-a-specific-object" target="_blank">Getting an object</a></td>
         <td><em>Nothing</em></td>
         <td>A single object</td>
       </tr>
       <tr>
+        <td><a href="http://deployd.github.com/deployd/#Updating-an-object" target="_blank">Updating an object</a></td>
         <td>PUT</td>
         <td><%- path %>/&lt;_id&gt;</td>
-        <td><a href="http://deployd.github.com/deployd/#Updating-an-object" target="_blank">Updating an object</a></td>
         <td>A single object</td>
         <td>The saved object (or errors)</td>
       </tr>
       <tr>
+        <td><a href="http://deployd.github.com/deployd/#Deleting-an-object" target="_blank">Deleting an object</a></td>
         <td>DELETE</td>
         <td><%- path %>/&lt;_id&gt;</td>
-        <td><a href="http://deployd.github.com/deployd/#Deleting-an-object" target="_blank">Deleting an object</a></td>
         <td>A single object</td>
         <td><em>Nothing</em></td>
       </tr>
       <% if (type === 'UserCollection') { %>
         <tr>
+          <td><a href="http://deployd.github.com/deployd/#Authenticating-a-user" target="_blank">Logging in</a></td>
           <td>POST</td>
           <td><%- path %>/login</td>
-          <td><a href="http://deployd.github.com/deployd/#Authenticating-a-user" target="_blank">Logging in</a></td>
           <td><code>email</code> and <code>password</code> of user</td>
           <td>The user, plus session cookie (or error)</td>
         </tr>
         <tr>
+          <td><a href="http://deployd.github.com/deployd/#Logging-out" target="_blank">Logging out</a></td>
           <td>POST</td>
           <td><%- path %>/logout</td>
-          <td><a href="http://deployd.github.com/deployd/#Logging-out" target="_blank">Logging out</a></td>
           <td><em>Nothing</em></td>
           <td><em>Nothing</em></td>
         </tr>
         <tr>
+          <td><a href="http://deployd.github.com/deployd/#Current-user" target="_blank">Getting the current user</a></td>
           <td>GET</td>
           <td><a href="<%- path %>/me" target="_blank"><%- path %>/me</a></td>
-          <td><a href="http://deployd.github.com/deployd/#Current-user" target="_blank">Getting the current user</a></td>
           <td><em>Nothing</em></td>
           <td>A single object</td>
         </tr>
@@ -335,7 +369,6 @@
     </tbody>
   </thead>
 </table>
-<div class="alert alert-info">Use these routes in your app code to save and load data from this Collection.</div>
 </script> 
     <script type="x-ejs-template" id="collection-data-template" >
 <h3>Data</h3>
@@ -377,7 +410,7 @@
         <tfoot>
           <tr data-bind="visible: !collection().length">
             <td data-bind="attr: {colspan: properties().length + 2}">
-              <div class="alert alert-info">This collection is empty. Add an object to start storing data.</div>
+              <div class="alert alert-info" style="margin: 40px auto; width: 120px;">This collection is empty.</div>
             </td>
             
           </tr>
@@ -389,7 +422,7 @@
               </td>
             <!-- /ko -->
             <td>
-              <a href="#" class="btn btn-success" data-bind="click: $root.saveRow"><i class="icon-white icon-plus"></i> add</a>
+              <a href="#" class="btn btn-success" data-bind="click: $root.saveRow"><i class="icon-white icon-plus"></i> Add</a>
             </td>
           </tr>
         </tfoot>
@@ -409,6 +442,7 @@
 </script> 
  
     <script type="x-ejs-template" id="property-list-template" >
+<% isUsers = typeof resourceTypeId !== 'undefined' && resourceTypeId === 'UserCollection'; %>
 <ul class="component-list">
   <li class="component-item locked"><div class="component-item-header">
     <i class="icon-white string" data-bind="tooltip: {placement: 'left', title: 'string'}"></i>
@@ -417,7 +451,7 @@
       <i class="icon-white icon-lock" title="Locked"></i>
     </div>
   </div></li>
-  <% if (typeof resourceTypeId !== 'undefined' && resourceTypeId === 'UserCollection') { %>
+  <% if(isUsers) { %>
   <li class="component-item locked"><div class="component-item-header">
     <i class="icon-white string" data-bind="tooltip: {placement: 'left', title: 'string'}"></i>
     <span class="code name">email</span>
@@ -439,15 +473,33 @@
       <div data-bind="visible: !editing()">
         <i class="icon-white" data-bind="tooltip: {placement: 'left', title: typeLabel}, cssNamed: type"></i>
         <span class="code name" data-bind="text: name, click: toggleEditing"></span>
+        <span class="label" data-bind="visible: optional">optional</span>
         <div class="pull-right">
-          <span class="label" data-bind="visible: optional">Optional</span>
           <a href="#" data-bind="click: $root.removeProperty"><i class="icon-white icon-remove"></i></a>
         </div>
       </div>
     </div></li>
   <!-- /ko -->
   <div class="placeholder component-item-header">
-    <div class="alert alert-info" data-bind="visible: !properties().length">Add properties to describe the data you want to store.</div>
+    <div data-bind="visible: !properties().length">
+      <div class="get-started" style="margin-top: 0;">
+        <% if(isUsers) { %>
+          <p>
+            <strong><i class="icon-user icon-white"></i> Users</strong> - Add properties unique to the users you want to store in this collection. Users have email and password properties by default. These are required to login a user.
+          </p>
+        <% } else { %>
+          <p>
+            <strong><i class="icon-list icon-white"></i> Properties</strong> - Describe the JSON objects you want to store in your collection by adding properties and setting their type.
+          </p>
+        <% } %>
+        <p>
+          <strong><i class="icon-ban-circle icon-white"></i> Validation</strong> - By describing the data you expect in your collection you enable deployd to automatically validate new objects.
+        </p>
+      </div>
+      <div class="alert alert-info">
+        <strong>Get started</strong> by adding properties to describe the <strong><%= isUsers ? 'users' : 'data' %></strong> you want to store in this collection.
+      </div>
+    </div>
     <div data-bind="template: {name: 'property-single-template', data: newProperty}"></div>
   </div>
 </ul>
@@ -466,12 +518,12 @@
       </li>
     </ul>
   </div>
-  <input type="text" data-bind="value: name, hasfocus: nameFocus, event: { keypress: onNameKeypress }" />
+  <input type="text" placeholder="myPropertyName" data-bind="value: name, hasfocus: nameFocus, event: { keypress: onNameKeypress }" />
   <button class="btn" data-bind="click: toggleEditing, clickBubble: false, visible: !isNew">done</button>
   <div class="pull-right">
     <label data-bind="if: type() !== 'boolean'" class="checkbox pull-left"><input type="checkbox" data-bind="checked: optional" />Optional</label>
     <a href="#" class="delete-btn" data-bind="click: $root.removeProperty, visible: !isNew"><i class="icon-white icon-remove"></i></a>
-    <button class="btn btn-success" data-bind="click: $root.addProperty, visible: isNew"><i class="icon-white icon-plus"></i>&nbsp;add</button>
+    <button class="btn btn-success" data-bind="click: $root.addProperty, visible: isNew"><i class="icon-white icon-plus"></i>&nbsp;Add</button>
   </div>
 </script>
 
