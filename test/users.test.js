@@ -24,17 +24,18 @@ describe('Users', function(){
   })
   
   describe('PUT /users/:id', function(){
-    it('should update the user', function(done) {
-      data.users[0].username = 'foobar';
-      users.use('/' + data.users[0]._id).put(data.users[0], function (err) {     
-
+    it('should update the user and still be able login', function(done) {
+      users.use('/' + data.users[0]._id).put({username: 'foobar'}, function (err) {
         users.use('/' + data.users[0]._id).get(function (err, user) {
           expect(user.email).to.eql(data.users[0].email);
           expect(user.password).to.not.exist;
           expect(user.username).to.equal('foobar');
-          done(err);
+          // should still login
+          users.use('/login').post({email: data.users[0].email, password: data.users[0].password}, function (err, session, req, res) {
+            
+            done(err);
+          });
         })
-
       })
     })
   })

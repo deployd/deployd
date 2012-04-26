@@ -30,7 +30,7 @@ describe('Static', function(){
         , out = fs.createWriteStream(__dirname + '/support/out-eg.jpg')
       ;
       
-      client.use('/avatars/eg.jpg').post(file, function (err, body, req, res) { 
+      client.use('/avatars/eg.jpg').post(file, function (err, body, req, res) {
         client.use('/avatars/eg.jpg').pipe(out).get(function (err) {
           var same = fs.readFileSync(__dirname + '/support/eg.jpg').toString('base64') === fs.readFileSync(__dirname + '/support/out-eg.jpg').toString('base64');
           expect(same).to.equal(true);
