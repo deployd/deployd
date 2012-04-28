@@ -148,6 +148,21 @@ describe('Collection Actions', function(){
       })
     })
     
+    it('should also update a single item when using POST', function(done) {
+      todos.post({title: 'another random todo', completed: true}, function (e, t) {
+        t.title = 'foobar';
+        todos.use('/' + t._id).post(t, function (error, todo) {
+          todos.use('/' + t._id).get(function (err, todo) {
+            expect(todo).to.exist;
+            expect(todo._id).to.exist;
+            expect(todo.completed).to.equal(true);
+            expect(todo.title).to.equal('foobar');
+            done(err);
+          })
+        })
+      })
+    })
+    
     it('should error when an id is not included', function(done) {
       unauthed.use('/todos').put({title: 'foo'}, function (err) {
         expect(err).to.exist;
