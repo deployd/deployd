@@ -25,16 +25,28 @@ describe('Users', function(){
   
   describe('PUT /users/:id', function(){
     it('should update the user and still be able login', function(done) {
-      users.use('/' + data.users[0]._id).put({username: 'foobar'}, function (err) {
-        users.use('/' + data.users[0]._id).get(function (err, user) {
-          expect(user.email).to.eql(data.users[0].email);
-          expect(user.password).to.not.exist;
-          expect(user.username).to.equal('foobar');
-          // should still login
-          users.use('/login').post({email: data.users[0].email, password: data.users[0].password}, function (err, session, req, res) {
-            
-            done(err);
-          });
+      users.use('/login').post({email: data.users[0].email, password: data.users[0].password}, function (err, session, req, res) {
+        users.use('/' + session.user._id).put({username: 'foobar'}, function (err) {
+          users.use('/' + session.user._id).get(function (err, user) {
+            expect(user.email).to.eql(data.users[0].email);
+            expect(user.password).to.not.exist;
+            expect(user.username).to.equal('foobar');
+            // should still login
+            users.use('/logout').post(function () {
+              users.use('/login').post({email: data.users[0].email, password: data.users[0].password}, function (err, session, req, res) {
+                done(err);
+              });
+            })
+          })
+        })
+      })
+    })
+    
+    it('should only allow the current user', function(done) {
+      users.use('/logout').del(function (err, res) {
+        users.use('/' + data.users[0]._id).put({password: 'hax'}, function (err) {
+          expect(err).to.exist;
+          done();
         })
       })
     })
@@ -121,13 +133,14 @@ describe('Users', function(){
       })
     })
     
-    it('should not return a user when an _id is not provided', function(done) {
+    it('should not return an email unless requested from the current user', function(done) {
       var unAuthed = require('../lib/client').use('http://localhost:3003/users');
       
       unAuthed.get(function (err, res) {
-        expect(err).to.exist;
-        expect(res).to.not.exist;
-        done();
+        res.forEach(function (user) {
+          expect(user.email).to.not.exist;
+        });
+        done(err);
       })
     })
     
