@@ -113,12 +113,30 @@ describe('Application Resource Types', function(){
     })
   })
   
-  describe('DELETE /resources', function(){
+  describe('DELETE /resources/', function(){
     it('should remove all resources or those that match the query', function(done) {
       resources.del(function (err) {
         resources.get(function (error, all) {
           expect(all).to.not.exist;
           done(error || err);
+        })
+      })
+    })
+  })
+  
+  describe('DELETE /resources/<ObjectID>', function(){
+    it('should remove the resource and all of its data', function(done) {
+      todos.post({title: 'another todo...'}, function (err, res) {
+        resources.get({path: '/todos'}, function (e, res) {
+          res = res[0];
+          resources.use('/' + res._id).del(function (err, upd) {
+            resources.post(data.resources.todos, function (e) {
+              todos.get(function (err, res) {
+                expect(res).to.not.exist;
+                done(err);
+              })
+            });
+          })
         })
       })
     })
