@@ -84,7 +84,7 @@ A GET request at an object's URL will return the properties of that object:
 
 ## Updating an object
 
-A PUT request at an object's URL will update the object. You must include all properties except for `_id`.
+A PUT (or POST) request at an object's URL will update the object. You must include all properties except for `_id`.
 
     PUT /people/4f71fc7c2ba744786f000001
     Content-Type: application/json
