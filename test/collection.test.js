@@ -148,6 +148,20 @@ describe('Collection Actions', function(){
       })
     })
     
+    it('should only set the properties provided', function(done) {
+      todos.post({title: 'a random todo', completed: true}, function (e, t) {
+        todos.use('/' + t._id).put({title: 'foobar'}, function (error, todo) {
+          todos.use('/' + t._id).get(function (err, todo) {
+            expect(todo).to.exist;
+            expect(todo._id).to.exist;
+            expect(todo.completed).to.equal(true);
+            expect(todo.title).to.equal('foobar');
+            done(err);
+          })
+        })
+      })
+    })
+    
     it('should also update a single item when using POST', function(done) {
       todos.post({title: 'another random todo', completed: true}, function (e, t) {
         t.title = 'foobar';
