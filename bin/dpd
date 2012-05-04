@@ -9,686 +9,527 @@ var program = require('commander')
   , fs = require('fs')
   , path = require('path')
   , exec = require('child_process').exec
-;
-
-// Options
-
-program
-  .version('0.4.1')
-  .option('-j, --json', 'output as json')
-  .option('-p, --port <port>', 'specify the port (2403)')
-  .option('-s, --storage <url>', 'specify where to store resources (mongodb://localhost/deployd)')
-  .option('-d, --destination <url>', 'specify where to push to when cloning')
-  .option('-o, --open', 'open the dashboard in a browser')
-  .option('-l, --local', 'push from the current directory to the local server')
-  .option('-f, --file <path>', 'specify a specific file to push')
+  , sh = require('shelljs')
+  , url = require('url')
 ;
 
 /**
- * A method to output json.
- */
-
-function json(obj) {
-  if(program && program.json) process.stdout.write(JSON.stringify(obj));
-}
-
-/**
- * Silent if in json mode.
+ * Clients for interacting with dpd over http and mongodb.
  */
  
-function log() {
-  if(!program.json) console.log.apply(console, arguments);
-}
+var local = dpd;
 
-/**
- * List all administration keys (users).
- */
+var client = require('mdoq')
+  .use(function (req, res, next, use) {
+    var host = url.parse(this.url).host
+      , key = keys(host);
 
-program
-  .command('keys')
-  .description(' - list all admin keys')
-  .action(function () {
-    var port = program.port || 2403;
-
-    if(program.storage) {
-      dpd.storage(program.storage);
-    }
-
-    dpd.use('http://localhost:' + port).use('/keys').get(function (err, keys) {
-
-      json(keys);
-      log(keys || 'no keys found! see dpd --help');
-      
-      process.exit();
-    })
-  })
-
-/**
- * Add a new admin key.
- */
-
-program
-  .command('addkey [key]')
-  .description(" - add a new admin key eg. dpd addkey '{\"user\": \"foo\", \"label\": \"admin\"}'")
-  .action(function (key) {
-    try {
-      key = JSON.parse(key);
-    } catch(e) {
-      key = undefined;
-    }
-    
-    var strength = Math.floor(Math.random() * 5) + 2;
-    
-    while(strength--) {
-      key[keygen()] = keygen() + keygen() + keygen();
-    }
-    
-    if(typeof key == 'object') {
-      if(program.storage) {
-        dpd.storage(program.storage);
-      }
-      
-      var port = program.port || 2403;
-      
-      dpd.use('http://localhost:' + port).use('/keys').post(key, function (err, newKey) {
-        if(err) {
-          json(err);
-          log('Could not add key', err);
-        } else {
-          log('added key', newKey);          
-        }
-        process.exit();
-      })
+    if(key) {
+      // finish with http
+      use(require('mdoq-http'));
+      req.headers['x-dssh-key'] = key;
+      next();
     } else {
-      var msg = 'key must be a valid JSON object with more than one attribute!';
-      json(new Error(msg))
-      log(msg);
+      if(~this.url.indexOf('.deploydapp.com')) {
+         login(host, next);
+      } else {
+        // dont bother going to http without a key
+        return next({message: 'couldnt find a key for that remote'});
+      }
+
+      // after everyone has a chance to grab a key
+      use(function (req, res, next) {
+        key = keys(host);
+        req.headers['x-dssh-key'] = key;
+        next();
+      })
+      // finish with http
+      use(require('mdoq-http'));
     }
   })
 ;
 
 /**
- * Keygen
+ * Utilities
  */
- 
+
+function getAppName() {
+  return path.basename(path.resolve('.'));
+}
+
+function getStorageUrl(port) {
+  port = port || config('mongod').port;
+  return 'mongodb://localhost:' + (port || 27017) + '/' + getAppName();
+}
+
+function getMongodPort() {
+  var mongods = userConfig('mongods') || {}
+    , port = 27022
+  ;
+  
+  var localMongod = config('mongod');
+  if(localMongod) {
+    if(localMongod.port) port = localMongod.port;
+  } else {
+    while(mongods[port.toString()]) port++;
+  }
+  
+  var mongod = mongods[port] = {
+    path: path.resolve('.')
+  };
+  
+  // save global mongod config
+  userConfig('mongods', mongods);
+  
+  // also store port for local config
+  mongod.port = port;
+  
+  // save local config
+  config('mongod', mongod);
+  
+  return port;
+}
+
+function startMongod(fn) {
+  sh.mkdir('-p', '.data');
+  
+  stopMongod();
+  
+  var buf
+    , port = getMongodPort()
+    , proc = exec('mongod --dbpath .data --port ' + port)
+  
+  proc.stdout.on('data', function (data) {
+    buf += data;
+    if(program.debug) console.log(data);
+    if(~buf.indexOf('listening')) {
+      clearTimeout(timer);
+      proc.stdout.removeAllListeners('data');
+      fn(null, port);
+    }
+  });
+  
+  var timer = setTimeout(function () {
+    fn(new Error('timed out while starting mongod'))
+  }, 2000);
+  
+  return proc;
+}
+
+function stopMongod() {
+  if((fs.existsSync || path.existsSync)('.data/mongo.lock')) {
+    sh.rm('.data/mongo.lock');
+  }
+}
+
 function keygen() {
-  // TODO added randomness
-  return Math.random().toString().split('.')[1];
+  var strength = Math.floor(Math.random() * 5) + 2
+    , crypto = require('crypto')
+    , key = {}
+  ;
+  
+  
+  try {
+    while(strength--) {
+      var hash = crypto.createHash('md5')
+      key[Math.random().toString().substr(2, 3)] = hash.update(crypto.randomBytes(128)).digest('hex');
+    }
+  } catch(e) {  
+    key[Math.random().toString().substr(2, 3)] = Math.random().toString().split('.')[1];
+  }
+  
+  return key;
+}
+
+function listen(port, fn) {
+  var key = config('key');
+  
+  port = port || 2403;
+  startMongod(function (err, mongoPort) {
+    local
+      .storage(getStorageUrl(mongoPort))
+      .use('http://localhost:' + port).listen(function () {
+        var key = config('key') || keygen();
+        local.use('/keys').post(key, function (err, newKey) {
+          key = newKey || key;
+          config('key', key);
+          console.log('dpd is listening @', 'http://localhost:' + port);
+          if(program.dashboard) {
+            exec('open http://localhost:' + port + '/__dashboard?key=' + encodeURIComponent(JSON.stringify(key)))
+          }
+
+          if(typeof fn === 'function') fn();
+          console.log('building cache...');
+          pushTo(local, function () {
+            
+          });
+        })
+      })
+    ;
+  })
+}
+
+function cancel(msg) {
+  console.log(msg);
+  // process.exit(process.pid);
+}
+
+function config(key, value, path) {
+  path = path || '.dpd';
+  
+  var config = {};
+  if((fs.existsSync || path.existsSync)(path)) {
+    try {
+      config = JSON.parse(fs.readFileSync(path))
+    } catch (e) {
+      return cancel('error when parsing config');
+    }
+  }
+  
+  if(key) {
+    if(value) {
+      config[key] = value;
+      fs.writeFileSync(path, JSON.stringify(config));
+    } else {
+      return config[key];
+    }
+  }
+}
+
+function userConfig(key, value) {
+  return config(key, value, process.env.HOME + '/.dpd');
+}
+
+function sanitizeHost(host) {
+  if(~host.indexOf('://')) {
+    return host;
+  } else {
+    return 'http://' + host;
+  }
+}
+
+function pushTo(dpd, fn) {
+  var l = loader(fn);
+  
+  files().forEach(function (file) {
+    if(fs.statSync(file).isDirectory()) {
+      l.add();
+      uploadDir(file, dpd, function () {
+        l.tic();
+      });
+    }
+  })
+}
+
+function files(fn) {
+  var files = sh.find('.').filter(function(file) { return file[0] !== '.'; });
+  files.push('.');
+  return files;
+}
+
+function dropFiles(client, fn) {
+  console.log('dropping files...');
+  files(fn);
+}
+
+function login(host, next) {
+  console.log('please login to deployd.com');
+  program.prompt('username: ', function (username) {
+    program.password('password: ', '*', function (password) {
+      require('mdoq')
+        .require('mdoq-http')
+        .use('http://deployd.com/apps/authenticate')
+        .get({host: host})
+        .post({username: username, password: password}, function (err, app) {
+          if(app && app.key) {
+            console.log(app.key);
+            keys(host, app.key);
+            addRemote(host);
+            next();
+          } else {
+            next({message: 'login failed...'});
+          }
+        })
+    })
+  })
+}
+
+function resources(dpd, fn) {
+  dpd
+    .use('/resources')
+    .get(function (err, resources) {
+      if(err) {
+        console.log(err);
+        cancel('an error occurred while fetching resources');
+      } else if(!resources) {
+        console.log(host, 'does not have any resources');
+      } else {
+        resources.forEach(fn);
+      }
+    });
+}
+
+function keys(host, key) {
+  var keys = config('keys') || {};
+  if(key) {
+    keys[host] = key;
+    config('keys', keys);
+  } else {
+    return keys[host];
+  }
+}
+
+function addRemote(host, name) {
+  if(!host) return cancel('host is required');
+  var remotes = config('remotes') || {};
+  remotes[host] = name || true;
+  config('remotes', remotes);
+}
+
+function uploadFile(file, dpd, fn) {
+  var url = file;
+  
+  if(url[0] === '.') url = url.slice(1);
+  dpd.use(url).post(fs.createReadStream(file), fn);
+}
+
+function uploadDir(dir, dpd, fn) {
+  var l = loader(fn);
+  
+  function upload() {
+    fs.readdirSync(dir).forEach(function (file) {
+      var filePath = dir + '/' + file;
+
+      if(fs.statSync(filePath).isFile() && file[0] != '.') {
+        l.add();
+        uploadFile(filePath, dpd, l.tic);
+      }
+    })
+    
+    if(!l.total) l.end();
+  }
+  
+  var urlPath = '/' + dir;
+  if(dir === '.') urlPath = '/';
+  
+  var resources = dpd.use('/resources');
+  
+  resources.get({path: urlPath}, function (err, res) {
+    if(err) return cancel(err);
+    
+    if(res) {
+      upload();
+    } else {
+      // create the resource
+      resources.post({path: urlPath, typeLabel: 'Files', type: 'Static'}, upload);
+    }
+  })
+}
+
+function downloadFile(host, path, output, fn) {
+  require('mdoq')
+    .require('mdoq-http')
+    .use(sanitizeHost(host))
+    .use(path)
+    .pipe(fs.createWriteStream(output), fn)
+  ;
+}
+
+function downloadFiles(host, resource, fn) {
+  var remaining = 0;
+  
+  var l = loader(fn);
+  
+  client.use(sanitizeHost(host)).use(resource.path).get(function (err, files) {
+    if(err || !files) return cancel(err);
+    if(resource.path === '/') resource.path = '';
+    else sh.mkdir('-p', '.' + resource.path);
+    
+    files.forEach(function (file) {
+      l.add();
+      downloadFile(host, resource.path + '/' + file, '.' + resource.path + '/' + file, function () {
+        l.tic();
+      });
+    })
+  })
 }
 
 /**
- * Generate a key
+ * Async Loader Utility
+ */
+
+var loaders = [];
+var lbl = '';
+function loader(fn) {
+  var l = {
+    completed: 0,
+    total: 0,
+    tic: function (force) {
+      l.completed++;
+      
+      if(force) l.completed = l.total;
+      
+      // render all loaders state...
+      var allTotal = 0, allCompleted = 0;
+      loaders.forEach(function (loader) {
+        allTotal += loader.total;
+        allCompleted += loader.completed;
+      });
+      
+      if(allCompleted === allTotal) loaders = [];
+      var p = allCompleted / allTotal;
+      var perc = Math.round(p * 100);
+      var bar = '';
+      
+      while(bar.length < 20) {
+        if(bar.length < p * 20) bar += '=';
+        else bar += ' ';
+      }
+      
+      if(allTotal > 0) {
+        process.stdout.write('\r\033[2K' + '[' + bar + '] ' + allCompleted + '/' + allTotal + ' ');
+      }
+      if(perc === 100) console.log('');
+
+      if(l.completed === l.total) fn();
+    },
+    add: function () {
+      l.total++;
+    },
+    end: function () {
+      l.tic(true);
+    }
+  }
+  
+  loaders.push(l);
+  return l;
+}
+
+/**
+ * CLI Options
  */
  
 program
-  .command('key')
-  .description(" - generate, add, and print a random admin key")
-  .action(function () {
-    
-    var port = program.port || 2403;
-    var key = {}, strength = Math.floor(Math.random() * 5) + 2;
-    
-    while(strength--) {
-      key[keygen()] = keygen() + keygen() + keygen();
-    }
-    
-    if(program.storage) {
-      dpd.storage(program.storage);
-    }
-    
-    dpd.use('http://localhost:' + port).use('/keys').post(key, function (err, newKey) {
-      if(err) {
-        json(err);
-        log('Could not add key', err);
-      } else {
-        json(newKey);
-        log('added key:\n\n' + JSON.stringify(newKey) + '\n');          
-      }
-      process.exit();
-    })
-  })
+  .version('0.4.3')
+  .option('-d, --dashboard', 'open the dashboard when starting the server')
+  .option('-s, --storage', 'override the default storage path')
+  .option('--debug', 'show debug information')
 ;
 
 /**
- * Remove an admin key by id.
+ * CLI Commands
  */
 
- program
-   .command('rm [query]')
-   .description(' - remove an admin key by query')
-   .action(function (query) {
-     if(!query) return console.log('you must provide the _id of they key you want to remove');
-     
-     // parse the query
-     query = JSON.parse(query);
-     
-     if(program.storage) {
-       dpd.storage(program.storage);
-     }
-     
-     if(Object.keys(query) < 1) throw 'use `dpd reset` to clear all keys';
-     
-     var port = program.port || 2403;
-     
-     dpd.use('http://localhost:' + port).use('/keys').del(query, function (err) {
-       if(err) {
-         json(err);
-         log(err);
-       } else {
-         json({removed: query});
-         log('removed all keys matching the given query');
-       }
-       process.exit();
-     })
-   });
-
-/**
-* Remove all admin keys.
-*/
+program
+  .command('listen [port]')
+  .description(' - start an instance of deployd at the specified port (2403)')
+  .action(listen)
+;
 
 program
-  .command('reset')
-  .description(" - remove all admin keys by query (cannot be undone)'")
-  .action(function () {
+  .command('remote [host] [name]')
+  .description(' - add a remote host for syncing files and configuration')
+  .action(addRemote)
+;
 
-    if(program.storage) {
-      dpd.storage(program.storage);
-    }
-    
-    var port = program.port || 2403;
-
-    dpd.use('http://localhost:' + port).use('/keys').del(function (err) {
-      if(err) {
-        json(err);
-        log(err);
-      } else {
-        json({removed: 'all'});
-        log('removed all keys');
-      }
+program
+  .command('clone [host]')
+  .description(' - add a remote host and pull down all its resources and files')
+  .action(function (host) {
+    // if(config('clone')) return cancel('cannot clone into an existing clone!');
+    addRemote(host);
+  
+    var l = loader(function () {
       process.exit();
+      config('clone', host);
     })
-  });
+    
+    startMongod(function (err, mongoPort) {
+      local
+        .use('http://localhost:2403')
+        .storage(getStorageUrl(mongoPort))
+        .listen(function () {
+          resources(client.use(sanitizeHost(host)), function (resource) {
+            if(resource.type === 'Static') {
+              l.add();
+              downloadFiles(host, resource, l.tic);
+            }
 
+            delete resource._id;
 
-/**
- * Start the http server and listen.
- */
+            l.add();
+            // clone resource
+            local.use('/resources').del({path: resource.path}, function (err, res) {
+              local.use('/resources').post(resource, function (err, res) {
+                l.tic();
+              });
+            });
+          });
+        })
+      ;
+    })
+
+  })
+;
 
 program
-  .command('listen')
-  .description(' - start listening over http at the provided port')
-  .action(function (cmd) {
-    // user .dpd config if it exists
-    try {
-      var config = JSON.parse(fs.readFileSync('./.dpd'));
-    } catch(e) { }
-    
-    var port = program.port || 2403
-      , storage = program.storage || (config && path.basename(path.resolve('.')))
-    ;
-    
-    if(storage) {
-      dpd.storage(storage);
+  .command('push [host]')
+  .description(' - push all local resources and files to a remote host')
+  .action(function (host) {
+    function use(host) {
+      if(!host) return cancel('no remote found! add one with `dpd remote` or specify one `dpd push myapp.com`');
+      pushTo(client.use(sanitizeHost(host)), function () {
+        console.log(host, 'is now up to date');
+      });
     }
     
-    dpd.use('http://localhost:' + port).listen(function () {
-      json({port: port, storage: dpd.storage()});
-      log('deployd is listening on port %s and storing resources at %s', port, dpd.storage());
-      if(program.open) {
-        dpd.use('/keys').get(function (err, keys) {
-          console.log(keys);
-          require('child_process').exec('open "http://localhost:' + port +'/__dashboard?key=' + encodeURI(JSON.stringify(keys[0])) + '"');
-        })
-      }
+    var remotes = config('remotes') || {};
+    if(host) {
+      use(host);
+    } else if(Object.keys(remotes).length > 1) {
+      console.log('more than one remote found... you must specify one of the following hosts');
+      program.choose(Object.keys(remotes), function (i) {
+        use(Object.keys(remotes)[i]);
+      });
+    } else {
+      use(Object.keys(remotes)[0]);
+    }
+  })
+;
+
+program
+  .command('dev [port]')
+  .description(' - boot a local development server')
+  .action(function (port) {
+    dropFiles(function () {
+      listen(port);
     });
   })
 ;
 
-  /**
-   * Clone one dpd configuration into another.
-   */
-
-  program
-    .command('clone')
-    .description(' - clone the configuration and files of one instance into another')
-    .action(function () {
-      var port = program.port || 2403;
-
-      if(!program.storage || !program.destination) throw 'a destination (--destination) and storage (--storage) are required';
-      
-      dpd.storage(program.storage);
-      dpd.use('/resources').get(function (err, resources) {
-        if(!resources) {
-          json({status: 'none found'});
-          log('none found');
-          process.kill(process.pid);
-          return;
-        };
-        if(err) throw err;
-        
-        var dest = dpd.use('/resources');
-        dest.storage(program.destination);
-        
-        dest.post(resources, function (err) {
-          if(err) throw err;
-          var remaining = 0;
-          
-          resources.forEach(function (resource) {
-            if(resource.type === 'Static') {
-              dpd.storage(program.storage);
-              // / is an alias for /index
-              var collection = resource.path;
-              if(collection === '/') collection = '/index';
-              
-              var srcFiles = require('mdoq').require('mdoq-mongodb').use(program.storage).use(collection);
-              var destFiles = require('mdoq').require('mdoq-mongodb').use(program.destination).use(collection);
-              
-              dpd.use(resource.path).get({}, function (err, files) {
-                files.forEach(function (file) {
-                  remaining++;
-                  
-                  var id = {_id: file};
-                  
-                  srcFiles.get(id, function (err, res) {
-                    if(err) log(err);
-                    if(!err && res) {
-                    
-                      var temp = require('fs').createWriteStream('/tmp/' + file);
-                    
-                      res.file.stream(true).pipe(temp).on('close', function () {
-                        destFiles.get({}).file(require('fs').createReadStream('/tmp/' + file)).post(function (err) {
-                          remaining--;
-
-                          if(!remaining) {
-                            json({status: 'done.'});
-                            log('done.');
-                            process.kill(process.pid);
-                          }
-                        })
-                      })
-                    }
-                  })
-                })
-              })
-            }
-          })
-        })
-      })
+program
+  .command('repl')
+  .description(' - connect to a running instance through a mongo repl')
+  .action(function (port) {
+    var mongo = require('child_process').spawn('mongo', ['localhost:' + config('mongod').port + '/' + getAppName()]);
+    
+    process.stdin.pipe(mongo.stdin);
+    process.stdin.resume();
+    
+    mongo.stdout.on('data', function (data) {
+      if(~data.toString().indexOf('/tweeter')) {
+        mongo.stdout.pipe(process.stdout);
+      }
     })
-  ;
+  })
+;
 
-  program
-    .command('init [remote] [key]')
-    .description(' - initialize a set of local files')
-    .action(function (remote, key) {      
-      if(!remote) {
-        log('A remote host is required');
-      }
-      if(!key) {
-        log('A valid JSON auth key is required');
-      }
-      
-      if(!key || !remote) {
-        log('example:');
-        log('\tdpd init http://localhost:2403 \'{"foo":"bar"}\'');
-        return;
-      }
-      
-      try {
-        JSON.parse(key);
-      } catch(e) {
-        log('invalid JSON for key, make sure it is a string: \'{"foo": "bar"}\'');
-        return;
-      }
-      
-      var config = {
-        key: key,
-        remote: remote
-      };
-      fs.writeFileSync('./.dpd', JSON.stringify(config));
-    })
-  ;
-
-  program
-    .command('pull')
-    .description(' - download a remote instance\'s files into the current directory')
-    .action(function () {
-      try {
-        var config = JSON.parse(fs.readFileSync('./.dpd'));
-      } catch(e) {
-        log('you must run dpd init before pull');
-      }
-      
-      var key = config.key
-        , remote = config.remote;
-      
-      var client = require('mdoq')
-        .use(function (req, res, next) {
-          req.headers['x-dssh-key'] = key;
-          next();
-        })
-        .require('mdoq-http')
-        .use(remote)
-      ;
-      
-      var remaining = 0;
-      
-      client
-        .use('/resources').get(function (err, resources) {
-          if(err || resources && resources.status) return log(err || resources);
-          if(!resources) {
-            log('done.');
-            process.kill(process.pid);
-            return;
-          }
-          resources.forEach(function (resource) {
-            if(resource.type === 'Static') {                
-              client.use(resource.path).get(function (err, files) {
-                if(resource.path === '/') resource.path = '';
-                
-                if(files) {
-                  try {
-                    fs.mkdirSync('.' + resource.path); 
-                  } catch(e) {}
-                  files.forEach(function (file) {
-                    remaining++;
-                    log('PULL', resource.path + '/' + file);
-                    client.use(resource.path + '/' + file)
-                    .get()
-                    .pipe(fs.createWriteStream('.' + resource.path + '/' + file))
-                    .get(function () {
-                      remaining--;
-                      if(!remaining) {
-                        log('done.');
-                        process.kill(process.pid);
-                      }
-                    })
-                  })
-                }
-              })
-            }
-          })
-        })
-    })
-  ;
-
-  program
-    .command('push')
-    .description(' - push the current directories first level of files to the remote instance')
-    .action(function () {
-      try {
-        var config = JSON.parse(fs.readFileSync('./.dpd'));
-      } catch(e) {
-        log('you must run dpd init before push');
-        return;
-      }
-      
-      if(program.local) {
-        config.remote = 'http://localhost:' + (program.port || 2403);
-      }
-      
-      var key = config.key
-        , remote = config.remote
-        , file = program.file
-      ;
-      
-      if(file) {
-        // transform path to relative dpd path
-        file = path.resolve(file).replace(path.resolve('.'), '');
-      }
-        
-      var client = require('mdoq')
-        .use(function (req, res, next) {
-          if(program.local) {
-            program.local = false;
-            dpd.storage(path.basename(path.resolve('.'))).use('/keys').get(function (err, keys) {              
-              key = req.headers['x-dssh-key'] = JSON.stringify(keys[0]);
-              next();
-            });
-          } else {
-            req.headers['x-dssh-key'] = key;
-            next();
-          }
-        })
-        .require('mdoq-http')
-        .use(remote)
-      ;
-
-      
-      client
-        .use('/resources').get(function (err, resources) {
-          if(err || resources && resources.status) return log(err || resources);
-      
-          var resourceMap = {};
-          
-          // create resource map
-          resources && resources.forEach(function (resource) {
-            if(resource.type === 'Static') {
-              resourceMap[resource.path] = true;
-            }
-          })
-          
-          function uploadDir(path) {
-            if(path === '/') path = '';
-            
-            fs.readdirSync('.' + path).forEach(function (file) {
-              if(fs.statSync('.' + path + '/' + file).isFile()) {
-                uploadFile(path + '/' + file);
-              }
-            })
-          }
-          
-          var remaining = 0;
-          function uploadFile(path) {
-            if(path[0] === '.') return; // skip hidden files
-            if(file && path !== file) return;
-            
-            remaining++;
-            console.log('PUSH', path);
-            client.use(path).post(fs.createReadStream('.' + path), function (err, res) {
-              remaining--;
-              if(err) {
-                log(err);
-                return process.kill(process.pid);
-              }
-
-              if(!remaining) {
-                log('done.');
-                process.kill(process.pid);
-              }
-            });
-          }
-          
-          var creatingIndex;
-          
-          fs.readdirSync('.').forEach(function (path) {
-            if(path[0] === '.') return; // skip hidden files
-            
-            path = '/' + path;
-            if(fs.statSync('.' + path).isFile() && !creatingIndex) {
-              if(resourceMap['/']) {
-                uploadFile(path);
-              } else {
-                console.log('CREATE /');
-                creatingIndex = true;
-                // create the resource
-                client.use('/resources').post({path: '/', typeLabel: 'Files', type: 'Static'}, function (err) {
-                  // then upload the directory
-                  uploadDir('/');
-                });
-              }
-            } else {
-              // folder
-              if(resourceMap[path]) {
-                // exists as a resource
-                uploadDir(path); 
-              } else {
-                // create the resource
-                console.log('CREATE', path);
-                remaining++;
-                client.use('/resources').post({path: path, typeLabel: 'Files', type: 'Static'}, function (err) {
-                  remaining--;
-                  // then upload the directory
-                  uploadDir(path);
-                });
-              }
-            }
-          })
-        })
-      ;
-    })
-  ;
-
-  program
-    .command('rclone')
-    .description(' - clone a remote instance into the current directory')
-    .action(function () {
-      try {
-        var config = JSON.parse(fs.readFileSync('./.dpd'));
-      } catch(e) {
-        log('you must run dpd init before pull');
-      }
-      
-      var key = config.key
-        , remote = config.remote;
-      
-      var client = require('mdoq')
-        .use(function (req, res, next) {
-          req.headers['x-dssh-key'] = key;
-          next();
-        })
-        .require('mdoq-http')
-        .use(remote)
-      ;
-      
-      var remaining = 0;
-      var name = path.basename(path.resolve('.'));
-      var local = dpd.storage(name);
-      
-      console.log('storing data locally at', name);
-      
-      // add a local key
-      require('child_process').exec('dpd key -s ' + name, function (err, data) {
-        console.log(data);
-      }); 
-      
-      client
-        .use('/resources').get(function (err, resources) {
-          if(err || resources && resources.status) return log(err || resources);
-          if(!resources) {
-            log('done.');
-            process.kill(process.pid);
-            return;
-          }
-          
-          // delete all ids
-          resources.forEach(function (resource) {
-            delete resource._id;
-          });
-          
-          
-          // clone resources
-          local.use('/resources').post(resources, function (err) {
-            if(err) {
-              console.error(err);
-              process.kill();
-            }
-            resources.forEach(function (resource) {
-              if(resource.type === 'Static') {                
-                client.use(resource.path).get(function (err, files) {
-                  if(resource.path === '/') resource.path = '';
-
-                  if(files) {
-                    try {
-                      fs.mkdirSync('.' + resource.path); 
-                    } catch(e) {}
-                    files.forEach(function (file) {
-                      remaining++;
-                      log('PULL', resource.path + '/' + file);
-                      client.use(resource.path + '/' + file)
-                      .get()
-                      .pipe(fs.createWriteStream('.' + resource.path + '/' + file))
-                      .get(function () {
-                        remaining--;
-                        if(!remaining) {
-                          local.listen(function () {
-                            console.log('syncing files...');
-                            exec('dpd push --local', function (err, data) {
-                              log('done.');
-                              process.kill(process.pid);
-                            })
-                          })
-                        }
-                      })
-                    })
-                  }
-                })
-              }
-            })
-          });
-        })
-      ;
-    })
-  ;
-
-  program
-    .command('watch')
-    .description(' - push local files when they change')
-    .action(function () {
-      var watching = {}
-        , started
-      ;
-      
-      function watchDir(dir) {
-        
-        fs.readdirSync(dir).forEach(function (path) {
-          // if(path[0] === '.') return; // skip hidden files
-
-          // transofrm path to be fully qualified
-          path = dir + '/' + path;
-          
-          if(fs.statSync(path).isFile()) {
-            if(watching[path]) return;
-            watching[path] = fs.watch(path, function (event, filename) {
-              console.log('pushing', path);
-              exec('dpd push -f ' + path + (program.local ? ' --local' : ''), function () {
-                console.log('done.');
-              });
-            });
-            
-            if(started) {
-              // new file... push it
-              console.log('pushing', path);
-              exec('dpd push -f ' + path + (program.local ? ' --local' : ''), function () {
-                console.log('done.');
-              });
-            }
-          } else {
-            watchDir(path);
-          }
-        })
-      }
-      
-      setInterval(function () {
-        watchDir('.');
-        started = true;
-      }, program.interval || 1000);
-    })
-  ;
-  
-  program
-    .command('dev')
-    .description(' - boot up a dev server from the local directory, watches files for changes')
-    .action(function () {
-      exec('dpd listen -o', function (err, data) {
-        console.log(err || data);
-      })
-      exec('dpd watch --local', function (err, data) {
-        console.log(err || data);
-      })
-    })
-  ;
-
-// Parse
+/**
+ * Parse arguments
+ */
 
 program.parse(process.argv);
+
+if(program.args.length === 0) {
+  listen();
+}
