@@ -1,4 +1,5 @@
 (function ($) {
+  if(!$) throw 'dpd.js depends on jQuery.ajax - you must include it before loading dpd.js';
   
   // global namespace
   window.dpd = {};
@@ -115,7 +116,7 @@
           }
         })(r);
       
-        resource.logout = (function () {
+        resource.logout = (function (r) {
           return function (fn) {
             return $.ajax({
               url: r.path + '/logout',
@@ -134,7 +135,7 @@
         resource.me = (function (r) {
           return function (fn) {
             return $.ajax({
-              url: r.path,
+              url: r.path + '/me',
               type: 'GET',
               contentType: contentType,
               success: function (res) {
@@ -149,6 +150,4 @@
       }
     }
   }
-  
-  
-})(jQuery);
+})(window.jQuery);

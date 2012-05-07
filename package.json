@@ -10,18 +10,18 @@
   },
   "main":"index",
   "dependencies": {
-    "mdoq": "0.8.8",
-    "mdoq-http": "0.4.x",
-    "mdoq-mongodb": "0.4.x",
+    "mdoq": "0.9.0",
+    "mdoq-http": "0.5.x",
+    "mdoq-mongodb": "0.5.x",
     "revalidator": "0.1.x",
     "commander": "0.5.x",
     "express": "2.5.x",
-    "formidable": "1.0.x"
+    "formidable": "1.0.x",
+    "shelljs": "0.0.4"
   },
   "devDependencies": {
     "mocha": "*",
-    "chai": "*",
-    "shelljs": "*"
+    "chai": "*"
   },
   "bin": {"dpd": "./bin/dpd"}
 }
