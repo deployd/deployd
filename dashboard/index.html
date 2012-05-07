@@ -11,50 +11,56 @@
  
     <div id="header" class="subnav clearfix"></div> 
  
-    <div id="body"></div> 
+    <div id="resources-container"> 
+    </div> 
+    <div id="body-container" class="container-fluid hide"> 
+      <div class="row-fluid"> 
+        <div class="span2"> 
+          <div class="well"> 
+            <!-- <h3 class="clearfix"> 
+              Resources  
+              <a class="pull-right header-link" href="#">Edit</a>  
+            </h3> -->             
+            <ul class="nav nav-pills nav-stacked type-icons" id="resource-sidebar"> 
+            </ul> 
+ 
+          </div> 
+        </div> 
+        <div class="span10" id="body"> 
+        </div> 
+      </div> 
+    </div> 
  
     <div class="modal" id="authModal" style="display: none"> 
-      <div class="modal-header"> 
-        <h3>Deployd Dashboard</h3> 
-      </div> 
-      <div class="modal-body"> 
-        <p>Authenticate with your deployd app:</p> 
-        <form> 
-            <label>Authentication key: <textarea name="key"></textarea></label> 
-        </form> 
-      </div> 
-      <div class="modal-footer"> 
-        <a href="#" class="btn btn-primary save">Authenticate</a> 
-      </div> 
     </div> 
  
     <script type="x-ejs-template" id="header-template" >
 <div class="full-width-container">
   <ul class="nav nav-pills pull-left" style="margin-left: 19px;">
-    <li <%= (typeof resourceName === 'undefined' || !resourceName) ? 'class="active"' : '' %>>
-      <a href="#">Resources</a>
-    </li>
     <li>
-    <a href="<%- appUrl %>" target="_blank"><%- appUrl %></a>
+      <a href="<%- appUrl %>" target="_blank"><%- appUrl %></a>
     </li>
-    <% if (typeof resourceName !== 'undefined' && resourceName) { %>
-      <li class="active">
-        <a href="#<%= resourceId %>" class="resourceName"><%= resourceName %></a>
-      </li>
-    <% } %>
-    <li><a href="<%= documentation %>" target="_blank">
-      <% if (resourceType) { %>
-        <%= resourceType %> Resource
-      <% } else { %>
-        Documentation
-      <% } %>
-      
-    </a></li>
   </ul>
   <div class="pull-right">
     <span id="save-status"></span>
     <button id="undo-btn" class="btn btn-warning"><i class="icon-exclamation-sign icon-white"></i> Undo <span class="action-label"></span></button>
   </div>
+</div>
+</script> 
+ 
+    <script type="x-ejs-template" id="auth-modal-template" >
+<div class="modal-header">
+  <h3>Deployd Dashboard</h3>
+</div>
+<div class="modal-body">
+  <div class="alert alert-error key-error hide">Your auth key is invalid. You can generate a new key with the <code>dpd key</code> command.</div>
+  <p>Authenticate with your deployd app:</p>
+  <form>
+      <label>Authentication key: <textarea class="full-width" rows="6" name="key"></textarea></label>
+  </form>
+</div>
+<div class="modal-footer">
+  <a href="#" class="btn btn-primary save">Authenticate</a>
 </div>
 </script> 
  
@@ -65,11 +71,9 @@
         <div class="clearfix">
           <h3 class="pull-left">Resources</h3>
           <div class="btn-group pull-right">
-            <a class="btn btn-success" data-toggle="dropdown" href="#">
-              <i class="icon-white icon-plus"></i> Add New Resource
-            </a>
             <a class="btn btn-success dropdown-toggle" data-toggle="dropdown" href="#">
-              <span class="caret"></span>
+              <i class="icon-white icon-plus"></i> Add New Resource
+              &nbsp;<span class="caret"></span>
             </a>
             <ul id="property-types" class="dropdown-menu">
             </ul>
@@ -82,7 +86,7 @@
             <div class="alert alert-info" style="text-align: center;"><strong>This app is empty.</strong> Add a resource to get started.</div>
             <div class="get-started">
               <p>
-                <strong><i class="icon-th-large icon-white"></i> Resources</strong> - Give your JavaScript direct access to a powerful database, user management and more by adding resources.
+                Give your JavaScript direct access to a powerful database, user management and more by adding resources.
               </p>
               <p>
                 <strong><i class="icon-folder-close icon-white"></i> Files</strong> - Add a <i>files resource</i> to upload and serve your html, css, JavaScript, and other assets.
@@ -106,59 +110,40 @@
 </script> 
     <script type="x-ejs-template" id="collection-template" >
 <div id="model-editor">
-  <div class="container-fluid">
-    <div class="row-fluid">
-      <div class="span2">&nbsp;</div>
-      <div class="fixed2">
-        <div class="well sidebar-nav">
-          <ul id="page-nav" class="nav nav-pills nav-stacked">
-            <li class="active"><a href="#properties" data-toggle="tab">Properties</a></li>
-            <li><a href="#data" data-toggle="tab">Data</a></li>
-            <li><a href="#api" data-toggle="tab">API</a></li>
-            <li><a href="#events" data-toggle="tab">Events</a></li>
-          </ul>
+  <div class="tab-content">
+    <div id="properties" class="container tab-pane active">
+      <div class="panel well stacked">
+        <h3>
+          Properties
+        </h3>
+        <div id="property-list">
         </div>
       </div>
-      
-      <div class="span10">
-        <div class="tab-content">
-          <div id="properties" class="tab-pane active">
-            <div class="panel well stacked">
-              <h3>
-                Properties
-              </h3>
-              <div id="property-list">
-              </div>
-            </div>
 
-            <div id="property-now-what" class="alert alert-info hide">
-              When you're done adding properties, you should <a href="#data" class="cta-link">add some data</a> to this collection.
-            </div>
-          </div>
-          <div id="data" class="tab-pane well stacked">
-            
-          </div>
-
-          <div id="api" class="tab-pane well stacked">
-                  
-          </div>    
-
-          <div id="events" class="tab-pane">
-            <div class="row-fluid">
-            <div class="span9">
-              <div id="events-panel" class="well stacked">
-              </div>
-                    
-            </div>
-            <div class="span3">
-              <div id="property-reference" class="well">
-
-              </div>
-          </div>          
-        </div>
-
+      <div id="property-now-what" class="alert alert-info hide">
+        When you're done adding properties, you should <a href="#data" class="cta-link">add some data</a> to this collection.
       </div>
     </div>
+    <div id="data" class="tab-pane well stacked">
+      
+    </div>
+
+    <div id="api" class="tab-pane well stacked">
+            
+    </div>    
+
+    <div id="events" class="tab-pane">
+      <div class="row-fluid">
+      <div class="span9">
+        <div id="events-panel" class="well stacked">
+        </div>
+              
+      </div>
+      <div class="span3">
+        <div id="property-reference" class="well">
+
+        </div>
+    </div>          
   </div>
 </div>
 
@@ -184,7 +169,7 @@
           <div class="alert alert-info"><strong>This folder is empty.</strong> Create or upload some files to get started.</div>
           <div class="get-started" style="margin-bottom: 0;">
              <p>
-               <strong><i class="icon-upload icon-white"></i> Uploading</strong> - There are a couple of ways to upload files. The easiest way is to use the "Quick Upload Files" button.
+               <strong><i class="icon-upload icon-white"></i> Uploading</strong> - The easiest way to get files in your app is to use the "Quick Upload Files" button.
              </p>
              <p>
                <strong><i class="icon-pencil icon-white"></i> Editing</strong> - Once you have uploaded files, you can click on a filename to edit with deployd's built in text editor.
@@ -252,7 +237,7 @@
 </tr>
 </script> 
     <script type="x-ejs-template" id="file-editor-template" >
-<div class="well" style="margin: 20px;">
+<div class="well">
   <div id="file-nav" class="clearfix">
     <button class="pull-left btn back"><i class="icon-folder-open"></i> Back</button>
     <div class="pull-left" id="file-status"></div>
@@ -273,6 +258,27 @@
       <%- type.label %>
     </a>
    </li>
+<% }); %>
+</script> 
+    <script type="x-ejs-template" id="resource-sidebar-template" >
+<li>
+  <a href="#">Resources</a>
+</li>
+<% collection.each(function(resourceModel) { var resource = resourceModel.toJSON(); %>
+  <li class="<%= resource._id === app.resourceId ? 'active' : '' %>" >
+    <a href="#<%= resource._id %>">
+      <i class="icon-hack <%- resource.type.toLowerCase() %>"></i>&nbsp;
+      <%- resource.path %>
+    </a>
+    <% if (resource._id === app.resourceId && (resource.type === 'Collection' || resource.type === 'UserCollection')) { %>
+      <ul class="nav nav-tabs nav-stacked nav-sublist">
+        <li class="active"><a href="#properties" data-toggle="tab">Properties</a></li>
+        <li><a href="#data" data-toggle="tab">Data</a></li>
+        <li><a href="#api" data-toggle="tab">API</a></li>
+        <li><a href="#events" data-toggle="tab">Events</a></li> 
+      </ul>
+    <% } %>
+  </li>
 <% }); %>
 </script> 
     <script type="x-ejs-template" id="resource-template" >
@@ -593,31 +599,31 @@
   <a class="pull-right header-link" target="_blank" href="http://deployd.github.com/deployd/#Collection-Event-Handlers">Documentation</a> 
 </h3>
   
-<ul class="nav nav-tabs">
-  <li><a href="#get-panel" data-toggle='tab'>On GET</a></li>
-  <li class="active"><a href="#post-panel" data-toggle='tab'>On POST</a></li>
-  <li><a href="#put-panel" data-toggle='tab'>On PUT</a></li>
-  <li><a href="#delete-panel" data-toggle='tab'>On DELETE</a></li>
+<ul class="nav nav-tabs" id="event-nav">
+  <li><a href="#get-panel" data-toggle='tab' data-editor="onGet">On GET</a></li>
+  <li class="active"><a href="#post-panel" data-toggle='tab' data-editor="onPost">On POST</a></li>
+  <li><a href="#put-panel" data-toggle='tab' data-editor="onPut">On PUT</a></li>
+  <li><a href="#delete-panel" data-toggle='tab' data-editor="onDelete">On DELETE</a></li>
 </ul>
 <div class="tab-content">
   <div class="tab-pane" id="get-panel">
     <div class="editor-container">
-      <div id="onGet"><%= onGet %></div>
+      <div id="onGet"></div>
     </div>
   </div>
   <div class="tab-pane active" id="post-panel">
     <div class="editor-container">
-      <div id="onPost"><%= onPost %></div>
+      <div id="onPost"></div>
     </div>
   </div>
   <div class="tab-pane" id="put-panel">
     <div class="editor-container">
-      <div id="onPut"><%= onPut %></div>
+      <div id="onPut"></div>
     </div>
   </div>
   <div class="tab-pane" id="delete-panel">
     <div class="editor-container">
-      <div id="onDelete"><%= onDelete %></div>
+      <div id="onDelete"></div>
     </div>
   </div>
 </div>
