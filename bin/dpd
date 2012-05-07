@@ -242,7 +242,6 @@ function login(host, next) {
         .get({host: host})
         .post({username: username, password: password}, function (err, app) {
           if(app && app.key) {
-            console.log(app.key);
             keys(host, app.key);
             addRemote(host);
             next();
@@ -262,7 +261,8 @@ function resources(dpd, fn) {
         console.log(err);
         cancel('an error occurred while fetching resources');
       } else if(!resources) {
-        console.log(host, 'does not have any resources');
+        console.log(dpd.url, 'does not have any resources');
+        process.exit();
       } else {
         resources.forEach(fn);
       }
@@ -434,9 +434,14 @@ program
 
 program
   .command('clone [host]')
-  .description(' - add a remote host and pull down all its resources and files')
+  .description(' - add a remote host and pull down all its resources and files into a new directory')
   .action(function (host) {
     // if(config('clone')) return cancel('cannot clone into an existing clone!');
+    var name = url.parse(sanitizeHost(host)).host.split('.')[0].split(':')[0];
+    console.log('cloning into', name + '...');
+    sh.mkdir('-p', name);
+    sh.cd(name);
+    
     addRemote(host);
   
     var l = loader(function () {
