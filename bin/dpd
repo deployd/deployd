@@ -155,7 +155,7 @@ function listen(port, fn) {
           config('key', key);
           console.log('dpd is listening @', 'http://localhost:' + port);
           if(program.dashboard) {
-            exec('open http://localhost:' + port + '/__dashboard?key=' + encodeURIComponent(JSON.stringify(key)))
+            exec('open http://localhost:' + port + '/__dashboard/?key=' + encodeURIComponent(JSON.stringify(key)))
           }
 
           if(typeof fn === 'function') fn();
@@ -290,6 +290,8 @@ function uploadFile(file, dpd, fn) {
   var url = file;
   
   if(url[0] === '.') url = url.slice(1);
+  if(url[0] !== '/') url = '/' + url;
+
   dpd.use(url).post(fs.createReadStream(file), fn);
 }
 
