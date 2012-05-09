@@ -23,5 +23,8 @@
     "mocha": "*",
     "chai": "*"
   },
-  "bin": {"dpd": "./bin/dpd"}
+  "bin": {
+    "dpd": "./bin/dpd",
+    "dpd-export": "./bin/dpd-export"
+  }
 }
