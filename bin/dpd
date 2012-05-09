@@ -11,7 +11,7 @@ var program = require('commander')
   , exec = require('child_process').exec
   , sh = require('shelljs')
   , url = require('url')
-  , keygen = require('../lib/key')
+  , keygen = require('../lib/key').keygen
 ;
 
 /**
@@ -128,13 +128,12 @@ function listen(port, fn) {
   
   port = port || 2403;
   startMongod(function (err, mongoPort) {
+    
+    
     local
       .storage(getStorageUrl(mongoPort))
       .use('http://localhost:' + port).listen(function () {
-        var key = config('key') || keygen();
-        local.use('/keys').post(key, function (err, newKey) {
-          key = newKey || key;
-          config('key', key);
+        function start(key) {
           console.log('dpd is listening @', 'http://localhost:' + port);
           if(program.dashboard) {
             exec('open http://localhost:' + port + '/__dashboard/?key=' + encodeURIComponent(JSON.stringify(key)))
@@ -145,6 +144,18 @@ function listen(port, fn) {
           pushTo(local, function () {
             
           });
+        }
+        
+        var keys = local.use('/keys');
+          
+        keys.get(function (err, k) {
+          if(k) {
+            start(k[0]);
+          } else {
+            keys.post(keygen(), function (err, key) {
+              start(key);
+            })
+          }
         })
       })
     ;

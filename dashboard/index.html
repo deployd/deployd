@@ -80,6 +80,15 @@
           </div>
         </div>
         <ul id="resource-list" class="component-list" style="display: none;">
+          <li class="component-item locked" id="files-resource">
+            <div class="component-item-header">
+              <i title="Files" class="icon-white static"></i>
+                <span class="path">Files</span>
+                <div class="pull-right">
+                  <i class="icon-white icon-lock"></i>
+                </div>
+            </div>
+          </li>
         </ul>
         <div id="resource-list-empty" class="component-list-empty" style="display: none;">
           <div>
@@ -156,37 +165,34 @@
           <h3 class="pull-left">Files</h3>
           <div id="file-upload" class="pull-right">
             
-            <a href="#sync-info-modal" data-toggle="modal" class="btn"><i class="icon-resize-vertical"></i> Setup Local Sync</a>
-            <a href="#" class="new-file-btn btn btn-success"><i class="icon-plus icon-white"></i> New File</a>
-            <span class="btn btn-success fileinput-button">
-                <i class="icon-upload icon-white"></i>
-                <span>Quick Upload Files</span>
-                <input type="file" multiple="multiple" />
-            </span>
+            <a href="#sync-info-modal" data-toggle="modal" class="btn btn-primary"><i class="icon-white icon-resize-vertical"></i> Setup Local Sync</a>
+            
           </div>
         </div>
-        <div id="files-empty" class="hide">
-          <div class="alert alert-info"><strong>This folder is empty.</strong> Create or upload some files to get started.</div>
+        <div id="files-empty" data-bind="visible: !(files().length || folders().length)">
+          <div class="alert alert-info"><strong>There are no files in your app.</strong> Create or upload some files to get started.</div>
           <div class="get-started" style="margin-bottom: 0;">
              <p>
-               <strong><i class="icon-upload icon-white"></i> Uploading</strong> - The easiest way to get files in your app is to use the "Quick Upload Files" button.
+               <strong><i class="icon-upload icon-white"></i> Uploading</strong> - If you've already built part of your app, you can quickly get your files online by uploading them.
              </p>
              <p>
-               <strong><i class="icon-pencil icon-white"></i> Editing</strong> - Once you have uploaded files, you can click on a filename to edit with deployd's built in text editor.
+               <strong><i class="icon-pencil icon-white"></i> Editing</strong> - You can create your entire app in the dashboard if you want. Create a file and use deployd's built-in text editor to write HTML, JavaScript, and CSS.
              </p>
              <p>
-                <strong><i class="icon-download-alt icon-white"></i> Working Locally</strong> - Setup the <a href="#sync-info-modal" data-toggle="modal">deployd command line tool</a> to easily sync your local files with deployd.
+                <strong><i class="icon-download-alt icon-white"></i> Working Locally</strong> - Setup the <a href="#sync-info-modal" data-toggle="modal">deployd command line tool</a> to easily sync files to deployd from your favorite text-editor.
               </p>
           </div>
         </div>
-        <table id="files" class="table table-bordered table-striped">
-          <thead>
-            <th>Filename</th>
-          </thead>
-          <tbody></tbody>
-        </table>
-        <div id="currentUploads">
+        <div id="files" data-bind="template: 'folder-template'" class="file-list-container">
         </div>
+        <a href="#" class="btn btn-success" data-bind="click: addFile"><i class="icon-plus icon-white"></i> File</a>
+        <a href="#" class="btn btn-success" data-bind="click: addFolder"><i class="icon-plus icon-white"></i> Folder</a>
+        <span class="fileinput-button btn btn-primary">
+          <i class="icon-upload icon-white" title="Upload"></i>
+          Upload
+          <input type="file" multiple="multiple" data-bind="event: {change: onChangeUpload}" />
+        </spab>
+        <span id="currentUploads" data-bind="text: uploadingText"></span>
       </div>
     </div>
   </div>
@@ -223,6 +229,44 @@
 
   </div>
 </div>
+
+<script type="text/html" id="folder-template">
+  <div class="add-buttons">
+    <a href="#" data-bind="click: addFile"><i class="icon-plus"></i> File</a>
+    &nbsp;
+    <a href="#" data-bind="click: addFolder"><i class="icon-plus"></i> Folder</a>
+    &nbsp;
+    <a class="fileinput-button">
+      <i class="icon-upload" title="Upload"></i>
+      Upload
+      <input type="file" multiple="multiple" data-bind="event: {change: onChangeUpload}" />
+    </a>
+    <span id="currentUploads" data-bind="text: uploadingText"></span>
+  </div>
+  <ul class="file-list">
+    <!-- ko foreach: folders -->
+      <li class="folder" data-bind="click: $parent.onClickFolder">
+        <i class="icon-folder-close" data-bind="css: {'icon-folder-close': !isOpen(), 'icon-folder-open': isOpen}"></i>
+        <span data-bind="text: name"></span>
+        <div class="buttons">
+          <a href="#" class="btn" data-bind="click: $parent.deleteFolder"><i class="icon-remove"></i> Delete</a>
+        </div>
+      </li>
+      <li class="file-list-container" data-bind="template: {name: 'folder-template', data: viewModel}, visible: isOpen">
+      </li>
+    <!-- /ko -->
+    <!-- ko foreach: files -->
+    <li class="file" data-bind="click: $parent.onClickFile">
+      <i class="icon-file"></i>
+      <span data-bind="text: $data"></span>
+      <div class="buttons">
+        <a href="#" target="_blank" class="btn" data-bind="attr: {href: '/' + $parent.getPath($data)}, clickBubble: false"><i class="icon-eye-open"></i> View</a>
+        <a href="#" class="btn" data-bind="click: $parent.deleteFile"><i class="icon-remove"></i> Delete</a>
+      </div>
+    </li>
+    <!-- /ko -->
+  </ul>
+</script>
 </script> 
     <script type="x-ejs-template" id="file-template" >
 <tr class="component-item">
@@ -264,10 +308,16 @@
 <li>
   <a href="#">Resources</a>
 </li>
+<li <%= app.files ? 'class="active"' : '' %>>
+  <a href="#files">
+    <i class="<%= app.files ? 'icon-white' : 'icon-hack' %> static"></i>&nbsp;
+    Files
+  </a>
+</li>
 <% collection.each(function(resourceModel) { var resource = resourceModel.toJSON(); %>
   <li class="<%= resource._id === app.resourceId ? 'active' : '' %>" >
     <a href="#<%= resource._id %>">
-      <i class="icon-hack <%- resource.type.toLowerCase() %>"></i>&nbsp;
+      <i class="<%= resource._id === app.resourceId ? 'icon-white' : 'icon-hack' %> <%- resource.type.toLowerCase() %>"></i>&nbsp;
       <%- resource.path %>
     </a>
     <% if (resource._id === app.resourceId && (resource.type === 'Collection' || resource.type === 'UserCollection')) { %>
@@ -283,7 +333,7 @@
 </script> 
     <script type="x-ejs-template" id="resource-template" >
 <div class="component-item-header">
-  <i title="<%= resource.typeLabel %>" class="icon-white <%= resource.typeLabel.toLowerCase().replace(' ', '-') %>"></i>
+  <i title="<%= resource.typeLabel %>" class="type-icon icon-white <%= resource.typeLabel.toLowerCase().replace(' ', '-') %>"></i>
   <% if (resource.c_active) { %>
     <input style="margin-left: 3px; width: 225px;" type="text" class="code" name="path" value="<%- resource.path %>" />
     <a style="margin-right: 3px;" href="#" class="btn btn-primary save-btn">save</a>
