@@ -21,7 +21,8 @@
   },
   "devDependencies": {
     "mocha": "*",
-    "chai": "*"
+    "chai": "*",
+    "node-markdown": "*"
   },
   "bin": {
     "dpd": "./bin/dpd",
