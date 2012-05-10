@@ -4,6 +4,7 @@ describe('Resource Events', function(){
       todos.post({title: 'post event handler test'}, function (err, todo) {
         expect(todo._id).to.exist;
         expect(todo.isPost).to.equal(true);
+        expect(todo.isValidate).to.equal(true);
         done(err);
       })
     });
@@ -18,7 +19,8 @@ describe('Resource Events', function(){
         });
       });
     });
-  })
+  });
+  
   describe('GET /todos', function(){
     it('should execute the todos GET event handler', function(done) {
       todos.post({title: 'feed the dog'}, function (err) {
@@ -32,18 +34,23 @@ describe('Resource Events', function(){
       })
     })
   });
+  
   describe('PUT /todos', function(){
     it('should execute the todos PUT event handler', function(done) {
       todos.post({title: 'foo'}, function (e, t) {        
         todos.get(function (e, all) {        
           todos.get({_id: all[0]._id}).put({title: 'post event handler test'}, function (err, todo) {
             expect(todo.isPut).to.equal(true);
+            expect(todo.isValidate).to.equal(true);
             done(err);
           })  
         })  
       })
     })
-  })
+  });
+  
+  
+  
   describe('DELETE /todos', function(){
     it('should execute the todos DELETE event handler', function(done) {
       todos.post({title: 'dont delete'}, function (e, r) {
