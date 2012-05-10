@@ -46,9 +46,10 @@ a {cursor: pointer;}
 
 /* Track */
 ::-webkit-scrollbar-track {
-    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.0); 
+    /*-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.0); 
     -webkit-border-radius: 10px;
-    border-radius: 10px;
+    border-radius: 10px;*/
+    background: #ffffff;
 }
  
 /* Handle */
