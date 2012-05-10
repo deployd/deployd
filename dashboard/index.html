@@ -72,14 +72,14 @@
           <h3 class="pull-left">Resources</h3>
           <div class="btn-group pull-right">
             <a class="btn btn-success dropdown-toggle" data-toggle="dropdown" href="#">
-              <i class="icon-white icon-plus"></i> Add New Resource
+              <i class="icon-white icon-plus"></i> Resource
               &nbsp;<span class="caret"></span>
             </a>
             <ul id="property-types" class="dropdown-menu">
             </ul>
           </div>
         </div>
-        <ul id="resource-list" class="component-list" style="display: none;">
+        <ul id="resource-list" class="component-list">
           <li class="component-item locked" id="files-resource">
             <div class="component-item-header">
               <i title="Files" class="icon-white static"></i>
@@ -91,26 +91,19 @@
           </li>
         </ul>
         <div id="resource-list-empty" class="component-list-empty" style="display: none;">
-          <div>
-            <div class="alert alert-info" style="text-align: center;"><strong>This app is empty.</strong> Add a resource to get started.</div>
-            <div class="get-started">
-              <p>
-                Give your JavaScript direct access to a powerful database, user management and more by adding resources.
-              </p>
-              <p>
-                <strong><i class="icon-folder-close icon-white"></i> Files</strong> - Add a <i>files resource</i> to upload and serve your html, css, JavaScript, and other assets.
-              </p>
-              <p>
-                <strong><i class="icon-th-list icon-white"></i> Collection</strong> - Add a <i>collection resource</i> to save and query data over a simple http api.
-              </p>
-              <p>
-                <strong><i class="icon-user icon-white"></i> Users Collection</strong> - Add a <i>users collection</i> resource to create and authenticate users over http.
-              </p>
-            </div>
-            <div class="tutorial-help">
-              <p>If you're new to Deployd, check out our tutorial to quickly build your first app.</p>
-              <a href="http://www.deployd.com/tutorial/step1" target="_blank" class="btn btn-primary"><i class="icon-question-sign icon-white"></i> Go to Tutorial</a>
-            </div>
+          <!-- <div class="alert alert-info"><strong>This app has no resources.</strong></div> -->
+          <div class="get-started-light">
+            <p>Your app can do more!</p>
+            <p>
+              <strong><i class="icon-th-list"></i> Store data</strong> - Add a <i>collection resource</i> to save and query data over a simple http api.
+            </p>
+            <p>
+              <strong><i class="icon-user"></i> Authenticate users</strong> - Add a <i>users collection</i> resource to create and authenticate users over http.
+            </p>
+          </div>
+          <div class="tutorial-help">
+            <p>If you're new to Deployd, check out our tutorial to quickly build your first app.</p>
+            <a href="http://www.deployd.com/tutorial/step1" target="_blank" class="btn btn-primary"><i class="icon-question-sign icon-white"></i> Go to Tutorial</a>
           </div>
         </div>
       </div>
@@ -651,7 +644,8 @@
   
 <ul class="nav nav-tabs" id="event-nav">
   <li><a href="#get-panel" data-toggle='tab' data-editor="onGet">On GET</a></li>
-  <li class="active"><a href="#post-panel" data-toggle='tab' data-editor="onPost">On POST</a></li>
+  <li class="active"><a href="#validate-panel" data-toggle='tab' data-editor="onValidate">On Validate</a></li>
+  <li><a href="#post-panel" data-toggle='tab' data-editor="onPost">On POST</a></li>
   <li><a href="#put-panel" data-toggle='tab' data-editor="onPut">On PUT</a></li>
   <li><a href="#delete-panel" data-toggle='tab' data-editor="onDelete">On DELETE</a></li>
 </ul>
@@ -661,7 +655,12 @@
       <div id="onGet"></div>
     </div>
   </div>
-  <div class="tab-pane active" id="post-panel">
+  <div class="tab-pane active" id="validate-panel">
+    <div class="editor-container">
+      <div id="onValidate"></div>
+    </div>
+  </div>
+  <div class="tab-pane" id="post-panel">
     <div class="editor-container">
       <div id="onPost"></div>
     </div>
