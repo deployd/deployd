@@ -28,4 +28,23 @@ describe('Router Middleware', function(){
     })
   })
   
+  
+  it('should find resources by id', function(done) {
+    // use a fake id, but it should validate as an id
+    var _id = '4faaed0cbc270e7992000043';
+    router.use('/todos/' + _id).get(function () {
+      expect(this.req._id).to.equal(_id);
+      expect(this.req.query._id).to.equal(_id);
+      expect(this.req.filename).to.not.exist;
+      done();
+    })
+  })
+  
+  it('should only find resources at their paths', function(done) {
+    router.use('/todos/foo').get(function () {
+      expect(this.req.resource).to.not.exist;
+      done();
+    })
+  })
+  
 })

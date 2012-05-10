@@ -1,15 +1,17 @@
 describe('Users', function(){
   describe('POST /users', function(){
     it('should register a new user', function(done) {
-      users.post(data.users[0], function (err, user) {
-        expect(user._id).to.exist;
-        expect(user.email).to.eql(data.users[0].email);
-        expect(user.password).to.not.exist;
-        
-        // for use in GET /users test
-        data.users[0]._id = user._id;
-        
-        done(err);
+      client.use('/users').del(function (err) {
+        users.post(data.users[0], function (err, user) {
+          expect(user._id).to.exist;
+          expect(user.email).to.eql(data.users[0].email);
+          expect(user.password).to.not.exist;
+
+          // for use in GET /users test
+          data.users[0]._id = user._id;
+
+          done(err);
+        })
       })
     })
     
@@ -20,6 +22,17 @@ describe('Users', function(){
         expect(err).to.exist;
         done();
       });
+    })
+    
+    it('should not register a user twice with the same email', function(done) {
+      var user = {email: 'a@b.com', password: 'foobar', age: 21, username: "Foo Bar"};
+      
+      users.post(user, function (err) {
+        users.post(user, function (err) {
+          expect(err).to.exist;
+          done();
+        })
+      })
     })
   })
   
