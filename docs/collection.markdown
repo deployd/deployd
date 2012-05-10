@@ -6,7 +6,7 @@ A Collection resource allows client apps to save and query data.
 
 After creating a Collection resource in the dashboard, you can set up the schema that will automatically validate data sent to the resource url over HTTP. You can configure this schema in the dashboard.
 
-The grid view below the property list allows you to edit the Collection manually.
+The Data view in the dashboard allows you to edit the Collection manually.
 
 ## Property types
 
@@ -84,14 +84,12 @@ A GET request at an object's URL will return the properties of that object:
 
 ## Updating an object
 
-A PUT (or POST) request at an object's URL will update the object. You must include all properties except for `_id`.
+A PUT (or POST) request at an object's URL will update the properties specified on the object.
 
     PUT /people/4f71fc7c2ba744786f000001
     Content-Type: application/json
     {
-      "age": 24,
-      "firstName": "Fred",
-      "lastName": "Smith"
+      "age": 24
     }
 
 The server will respond with the entire object:
@@ -145,10 +143,11 @@ The `q` parameter supports [MongoDB's query language](http://www.mongodb.org/dis
 
 You can attach micro-scripts to events to add logic and validation to your objects. Collections currently support the following events:
 
-  * **On Get** - called when data is read
-  * **On Post** - called when data is created
-  * **On Put** - called when data is updated
-  * **On Delete** - called when data is destroyed
+  * **On GET** - called when data is read
+  * **On Validate** - called before creating or updating an object.
+  * **On POST** - called when data is created
+  * **On PUT** - called when data is updated
+  * **On DELETE** - called when data is destroyed
 
 ## Reading and setting properties
 
@@ -156,17 +155,19 @@ In an event micro-script, the `this` object refers to the current object, and ha
 
 You can set values on the `this` object during an On Post or On Put event. These changes will be saved to the database.
 
-    // On Post:
+    // On POST:
     this.dateCreated = new Date();
 
-    // On Put:
+    // On Validate:
     this.totalScore = this.level1Points + this.level2Points;
+
+**Note**: If you intend for a property to be "automatic" (calculated by the server, and never provided by the client), you will need to mark it as **Optional** in the dashboard.
 
 ## Accessing the current user
 
 If the request is coming from a logged in User, you can use the "me" object to access their properties.
 
-    // On Post:
+    // On POST:
     this.creator = me._id;
 
 
@@ -174,7 +175,7 @@ If the request is coming from a logged in User, you can use the "me" object to a
 
 You can stop any event by calling the `cancel(message, [code])` method.
 
-    //On Delete:
+    //On DELETE:
     if (this.protected) {
       cancel('This post is protected and cannot be deleted');
     }
@@ -188,9 +189,9 @@ You can stop any event by calling the `cancel(message, [code])` method.
 
 You can pass an integer to the `cancel()` method as the second parameter to set the HTTP status code. For example, 401 means "Unauthorized".
 
-    //On Put
+    //On PUT
     if (this.creator !== me._id) {
-      cancel("You cannot view this post because it is not yours!", 401);
+      cancel("You cannot edit this post because it is not yours!", 401);
     }
 
     PUT /posts/13456
@@ -199,7 +200,7 @@ You can pass an integer to the `cancel()` method as the second parameter to set 
 
     401 Unauthorized
     {
-      "message": "You cannot view this post because it is not yours!"
+      "message": "You cannot edit this post because it is not yours!"
     }
 
 
@@ -207,7 +208,7 @@ You can pass an integer to the `cancel()` method as the second parameter to set 
 
 Use the `error(name, message)` function to add a validation error.
 
-    //On Post
+    //On Validate
     if (this.age < 18) {
       error('age', 'must be older than 18')
     }
@@ -238,7 +239,7 @@ If you wish to hide certain properties from a user, use the `hide(propertyName)`
 
 ## Protecting properties from modification
 
-Use the `protect(propertyName)` function to protect specified properties during a POST or PUT.
+Use the `protect(propertyName)` function to protect specified properties during a PUT.
   
     //On Put
     protect('createdDate');

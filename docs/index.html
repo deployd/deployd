@@ -85,8 +85,7 @@
 
 <p>Deployd is configured so that you can easily develop a web app locally on your computer. It will send Access-Control-Allow-Origin HTTP headers if a request is coming from localhost or your filesystem, which will allow modern web browsers to use AJAX normally. It will not send these headers for any other domain.</p>
 
-<hr />
-<h1>Collection Resource</h1>
+<hr /><h1>Collection Resource</h1>
 
 <p>A Collection resource allows client apps to save and query data.</p>
 
@@ -94,7 +93,7 @@
 
 <p>After creating a Collection resource in the dashboard, you can set up the schema that will automatically validate data sent to the resource url over HTTP. You can configure this schema in the dashboard.</p>
 
-<p>The grid view below the property list allows you to edit the Collection manually.</p>
+<p>The Data view in the dashboard allows you to edit the Collection manually.</p>
 
 <h2>Property types</h2>
 
@@ -177,14 +176,12 @@ Content-Type: application/json
 
 <h2>Updating an object</h2>
 
-<p>A PUT (or POST) request at an object's URL will update the object. You must include all properties except for <code>_id</code>.</p>
+<p>A PUT (or POST) request at an object's URL will update the properties specified on the object.</p>
 
 <pre><code>PUT /people/4f71fc7c2ba744786f000001
 Content-Type: application/json
 {
-  "age": 24,
-  "firstName": "Fred",
-  "lastName": "Smith"
+  "age": 24
 }
 </code></pre>
 
@@ -242,10 +239,11 @@ Content-Type: application/json
 <p>You can attach micro-scripts to events to add logic and validation to your objects. Collections currently support the following events:</p>
 
 <ul>
-<li><strong>On Get</strong> - called when data is read</li>
-<li><strong>On Post</strong> - called when data is created</li>
-<li><strong>On Put</strong> - called when data is updated</li>
-<li><strong>On Delete</strong> - called when data is destroyed</li>
+<li><strong>On GET</strong> - called when data is read</li>
+<li><strong>On Validate</strong> - called before creating or updating an object.</li>
+<li><strong>On POST</strong> - called when data is created</li>
+<li><strong>On PUT</strong> - called when data is updated</li>
+<li><strong>On DELETE</strong> - called when data is destroyed</li>
 </ul>
 
 <h2>Reading and setting properties</h2>
@@ -254,18 +252,20 @@ Content-Type: application/json
 
 <p>You can set values on the <code>this</code> object during an On Post or On Put event. These changes will be saved to the database.</p>
 
-<pre><code>// On Post:
+<pre><code>// On POST:
 this.dateCreated = new Date();
 
-// On Put:
+// On Validate:
 this.totalScore = this.level1Points + this.level2Points;
 </code></pre>
+
+<p><strong>Note</strong>: If you intend for a property to be "automatic" (calculated by the server, and never provided by the client), you will need to mark it as <strong>Optional</strong> in the dashboard.</p>
 
 <h2>Accessing the current user</h2>
 
 <p>If the request is coming from a logged in User, you can use the "me" object to access their properties.</p>
 
-<pre><code>// On Post:
+<pre><code>// On POST:
 this.creator = me._id;
 </code></pre>
 
@@ -273,7 +273,7 @@ this.creator = me._id;
 
 <p>You can stop any event by calling the <code>cancel(message, [code])</code> method.</p>
 
-<pre><code>//On Delete:
+<pre><code>//On DELETE:
 if (this.protected) {
   cancel('This post is protected and cannot be deleted');
 }
@@ -288,9 +288,9 @@ DELETE /posts/123456
 
 <p>You can pass an integer to the <code>cancel()</code> method as the second parameter to set the HTTP status code. For example, 401 means "Unauthorized".</p>
 
-<pre><code>//On Put
+<pre><code>//On PUT
 if (this.creator !== me._id) {
-  cancel("You cannot view this post because it is not yours!", 401);
+  cancel("You cannot edit this post because it is not yours!", 401);
 }
 
 PUT /posts/13456
@@ -299,7 +299,7 @@ Content-Type: application/json
 
 401 Unauthorized
 {
-  "message": "You cannot view this post because it is not yours!"
+  "message": "You cannot edit this post because it is not yours!"
 }
 </code></pre>
 
@@ -307,7 +307,7 @@ Content-Type: application/json
 
 <p>Use the <code>error(name, message)</code> function to add a validation error.</p>
 
-<pre><code>//On Post
+<pre><code>//On Validate
 if (this.age &lt; 18) {
   error('age', 'must be older than 18')
 }
@@ -340,32 +340,28 @@ if (this.creator !== me._id) {
 
 <h2>Protecting properties from modification</h2>
 
-<p>Use the <code>protect(propertyName)</code> function to protect specified properties during a POST or PUT.</p>
+<p>Use the <code>protect(propertyName)</code> function to protect specified properties during a PUT.</p>
 
 <pre><code>//On Put
 protect('createdDate');
-</code></pre>
-<hr /><h1>Files Resource</h1>
+</code></pre><hr /><h1>Files Resource</h1>
 
-<p>The Files Resource allows you host static files from your app, such as HTML, browser JavaScript, CSS, images, and videos. </p>
+<p>The Files Resource allows you host static files from your app, such as HTML, browser JavaScript, CSS, images, and videos.</p>
+
+<p>The Files Resource is always included in your app.</p>
 
 <h2>Accessing files</h2>
 
 <p>Send a GET request with the filename to load the raw file. This is how browsers request pages and files by default.</p>
 
-<pre><code>GET /files/bg.jpg
+<pre><code>GET /register.html
+
+GET /images/bg.jpg
 </code></pre>
-
-<h2>Folders</h2>
-
-<p>If you prefer to have separate folders for Javascript, CSS, and images, create multiple Static Resources at the paths you want to store the files.</p>
-
-<p>You can also give a Static Resource an empty path <code>/</code>. This will assign it to the root of your app.</p>
 
 <h2>Home page</h2>
 
-<p>If a Static Resource receives a request without a filename, it will automatically redirect to "index.html" if available.</p>
-<hr /><h1>User Collection Resource</h1>
+<p>If the Files Resource receives a request without a filename, it will automatically redirect to "index.html" if available.</p><hr /><h1>User Collection Resource</h1>
 
 <p>A User Collection resource behaves much like the standard Collection resource, but adds the ability to authenticate with a username and password.</p>
 
@@ -428,8 +424,7 @@ Content-Type: application/json
 <p>To logout a user send a POST request to <code>/&lt;collection name&gt;/logout</code>:</p>
 
 <pre><code>204 No Content
-</code></pre>
-        </div> <!-- /span9 -->
+</code></pre>        </div> <!-- /span9 -->
       </div> <!-- /row -->
     </div> <!-- /container -->
   </body>
