@@ -1,19 +1,17 @@
 # Files Resource
 
-The Files Resource allows you host static files from your app, such as HTML, browser JavaScript, CSS, images, and videos. 
+The Files Resource allows you host static files from your app, such as HTML, browser JavaScript, CSS, images, and videos.
+
+The Files Resource is always included in your app.
 
 ## Accessing files
 
 Send a GET request with the filename to load the raw file. This is how browsers request pages and files by default.
 
-    GET /files/bg.jpg
+    GET /register.html
 
-## Folders
-
-If you prefer to have separate folders for Javascript, CSS, and images, create multiple Static Resources at the paths you want to store the files.
-
-You can also give a Static Resource an empty path `/`. This will assign it to the root of your app.
+    GET /images/bg.jpg
 
 ## Home page
 
-If a Static Resource receives a request without a filename, it will automatically redirect to "index.html" if available.
+If the Files Resource receives a request without a filename, it will automatically redirect to "index.html" if available.
