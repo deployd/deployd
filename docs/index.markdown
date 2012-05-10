@@ -4,21 +4,31 @@
 
 Instead of reinventing a protocol, deployd embraces HTTP. This means that any HTTP client, such as a JavaScript app, a mobile app, or even another server, can securely interact with your data without having to setup a web server and write a custom backend.
 
+## Dependencies
+
+Currently deployd requires mongodb to be installed. You can download it [here](http://www.mongodb.org/downloads).
+
+Deployd also requires `node.js` >= v0.6.0. You can download it [here](http://nodejs.org/#download).
+
 ## Quick start
 
-To install deployd locally you must have `npm` and a running instance of mongodb.
+Install deployd from npm (requires [nodejs(http://www.mongodb.org/downloads), [mongodb](http://nodejs.org/#download)).
 
-    [sudo] npm install deployd -g
+    $ [sudo] npm install deployd -g
     
-First you'll want to generate an authentication key.
+Create an `index.html` file in a new directory.
 
-    dpd key
+    $ cat >> index.html
+    hello world!
+    ^C
+
+Run deployd from the directory where you want to server your files.
+
+    $ dpd -d
     
-Copy the key for use in the dashboard. Then start the server.
+This will open up the dashboard where you can manage your deployd server.
 
-    dpd listen
-
-You can view the dashboard at `http://localhost:2403/__dashboard/`. It will prompt you for your auth key.
+See `dpd -h` for more info on how to use the command line interface.
 
 ## How does it work?
 
