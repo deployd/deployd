@@ -203,20 +203,19 @@
 
 		<pre><code>npm install deployd -g</code></pre>
 
-		<p>In the directory where you want to keep your app files, run the following command.
-		It will grant local access to your app and tell <code>dpd</code> to store the files in that directory.</p>
+		<p>To copy down all your apps resources and files run the following command. It will create a folder for you.</p>
 
-		<pre><code>dpd init http://<%= window.location.host %> '<%= $.cookie('DPDAuthKey') %>'</code></pre>
+		<pre><code>dpd clone <%= window.location.host %></code></pre>
 
 		<p id="scroll_to_here" >Now you can push and pull the entire contents of the directory with the following commands.</p>
 
 		<pre><code>dpd push</code></pre>
 
-		<p>Running <code>dpd push</code> will upload the contents of your current directory to your app.</p>
+		<p>Running <code>dpd push</code> will upload all resources and the contents of your current directory to your app.</p>
 
 		<pre><code>dpd pull</code></pre>
 
-		<p>Running <code>dpd pull</code> will download all of your app's files into the current directory.</p>
+		<p>Running <code>dpd pull</code> will download all of your app's files into the current directory as well as download all the resources from the remote server.</p>
   </div>
   <div class="modal-footer">
 
