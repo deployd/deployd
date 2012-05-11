@@ -12,7 +12,7 @@ Deployd also requires `node.js` >= v0.6.0. You can download it [here](http://nod
 
 ## Quick start
 
-Install deployd from npm (requires [nodejs(http://www.mongodb.org/downloads), [mongodb](http://nodejs.org/#download)).
+Install **deployd** from npm.
 
     $ [sudo] npm install deployd -g
     
