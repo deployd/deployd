@@ -6,6 +6,9 @@
     <link href="css/style.css" rel="stylesheet" type="text/css" />
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
     <link href='http://fonts.googleapis.com/css?family=Bitter:400,700,400italic' rel='stylesheet' type='text/css'>
+    <style>
+      h3.code {text-transform: lowercase; font-family: Monaco, Bitter, san-serif;}
+    </style>
   </head>
   <body>
     <div class="container-fluid">
@@ -26,50 +29,61 @@
 
 <p>Instead of reinventing a protocol, deployd embraces HTTP. This means that any HTTP client, such as a JavaScript app, a mobile app, or even another server, can securely interact with your data without having to setup a web server and write a custom backend.</p>
 
-<h2>Dependencies</h2>
-
-<p>Currently deployd requires mongodb to be installed. You can download it <a href="http://www.mongodb.org/downloads">here</a>.</p>
-
-<p>Deployd also requires <code>node.js</code> >= v0.6.0. You can download it <a href="http://nodejs.org/#download">here</a>.</p>
-
 <h2>Quick start</h2>
 
-<p>Install <strong>deployd</strong> from npm.</p>
+<p>Currently deployd requires mongodb to be installed. You can download mongodb <a href="http://www.mongodb.org/downloads">here</a>. It also requires <code>node.js</code> >= v0.6.0. You can download node <a href="http://nodejs.org/#download">here</a>.</p>
+
+<p>Install <strong>deployd</strong> from npm. <code>sudo</code> may be required depending on your setup.</p>
 
 <pre><code>$ [sudo] npm install deployd -g
 </code></pre>
 
 <p>Create an <code>index.html</code> file in a new directory.</p>
 
-<pre><code>$ cat &gt;&gt; index.html
-hello world!
-^C
+<pre><code>&lt;!doctype html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;script src="http://code.jquery.com/jquery-1.7.2.min.js"&gt;&lt;/script&gt;
+    &lt;script src="/dpd.js"&gt;&lt;/script&gt;
+    &lt;script&gt; console.log(dpd); &lt;/script&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
 </code></pre>
 
-<p>Run deployd from the directory where you want to server your files.</p>
+<p>Run the following command from the same directory where you created index.html. <em>See <code>dpd -h</code> for more info on how to use the command line interface.</em></p>
 
 <pre><code>$ dpd -d
 </code></pre>
 
-<p>This will open up the dashboard where you can manage your deployd server.</p>
+<p>This will open up the dashboard where you can manage your deployd server. You can create resources and manage their data.</p>
 
-<p>See <code>dpd -h</code> for more info on how to use the command line interface.</p>
+<p>Create some resources in the dashboard. If you open up <code>http://localhost:2403</code> in a browser with a console (Chrome, Firefox) you should see the <code>dpd</code> object logged out. This is an api to all of your collections.</p>
+
+<p>If you created a <code>/todos</code> collection you could add a new todo with:</p>
+
+<pre><code>dpd.todos.save({title: 'Foo the bar', completed: true}, function(todo) {
+  console.log(todo);
+});
+</code></pre>
+
+<p>If you created a <code>/users</code> user collection you could log in a user with:</p>
+
+<pre><code>dpd.users.login({email: 'foo@bar.com', password: 'mypassword'}, function(user) {
+  console.log(user);
+});
+</code></pre>
 
 <h2>How does it work?</h2>
 
-<h3>Resources</h3>
+<h3>Storage</h3>
 
-<p>When deployd receives an HTTP request, it checks the first part of the URL to see which resource should handle the request:</p>
+<p>Deployd securely proxies requests into the database. It does this by running an http server that understands how to turn http requests into database commands. Deployd also provides a layer of security around the database by validating requests. You can completely customize this validation in the dashboard ui or by writing simple and familiar JavaScript.</p>
 
-<ul>
-<li><strong>/todos</strong>/12345 - handled by the <strong>/todos</strong> resource</li>
-<li><strong>/img</strong>/bg.jpg - handled by the <strong>/img</strong> resource</li>
-<li><strong>/</strong>index.html - handled by the <strong>/</strong> resource</li>
-</ul>
+<h3>REST</h3>
 
-<p>Once deployd knows what resource is being requested, it will validate the input, execute any event handlers you have defined and either return or store the result. You can create and configure resources and event handlers in the dashboard.</p>
-
-<h2>REST API</h2>
+<p>Deployd uses REST to expose database commands to clients.</p>
 
 <p>REST is a web service design pattern that conforms closely to HTTP itself. In Deployd, HTTP methods or verbs have meaning:</p>
 
@@ -91,11 +105,118 @@ hello world!
 <li><strong>500</strong> Internal Server Error - Deployd has failed to process the request due to an unexpected error.</li>
 </ul>
 
-<h2>Cross-Origin AJAX</h2>
+<p>Deployd exposes everything, even low level functionality, securely over http (with the appropriate auth keys). This lets you use deployd however you want as long as your client can speak http.</p>
 
-<p>Deployd is configured so that you can easily develop a web app locally on your computer. It will send Access-Control-Allow-Origin HTTP headers if a request is coming from localhost or your filesystem, which will allow modern web browsers to use AJAX normally. It will not send these headers for any other domain.</p>
+<h3>Resources</h3>
 
-<hr /><h1>Collection Resource</h1>
+<p>Resources allow you to control what is allowed in and out of your database. To allow clients to store data or users you create collections. By default these collections have basic validation to prevent malicious data from leaking into the database. This validation can be completely customized to restrict or allow any sort of input your app requires. It can also be customized to reject requests based on the current user, or ignore requests by anonymous users.</p>
+
+<hr />
+
+<h1>JavaScript Client API</h1>
+
+<p>Its very easy to access the deployd api from browser JavaScript. Just include <code>&lt;script src="/dpd.js"&gt;&lt;/script&gt;</code>. Deployd automatically builds and generates your data api for you dynamically.</p>
+
+<h2>Collections</h2>
+
+<p>Each collection gets several methods to create/update, read/query, and delete data. The following examples assume you have created a <code>/todos</code> collection.</p>
+
+<h3 class="code">save(data, callback) </h3>
+
+<p>Save the provided data object to the collection.</p>
+
+<pre><code>dpd.todos.save({creator: 'ritch', title: 'foo the bar', order: 7, done: false}, function(todo, err) {
+  if(err) return console.log(err);
+  console.log(todo); // {title: 'foo the bar', order: 7, done: false, _id: "4b5783300334000000000aa9"}
+});
+</code></pre>
+
+<p>If the object already has an <code>_id</code> the existing object in the collection with the matching id will be updated.</p>
+
+<pre><code>dpd.todos.save({_id: "4b5783300334000000000aa9", done: true}, function(todo, err) {
+  if(err) return console.log(err);
+  console.log(todo); // {title: 'foo the bar', order: 7, done: true, _id: "4b5783300334000000000aa9"}
+});
+</code></pre>
+
+<h3 class="code">get([query], callback)</h3>
+
+<p>Query the collection using the optional <a href="http://www.mongodb.org/display/DOCS/Advanced+Queries">mongo query object</a>.</p>
+
+<p>Get all the todos with a creator <code>'ritch'</code>.</p>
+
+<pre><code>dpd.todos.get({creator: 'ritch'}, function(todos, err) {
+  if(err) return console.log(err);
+  console.log(todos); // [{title: 'foo the bar', order: 7, done: true}, ...]
+});
+</code></pre>
+
+<h3 class="code">first([query], callback)</h3>
+
+<p>Get the first object from the collection using the optional <a href="http://www.mongodb.org/display/DOCS/Advanced+Queries">mongo query object</a>.</p>
+
+<p>Get a todo by id.</p>
+
+<pre><code>dpd.todos.first({_id: "4b5783300334000000000aa9"}, function(todo, err) {
+  if(err) return console.log(err);
+  console.log(todo); // {title: 'foo the bar', order: 7, done: true, _id: "4b5783300334000000000aa9"}
+});
+</code></pre>
+
+<h3 class="code">del(query, callback)</h3>
+
+<p>Delete the object from the collection using the required <a href="http://www.mongodb.org/display/DOCS/Advanced+Queries">mongo query object</a>. The query must include an <code>_id</code>.</p>
+
+<p>Delete a todo by id.</p>
+
+<pre><code>dpd.todos.del({_id: "4b5783300334000000000aa9"}, function(err) {
+  console.log(err);
+});
+</code></pre>
+
+<h2>Users Collection</h2>
+
+<p>Users collections include methods to login and logout users as well as return the current user. Each users collection gets the same methods to create/update, read/query, and delete data as a regular collection. The following examples assume you have created a <code>/users</code> collection.</p>
+
+<h3 class="code">users.save(user, callback)</h3>
+
+<p>Register a new user. Passwords will automatically be removed from responses.</p>
+
+<pre><code>dpd.users.save({email: 'foo@bar.com', password: 'mypassword'}, function(user, err) {
+  if(err) return console.log(err);
+  console.log(user); // {email: 'foo@bar.com', _id: "4b5783300334000000000aa9"}
+});
+</code></pre>
+
+<h3 class="code">users.login(credentials, callback)</h3>
+
+<p>Login a user with the given credentials.</p>
+
+<pre><code>dpd.users.first({email: 'foo@bar.com', password: 'mypassword'}, function(user, err) {
+  if(err) return console.log(err);
+  console.log(user); // {email: 'foo@bar.com', _id: "4b5783300334000000000aa9"}
+});
+</code></pre>
+
+<h3 class="code">users.me(callback)</h3>
+
+<p>Get the currently logged in user.</p>
+
+<pre><code>dpd.users.me(function(user, err) {
+  if(err) return console.log(err);
+  console.log(user); // {email: 'foo@bar.com', _id: "4b5783300334000000000aa9"}
+});
+</code></pre>
+
+<h3 class="code">users.logout(callback)</h3>
+
+<p>Logout the current user.</p>
+
+<pre><code>dpd.users.logout(function(err) {
+  if(err) return console.log(err);
+  console.log(user); // {email: 'foo@bar.com', _id: "4b5783300334000000000aa9"}
+});
+</code></pre><h1>Collection Resource</h1>
 
 <p>A Collection resource allows client apps to save and query data.</p>
 
@@ -354,24 +475,7 @@ if (this.creator !== me._id) {
 
 <pre><code>//On Put
 protect('createdDate');
-</code></pre><hr /><h1>Files Resource</h1>
-
-<p>The Files Resource allows you host static files from your app, such as HTML, browser JavaScript, CSS, images, and videos.</p>
-
-<p>The Files Resource is always included in your app.</p>
-
-<h2>Accessing files</h2>
-
-<p>Send a GET request with the filename to load the raw file. This is how browsers request pages and files by default.</p>
-
-<pre><code>GET /register.html
-
-GET /images/bg.jpg
-</code></pre>
-
-<h2>Home page</h2>
-
-<p>If the Files Resource receives a request without a filename, it will automatically redirect to "index.html" if available.</p><hr /><h1>User Collection Resource</h1>
+</code></pre><hr /><h1>User Collection Resource</h1>
 
 <p>A User Collection resource behaves much like the standard Collection resource, but adds the ability to authenticate with a username and password.</p>
 

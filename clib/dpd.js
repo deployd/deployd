@@ -86,11 +86,11 @@
               url: r.path + q,
               type: 'DELETE',
               contentType: contentType,
-              success: function (res) {
-                fn && fn(res);
+              success: function () {
+                fn && fn();
               },
               error: function (err) {
-                fn && fn(null, err);
+                fn && fn(err);
               }
             });
           }
@@ -122,11 +122,11 @@
               url: r.path + '/logout',
               type: 'POST',
               contentType: contentType,
-              success: function (res) {
-                fn && fn(res);
+              success: function () {
+                fn && fn();
               },
               error: function (err) {
-                fn && fn(null, err);
+                fn && fn(err);
               }
             });
           }
@@ -142,7 +142,7 @@
                 fn && fn(res);
               },
               error: function (err) {
-                fn && fn(null, err);
+                fn && fn(err);
               }
             });
           }
