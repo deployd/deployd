@@ -139,6 +139,9 @@
           }
         })(r)
       };
+
+      //Aliases
+      resource.first = resource.getOne;
     
     
       if(r.type === 'UserCollection') {

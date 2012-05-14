@@ -89,7 +89,7 @@ Each collection gets several methods to create/update, read/query, and delete da
 
 <h3 class="code">save(data, callback) </h3>
 
-Save the provided data object to the collection.
+Save the provided data object to the collection:
 
     dpd.todos.save({creator: 'ritch', title: 'foo the bar', order: 7, done: false}, function(todo, err) {
       if(err) return console.log(err);
@@ -103,47 +103,75 @@ If the object already has an `_id` the existing object in the collection with th
       console.log(todo); // {title: 'foo the bar', order: 7, done: true, _id: "4b5783300334000000000aa9"}
     });
 
+<h3 class="code">post(data, callback) </h3>
+
+Creates the provided object in the collection:
+
+  dpd.todos.post({creator: 'ritch', title: 'foo the bar', order: 7, done: false}, function(todo, err) {
+    if(err) return console.log(err);
+    console.log(todo); // {title: 'foo the bar', order: 7, done: false, _id: "4b5783300334000000000aa9"}
+  });
+
 <h3 class="code">get([query], callback)</h3>
 
 Query the collection using the optional [mongo query object](http://www.mongodb.org/display/DOCS/Advanced+Queries).
 
-Get all the todos with a creator `'ritch'`.
+Get all the todos with a creator `'ritch'`:
 
     dpd.todos.get({creator: 'ritch'}, function(todos, err) {
       if(err) return console.log(err);
       console.log(todos); // [{title: 'foo the bar', order: 7, done: true}, ...]
     });
 
-<h3 class="code">first([query], callback)</h3>
+<h3 class="code">getOne([query/id], callback)</h3>
 
-Get the first object from the collection using the optional [mongo query object](http://www.mongodb.org/display/DOCS/Advanced+Queries).
+Get the first object from the collection using the optional [mongo query object](http://www.mongodb.org/display/DOCS/Advanced+Queries) or an id.
 
-Get a todo by id.
+Get a todo by id:
 
-    dpd.todos.first({_id: "4b5783300334000000000aa9"}, function(todo, err) {
+    dpd.todos.getOne("4b5783300334000000000aa9", function(todo, err) {
       if(err) return console.log(err);
       console.log(todo); // {title: 'foo the bar', order: 7, done: true, _id: "4b5783300334000000000aa9"}
     });
 
-<h3 class="code">del(query, callback)</h3>
+Get a todo with specified properties:
 
-Delete the object from the collection using the required [mongo query object](http://www.mongodb.org/display/DOCS/Advanced+Queries). The query must include an `_id`.
+    dpd.todos.getOne({creator: 'ritch', title: 'foo the bar'}, function(todo, err) {
+      if(err) return console.log(err);
+      console.log(todo); // {title: 'foo the bar', creator: 'ritch', order: 7, done: true, _id: "4b5783300334000000000aa9"}
+    });
 
-Delete a todo by id.
+<h3 class="code">put([id], data, callback)</h3>
 
-    dpd.todos.del({_id: "4b5783300334000000000aa9"}, function(err) {
-      console.log(err);
+Updates the object with the specified id with the provided properties. If no id is provided, it will be inferred from the data's `_id` property.
+
+Update a todo:
+
+    dpd.todos.put("4b5783300334000000000aa9", {order: 3}, function(todo, err)) {
+      if(err) return console.log(err);
+      console.log(todo); // {title: 'foo the bar', creator: 'ritch', order: 3, done: true, _id: "4b5783300334000000000aa9"}
+    });
+
+<h3 class="code">del(id, callback)</h3>
+
+Delete the object from the collection with the specified id.
+
+Delete a todo by id:
+
+    dpd.todos.del("4b5783300334000000000aa9", function(success, err) {
+      if(err) return console.log(err);
+      console.log(success); // true
     });
 
 ## Users Collection
 
 Users collections include methods to login and logout users as well as return the current user. Each users collection gets the same methods to create/update, read/query, and delete data as a regular collection. The following examples assume you have created a `/users` collection.
 
-<h3 class="code">users.save(user, callback)</h3>
+<h3 class="code">users.post(user, callback)</h3>
 
 Register a new user. Passwords will automatically be removed from responses.
 
-    dpd.users.save({email: 'foo@bar.com', password: 'mypassword'}, function(user, err) {
+    dpd.users.post({email: 'foo@bar.com', password: 'mypassword'}, function(user, err) {
       if(err) return console.log(err);
       console.log(user); // {email: 'foo@bar.com', _id: "4b5783300334000000000aa9"}
     });
@@ -170,7 +198,7 @@ Get the currently logged in user.
 
 Logout the current user.
 
-    dpd.users.logout(function(err) {
+    dpd.users.logout(function(success, err) {
       if(err) return console.log(err);
-      console.log(user); // {email: 'foo@bar.com', _id: "4b5783300334000000000aa9"}
+      console.log(success); // true
     });
