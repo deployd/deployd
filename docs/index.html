@@ -59,7 +59,7 @@
 
 <p>This will open up the dashboard where you can manage your deployd server. You can create resources and manage their data.</p>
 
-<p>Create some resources in the dashboard. If you open up <code>http://localhost:2403</code> in a browser with a console (Chrome, Firefox) you should see the <code>dpd</code> object logged out. This is an api to all of your collections.</p>
+<p>Open up <code>http://localhost:2403</code> your browser console. You should see the <code>dpd</code> object logged out. This is an api to all of your resources.</p>
 
 <p>If you created a <code>/todos</code> collection you could add a new todo with:</p>
 
@@ -81,7 +81,7 @@
 
 <p>Deployd greatly simplifies web and mobile app development by acting as a proxy between untrusted clients (browser, phones, etc) and your database, allowing you to do more on the client than ever before. This added benefit also comes with added responsibility to secure the newly opened APIs directly to your data. Deployd solves this by validating every request against rules you define in the dashboard or in familiar JavaScript.</p>
 
-<p>Once a request is validated for input, authorization, and passes any <a href="#Collection-Event-Handlers">custom validation</a>, it is proxied to the storage engine (database abstraction). This means you do not have to write backend code to expose data to your clients. Data is instantly available.</p>
+<p>Once a request is validated for input, authorization, and passes any <a href="#Collection-Event-Handlers">custom validation</a>, it is proxied to the storage layer (database abstraction). This means you do not have to write backend code to expose data to your clients. Data is instantly available.</p>
 
 <h3>REST</h3>
 

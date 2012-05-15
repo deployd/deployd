@@ -211,9 +211,16 @@ describe('Collection Actions', function(){
     })
     
     it('should error when an id is not included', function(done) {
-      unauthed.use('/todos').del(function (err) {
-        expect(err).to.exist;
-        done();
+      var todos = unauthed.use('/todos');
+      todos.post({title: 'a random todo'}, function (e, t) {
+        todos.del(function (error) {
+          console.log(error);
+          expect(error).to.exist;
+          todos.use('/' + t._id).get(function (err, todo) {
+            expect(todo).to.exist;
+            done(err);
+          })
+        })
       })
     })
   })
