@@ -79,7 +79,9 @@
 
 <h3>Storage</h3>
 
-<p>Deployd securely proxies requests into the database. It does this by running an http server that understands how to turn http requests into database commands. Deployd also provides a layer of security around the database by validating requests. You can completely customize this validation in the dashboard ui or by writing simple and familiar JavaScript.</p>
+<p>Deployd greatly simplifies web and mobile app development by acting as a proxy between untrusted clients (browser, phones, etc) and your database, allowing you to do more on the client than ever before. This added benefit also comes with added responsibility to secure the newly opened APIs directly to your data. Deployd solves this by validating every request against rules you define in the dashboard or in familiar JavaScript.</p>
+
+<p>Once a request is validated for input, authorization, and passes any <a href="#Collection-Event-Handlers">custom validation</a>, it is proxied to the storage engine (database abstraction). This means you do not have to write backend code to expose data to your clients. Data is instantly available.</p>
 
 <h3>REST</h3>
 
@@ -109,13 +111,18 @@
 
 <h3>Resources</h3>
 
-<p>Resources allow you to control what is allowed in and out of your database. To allow clients to store data or users you create collections. By default these collections have basic validation to prevent malicious data from leaking into the database. This validation can be completely customized to restrict or allow any sort of input your app requires. It can also be customized to reject requests based on the current user, or ignore requests by anonymous users.</p>
+<p>Deployd servers are built using resources. Each resource handles its own unique URL. For example a list of todos could be served as a collection resource.</p>
+
+<pre><code>GET /todos?q={"$orderby": "created"}
+</code></pre>
+
+<p>Deployd will route this to the <code>/todos</code> collection resource and hand it off to its module. The collection resource will execute a fetch from the storage engine passing the query <code>{"$orderby": "created"}</code> and execute the <code>GET</code> event handler if one has been attached, passing the event handler the current session and data retrieved. Finally, the http response will be handed the final object, potentially modified by an event handler.</p>
 
 <hr />
 
 <h1>JavaScript Client API</h1>
 
-<p>Its very easy to access the deployd api from browser JavaScript. Just include <code>&lt;script src="/dpd.js"&gt;&lt;/script&gt;</code>. Deployd automatically builds and generates your data api for you dynamically.</p>
+<p>Its very easy to access the deployd api from browser JavaScript. Just include <code>&lt;script src="/dpd.js"&gt;&lt;/script&gt;</code>. Deployd automatically builds and generates your data api for you.</p>
 
 <h2>Collections</h2>
 
@@ -123,7 +130,7 @@
 
 <h3 class="code">save(data, callback) </h3>
 
-<p>Save the provided data object to the collection.</p>
+<p>Save the provided data object to the collection:</p>
 
 <pre><code>dpd.todos.save({creator: 'ritch', title: 'foo the bar', order: 7, done: false}, function(todo, err) {
   if(err) return console.log(err);
@@ -139,11 +146,21 @@
 });
 </code></pre>
 
+<h3 class="code">post(data, callback) </h3>
+
+<p>Creates the provided object in the collection:</p>
+
+<pre><code>dpd.todos.post({creator: 'ritch', title: 'foo the bar', order: 7, done: false}, function(todo, err) {
+  if(err) return console.log(err);
+  console.log(todo); // {title: 'foo the bar', order: 7, done: false, _id: "4b5783300334000000000aa9"}
+});
+</code></pre>
+
 <h3 class="code">get([query], callback)</h3>
 
 <p>Query the collection using the optional <a href="http://www.mongodb.org/display/DOCS/Advanced+Queries">mongo query object</a>.</p>
 
-<p>Get all the todos with a creator <code>'ritch'</code>.</p>
+<p>Get all the todos with a creator <code>'ritch'</code>:</p>
 
 <pre><code>dpd.todos.get({creator: 'ritch'}, function(todos, err) {
   if(err) return console.log(err);
@@ -151,26 +168,47 @@
 });
 </code></pre>
 
-<h3 class="code">first([query], callback)</h3>
+<h3 class="code">first([query | id], callback) or getOne([query | id], callback)</h3>
 
-<p>Get the first object from the collection using the optional <a href="http://www.mongodb.org/display/DOCS/Advanced+Queries">mongo query object</a>.</p>
+<p>Get the first object from the collection using the optional <a href="http://www.mongodb.org/display/DOCS/Advanced+Queries">mongo query object</a> or an id.</p>
 
-<p>Get a todo by id.</p>
+<p>Get a todo by id:</p>
 
-<pre><code>dpd.todos.first({_id: "4b5783300334000000000aa9"}, function(todo, err) {
+<pre><code>dpd.todos.first("4b5783300334000000000aa9", function(todo, err) {
   if(err) return console.log(err);
   console.log(todo); // {title: 'foo the bar', order: 7, done: true, _id: "4b5783300334000000000aa9"}
 });
 </code></pre>
 
-<h3 class="code">del(query, callback)</h3>
+<p>Get a todo with specified properties:</p>
 
-<p>Delete the object from the collection using the required <a href="http://www.mongodb.org/display/DOCS/Advanced+Queries">mongo query object</a>. The query must include an <code>_id</code>.</p>
+<pre><code>dpd.todos.first({creator: 'ritch', title: 'foo the bar'}, function(todo, err) {
+  if(err) return console.log(err);
+  console.log(todo); // {title: 'foo the bar', creator: 'ritch', order: 7, done: true, _id: "4b5783300334000000000aa9"}
+});
+</code></pre>
 
-<p>Delete a todo by id.</p>
+<h3 class="code">put([id], data, callback)</h3>
 
-<pre><code>dpd.todos.del({_id: "4b5783300334000000000aa9"}, function(err) {
-  console.log(err);
+<p>Updates the object with the specified id with the provided properties. If no id is provided, it will be inferred from the data's <code>_id</code> property.</p>
+
+<p>Update a todo:</p>
+
+<pre><code>dpd.todos.put("4b5783300334000000000aa9", {order: 3}, function(todo, err)) {
+  if(err) return console.log(err);
+  console.log(todo); // {title: 'foo the bar', creator: 'ritch', order: 3, done: true, _id: "4b5783300334000000000aa9"}
+});
+</code></pre>
+
+<h3 class="code">del(id, callback)</h3>
+
+<p>Delete the object from the collection with the specified id.</p>
+
+<p>Delete a todo by id:</p>
+
+<pre><code>dpd.todos.del("4b5783300334000000000aa9", function(success, err) {
+  if(err) return console.log(err);
+  console.log(success); // true
 });
 </code></pre>
 
@@ -178,11 +216,11 @@
 
 <p>Users collections include methods to login and logout users as well as return the current user. Each users collection gets the same methods to create/update, read/query, and delete data as a regular collection. The following examples assume you have created a <code>/users</code> collection.</p>
 
-<h3 class="code">users.save(user, callback)</h3>
+<h3 class="code">users.post(user, callback)</h3>
 
 <p>Register a new user. Passwords will automatically be removed from responses.</p>
 
-<pre><code>dpd.users.save({email: 'foo@bar.com', password: 'mypassword'}, function(user, err) {
+<pre><code>dpd.users.post({email: 'foo@bar.com', password: 'mypassword'}, function(user, err) {
   if(err) return console.log(err);
   console.log(user); // {email: 'foo@bar.com', _id: "4b5783300334000000000aa9"}
 });
@@ -212,9 +250,9 @@
 
 <p>Logout the current user.</p>
 
-<pre><code>dpd.users.logout(function(err) {
+<pre><code>dpd.users.logout(function(success, err) {
   if(err) return console.log(err);
-  console.log(user); // {email: 'foo@bar.com', _id: "4b5783300334000000000aa9"}
+  console.log(success); // true
 });
 </code></pre><h1>Collection Resource</h1>
 

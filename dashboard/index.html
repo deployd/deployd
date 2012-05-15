@@ -62,7 +62,7 @@
   <div class="container">
       <div class="well">
         <div class="clearfix">
-          <h3 class="pull-left">Resources</h3>
+          <h3 class="pull-left">Dashboard</h3>
           <div class="btn-group pull-right">
             <a class="btn btn-success dropdown-toggle" data-toggle="dropdown" href="#">
               <i class="icon-white icon-plus"></i> Resource
@@ -148,8 +148,9 @@
       <div class="well">
         <div class="clearfix">
           <h3 class="pull-left">Files</h3>
-          <div id="file-upload" class="pull-right">
+          <div class="pull-right">
             
+            <a href="#dpd-js-modal" data-toggle="modal" class="btn btn-primary"><i class="icon-white icon-file"></i> Use dpd.js</a>
             <a href="#sync-info-modal" data-toggle="modal" class="btn btn-primary"><i class="icon-white icon-resize-vertical"></i> Setup Local Sync</a>
             
           </div>
@@ -183,9 +184,24 @@
   </div>
 </div>
 
+<div id="dpd-js-modal" class="hide modal">
+  <div class="modal-header">
+    <a class="close" data-dismiss="modal">&times;</a>
+    <h3>Using Dpd.js</h3>
+  </div>
+  <div class="modal-body">
+    <p>Deployd generates a JavaScript client library for your app using the resources you add.</p>
+    <p><a href="/dpd.js" target="_blank">dpd.js</a> is automatically hosted by your server. To use it in your app, add it to your HTML pages:</p>
+    <pre class="prettyprint lang-html">&lt;script src="http://code.jquery.com/jquery-latest.min.js"&gt;&lt;/script&gt;
+&lt;script src="dpd.js"&gt;&lt;/script&gt;</pre>
+    <p><strong>If you would like to use dpd.js in your local testing</strong>, use the dpd.js loader proxy. Put it at the root of your app and include it just like the full library. When you load the script, it will download the latest version of dpd.js from your server. When you upload your app, Deployd will replace the loader proxy with the full library.</p>
+    <a href="/dpd.js?proxy=true" class="btn btn-primary"><i class="icon-white icon-download"></i> Download dpd.js proxy</a>
+  </div>
+</div>
+
 <div id="sync-info-modal" class="hide modal" style="margin-top: -280px">
   <div class="modal-header">
-    <a class="close" data-dismiss="modal">×</a>
+    <a class="close" data-dismiss="modal">&times;</a>
     <h3>Setup Local Sync</h3>
   </div>
   <div class="modal-body">
@@ -193,21 +209,26 @@
 
 		<p>Run the following commands from the command line to install the utility and setup your app.</p>
 
-		<pre><code>npm install deployd -g</code></pre>
+		<pre><code>npm install dpdc -g</code></pre>
 
-		<p>To copy down all your apps resources and files run the following command. It will create a folder for you.</p>
+		<p>To copy all your apps files run the following command. It will create a folder for you and configure it to point to your remote deployd server.</p>
 
-		<pre><code>dpd clone <%= window.location.host %></code></pre>
+		<pre><code>dpdc clone <%= window.location.host %></code></pre>
 
 		<p id="scroll_to_here" >Now you can push and pull the entire contents of the directory with the following commands.</p>
 
-		<pre><code>dpd push</code></pre>
+		<pre><code>dpdc push</code></pre>
 
-		<p>Running <code>dpd push</code> will upload all resources and the contents of your current directory to your app.</p>
+		<p>Running <code>dpdc push</code> will upload all the files of your current directory to your deployd server.</p>
 
-		<pre><code>dpd pull</code></pre>
+		<pre><code>dpdc pull</code></pre>
 
-		<p>Running <code>dpd pull</code> will download all of your app's files into the current directory as well as download all the resources from the remote server.</p>
+		<p>Running <code>dpdc pull</code> will download all of your app's files into the current directory.</p>
+		
+
+		<p>You can see your changes without uploading by running a dev server.</p>
+				
+		<pre><code>dpdc dev</code></pre>
   </div>
   <div class="modal-footer">
 
@@ -292,7 +313,7 @@
 <li>
   <a href="#">
     <i class="icon-white icon-align-justify"></i>&nbsp;
-    Resources
+    Dashboard
   </a>
 </li>
 <li <%= app.files ? 'class="active"' : '' %>>
@@ -338,186 +359,203 @@
 </script> 
  
     <script type="x-ejs-template" id="collection-routes-template" >
-<h3>JavaScript API</h3>
-<div id="js-examples">
-<p>Deployd generates a browser JavaScript api for easily accessing data from the <code><%= resourceData.path %></code> collection. To use it you first need to include jQuery and the generated script.</p>
+<h3>API</h3>
 
-<pre class="prettyprint code">
-&lt;script src="http://code.jquery.com/jquery-latest.min.js"&gt;&lt;/script&gt;
-&lt;script src="/dpd.js"&gt;&lt;/script&gt;
-</pre>
+<ul class="nav nav-tabs" id="event-nav">
+  <li class="active"><a href="#js-examples" data-toggle='tab'>JavaScript</a></li>
+  <li><a href="#rest-examples" data-toggle='tab'>REST</a></li>
+</ul>
 
-<%
-  function ns(path) {
-    path = path.replace('/', '');
-    if(path.indexOf('-') > -1) path = "['" + path + "']";
-    else path = '.' + path;
-    return path;
-  }
-  
-  function getObj() {
-    var props = resourceData.properties
-      , keys = _.keys(props)
-      , obj = {}
-      , key
-      , vals = {string: 'foobar', number: 123, boolean: true, date: new Date()}
-    ;
-    
-    while(key = keys.shift()) {
-      if(props[key].type != 'date') obj[key] = vals[props[key].type];
+<div class="tab-content tab-content-styled">
+  <div id="js-examples" class="tab-pane active">
+  <p>Deployd generates a browser JavaScript api for easily accessing data from the <code><%= resourceData.path %></code> collection. To use it you first need to include jQuery and the generated script.</p>
+
+  <pre class="prettyprint code">&lt;script src="http://code.jquery.com/jquery-latest.min.js"&gt;&lt;/script&gt;
+&lt;script src="dpd.js"&gt;&lt;/script&gt;</pre>
+
+  <%
+    function ns(path) {
+      path = path.replace('/', '');
+      if(path.indexOf('-') > -1) path = "['" + path + "']";
+      else path = '.' + path;
+      return path;
     }
+    
+    function getObj() {
+      var props = resourceData.properties
+        , keys = _.keys(props)
+        , obj = {}
+        , key
+        , vals = {string: 'foobar', number: 123, boolean: true, date: new Date()}
+      ;
+      
+      while(key = keys.shift()) {
+        if(props[key].type != 'date') obj[key] = vals[props[key].type];
+      }
 
-    return JSON.stringify(obj);
-  }
-%>
+      return JSON.stringify(obj);
+    }
+  %>
 
-<% if (resourceData.type === 'UserCollection') { %>
-<p>Register a new user in the <code><%= resourceData.path %></code> collection:</p>
-<pre class="code prettyprint">
-dpd<%= ns(resourceData.path) %>.save({"email": "foo@bar.com", "password": "mypassword"}, function(user, err) {
-  if(err) return console.log(err);
-  console.log(user);
-});</pre>
+  <% if (resourceData.type === 'UserCollection') { %>
+  <p>Register a new user in the <code><%= resourceData.path %></code> collection:</p>
+  <pre class="code prettyprint">
+  dpd<%= ns(resourceData.path) %>.post({"email": "foo@bar.com", "password": "mypassword"}, function(user, err) {
+    if(err) return console.log(err);
+    console.log(user);
+  });</pre>
 
-<p>Login an existing user in the <code><%= resourceData.path %></code> collection:</p>
-<pre class="code prettyprint">
-dpd<%= ns(resourceData.path) %>.login({"email": "foo@bar.com", "password": "mypassword"}, function(user, err) {
-  if(err) return console.log(err);
-  console.log(user);
-});</pre>
+  <p>Login an existing user in the <code><%= resourceData.path %></code> collection:</p>
+  <pre class="code prettyprint">
+  dpd<%= ns(resourceData.path) %>.login({"email": "foo@bar.com", "password": "mypassword"}, function(user, err) {
+    if(err) return console.log(err);
+    console.log(user);
+  });</pre>
 
-<p>Get the current user in the <code><%= resourceData.path %></code> collection:</p>
-<pre class="code prettyprint">
-dpd<%= ns(resourceData.path) %>.me(function(me) {
-  console.log(me);
-});</pre>
+  <p>Get the current user in the <code><%= resourceData.path %></code> collection:</p>
+  <pre class="code prettyprint">
+  dpd<%= ns(resourceData.path) %>.me(function(me) {
+    console.log(me);
+  });</pre>
 
-<p>Logout the current user in the <code><%= resourceData.path %></code> collection:</p>
-<pre class="code prettyprint">
-dpd<%= ns(resourceData.path) %>.logout(function(err) {
-  if(err) console.log(err);
-});</pre>
-  
-<% } else { %> 
+  <p>Logout the current user in the <code><%= resourceData.path %></code> collection:</p>
+  <pre class="code prettyprint">
+  dpd<%= ns(resourceData.path) %>.logout(function(err) {
+    if(err) console.log(err);
+  });</pre>
+    
+  <% } else { %> 
 
-<p>Insert a new object into the <code><%= resourceData.path %></code> collection:</p>
-<pre class="code prettyprint">
-dpd<%= ns(resourceData.path) %>.save(<%= getObj() %>, function(result, err) {
-  if(err) return console.log(err);
-  console.log(result, result._id);
-});</pre>
+  <p>Insert data into the <code><%= resourceData.path %></code> collection:</p>
+  <pre class="code prettyprint">
+  dpd<%= ns(resourceData.path) %>.post(<%= getObj() %>, function(result, err) {
+    if(err) return console.log(err);
+    console.log(result, result._id);
+  });</pre>
 
-<% } %>
+  <% } %>
 
-<p>Get all the objects in the <code><%= resourceData.path %></code> collection:</p>
-<pre class="code prettyprint">
-dpd<%= ns(resourceData.path) %>.get(function (result, err) {
-  if(err) return console.log(err);
-  console.log(result);
-});</pre>
+  <p>Get all the objects in the <code><%= resourceData.path %></code> collection:</p>
+  <pre class="code prettyprint">
+  dpd<%= ns(resourceData.path) %>.get(function (result, err) {
+    if(err) return console.log(err);
+    console.log(result);
+  });</pre>
 
-<p>Get all the objects in the <code><%= resourceData.path %></code> collection that match a <a href="http://www.mongodb.org/display/DOCS/Advanced+Queries">query</a>:</p>
-<pre class="code prettyprint">
-var query = <%= getObj() %>;
+  <p>Get all the objects in the <code><%= resourceData.path %></code> collection that match a <a href="http://www.mongodb.org/display/DOCS/Advanced+Queries">query</a>:</p>
+  <pre class="code prettyprint">
+  var query = <%= getObj() %>;
 
-dpd<%= ns(resourceData.path) %>.get(query, function (result) {
-  console.log(result);
-});</pre>
+  dpd<%= ns(resourceData.path) %>.get(query, function (result) {
+    console.log(result);
+  });</pre>
+
+  <p>Get a single object in the <code><%= resourceData.path %></code> collection by id:</p>
+  <pre class="code prettyprint">
+  dpd<%= ns(resourceData.path) %>.first("000000000000000000000000", function (result) {
+    console.log(result);
+  });</pre>
+
+  <p>Get a single object in the <code><%= resourceData.path %></code> collection that matches a <a href="http://www.mongodb.org/display/DOCS/Advanced+Queries">query</a>:</p>
+  <pre class="code prettyprint">
+  var query = <%= getObj() %>;
+
+  dpd<%= ns(resourceData.path) %>.first(query, function (result) {
+    console.log(result);
+  });</pre>
+
+  <p>Update an object in the <code><%= resourceData.path %></code> collection:</p>
+  <pre class="code prettyprint">
+  dpd<%= ns(resourceData.path) %>.put("000000000000000000000000", <%= getObj() %>, function(result, err) {
+    if(err) return console.log(err);
+    console.log(result, result._id);
+  });</pre>
+
+  <p>Remove a single object from the <code><%= resourceData.path %></code> collection:</p>
+  <pre class="code prettyprint">
+  dpd<%= ns(resourceData.path) %>.del("000000000000000000000000", function (err) {
+    if(err) console.log(err);
+  });</pre>
+
+  </div>
 
 
-<p>Get a single object in the <code><%= resourceData.path %></code> collection that matches a <a href="http://www.mongodb.org/display/DOCS/Advanced+Queries">query</a>:</p>
-<pre class="code prettyprint">
-var query = <%= getObj() %>;
+  <div id="rest-examples" class="tab-pane">
+    <p>Access the <code><%= resourceData.path %></code> collection over http.</p>
 
-dpd<%= ns(resourceData.path) %>.first(query, function (result) {
-  console.log(result);
-});</pre>
-
-<p>Remove a single object from the <code><%= resourceData.path %></code> collection that matches a <a href="http://www.mongodb.org/display/DOCS/Advanced+Queries">query</a>:</p>
-<pre class="code prettyprint">
-var query = {"_id": "4b5783300334000000000aa9"};
-
-dpd<%= ns(resourceData.path) %>.del(query, function (err) {
-  if(err) console.log(err);
-});</pre>
-
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th>Task</th>
+          <th>Method</th>
+          <th>Route</th>
+          <th>Accepts</th>
+          <th>Returns</th>
+        </tr>
+        <tbody>
+          <tr>
+            <td><a href="http://deployd.github.com/deployd/#Listing-data" target="_blank">Listing data</a></td>
+            <td>GET</td>
+            <td><a href="<%- resourceData.path %>" target="_blank"><%- resourceData.path %></a></td>
+            <td><em>Nothing</em></td>
+            <td>An array of objects</td>
+          </tr>
+          <tr>
+            <td><a href="http://deployd.github.com/deployd/#Saving-data" target="_blank">Creating an object</a></td>
+            <td>POST</td>
+            <td><%- resourceData.path %></td>
+            <td>A single object</td>
+            <td>The saved object (or errors)</td>
+          </tr>
+          <tr>
+            <td><a href="http://deployd.github.com/deployd/#Retrieving-a-specific-object" target="_blank">Getting an object</a></td>
+            <td>GET</td>
+            <td><%- resourceData.path %>/&lt;_id&gt;</td>
+            <td><em>Nothing</em></td>
+            <td>A single object</td>
+          </tr>
+          <tr>
+            <td><a href="http://deployd.github.com/deployd/#Updating-an-object" target="_blank">Updating an object</a></td>
+            <td>PUT</td>
+            <td><%- resourceData.path %>/&lt;_id&gt;</td>
+            <td>A single object</td>
+            <td>The saved object (or errors)</td>
+          </tr>
+          <tr>
+            <td><a href="http://deployd.github.com/deployd/#Deleting-an-object" target="_blank">Deleting an object</a></td>
+            <td>DELETE</td>
+            <td><%- resourceData.path %>/&lt;_id&gt;</td>
+            <td>A single object</td>
+            <td><em>Nothing</em></td>
+          </tr>
+          <% if (resourceData.type === 'UserCollection') { %>
+            <tr>
+              <td><a href="http://deployd.github.com/deployd/#Authenticating-a-user" target="_blank">Logging in</a></td>
+              <td>POST</td>
+              <td><%- resourceData.path %>/login</td>
+              <td><code>email</code> and <code>password</code> of user</td>
+              <td>The user, plus session cookie (or error)</td>
+            </tr>
+            <tr>
+              <td><a href="http://deployd.github.com/deployd/#Logging-out" target="_blank">Logging out</a></td>
+              <td>POST</td>
+              <td><%- resourceData.path %>/logout</td>
+              <td><em>Nothing</em></td>
+              <td><em>Nothing</em></td>
+            </tr>
+            <tr>
+              <td><a href="http://deployd.github.com/deployd/#Current-user" target="_blank">Getting the current user</a></td>
+              <td>GET</td>
+              <td><a href="<%- resourceData.path %>/me" target="_blank"><%- resourceData.path %>/me</a></td>
+              <td><em>Nothing</em></td>
+              <td>A single object</td>
+            </tr>
+          <% } %>
+        </tbody>
+      </thead>
+    </table>
+  </div>
 </div>
-
-<h3>REST API</h3>
-
-<p>Access the <code><%= resourceData.path %></code> collection over http.</p>
-
-<table class="table table-bordered table-striped">
-  <thead>
-    <tr>
-      <th>Task</th>
-      <th>Method</th>
-      <th>Route</th>
-      <th>Accepts</th>
-      <th>Returns</th>
-    </tr>
-    <tbody>
-      <tr>
-        <td><a href="http://deployd.github.com/deployd/#Listing-data" target="_blank">Listing data</a></td>
-        <td>GET</td>
-        <td><a href="<%- resourceData.path %>" target="_blank"><%- resourceData.path %></a></td>
-        <td><em>Nothing</em></td>
-        <td>An array of objects</td>
-      </tr>
-      <tr>
-        <td><a href="http://deployd.github.com/deployd/#Saving-data" target="_blank">Creating an object</a></td>
-        <td>POST</td>
-        <td><%- resourceData.path %></td>
-        <td>A single object</td>
-        <td>The saved object (or errors)</td>
-      </tr>
-      <tr>
-        <td><a href="http://deployd.github.com/deployd/#Retrieving-a-specific-object" target="_blank">Getting an object</a></td>
-        <td>GET</td>
-        <td><%- resourceData.path %>/&lt;_id&gt;</td>
-        <td><em>Nothing</em></td>
-        <td>A single object</td>
-      </tr>
-      <tr>
-        <td><a href="http://deployd.github.com/deployd/#Updating-an-object" target="_blank">Updating an object</a></td>
-        <td>PUT</td>
-        <td><%- resourceData.path %>/&lt;_id&gt;</td>
-        <td>A single object</td>
-        <td>The saved object (or errors)</td>
-      </tr>
-      <tr>
-        <td><a href="http://deployd.github.com/deployd/#Deleting-an-object" target="_blank">Deleting an object</a></td>
-        <td>DELETE</td>
-        <td><%- resourceData.path %>/&lt;_id&gt;</td>
-        <td>A single object</td>
-        <td><em>Nothing</em></td>
-      </tr>
-      <% if (resourceData.type === 'UserCollection') { %>
-        <tr>
-          <td><a href="http://deployd.github.com/deployd/#Authenticating-a-user" target="_blank">Logging in</a></td>
-          <td>POST</td>
-          <td><%- resourceData.path %>/login</td>
-          <td><code>email</code> and <code>password</code> of user</td>
-          <td>The user, plus session cookie (or error)</td>
-        </tr>
-        <tr>
-          <td><a href="http://deployd.github.com/deployd/#Logging-out" target="_blank">Logging out</a></td>
-          <td>POST</td>
-          <td><%- resourceData.path %>/logout</td>
-          <td><em>Nothing</em></td>
-          <td><em>Nothing</em></td>
-        </tr>
-        <tr>
-          <td><a href="http://deployd.github.com/deployd/#Current-user" target="_blank">Getting the current user</a></td>
-          <td>GET</td>
-          <td><a href="<%- resourceData.path %>/me" target="_blank"><%- resourceData.path %>/me</a></td>
-          <td><em>Nothing</em></td>
-          <td>A single object</td>
-        </tr>
-      <% } %>
-    </tbody>
-  </thead>
-</table>
 </script> 
     <script type="x-ejs-template" id="collection-data-template" >
 <h3>Data</h3>
@@ -751,7 +789,7 @@ dpd<%= ns(resourceData.path) %>.del(query, function (err) {
   <li><a href="#put-panel" data-toggle='tab' data-editor="onPut">On PUT</a></li>
   <li><a href="#delete-panel" data-toggle='tab' data-editor="onDelete">On DELETE</a></li>
 </ul>
-<div class="tab-content">
+<div class="tab-content tab-content-styled">
   <div class="tab-pane" id="get-panel">
     <div class="editor-container">
       <div id="onGet"></div>
@@ -786,7 +824,7 @@ dpd<%= ns(resourceData.path) %>.del(query, function (err) {
 <html>
   <head>
     <xscript src="http://code.jquery.com/jquery-latest.min.js"></xscript>
-    <xscript src="/dpd.js"></xscript>
+    <xscript src="dpd.js"></xscript>
   </head>
   <body>
     

@@ -73,7 +73,7 @@
                   fn && fn(res);
                 }
               },
-              error: errorCallback(res)
+              error: errorCallback(fn)
             });
           }
         })(r),

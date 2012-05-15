@@ -49,7 +49,9 @@ If you created a `/users` user collection you could log in a user with:
 
 ### Storage
 
-Deployd securely proxies requests into the database. It does this by running an http server that understands how to turn http requests into database commands. Deployd also provides a layer of security around the database by validating requests. You can completely customize this validation in the dashboard ui or by writing simple and familiar JavaScript.
+Deployd greatly simplifies web and mobile app development by acting as a proxy between untrusted clients (browser, phones, etc) and your database, allowing you to do more on the client than ever before. This added benefit also comes with added responsibility to secure the newly opened APIs directly to your data. Deployd solves this by validating every request against rules you define in the dashboard or in familiar JavaScript.
+
+Once a request is validated for input, authorization, and passes any [custom validation](#Collection-Event-Handlers), it is proxied to the storage engine (database abstraction). This means you do not have to write backend code to expose data to your clients. Data is instantly available.
 
 ### REST
 
@@ -75,13 +77,17 @@ Deployd exposes everything, even low level functionality, securely over http (wi
 
 ### Resources
 
-Resources allow you to control what is allowed in and out of your database. To allow clients to store data or users you create collections. By default these collections have basic validation to prevent malicious data from leaking into the database. This validation can be completely customized to restrict or allow any sort of input your app requires. It can also be customized to reject requests based on the current user, or ignore requests by anonymous users.
+Deployd servers are built using resources. Each resource handles its own unique URL. For example a list of todos could be served as a collection resource.
+
+    GET /todos?q={"$orderby": "created"}
+
+Deployd will route this to the `/todos` collection resource and hand it off to its module. The collection resource will execute a fetch from the storage engine passing the query `{"$orderby": "created"}` and execute the `GET` event handler if one has been attached, passing the event handler the current session and data retrieved. Finally, the http response will be handed the final object, potentially modified by an event handler.
 
 <hr />
 
 # JavaScript Client API
 
-Its very easy to access the deployd api from browser JavaScript. Just include `<script src="/dpd.js"></script>`. Deployd automatically builds and generates your data api for you dynamically.
+Its very easy to access the deployd api from browser JavaScript. Just include `<script src="/dpd.js"></script>`. Deployd automatically builds and generates your data api for you.
 
 ## Collections
 
@@ -107,10 +113,10 @@ If the object already has an `_id` the existing object in the collection with th
 
 Creates the provided object in the collection:
 
-  dpd.todos.post({creator: 'ritch', title: 'foo the bar', order: 7, done: false}, function(todo, err) {
-    if(err) return console.log(err);
-    console.log(todo); // {title: 'foo the bar', order: 7, done: false, _id: "4b5783300334000000000aa9"}
-  });
+    dpd.todos.post({creator: 'ritch', title: 'foo the bar', order: 7, done: false}, function(todo, err) {
+      if(err) return console.log(err);
+      console.log(todo); // {title: 'foo the bar', order: 7, done: false, _id: "4b5783300334000000000aa9"}
+    });
 
 <h3 class="code">get([query], callback)</h3>
 
@@ -123,20 +129,20 @@ Get all the todos with a creator `'ritch'`:
       console.log(todos); // [{title: 'foo the bar', order: 7, done: true}, ...]
     });
 
-<h3 class="code">getOne([query/id], callback)</h3>
+<h3 class="code">first([query | id], callback) or getOne([query | id], callback)</h3>
 
 Get the first object from the collection using the optional [mongo query object](http://www.mongodb.org/display/DOCS/Advanced+Queries) or an id.
 
 Get a todo by id:
 
-    dpd.todos.getOne("4b5783300334000000000aa9", function(todo, err) {
+    dpd.todos.first("4b5783300334000000000aa9", function(todo, err) {
       if(err) return console.log(err);
       console.log(todo); // {title: 'foo the bar', order: 7, done: true, _id: "4b5783300334000000000aa9"}
     });
 
 Get a todo with specified properties:
 
-    dpd.todos.getOne({creator: 'ritch', title: 'foo the bar'}, function(todo, err) {
+    dpd.todos.first({creator: 'ritch', title: 'foo the bar'}, function(todo, err) {
       if(err) return console.log(err);
       console.log(todo); // {title: 'foo the bar', creator: 'ritch', order: 7, done: true, _id: "4b5783300334000000000aa9"}
     });
