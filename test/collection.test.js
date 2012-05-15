@@ -214,7 +214,6 @@ describe('Collection Actions', function(){
       var todos = unauthed.use('/todos');
       todos.post({title: 'a random todo'}, function (e, t) {
         todos.del(function (error) {
-          console.log(error);
           expect(error).to.exist;
           todos.use('/' + t._id).get(function (err, todo) {
             expect(todo).to.exist;
