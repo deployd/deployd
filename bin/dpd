@@ -17,7 +17,7 @@ var program = require('commander')
 /**
  * Clients for interacting with dpd over http and mongodb.
  */
- 
+
 var local = dpd;
 
 var client = require('mdoq')
@@ -478,7 +478,7 @@ program
 
 program
   .command('pull [host]')
-  .description(' - add a remote host and pull down all its resources and files into a new directory')
+  .description(' - pull down all resources and files from a remote host')
   .action(function (host) {
 
     function use(host) {
@@ -555,32 +555,22 @@ program
   })
 ;
 
-program
-  .command('dev [port]')
-  .description(' - boot a local development server')
-  .action(function (port) {
-    dropFiles(function () {
-      listen(port);
-    });
-  })
-;
-
-program
-  .command('repl')
-  .description(' - connect to a running instance through a mongo repl')
-  .action(function (port) {
-    var mongo = require('child_process').spawn('mongo', ['localhost:' + config('mongod').port + '/' + getAppName()]);
-    
-    process.stdin.pipe(mongo.stdin);
-    process.stdin.resume();
-    
-    mongo.stdout.on('data', function (data) {
-      if(~data.toString().indexOf('/tweeter')) {
-        mongo.stdout.pipe(process.stdout);
-      }
-    })
-  })
-;
+// program
+//   .command('repl')
+//   .description(' - connect to a running instance through a mongo repl')
+//   .action(function (port) {
+//     var mongo = require('child_process').spawn('mongo', ['localhost:' + config('mongod').port + '/' + getAppName()]);
+//     
+//     process.stdin.pipe(mongo.stdin);
+//     process.stdin.resume();
+//     
+//     mongo.stdout.on('data', function (data) {
+//       if(~data.toString().indexOf('/tweeter')) {
+//         mongo.stdout.pipe(process.stdout);
+//       }
+//     })
+//   })
+// ;
 
 /**
  * Parse arguments
