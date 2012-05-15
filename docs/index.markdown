@@ -31,7 +31,7 @@ Run the following command from the same directory where you created index.html. 
     
 This will open up the dashboard where you can manage your deployd server. You can create resources and manage their data.
 
-Create some resources in the dashboard. If you open up `http://localhost:2403` in a browser with a console (Chrome, Firefox) you should see the `dpd` object logged out. This is an api to all of your collections.
+Open up `http://localhost:2403` your browser console. You should see the `dpd` object logged out. This is an api to all of your resources.
 
 If you created a `/todos` collection you could add a new todo with:
 
@@ -51,7 +51,7 @@ If you created a `/users` user collection you could log in a user with:
 
 Deployd greatly simplifies web and mobile app development by acting as a proxy between untrusted clients (browser, phones, etc) and your database, allowing you to do more on the client than ever before. This added benefit also comes with added responsibility to secure the newly opened APIs directly to your data. Deployd solves this by validating every request against rules you define in the dashboard or in familiar JavaScript.
 
-Once a request is validated for input, authorization, and passes any [custom validation](#Collection-Event-Handlers), it is proxied to the storage engine (database abstraction). This means you do not have to write backend code to expose data to your clients. Data is instantly available.
+Once a request is validated for input, authorization, and passes any [custom validation](#Collection-Event-Handlers), it is proxied to the storage layer (database abstraction). This means you do not have to write backend code to expose data to your clients. Data is instantly available.
 
 ### REST
 
