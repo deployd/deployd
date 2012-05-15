@@ -205,7 +205,7 @@
     <h3>Setup Local Sync</h3>
   </div>
   <div class="modal-body">
-		<p>To sync your app's files with your local filesystem, first install the <code>dpd</code> command line utility. <em>It requires <a href="http://nodejs.org/#download">Node.js</a>.</em></p>
+		<p>To sync your app's files with your local filesystem, first install the <code>dpdc</code> command line utility. <em>It requires <a href="http://nodejs.org/#download">Node.js</a>.</em></p>
 
 		<p>Run the following commands from the command line to install the utility and setup your app.</p>
 
@@ -832,22 +832,11 @@
 </html>
 </script> 
  
-    <script type="text/javascript" src="js/lib/jquery-1.7.2.js"></script> 
-    <script type="text/javascript" src="js/lib/jquery-ui.min.js"></script> 
-    <script type="text/javascript" src="js/lib/jquery.plugins.js"></script> 
-    <script type="text/javascript" src="js/lib/bootstrap.js"></script> 
-    <script type="text/javascript" src="js/lib/underscore.js"></script> 
-    <script type="text/javascript" src="js/lib/underscore.string.min.js"></script> 
-    <script type="text/javascript" src="js/lib/backbone.js"></script> 
-    <script type="text/javascript" src="js/lib/knockout-2.0.0.js"></script> 
-    <script type="text/javascript" src="js/lib/knockout.mapping.js"></script> 
-    <script type="text/javascript" src="js/lib/ace-noconflict.js"></script> 
-    <script type="text/javascript" src="js/lib/ace-mode-javascript-noconflict.js"></script> 
-    <script type="text/javascript" src="js/lib/ace-mode-css-noconflict.js"></script> 
-    <script type="text/javascript" src="js/lib/ace-mode-html-noconflict.js"></script> 
-    <script type="text/javascript" src="js/lib/theme-twilight-noconflict.js"></script> 
-    <script type="text/javascript" src="js/lib/prettify.js"></script> 
+     
+        <script type="text/javascript" src="js/lib.js"></script> 
+        <script src="js/require.js" data-main="js/entry.js"></script> 
+     
  
-    <script src="js/lib/require.js" data-main="js/app/entry.js"></script> 
+    
   </body> 
 </html>
