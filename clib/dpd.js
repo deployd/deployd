@@ -7,7 +7,7 @@
   var r
     , resources = /*resources*/
     , contentType = 'application/json'
-    , rootUrl = /*rootUrl*/;
+    , rootUrl = '';
 
   function errorCallback(fn) {
     return function (err) {
