@@ -16,15 +16,8 @@
     <div id="body-container" class="container-fluid hide"> 
       <div class="row-fluid"> 
         <div class="span2"> 
-          <div class="well"> 
-            <!-- <h3 class="clearfix"> 
-              Resources  
-              <a class="pull-right header-link" href="#">Edit</a>  
-            </h3> -->             
-            <ul class="nav nav-pills nav-stacked type-icons" id="resource-sidebar"> 
-            </ul> 
- 
-          </div> 
+          <ul class="nav nav-stacked type-icons" id="resource-sidebar"> 
+          </ul> 
         </div> 
         <div class="span10" id="body"> 
         </div> 
@@ -69,39 +62,40 @@
   <div class="container">
       <div class="well">
         <div class="clearfix">
-          <h3 class="pull-left">Resources</h3>
+          <h3 class="pull-left">Dashboard</h3>
           <div class="btn-group pull-right">
             <a class="btn btn-success dropdown-toggle" data-toggle="dropdown" href="#">
-              <i class="icon-white icon-plus"></i> Add New Resource
+              <i class="icon-white icon-plus"></i> Resource
               &nbsp;<span class="caret"></span>
             </a>
             <ul id="property-types" class="dropdown-menu">
             </ul>
           </div>
         </div>
-        <ul id="resource-list" class="component-list" style="display: none;">
+        <ul id="resource-list" class="component-list">
+          <li class="component-item locked" id="files-resource">
+            <div class="component-item-header">
+              <i title="Files" class="icon-white static"></i>
+                <span class="path">Files</span>
+                <div class="pull-right">
+                  <i class="icon-white icon-lock"></i>
+                </div>
+            </div>
+          </li>
         </ul>
         <div id="resource-list-empty" class="component-list-empty" style="display: none;">
-          <div>
-            <div class="alert alert-info" style="text-align: center;"><strong>This app is empty.</strong> Add a resource to get started.</div>
-            <div class="get-started">
-              <p>
-                Give your JavaScript direct access to a powerful database, user management and more by adding resources.
-              </p>
-              <p>
-                <strong><i class="icon-folder-close icon-white"></i> Files</strong> - Add a <i>files resource</i> to upload and serve your html, css, JavaScript, and other assets.
-              </p>
-              <p>
-                <strong><i class="icon-th-list icon-white"></i> Collection</strong> - Add a <i>collection resource</i> to save and query data over a simple http api.
-              </p>
-              <p>
-                <strong><i class="icon-user icon-white"></i> Users Collection</strong> - Add a <i>users collection</i> resource to create and authenticate users over http.
-              </p>
-            </div>
-            <div class="tutorial-help">
-              <p>If you're new to Deployd, check out our tutorial to quickly build your first app.</p>
-              <a href="http://www.deployd.com/tutorial/step1" target="_blank" class="btn btn-primary"><i class="icon-question-sign icon-white"></i> Go to Tutorial</a>
-            </div>
+          <!-- <div class="alert alert-info"><strong>This app has no resources.</strong></div> -->
+          <div class="get-started-light">
+            <p>
+              <strong><i class="icon-white icon-th-list"></i> Store data</strong> - Add a <i>collection resource</i> to save and query data over a simple http api.
+            </p>
+            <p>
+              <strong><i class="icon-white icon-user"></i> Authenticate users</strong> - Add a <i>users collection</i> resource to create and authenticate users over http.
+            </p>
+          </div>
+          <div class="tutorial-help">
+            <p>If you're new to Deployd, check out our tutorial to quickly build your first app.</p>
+            <a href="http://www.deployd.com/tutorial/step1" target="_blank" class="btn btn-primary"><i class="icon-question-sign icon-white"></i> Go to Tutorial</a>
           </div>
         </div>
       </div>
@@ -154,75 +148,131 @@
       <div class="well">
         <div class="clearfix">
           <h3 class="pull-left">Files</h3>
-          <div id="file-upload" class="pull-right">
+          <div class="pull-right">
             
-            <a href="#sync-info-modal" data-toggle="modal" class="btn"><i class="icon-resize-vertical"></i> Setup Local Sync</a>
-            <a href="#" class="new-file-btn btn btn-success"><i class="icon-plus icon-white"></i> New File</a>
-            <span class="btn btn-success fileinput-button">
-                <i class="icon-upload icon-white"></i>
-                <span>Quick Upload Files</span>
-                <input type="file" multiple="multiple" />
-            </span>
+            <a href="#dpd-js-modal" data-toggle="modal" class="btn btn-primary"><i class="icon-white icon-file"></i> Use dpd.js</a>
+            <a href="#sync-info-modal" data-toggle="modal" class="btn btn-primary"><i class="icon-white icon-resize-vertical"></i> Setup Local Sync</a>
+            
           </div>
         </div>
-        <div id="files-empty" class="hide">
-          <div class="alert alert-info"><strong>This folder is empty.</strong> Create or upload some files to get started.</div>
+        <div id="files-empty" data-bind="visible: !(files().length || folders().length)">
+          <div class="alert alert-info"><strong>There are no files in your app.</strong> Create or upload some files to get started.</div>
           <div class="get-started" style="margin-bottom: 0;">
              <p>
-               <strong><i class="icon-upload icon-white"></i> Uploading</strong> - The easiest way to get files in your app is to use the "Quick Upload Files" button.
+               <strong><i class="icon-upload icon-white"></i> Uploading</strong> - If you've already built part of your app, you can quickly get your files online by uploading them.
              </p>
              <p>
-               <strong><i class="icon-pencil icon-white"></i> Editing</strong> - Once you have uploaded files, you can click on a filename to edit with deployd's built in text editor.
+               <strong><i class="icon-pencil icon-white"></i> Editing</strong> - You can create your entire app in the dashboard if you want. Create a file and use deployd's built-in text editor to write HTML, JavaScript, and CSS.
              </p>
              <p>
-                <strong><i class="icon-download-alt icon-white"></i> Working Locally</strong> - Setup the <a href="#sync-info-modal" data-toggle="modal">deployd command line tool</a> to easily sync your local files with deployd.
+                <strong><i class="icon-download-alt icon-white"></i> Working Locally</strong> - Setup the <a href="#sync-info-modal" data-toggle="modal">deployd command line tool</a> to easily sync files to deployd from your favorite text-editor.
               </p>
           </div>
         </div>
-        <table id="files" class="table table-bordered table-striped">
-          <thead>
-            <th>Filename</th>
-          </thead>
-          <tbody></tbody>
-        </table>
-        <div id="currentUploads">
+        <div id="files" data-bind="template: 'folder-template'" class="file-list-container">
         </div>
+        <a href="#" class="btn btn-success" data-bind="click: addFile"><i class="icon-plus icon-white"></i> File</a>
+        <a href="#" class="btn btn-success" data-bind="click: addFolder"><i class="icon-plus icon-white"></i> Folder</a>
+        <span class="fileinput-button btn btn-primary">
+          <i class="icon-upload icon-white" title="Upload"></i>
+          Upload
+          <input type="file" multiple="multiple" data-bind="event: {change: onChangeUpload}" />
+        </spab>
+        <span id="currentUploads" data-bind="text: uploadingText"></span>
       </div>
     </div>
   </div>
 </div>
 
+<div id="dpd-js-modal" class="hide modal">
+  <div class="modal-header">
+    <a class="close" data-dismiss="modal">&times;</a>
+    <h3>Using Dpd.js</h3>
+  </div>
+  <div class="modal-body">
+    <p>Deployd generates a JavaScript client library for your app using the resources you add.</p>
+    <p><a href="/dpd.js" target="_blank">dpd.js</a> is automatically hosted by your server. To use it in your app, add it to your HTML pages:</p>
+    <pre class="prettyprint lang-html">&lt;script src="http://code.jquery.com/jquery-latest.min.js"&gt;&lt;/script&gt;
+&lt;script src="dpd.js"&gt;&lt;/script&gt;</pre>
+    <p><strong>If you would like to use dpd.js in your local testing</strong>, you will need to use the <a href="#sync-info-modal" data-toggle="modal">Local Sync command line tool</a> and run the `dpdc dev` command.</p>
+    <!-- <p><strong>If you would like to use dpd.js in your local testing</strong>, use the dpd.js loader proxy. Put it at the root of your app and include it just like the full library. When you load the script, it will download the latest version of dpd.js from your server. When you upload your app, Deployd will replace the loader proxy with the full library.</p>
+    <a href="/dpd.js?proxy=true" class="btn btn-primary"><i class="icon-white icon-download"></i> Download dpd.js proxy</a> -->
+  </div>
+</div>
+
 <div id="sync-info-modal" class="hide modal" style="margin-top: -280px">
   <div class="modal-header">
-    <a class="close" data-dismiss="modal">×</a>
+    <a class="close" data-dismiss="modal">&times;</a>
     <h3>Setup Local Sync</h3>
   </div>
   <div class="modal-body">
-		<p>To sync your app's files with your local filesystem, first install the <code>dpd</code> command line utility. <em>It requires <a href="http://nodejs.org/#download">Node.js</a>.</em></p>
+		<p>To sync your app's files with your local filesystem, first install the <code>dpdc</code> command line utility. <em>It requires <a href="http://nodejs.org/#download">Node.js</a>.</em></p>
 
 		<p>Run the following commands from the command line to install the utility and setup your app.</p>
 
-		<pre><code>npm install deployd -g</code></pre>
+		<pre><code>npm install dpdc -g</code></pre>
 
-		<p>In the directory where you want to keep your app files, run the following command.
-		It will grant local access to your app and tell <code>dpd</code> to store the files in that directory.</p>
+		<p>To copy all your apps files run the following command. It will create a folder for you and configure it to point to your remote deployd server.</p>
 
-		<pre><code>dpd init http://<%= window.location.host %> '<%= $.cookie('DPDAuthKey') %>'</code></pre>
+		<pre><code>dpdc clone <%= window.location.host %></code></pre>
 
 		<p id="scroll_to_here" >Now you can push and pull the entire contents of the directory with the following commands.</p>
 
-		<pre><code>dpd push</code></pre>
+		<pre><code>dpdc push</code></pre>
 
-		<p>Running <code>dpd push</code> will upload the contents of your current directory to your app.</p>
+		<p>Running <code>dpdc push</code> will upload all the files of your current directory to your deployd server.</p>
 
-		<pre><code>dpd pull</code></pre>
+		<pre><code>dpdc pull</code></pre>
 
-		<p>Running <code>dpd pull</code> will download all of your app's files into the current directory.</p>
+		<p>Running <code>dpdc pull</code> will download all of your app's files into the current directory.</p>
+		
+
+		<p>You can see your changes without uploading by running a dev server.</p>
+				
+		<pre><code>dpdc dev</code></pre>
   </div>
   <div class="modal-footer">
 
   </div>
 </div>
+
+<script type="text/html" id="folder-template">
+  <div class="add-buttons">
+    <a href="#" data-bind="click: addFile"><i class="icon-plus icon-white "></i> File</a>
+    &nbsp;
+    <a href="#" data-bind="click: addFolder"><i class="icon-plus icon-white "></i> Folder</a>
+    &nbsp;
+    <a class="fileinput-button">
+      <i class="icon-white icon-upload" title="Upload"></i>
+      Upload
+      <input type="file" multiple="multiple" data-bind="event: {change: onChangeUpload}" />
+    </a>
+    <span id="currentUploads" data-bind="text: uploadingText"></span>
+  </div>
+  <ul class="file-list">
+    <!-- ko foreach: folders -->
+      <li class="folder" data-bind="click: $parent.onClickFolder">
+        <i class="icon-white icon-folder-close" data-bind="css: {'icon-folder-close': !isOpen(), 'icon-folder-open': isOpen}"></i>
+        <span data-bind="text: name"></span>
+        <div class="buttons">
+          <a href="#" class="btn" data-bind="click: $parent.deleteFolder"><i class="icon-remove"></i> Delete</a>
+        </div>
+      </li>
+      <li class="file-list-container" data-bind="template: {name: 'folder-template', data: viewModel}, visible: isOpen">
+      </li>
+    <!-- /ko -->
+    <!-- ko foreach: files -->
+    <li class="file" data-bind="click: $parent.onClickFile">
+      <i class="icon-white icon-file"></i>
+      <span data-bind="text: $data"></span>
+      <div class="buttons">
+        <a href="#" target="_blank" class="btn" data-bind="attr: {href: '/' + $parent.getPath($data)}, clickBubble: false"><i class="icon-eye-open"></i> View</a>
+        <a href="#" class="btn" data-bind="click: $parent.deleteFile"><i class="icon-remove"></i> Delete</a>
+      </div>
+    </li>
+    <!-- /ko -->
+  </ul>
+</script>
 </script> 
     <script type="x-ejs-template" id="file-template" >
 <tr class="component-item">
@@ -262,20 +312,29 @@
 </script> 
     <script type="x-ejs-template" id="resource-sidebar-template" >
 <li>
-  <a href="#">Resources</a>
+  <a href="#">
+    <i class="icon-white icon-align-justify"></i>&nbsp;
+    Dashboard
+  </a>
+</li>
+<li <%= app.files ? 'class="active"' : '' %>>
+  <a href="#files">
+    <i class="icon-white static"></i>&nbsp;
+    Files
+  </a>
 </li>
 <% collection.each(function(resourceModel) { var resource = resourceModel.toJSON(); %>
   <li class="<%= resource._id === app.resourceId ? 'active' : '' %>" >
     <a href="#<%= resource._id %>">
-      <i class="icon-hack <%- resource.type.toLowerCase() %>"></i>&nbsp;
-      <%- resource.path %>
+      <i class="icon-white <%- resource.type.toLowerCase() %>"></i>&nbsp;
+      <%- resource.path.substr(1) %>
     </a>
     <% if (resource._id === app.resourceId && (resource.type === 'Collection' || resource.type === 'UserCollection')) { %>
-      <ul class="nav nav-tabs nav-stacked nav-sublist">
-        <li class="active"><a href="#properties" data-toggle="tab">Properties</a></li>
-        <li><a href="#data" data-toggle="tab">Data</a></li>
-        <li><a href="#api" data-toggle="tab">API</a></li>
-        <li><a href="#events" data-toggle="tab">Events</a></li> 
+      <ul class="nav">
+        <li class="active"><a href="#properties" data-toggle="tab"><i class="icon-white icon-list"></i> Properties</a></li>
+        <li><a href="#data" data-toggle="tab"><i class="icon-white icon-list-alt"></i> Data</a></li>
+        <li><a href="#events" data-toggle="tab"><i class="icon-white icon-exclamation-sign"></i> Events</a></li>
+        <li><a href="#api" data-toggle="tab"><i class="icon-white icon-info-sign"></i> API</a></li>
       </ul>
     <% } %>
   </li>
@@ -283,7 +342,7 @@
 </script> 
     <script type="x-ejs-template" id="resource-template" >
 <div class="component-item-header">
-  <i title="<%= resource.typeLabel %>" class="icon-white <%= resource.typeLabel.toLowerCase().replace(' ', '-') %>"></i>
+  <i title="<%= resource.typeLabel %>" class="type-icon icon-white <%= resource.typeLabel.toLowerCase().replace(' ', '-') %>"></i>
   <% if (resource.c_active) { %>
     <input style="margin-left: 3px; width: 225px;" type="text" class="code" name="path" value="<%- resource.path %>" />
     <a style="margin-right: 3px;" href="#" class="btn btn-primary save-btn">save</a>
@@ -303,78 +362,201 @@
     <script type="x-ejs-template" id="collection-routes-template" >
 <h3>API</h3>
 
-<div class="alert alert-info" style="width: 456px; padding-right: 15px;">Use these routes in your app to save and load data from this Collection.</div>
-<table class="table table-bordered table-striped">
-  <thead>
-    <tr>
-      <th>Task</th>
-      <th>Method</th>
-      <th>Route</th>
-      <th>Accepts</th>
-      <th>Returns</th>
-    </tr>
-    <tbody>
-      <tr>
-        <td><a href="http://deployd.github.com/deployd/#Listing-data" target="_blank">Listing data</a></td>
-        <td>GET</td>
-        <td><a href="<%- path %>" target="_blank"><%- path %></a></td>
-        <td><em>Nothing</em></td>
-        <td>An array of objects</td>
-      </tr>
-      <tr>
-        <td><a href="http://deployd.github.com/deployd/#Saving-data" target="_blank">Creating an object</a></td>
-        <td>POST</td>
-        <td><%- path %></td>
-        <td>A single object</td>
-        <td>The saved object (or errors)</td>
-      </tr>
-      <tr>
-        <td><a href="http://deployd.github.com/deployd/#Retrieving-a-specific-object" target="_blank">Getting an object</a></td>
-        <td>GET</td>
-        <td><%- path %>/&lt;_id&gt;</td>
-        <td><em>Nothing</em></td>
-        <td>A single object</td>
-      </tr>
-      <tr>
-        <td><a href="http://deployd.github.com/deployd/#Updating-an-object" target="_blank">Updating an object</a></td>
-        <td>PUT</td>
-        <td><%- path %>/&lt;_id&gt;</td>
-        <td>A single object</td>
-        <td>The saved object (or errors)</td>
-      </tr>
-      <tr>
-        <td><a href="http://deployd.github.com/deployd/#Deleting-an-object" target="_blank">Deleting an object</a></td>
-        <td>DELETE</td>
-        <td><%- path %>/&lt;_id&gt;</td>
-        <td>A single object</td>
-        <td><em>Nothing</em></td>
-      </tr>
-      <% if (type === 'UserCollection') { %>
+<ul class="nav nav-tabs" id="event-nav">
+  <li class="active"><a href="#js-examples" data-toggle='tab'>JavaScript</a></li>
+  <li><a href="#rest-examples" data-toggle='tab'>REST</a></li>
+</ul>
+
+<div class="tab-content tab-content-styled">
+  <div id="js-examples" class="tab-pane active">
+  <p>Deployd generates a browser JavaScript api for easily accessing data from the <code><%= resourceData.path %></code> collection. To use it you first need to include jQuery and the generated script.</p>
+
+  <pre class="prettyprint code">&lt;script src="http://code.jquery.com/jquery-latest.min.js"&gt;&lt;/script&gt;
+&lt;script src="dpd.js"&gt;&lt;/script&gt;</pre>
+
+  <%
+    function ns(path) {
+      path = path.replace('/', '');
+      if(path.indexOf('-') > -1) path = "['" + path + "']";
+      else path = '.' + path;
+      return path;
+    }
+    
+    function getObj() {
+      var props = resourceData.properties
+        , keys = _.keys(props)
+        , obj = {}
+        , key
+        , vals = {string: 'foobar', number: 123, boolean: true, date: new Date()}
+      ;
+      
+      while(key = keys.shift()) {
+        if(props[key].type != 'date') obj[key] = vals[props[key].type];
+      }
+
+      return JSON.stringify(obj);
+    }
+  %>
+
+  <% if (resourceData.type === 'UserCollection') { %>
+  <p>Register a new user in the <code><%= resourceData.path %></code> collection:</p>
+  <pre class="code prettyprint">
+  dpd<%= ns(resourceData.path) %>.post({"email": "foo@bar.com", "password": "mypassword"}, function(user, err) {
+    if(err) return console.log(err);
+    console.log(user);
+  });</pre>
+
+  <p>Login an existing user in the <code><%= resourceData.path %></code> collection:</p>
+  <pre class="code prettyprint">
+  dpd<%= ns(resourceData.path) %>.login({"email": "foo@bar.com", "password": "mypassword"}, function(user, err) {
+    if(err) return console.log(err);
+    console.log(user);
+  });</pre>
+
+  <p>Get the current user in the <code><%= resourceData.path %></code> collection:</p>
+  <pre class="code prettyprint">
+  dpd<%= ns(resourceData.path) %>.me(function(me) {
+    console.log(me);
+  });</pre>
+
+  <p>Logout the current user in the <code><%= resourceData.path %></code> collection:</p>
+  <pre class="code prettyprint">
+  dpd<%= ns(resourceData.path) %>.logout(function(err) {
+    if(err) console.log(err);
+  });</pre>
+    
+  <% } else { %> 
+
+  <p>Insert data into the <code><%= resourceData.path %></code> collection:</p>
+  <pre class="code prettyprint">
+  dpd<%= ns(resourceData.path) %>.post(<%= getObj() %>, function(result, err) {
+    if(err) return console.log(err);
+    console.log(result, result._id);
+  });</pre>
+
+  <% } %>
+
+  <p>Get all the objects in the <code><%= resourceData.path %></code> collection:</p>
+  <pre class="code prettyprint">
+  dpd<%= ns(resourceData.path) %>.get(function (result, err) {
+    if(err) return console.log(err);
+    console.log(result);
+  });</pre>
+
+  <p>Get all the objects in the <code><%= resourceData.path %></code> collection that match a <a href="http://www.mongodb.org/display/DOCS/Advanced+Queries">query</a>:</p>
+  <pre class="code prettyprint">
+  var query = <%= getObj() %>;
+
+  dpd<%= ns(resourceData.path) %>.get(query, function (result) {
+    console.log(result);
+  });</pre>
+
+  <p>Get a single object in the <code><%= resourceData.path %></code> collection by id:</p>
+  <pre class="code prettyprint">
+  dpd<%= ns(resourceData.path) %>.first("000000000000000000000000", function (result) {
+    console.log(result);
+  });</pre>
+
+  <p>Get a single object in the <code><%= resourceData.path %></code> collection that matches a <a href="http://www.mongodb.org/display/DOCS/Advanced+Queries">query</a>:</p>
+  <pre class="code prettyprint">
+  var query = <%= getObj() %>;
+
+  dpd<%= ns(resourceData.path) %>.first(query, function (result) {
+    console.log(result);
+  });</pre>
+
+  <p>Update an object in the <code><%= resourceData.path %></code> collection:</p>
+  <pre class="code prettyprint">
+  dpd<%= ns(resourceData.path) %>.put("000000000000000000000000", <%= getObj() %>, function(result, err) {
+    if(err) return console.log(err);
+    console.log(result, result._id);
+  });</pre>
+
+  <p>Remove a single object from the <code><%= resourceData.path %></code> collection:</p>
+  <pre class="code prettyprint">
+  dpd<%= ns(resourceData.path) %>.del("000000000000000000000000", function (err) {
+    if(err) console.log(err);
+  });</pre>
+
+  </div>
+
+
+  <div id="rest-examples" class="tab-pane">
+    <p>Access the <code><%= resourceData.path %></code> collection over http.</p>
+
+    <table class="table table-bordered table-striped">
+      <thead>
         <tr>
-          <td><a href="http://deployd.github.com/deployd/#Authenticating-a-user" target="_blank">Logging in</a></td>
-          <td>POST</td>
-          <td><%- path %>/login</td>
-          <td><code>email</code> and <code>password</code> of user</td>
-          <td>The user, plus session cookie (or error)</td>
+          <th>Task</th>
+          <th>Method</th>
+          <th>Route</th>
+          <th>Accepts</th>
+          <th>Returns</th>
         </tr>
-        <tr>
-          <td><a href="http://deployd.github.com/deployd/#Logging-out" target="_blank">Logging out</a></td>
-          <td>POST</td>
-          <td><%- path %>/logout</td>
-          <td><em>Nothing</em></td>
-          <td><em>Nothing</em></td>
-        </tr>
-        <tr>
-          <td><a href="http://deployd.github.com/deployd/#Current-user" target="_blank">Getting the current user</a></td>
-          <td>GET</td>
-          <td><a href="<%- path %>/me" target="_blank"><%- path %>/me</a></td>
-          <td><em>Nothing</em></td>
-          <td>A single object</td>
-        </tr>
-      <% } %>
-    </tbody>
-  </thead>
-</table>
+        <tbody>
+          <tr>
+            <td><a href="http://deployd.github.com/deployd/#Listing-data" target="_blank">Listing data</a></td>
+            <td>GET</td>
+            <td><a href="<%- resourceData.path %>" target="_blank"><%- resourceData.path %></a></td>
+            <td><em>Nothing</em></td>
+            <td>An array of objects</td>
+          </tr>
+          <tr>
+            <td><a href="http://deployd.github.com/deployd/#Saving-data" target="_blank">Creating an object</a></td>
+            <td>POST</td>
+            <td><%- resourceData.path %></td>
+            <td>A single object</td>
+            <td>The saved object (or errors)</td>
+          </tr>
+          <tr>
+            <td><a href="http://deployd.github.com/deployd/#Retrieving-a-specific-object" target="_blank">Getting an object</a></td>
+            <td>GET</td>
+            <td><%- resourceData.path %>/&lt;_id&gt;</td>
+            <td><em>Nothing</em></td>
+            <td>A single object</td>
+          </tr>
+          <tr>
+            <td><a href="http://deployd.github.com/deployd/#Updating-an-object" target="_blank">Updating an object</a></td>
+            <td>PUT</td>
+            <td><%- resourceData.path %>/&lt;_id&gt;</td>
+            <td>A single object</td>
+            <td>The saved object (or errors)</td>
+          </tr>
+          <tr>
+            <td><a href="http://deployd.github.com/deployd/#Deleting-an-object" target="_blank">Deleting an object</a></td>
+            <td>DELETE</td>
+            <td><%- resourceData.path %>/&lt;_id&gt;</td>
+            <td>A single object</td>
+            <td><em>Nothing</em></td>
+          </tr>
+          <% if (resourceData.type === 'UserCollection') { %>
+            <tr>
+              <td><a href="http://deployd.github.com/deployd/#Authenticating-a-user" target="_blank">Logging in</a></td>
+              <td>POST</td>
+              <td><%- resourceData.path %>/login</td>
+              <td><code>email</code> and <code>password</code> of user</td>
+              <td>The user, plus session cookie (or error)</td>
+            </tr>
+            <tr>
+              <td><a href="http://deployd.github.com/deployd/#Logging-out" target="_blank">Logging out</a></td>
+              <td>POST</td>
+              <td><%- resourceData.path %>/logout</td>
+              <td><em>Nothing</em></td>
+              <td><em>Nothing</em></td>
+            </tr>
+            <tr>
+              <td><a href="http://deployd.github.com/deployd/#Current-user" target="_blank">Getting the current user</a></td>
+              <td>GET</td>
+              <td><a href="<%- resourceData.path %>/me" target="_blank"><%- resourceData.path %>/me</a></td>
+              <td><em>Nothing</em></td>
+              <td>A single object</td>
+            </tr>
+          <% } %>
+        </tbody>
+      </thead>
+    </table>
+  </div>
+</div>
 </script> 
     <script type="x-ejs-template" id="collection-data-template" >
 <h3>Data</h3>
@@ -384,12 +566,12 @@
       <thead class="type-icons">
         <tr>
         <td class="code">
-          <i class="icon-hack string" data-bind="tooltip: 'string'"></i>
+          <i class="icon-white icon-hack string" data-bind="tooltip: 'string'"></i>
           _id
         </td>
         <!-- ko foreach: properties -->
           <td class="code">
-            <i class="icon-hack" data-bind="tooltip: typeLabel, cssNamed: type"></i>
+            <i class="icon-white icon-hack" data-bind="tooltip: typeLabel, cssNamed: type"></i>
             <span data-bind="text: name"></span>
           </td>
         <!-- /ko -->
@@ -438,12 +620,14 @@
 </div>
 
 <script type="text/html" id="data-cell-edit-template">
-  <i class="icon-warning-sign" data-bind="tooltip: {title: $parent.c_errors()[name()]}, visible: $parent.c_errors()[name()]"></i>
+  <div class="data-cell-input">
+  <i class="icon-white icon-warning-sign" data-bind="tooltip: {title: $parent.c_errors()[name()]}, visible: $parent.c_errors()[name()]"></i>
   <!-- ko if: type() === 'string' --> <input type="text" data-bind="value: $parent[name()], hasfocus: $parent.c_focus() === name(), event: {keydown: $parent._onKeypress}", /> <!-- /ko -->
   <!-- ko if: type() === 'boolean' --> <input type="checkbox" data-bind="checked: $parent[name()]" /> <!-- /ko -->
   <!-- ko if: type() === 'date' --> <input type="datetime" data-bind="value: $parent[name()], hasfocus: $parent.c_focus() === name(), event: {keydown: $parent._onKeypress}" /> <!-- /ko -->
   <!-- ko if: type() === 'number' --> <input type="number" data-bind="value: $parent[name()], hasfocus: $parent.c_focus() === name(), event: {keydown: $parent._onKeypress}" /> <!-- /ko -->
   <!-- ko if: type() === 'password' --> <input type="password" placeholder="*******" data-bind="value: $parent[name()], hasfocus: $parent.c_focus() === name(), event: {keydown: $parent._onKeypress}" /> <!-- /ko -->
+  </div>
 </script>
 </script> 
  
@@ -524,7 +708,7 @@
       </li>
     </ul>
   </div>
-  <input type="text" placeholder="myPropertyName" data-bind="value: name, hasfocus: nameFocus, event: { keypress: onNameKeypress }" />
+  <input type="text" placeholder="myPropertyName" data-bind="value: name, hasfocus: nameFocus, event: { keypress: onNameKeypress, keydown: onNameKeyDown }" />
   <button class="btn" data-bind="click: toggleEditing, clickBubble: false, visible: !isNew">done</button>
   <div class="pull-right">
     <label data-bind="if: type() !== 'boolean'" class="checkbox pull-left"><input type="checkbox" data-bind="checked: optional" />Optional</label>
@@ -601,17 +785,23 @@
   
 <ul class="nav nav-tabs" id="event-nav">
   <li><a href="#get-panel" data-toggle='tab' data-editor="onGet">On GET</a></li>
-  <li class="active"><a href="#post-panel" data-toggle='tab' data-editor="onPost">On POST</a></li>
+  <li class="active"><a href="#validate-panel" data-toggle='tab' data-editor="onValidate">On Validate</a></li>
+  <li><a href="#post-panel" data-toggle='tab' data-editor="onPost">On POST</a></li>
   <li><a href="#put-panel" data-toggle='tab' data-editor="onPut">On PUT</a></li>
   <li><a href="#delete-panel" data-toggle='tab' data-editor="onDelete">On DELETE</a></li>
 </ul>
-<div class="tab-content">
+<div class="tab-content tab-content-styled">
   <div class="tab-pane" id="get-panel">
     <div class="editor-container">
       <div id="onGet"></div>
     </div>
   </div>
-  <div class="tab-pane active" id="post-panel">
+  <div class="tab-pane active" id="validate-panel">
+    <div class="editor-container">
+      <div id="onValidate"></div>
+    </div>
+  </div>
+  <div class="tab-pane" id="post-panel">
     <div class="editor-container">
       <div id="onPost"></div>
     </div>
@@ -628,21 +818,26 @@
   </div>
 </div>
 </script> 
+     
+    <script type="x-ejs-template" id="empty-html-template" >
+<!doctype html>
+
+<html>
+  <head>
+    <xscript src="http://code.jquery.com/jquery-latest.min.js"></xscript>
+    <xscript src="dpd.js"></xscript>
+  </head>
+  <body>
+    
+  </body>
+</html>
+</script> 
  
-    <script type="text/javascript" src="js/lib/jquery-1.7.2.js"></script> 
-    <script type="text/javascript" src="js/lib/jquery-ui.min.js"></script> 
-    <script type="text/javascript" src="js/lib/jquery.plugins.js"></script> 
-    <script type="text/javascript" src="js/lib/bootstrap.js"></script> 
-    <script type="text/javascript" src="js/lib/underscore.js"></script> 
-    <script type="text/javascript" src="js/lib/underscore.string.min.js"></script> 
-    <script type="text/javascript" src="js/lib/backbone.js"></script> 
-    <script type="text/javascript" src="js/lib/knockout-2.0.0.js"></script> 
-    <script type="text/javascript" src="js/lib/knockout.mapping.js"></script> 
-    <script type="text/javascript" src="js/lib/ace-noconflict.js"></script> 
-    <script type="text/javascript" src="js/lib/ace-mode-javascript-noconflict.js"></script> 
-    <script type="text/javascript" src="js/lib/ace-mode-css-noconflict.js"></script> 
-    <script type="text/javascript" src="js/lib/ace-mode-html-noconflict.js"></script> 
+     
+        <script type="text/javascript" src="js/lib.js"></script> 
+        <script src="js/require.js" data-main="js/entry.js"></script> 
+     
  
-    <script src="js/lib/require.js" data-main="js/app/entry.js"></script> 
+    
   </body> 
 </html>

@@ -1,4 +1,5 @@
 require('shelljs/make');
+var md = require('node-markdown').Markdown;
 var path = require('path');
 
 target.all = function() {
@@ -11,11 +12,13 @@ target.docs = function() {
     , body = '';
   
   // index should be first
-  body += exec('markdown ' + 'index.markdown', {silent: true}).output;
+
+  body += md(cat('index.markdown'));
   
   ls('*.markdown').forEach(function(file, i, arr) {
     if(file != 'index.markdown') {
-      body += exec('markdown ' + file, {silent: true}).output;
+      console.log(cat(file));
+      body += md(cat(file));
       if(i < arr.length - 1) body += '<hr />';
     }
   });

@@ -68,6 +68,7 @@ data = {
       'if (me) {' + 
       '  this.creator = me._id;' +
       '}',
+      onValidate: 'this.isValidate = true'
     },
     users: {
       type: 'UserCollection',

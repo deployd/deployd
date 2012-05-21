@@ -1,17 +1,35 @@
 # deployd
 
-modern, distributed, resource server.
+distributed resource server
 
 [documentation](http://deployd.github.com/deployd)
 
 ## Features
 
- - Streaming, Any-Size File Storage
- - Queryable JSON Collections
- - Validation
- - Authentication
- - Events
- 
+**Users**
+
+  - Register, Login, and Logout Users
+  - Restrict access to data
+  
+**Data** 
+
+  - Query, Insert, Update, and Remove JSON Objects over HTTP
+  - JSON Schema Validation
+  - Scriptable Validation
+  
+**Files**
+
+  - Upload using the dashboard web ui or CLI
+  - Fully structured distributed file system built on GridFS
+  - Fast file streaming
+  - Optimized for serving from ec2, heroku, nodejitsu, and other similar clouds
+
+## Dependencies
+
+Currently deployd requires mongodb to be installed. You can download it [here](http://www.mongodb.org/downloads).
+
+Deployd also requires `node.js` >= v0.6.0. You can download it [here](http://nodejs.org/#download).
+
 ## Installation
 
     $ [sudo] npm install deployd -g
@@ -20,29 +38,10 @@ modern, distributed, resource server.
 
 You can start the server with the `dpd` command line interface. For more commands see `dpd -h`.
 
-    $ dpd listen
-
-## Remote Administration
-
-Deployd servers do not rely on human created passwords, instead deployd can be administered over http using a randomly generated auth key.
-
-Use the CLI to generate a unique key for remote administration.
-
-    $ dpd key
-
-    added key:
-
-    {_id: "...", ...}
-
-Requests to low level APIs such as /types and /resources will require a `x-dssh-header` containing a key generated with `dpd`.
-
-Keys can contain meta data for identifying their owner. This is useful in the case where access should
-be granted and revoked on a key by key basis.
-
-    $ dpd addkey '{"user":"joe"}'
-  
-    added key: {user: 'joe', _id: '...', ...}
+    $ dpd -d
     
+Including the `-d` flag will open the dashboard in your default browser.
+
 ## Questions
 
 Consult the [documentation](http://deployd.github.com/deployd) or contact `ritchie at deployd com`.
