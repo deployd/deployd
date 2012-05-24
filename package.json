@@ -1,7 +1,7 @@
 {
   "author": "Ritchie Martori",
   "name": "deployd",
-  "version": "0.4.7",
+  "version": "0.5.0-pre",
   "repository": {
     "url": "git://github.com/deployd/deployd.git"
   },
@@ -9,23 +9,11 @@
     "node": ">= 0.6.0"
   },
   "main":"index",
-  "dependencies": {
-    "mdoq": "0.9.0",
-    "mdoq-http": "0.5.x",
-    "mdoq-mongodb": "0.6.x",
-    "revalidator": "0.1.x",
-    "commander": "0.5.x",
-    "express": "2.5.x",
-    "formidable": "1.0.x",
-    "shelljs": "0.0.4"
-  },
+  "dependencies": {},
   "devDependencies": {
     "mocha": "*",
     "chai": "*",
     "node-markdown": "*"
   },
-  "bin": {
-    "dpd": "./bin/dpd",
-    "dpd-export": "./bin/dpd-export"
-  }
+  "bin": {}
 }

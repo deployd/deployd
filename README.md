@@ -1,52 +1,60 @@
 # deployd
 
-distributed resource server
+realtime bridge
 
-[documentation](http://deployd.github.com/deployd)
+## quick start
 
-## Features
+    [sudo] npm install deployd -g
+    dpd create my-app
 
-**Users**
+## features
 
-  - Register, Login, and Logout Users
-  - Restrict access to data
-  
-**Data** 
+ - secure access to database APIs directly from untrusted clients (browser js, mobile apps, etc)
+ - automatic properties and relationships for complex queries without joins (or sql)
+ - notify clients in realtime of events occurring within the database
+ - simple security specific language for scripting access control based on context
+ - useable in your existing node app or as a stand-alone server
+ - user and session management
+ - all APIs exposed over REST / HTTP
 
-  - Query, Insert, Update, and Remove JSON Objects over HTTP
-  - JSON Schema Validation
-  - Scriptable Validation
-  
-**Files**
+## goals
 
-  - Upload using the dashboard web ui or CLI
-  - Fully structured distributed file system built on GridFS
-  - Fast file streaming
-  - Optimized for serving from ec2, heroku, nodejitsu, and other similar clouds
+ - be database agnostic
+ - be client agnostic (usable from browser, servers, mobile apps, etc)
+ - be a good web citizen / support native web best practices
+ - be a good node citizen / use node best practices
+ - support extension through node modules and npm
+ - follow the [ways of node](http://www.mikealrogers.com/posts/the-way-of-node.html)
+ - follow the [12 factor methodology](http://www.12factor.net/)
+ 
+## modules
 
-## Dependencies
+**core**
 
-Currently deployd requires mongodb to be installed. You can download it [here](http://www.mongodb.org/downloads).
+ - resource - base module, mountable at a URL
+ - router - determines a resource based on a URL
+ - collection - allows users to query, save, and delete JSON objects
+ - users collection - allows users to register / login / logout
+ - file system - allows users to upload / download / stream files
+ - emitter - global message bus / event emitter
+ - sessions - manage authentication of users
+ - resources - internal access to mounted resources
+ - db - used by all modules to persist data
+ - http server - exposes APIs over HTTP
 
-Deployd also requires `node.js` >= v0.6.0. You can download it [here](http://nodejs.org/#download).
+**external**
 
-## Installation
+ - client - simple client for remote access from node and browsers (more comming soon)
 
-    $ [sudo] npm install deployd -g
-    
-## Start
+**third party**
 
-You can start the server with the `dpd` command line interface. For more commands see `dpd -h`.
+  coming soon
 
-    $ dpd -d
-    
-Including the `-d` flag will open the dashboard in your default browser.
-
-## Questions
+## questions
 
 Consult the [documentation](http://deployd.github.com/deployd) or contact `ritchie at deployd com`.
 
-## License
+## license
 
 Copyright 2012 deployd, llc
 
