@@ -1,4 +1,5 @@
-var Collection = require('../lib/resources/collection');
+var Collection = require('../lib/resources/collection')
+  , db = require('../lib/db');
 
 describe('collection', function(){
   describe('.validate(req)', function(){
@@ -84,30 +85,43 @@ describe('collection', function(){
     })
   })
   
-  describe('.authorize()', function(){
-    it('should allow users to GET Collections', function(done) {
-      freq('/foo', {}, function (req, res) {
-        var r = new Collection({}, req, res);
-        var errs = r.authorize();
-        done(errs);
-      })
+  describe('.authorize(method, query)', function(){
+    it('should allow users to GET Collections', function() {
+      var r = new Collection();
+      var err = r.authorize('GET', {});
+      expect(err).to.not.exist;
     })
     
-    it('should not allow users to PUT Collections without an _id', function(done) {
-      freq('/foo', {method: 'PUT'}, function (req, res) {
-        var r = new Collection({}, req, res);
-        var errs = r.authorize();
-        expect(errs).to.exist;
-        done();
-      })
+    it('should not allow users to PUT Collections without an _id', function() {
+      var r = new Collection();
+      var errs = r.authorize('PUT', {});
+      expect(errs).to.exist;
     })
     
-    it('should not allow users to DELETE Collections without an _id', function(done) {
-      freq('/foo', {method: 'DELETE'}, function (req, res) {
-        var r = new Collection({}, req, res);
-        var errs = r.authorize();
-        expect(errs).to.exist;
-        done();
+    it('should not allow users to DELETE Collections without an _id', function() {
+      var r = new Collection();
+      var errs = r.authorize('DELETE', {});
+      expect(errs).to.exist;
+    })
+  })
+  
+  describe('.handle(req, res)', function(){
+    it('should have a store', function() {
+      var c = new Collection({path: '/foo', db: db.connect(TEST_DB)});
+      expect(c.store).to.exist;
+    })
+    
+    it('should proxy the request into its store', function(done) {  
+      var c = new Collection({path: '/foo', db: db.connect(TEST_DB)});
+      freq('/foo', {body: {test: true}, json: true}, function (req, res) {
+        c.handle(req, res);
+      }, function (req, res) {
+        expect(req.body).to.eql({test: true});
+        expect(res.statusCode).to.equal(200);
+        c.store.first({test: true}, function (err, res) {
+          expect(res).to.eql({test: true});
+          done(err);
+        })
       })
     })
   })
