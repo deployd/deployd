@@ -50,10 +50,6 @@ data = {
         dateCompleted: {
           type: "date",
           optional: true
-        },
-        likes: {
-          type: "number",
-          optional: true
         }
       },
       onGet: 'this.isGet = true; //This is a comment',
@@ -84,6 +80,10 @@ data = {
         },
         age: {
           type: 'number'
+        },
+        likes: {
+          type: "number",
+          optional: true
         }
       }
     },
