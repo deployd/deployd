@@ -17,7 +17,8 @@
     "commander": "0.5.x",
     "express": "2.5.x",
     "formidable": "1.0.x",
-    "shelljs": "0.0.4"
+    "shelljs": "0.0.4",
+    "async-eval": "0.1.1"
   },
   "devDependencies": {
     "mocha": "*",

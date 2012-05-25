@@ -50,6 +50,10 @@ data = {
         dateCompleted: {
           type: "date",
           optional: true
+        },
+        likes: {
+          type: "number",
+          optional: true
         }
       },
       onGet: 'this.isGet = true; //This is a comment',
@@ -82,6 +86,17 @@ data = {
           type: 'number'
         }
       }
+    },
+    likes: {
+      type: 'Collection',
+      path: '/likes',
+      properties: {
+        userId: {
+          type: 'string'
+        }
+      },
+      onGet: 'dpd.users.getOne(this.userId, function(user) { this.username = user.username; })',
+      onPost: 'dpd.users.put(this.userId, {$inc: {likes: 1}})'
     },
     avatars: {
       type: 'Static',
@@ -125,7 +140,9 @@ beforeEach(function(done){
         resources.post(data.resources.index, function (ee) {
           resources.post(data.resources.avatars, function (er) {
             resources.post(data.resources.users, function (err, b, req, res) {
-              done(err || er || e);
+              resources.post(data.resources.likes, function (errr) {
+                done(err || er || e || errr);
+              });
             })
           })
         })
