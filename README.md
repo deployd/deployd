@@ -23,19 +23,21 @@ realtime bridge
  - be client agnostic (usable from browser, servers, mobile apps, etc)
  - be a good web citizen / support native web best practices
  - be a good node citizen / use node best practices
+ - can be hosted by modern cloud platforms
  - support extension through node modules and npm
  - follow the [ways of node](http://www.mikealrogers.com/posts/the-way-of-node.html)
  - follow the [12 factor methodology](http://www.12factor.net/)
- 
+
 ## modules
 
 **core**
 
  - resource - base module, mountable at a URL
- - router - determines a resource based on a URL
  - collection - allows users to query, save, and delete JSON objects
  - users collection - allows users to register / login / logout
+ - ??? - allow users to listen and emit events 
  - file system - allows users to upload / download / stream files
+ - router - determines a resource based on a URL
  - emitter - global message bus / event emitter
  - sessions - manage authentication of users
  - resources - internal access to mounted resources
@@ -53,6 +55,12 @@ realtime bridge
 ## questions
 
 Consult the [documentation](http://deployd.github.com/deployd) or contact `ritchie at deployd com`.
+
+## changelog
+
+### 0.5
+
+  - removed `property.optional` in favor of `property.required`
 
 ## license
 
