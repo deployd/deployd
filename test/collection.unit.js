@@ -85,26 +85,6 @@ describe('collection', function(){
     })
   })
   
-  describe('.authorize(method, query)', function(){
-    it('should allow users to GET Collections', function() {
-      var r = new Collection();
-      var err = r.authorize('GET', {});
-      expect(err).to.not.exist;
-    })
-    
-    it('should not allow users to PUT Collections without an _id', function() {
-      var r = new Collection();
-      var errs = r.authorize('PUT', {});
-      expect(errs).to.exist;
-    })
-    
-    it('should not allow users to DELETE Collections without an _id', function() {
-      var r = new Collection();
-      var errs = r.authorize('DELETE', {});
-      expect(errs).to.exist;
-    })
-  })
-  
   describe('.handle(req, res)', function(){
     it('should have a store', function() {
       var c = new Collection({path: '/foo', db: db.connect(TEST_DB)});
@@ -118,6 +98,7 @@ describe('collection', function(){
         freq(path, {method: method, body: body, json: true}, function (req, res) {
           // faux body
           req.body = body;
+          req.query = query;
           c.handle(req, res);
         }, function (req, res) {       
           test(req, res, method, path, properties, body, query);
@@ -168,7 +149,7 @@ describe('collection', function(){
     })
     
     it('should handle DELETE', function(done) {
-      example('DELETE', '/foo', {test: {type: 'boolean'}}, {test: false, _id: 7}, null,
+      example('DELETE', '/foo', {test: {type: 'boolean'}}, null, {_id: 7},
         function (req, res, method, path, properties, body) {
           expect(res.statusCode).to.equal(200);
         },
@@ -177,19 +158,84 @@ describe('collection', function(){
     })
   })
   
-  describe('.bind(settings)', function(){
-    it('should bind events', function(done) {
-      var settings = {path: '/foo', onGet: 'this.foo = Math.random();'}
-        , c = new Collection();
-        
-      c.bind(settings).on('completedGet', function (result) {
-        var item = result[0];
-        expect(item.foo >= 0 && item.foo <= 1).to.equal(true);
+  describe('.execListener(method, session, query, item, fn)', function(){
+    it('should execute a Get listener', function(done) {
+      var c = new Collection({
+        onGet: 'this.foo = 2 + 2;'
+      });
+      
+      var items = [{foo: 1}, {foo: 1}, {foo: 1}];
+      c.execListener('Get', {}, {}, items, function (err) {
+        for(var i = 0; i < items.length; i++) {
+          expect(items[i].foo).to.equal(4);
+        }
+        done(err);
+      })
+    })
+    
+    it('should be able to perform io', function(done) {
+      var widgets = db.connect(TEST_DB).createStore('widgets');
+      
+      var c = new Collection({
+        onGet: 'var item = this; widgets.insert({foo:"bar"}, function(err, widget) { item._id = widget._id })',
+        resources: {
+          widgets: widgets
+        }
+      });
+      
+      var items = [{_id: 1}, {_id: 1}, {_id: 1}];
+      c.execListener('Get', {}, {}, items, function (err, result) {
+        for(var i = 0; i < items.length; i++) {
+          expect(result[i]._id).to.not.equal(1);
+        }
+        done(err);
+      })
+    })
+    
+    it('should have access to a validation dsl cancel() method', function(done) {
+      var c = new Collection({
+        onGet: 'cancel("testing error", 123)'
+      });
+      
+      c.execListener('Get', {}, {}, [{a:'b'}], function (err) {
+        expect(err.toString()).to.equal('Error: testing error');
+        expect(err.status).to.equal(123);
         done();
       })
+    })
+    
+    it('should have access to a validation dsl hide() method', function(done) {
+      var c = new Collection({
+        onGet: 'hide("secret")'
+      });
       
-      freq('/foo', {}, function (req, res) {
-        c.emit('after:get', [{foo: 0}], req, res);
+      var items = [{secret: 'foobar'}];
+      c.execListener('Get', {}, {}, items, function (err, result) {
+        expect(result[0].secret).to.not.equal('foobar');
+        expect(result[0].secret).to.not.exist;
+        done();
+      })
+    })
+    
+    it('should return errors when the error() method is called', function(done) {
+      var c = new Collection({
+        onPost: 'error("foo", "must not be bar")'
+      });
+      
+      c.execListener('Post', {}, {}, {foo: 'bar'}, function (err, result) {
+        expect(result).to.eql({"foo": "must not be bar"});
+        done();
+      })
+    })
+    
+    it('should protect values from being changed via protect()', function(done) {
+      var c = new Collection({
+        onPut: 'protect("foo")'
+      });
+      
+      c.execListener('Put', {}, {}, {foo: 'bar'}, function (err, result) {
+        expect(result.foo).to.not.exist;
+        done();
       })
     })
   })
