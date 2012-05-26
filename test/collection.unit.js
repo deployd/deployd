@@ -111,17 +111,85 @@ describe('collection', function(){
       expect(c.store).to.exist;
     })
     
-    it('should proxy the request into its store', function(done) {  
-      var c = new Collection({path: '/foo', db: db.connect(TEST_DB)});
-      freq('/foo', {body: {test: true}, json: true}, function (req, res) {
-        c.handle(req, res);
-      }, function (req, res) {
-        expect(req.body).to.eql({test: true});
-        expect(res.statusCode).to.equal(200);
-        c.store.first({test: true}, function (err, res) {
-          expect(res).to.eql({test: true});
-          done(err);
+    function example(method, path, properties, body, query, test, done, testData) {
+      var c = new Collection({path: path, db: db.connect(TEST_DB), properties: properties});
+      
+      function t() {
+        freq(path, {method: method, body: body, json: true}, function (req, res) {
+          // faux body
+          req.body = body;
+          c.handle(req, res);
+        }, function (req, res) {       
+          test(req, res, method, path, properties, body, query);
+          // cleanup
+          c.store.remove(function (err) {
+            done(err);
+          })
         })
+      }
+      
+      if(testData) {
+        c.store.insert(testData, t);
+      } else {
+        t();
+      }
+    }
+    
+    it('should handle POST', function(done) {
+      example('POST', '/foo', {test: {type: 'boolean'}}, {test: true}, null,
+        function (req, res, method, path, properties, body) {
+            expect(req.body).to.eql(body);
+            expect(res.statusCode).to.equal(200);
+        },
+        done
+      );
+    })
+    
+    it('should handle GET', function(done) {
+      var testData = [{test: true}, {test: false}];
+      example('GET', '/foo', {test: {type: 'boolean'}}, null, null,
+        function (req, res, method, path, properties, body) {
+          expect(res.statusCode).to.equal(200);
+        },
+        done,
+        testData
+      );
+    })
+    
+    it('should handle PUT', function(done) {
+      var testData = [{test: true}, {test: false}];
+      example('PUT', '/foo', {test: {type: 'boolean'}}, {test: false, _id: 7}, null,
+        function (req, res, method, path, properties, body) {
+          expect(res.statusCode).to.equal(200);
+        },
+        done,
+        testData
+      );
+    })
+    
+    it('should handle DELETE', function(done) {
+      example('DELETE', '/foo', {test: {type: 'boolean'}}, {test: false, _id: 7}, null,
+        function (req, res, method, path, properties, body) {
+          expect(res.statusCode).to.equal(200);
+        },
+        done
+      );
+    })
+  })
+  
+  describe('.bind(settings)', function(){
+    it('should bind events', function(done) {
+      var settings = {path: '/foo', onGet: 'this.foo = Math.random();'}
+        , c = new Collection();
+        
+      c.bind(settings).on('completedGet', function (result) {
+        var item = result[0];
+        expect(item.foo >= 0 && item.foo <= 1).to.equal(true);
+        done();
+      })
+      
+      freq('/foo', {}, function (req, res) {
+        c.emit('after:get', [{foo: 0}], req, res);
       })
     })
   })
