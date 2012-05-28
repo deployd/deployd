@@ -1,0 +1,1926 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="bootstrap.css" type="text/css" media="screen" title="no title" charset="utf-8">
+    <link rel="stylesheet" href="style.css" type="text/css" media="screen" title="no title" charset="utf-8">
+  </head>
+  <body>
+  
+  <div class="docs">
+    
+      
+        <div class="comment">
+
+          <h1 class="comment-hdr">
+              db.connect()
+              
+          </h1>
+          
+            <h2 class="declaration">
+              
+              
+                
+              
+                
+              
+              db.connect(options)
+            </h2>
+          
+          <ul class="tags">
+            
+              <li class="tag">
+                
+                
+                  <span class="tag-type">param</span>
+                  
+                
+                
+                  <span class="tag-name">options</span>
+                
+                  
+                  <span class="tag-types"><code>Object</code></span>
+                
+                
+              </li>
+            
+              <li class="tag">
+                
+                
+                  <span class="tag-type">return</span>
+                  
+                
+                
+                  
+                  <span class="tag-types"><code>Db</code></span>
+                
+                
+              </li>
+            
+          </ul>
+          <div class="desc">
+            <p>Create a new database connection with the given options. You can start making<br />database calls right away. They are internally buffered and executed once the<br />connection is resolved.</p>
+
+<h2>Options</h2>
+
+<ul>
+<li><code>name</code>         the database name</li>
+<li><code>host</code>         the database host</li>
+<li><code>port</code>         the database port</li>
+</ul>
+
+<h2>Example</h2>
+
+<pre><code>db
+  .connect({host: 'localhost', port: 27015, name: 'test'})
+  .createStore('testing-store')
+  .insert({foo: 'bar'}, fn)
+</code></pre>
+          </div>
+        </div>
+      
+    
+      
+        <div class="comment">
+
+          <h1 class="comment-hdr">
+              Db()
+              
+          </h1>
+          
+            <h2 class="declaration">
+              
+              
+                
+              
+                
+              
+              Db(options)
+            </h2>
+          
+          <ul class="tags">
+            
+              <li class="tag">
+                
+                
+                  <span class="tag-type">param</span>
+                  
+                
+                
+                  <span class="tag-name">options</span>
+                
+                  
+                  <span class="tag-types"><code>Object</code></span>
+                
+                
+              </li>
+            
+              <li class="tag">
+                
+                
+                  <span class="tag-type">api</span>
+                  
+                    <span class="tag-visibility">private</span>
+                  
+                
+                
+                
+                
+              </li>
+            
+          </ul>
+          <div class="desc">
+            <p>A <code>Db</code> abstracts a driver implementation of the database. This allows for<br />a single interface to be used against any database implementation.</p>
+
+<h2>Example</h2>
+
+<pre><code>var redis = require('redis');
+
+function Redis(options) {
+  this.options = options;
+  this._redis = redis.createClient()
+}
+util.inherits(Redis, Db);
+
+Redis.prototype.open = function (fn) {
+  this._redis.once('ready', fn);
+}
+</code></pre>
+          </div>
+        </div>
+      
+    
+      
+        <div class="comment">
+
+          <h1 class="comment-hdr">
+              Db.prototype.open()
+              
+          </h1>
+          
+            <h2 class="declaration">
+              
+              
+                
+              
+                
+              
+              Db.prototype.open(callback)
+            </h2>
+          
+          <ul class="tags">
+            
+              <li class="tag">
+                
+                
+                  <span class="tag-type">param</span>
+                  
+                
+                
+                  <span class="tag-name">callback</span>
+                
+                  
+                  <span class="tag-types"><code>Function</code></span>
+                
+                
+              </li>
+            
+              <li class="tag">
+                
+                
+                  <span class="tag-type">api</span>
+                  
+                    <span class="tag-visibility">private</span>
+                  
+                
+                
+                
+                
+              </li>
+            
+          </ul>
+          <div class="desc">
+            <p>Open a connection to the underlying database.</p>
+          </div>
+        </div>
+      
+    
+      
+        <div class="comment">
+
+          <h1 class="comment-hdr">
+              Db.prototype.createStore()
+              
+          </h1>
+          
+            <h2 class="declaration">
+              
+              
+                
+              
+                
+              
+              Db.prototype.createStore(namespace)
+            </h2>
+          
+          <ul class="tags">
+            
+              <li class="tag">
+                
+                
+                  <span class="tag-type">param</span>
+                  
+                
+                
+                  <span class="tag-name">namespace</span>
+                
+                  
+                  <span class="tag-types"><code>String</code></span>
+                
+                
+              </li>
+            
+              <li class="tag">
+                
+                
+                  <span class="tag-type">return</span>
+                  
+                
+                
+                  
+                  <span class="tag-types"><code>Store</code></span>
+                
+                
+              </li>
+            
+          </ul>
+          <div class="desc">
+            <p>Create a new database store (eg. a collection).</p>
+
+<h2>Example</h2>
+
+<pre><code>db
+  .connect({host: 'localhost', port: 27015, name: 'test'})
+  .createStore('testing-store')
+  .insert({foo: 'bar'}, fn)
+</code></pre>
+          </div>
+        </div>
+      
+    
+      
+        <div class="comment">
+
+          <h1 class="comment-hdr">
+              Store()
+              
+          </h1>
+          
+            <h2 class="declaration">
+              
+              
+                
+              
+                
+              
+                
+              
+              Store(namespace, db)
+            </h2>
+          
+          <ul class="tags">
+            
+              <li class="tag">
+                
+                
+                  <span class="tag-type">param</span>
+                  
+                
+                
+                  <span class="tag-name">namespace</span>
+                
+                  
+                  <span class="tag-types"><code>String</code></span>
+                
+                
+              </li>
+            
+              <li class="tag">
+                
+                
+                  <span class="tag-type">param</span>
+                  
+                
+                
+                  <span class="tag-name">db</span>
+                
+                  
+                  <span class="tag-types"><code>Db</code></span>
+                
+                
+              </li>
+            
+              <li class="tag">
+                
+                
+                  <span class="tag-type">api</span>
+                  
+                    <span class="tag-visibility">private</span>
+                  
+                
+                
+                
+                
+              </li>
+            
+          </ul>
+          <div class="desc">
+            <p>Initialize a space in the database (eg. a collection).</p>
+          </div>
+        </div>
+      
+    
+      
+        <div class="comment">
+
+          <h1 class="comment-hdr">
+              Store.prototype.insert()
+              
+          </h1>
+          
+            <h2 class="declaration">
+              
+              
+                
+              
+                
+              
+              Store.prototype.insert(object, callback)
+            </h2>
+          
+          <ul class="tags">
+            
+              <li class="tag">
+                
+                
+                  <span class="tag-type">param</span>
+                  
+                
+                
+                  <span class="tag-name">object</span>
+                
+                  
+                  <span class="tag-types"><code>Object</code></span>
+                
+                
+              </li>
+            
+              <li class="tag">
+                
+                
+                  <span class="tag-type">param</span>
+                  
+                
+                
+                  <span class="tag-name">callback(err,</span>
+                
+                  
+                  <span class="tag-types"><code>Function</code></span>
+                
+                
+                  <span class="tag-description">obj)</span>
+                
+              </li>
+            
+          </ul>
+          <div class="desc">
+            <p>Insert an object into the store.</p>
+
+<h2>Example</h2>
+
+<pre><code>db
+  .connect({host: 'localhost', port: 27015, name: 'test'})
+  .createStore('testing-store')
+  .insert({foo: 'bar'}, fn)
+</code></pre>
+          </div>
+        </div>
+      
+    
+      
+        <div class="comment">
+
+          <h1 class="comment-hdr">
+              Store.prototype.find()
+              
+          </h1>
+          
+            <h2 class="declaration">
+              
+              
+                
+              
+                
+              
+              Store.prototype.find(query, callback)
+            </h2>
+          
+          <ul class="tags">
+            
+              <li class="tag">
+                
+                
+                  <span class="tag-type">param</span>
+                  
+                
+                
+                  <span class="tag-name">query</span>
+                
+                  
+                  <span class="tag-types"><code>Object</code></span>
+                
+                
+              </li>
+            
+              <li class="tag">
+                
+                
+                  <span class="tag-type">param</span>
+                  
+                
+                
+                  <span class="tag-name">callback(err,</span>
+                
+                  
+                  <span class="tag-types"><code>Function</code></span>
+                
+                
+                  <span class="tag-description">obj)</span>
+                
+              </li>
+            
+          </ul>
+          <div class="desc">
+            <p>Find all objects in the store that match the given query.</p>
+
+<h2>Example</h2>
+
+<pre><code>db
+  .connect({host: 'localhost', port: 27015, name: 'test'})
+  .createStore('testing-store')
+  .find({foo: 'bar'}, fn)
+</code></pre>
+          </div>
+        </div>
+      
+    
+      
+        <div class="comment">
+
+          <h1 class="comment-hdr">
+              Store.prototype.first()
+              
+          </h1>
+          
+            <h2 class="declaration">
+              
+              
+                
+              
+                
+              
+              Store.prototype.first(query, callback)
+            </h2>
+          
+          <ul class="tags">
+            
+              <li class="tag">
+                
+                
+                  <span class="tag-type">param</span>
+                  
+                
+                
+                  <span class="tag-name">query</span>
+                
+                  
+                  <span class="tag-types"><code>Object</code></span>
+                
+                
+              </li>
+            
+              <li class="tag">
+                
+                
+                  <span class="tag-type">param</span>
+                  
+                
+                
+                  <span class="tag-name">callback(err,</span>
+                
+                  
+                  <span class="tag-types"><code>Function</code></span>
+                
+                
+                  <span class="tag-description">obj)</span>
+                
+              </li>
+            
+          </ul>
+          <div class="desc">
+            <p>Find the first object in the store that match the given query.</p>
+
+<h2>Example</h2>
+
+<pre><code>db
+  .connect({host: 'localhost', port: 27015, name: 'test'})
+  .createStore('testing-store')
+  .first({foo: 'bar'}, fn)
+</code></pre>
+          </div>
+        </div>
+      
+    
+      
+        <div class="comment">
+
+          <h1 class="comment-hdr">
+              Store.prototype.update()
+              
+          </h1>
+          
+            <h2 class="declaration">
+              
+              
+                
+              
+                
+              
+                
+              
+              Store.prototype.update(query, object, callback)
+            </h2>
+          
+          <ul class="tags">
+            
+              <li class="tag">
+                
+                
+                  <span class="tag-type">param</span>
+                  
+                
+                
+                  <span class="tag-name">query</span>
+                
+                  
+                  <span class="tag-types"><code>Object</code></span>
+                
+                
+              </li>
+            
+              <li class="tag">
+                
+                
+                  <span class="tag-type">param</span>
+                  
+                
+                
+                  <span class="tag-name">object</span>
+                
+                  
+                  <span class="tag-types"><code>Object</code></span>
+                
+                
+              </li>
+            
+              <li class="tag">
+                
+                
+                  <span class="tag-type">param</span>
+                  
+                
+                
+                  <span class="tag-name">callback(err,</span>
+                
+                  
+                  <span class="tag-types"><code>Function</code></span>
+                
+                
+                  <span class="tag-description">obj)</span>
+                
+              </li>
+            
+          </ul>
+          <div class="desc">
+            <p>Update an object or objects in the store that match the given query.</p>
+
+<h2>Example</h2>
+
+<pre><code>db
+  .connect({host: 'localhost', port: 27015, name: 'test'})
+  .createStore('testing-store')
+  .update({_id: '&lt;an object id&gt;'}, fn)
+</code></pre>
+          </div>
+        </div>
+      
+    
+      
+        <div class="comment">
+
+          <h1 class="comment-hdr">
+              Store.prototype.remove()
+              
+          </h1>
+          
+            <h2 class="declaration">
+              
+              
+                
+              
+                
+              
+              Store.prototype.remove(query, callback)
+            </h2>
+          
+          <ul class="tags">
+            
+              <li class="tag">
+                
+                
+                  <span class="tag-type">param</span>
+                  
+                
+                
+                  <span class="tag-name">query</span>
+                
+                  
+                  <span class="tag-types"><code>Object</code></span>
+                
+                
+              </li>
+            
+              <li class="tag">
+                
+                
+                  <span class="tag-type">param</span>
+                  
+                
+                
+                  <span class="tag-name">callback(err,</span>
+                
+                  
+                  <span class="tag-types"><code>Function</code></span>
+                
+                
+                  <span class="tag-description">obj)</span>
+                
+              </li>
+            
+          </ul>
+          <div class="desc">
+            <p>Remove an object or objects in the store that match the given query.</p>
+
+<h2>Example</h2>
+
+<pre><code>db
+  .connect({host: 'localhost', port: 27015, name: 'test'})
+  .createStore('testing-store')
+  .remove({_id: '&lt;an object id&gt;'}, fn)
+</code></pre>
+          </div>
+        </div>
+      
+    
+      
+        <div class="comment">
+
+          <h1 class="comment-hdr">
+              Store.prototype.rename()
+              
+          </h1>
+          
+            <h2 class="declaration">
+              
+              
+                
+              
+                
+              
+              Store.prototype.rename(namespace, callback)
+            </h2>
+          
+          <ul class="tags">
+            
+              <li class="tag">
+                
+                
+                  <span class="tag-type">param</span>
+                  
+                
+                
+                  <span class="tag-name">namespace</span>
+                
+                  
+                  <span class="tag-types"><code>String</code></span>
+                
+                
+              </li>
+            
+              <li class="tag">
+                
+                
+                  <span class="tag-type">param</span>
+                  
+                
+                
+                  <span class="tag-name">callback(err,</span>
+                
+                  
+                  <span class="tag-types"><code>Function</code></span>
+                
+                
+                  <span class="tag-description">obj)</span>
+                
+              </li>
+            
+          </ul>
+          <div class="desc">
+            <p>Rename the store.</p>
+
+<h2>Example</h2>
+
+<pre><code>db
+  .connect({host: 'localhost', port: 27015, name: 'test'})
+  .createStore('testing-store')
+  .rename('renamed-store', fn)
+</code></pre>
+          </div>
+        </div>
+      
+    
+      
+        <div class="comment">
+
+          <h1 class="comment-hdr">
+              Server()
+              
+          </h1>
+          
+            <h2 class="declaration">
+              
+              
+                
+              
+                
+              
+              Server(options)
+            </h2>
+          
+          <ul class="tags">
+            
+              <li class="tag">
+                
+                
+                  <span class="tag-type">param</span>
+                  
+                
+                
+                  <span class="tag-name">options</span>
+                
+                  
+                  <span class="tag-types"><code>Object</code></span>
+                
+                
+              </li>
+            
+              <li class="tag">
+                
+                
+                  <span class="tag-type">return</span>
+                  
+                
+                
+                  
+                  <span class="tag-types"><code>HttpServer</code></span>
+                
+                
+              </li>
+            
+          </ul>
+          <div class="desc">
+            <p>Create an http server with the given options and create a <code>Router</code> to handle its requests.</p>
+
+<h2>Options</h2>
+
+<ul>
+<li><code>db</code>           the database connection info</li>
+<li><code>host</code>         the server's hostname</li>
+<li><code>port</code>         the server's port</li>
+</ul>
+
+<h2>Example</h2>
+
+<pre><code>var server = new Server({port: 3000, db: {host: 'localhost', port: 27015, name: 'my-db'}});
+
+server.listen();
+</code></pre>
+          </div>
+        </div>
+      
+    
+      
+        <div class="comment">
+
+          <h1 class="comment-hdr">
+              Resource()
+              
+          </h1>
+          
+            <h2 class="declaration">
+              
+              
+                
+              
+                
+              
+              Resource(settings)
+            </h2>
+          
+          <ul class="tags">
+            
+              <li class="tag">
+                
+                
+                  <span class="tag-type">param</span>
+                  
+                
+                
+                  <span class="tag-name">settings</span>
+                
+                  
+                  <span class="tag-types"><code>Object</code></span>
+                
+                
+              </li>
+            
+              <li class="tag">
+                
+                
+                  <span class="tag-type">api</span>
+                  
+                    <span class="tag-visibility">private</span>
+                  
+                
+                
+                
+                
+              </li>
+            
+          </ul>
+          <div class="desc">
+            <p>A <code>Resource</code> handles incoming requests at a matched url. The base class is designed <br />to be extended by overriding methods that will be called by a <code>Router</code>.</p>
+
+<h2>Settings</h2>
+
+<ul>
+<li><code>path</code>         the base path a resource should handle</li>
+<li><code>db</code>           the database a resource will use for persistence</li>
+</ul>
+
+<h2>Example</h2>
+
+<p>The following resource would respond with a file at the url <code>/my-file.html</code>.</p>
+
+<pre><code>function MyFileResource(settings) {
+  Resource.apply(this, arguments);
+}
+util.inherits(MyFileResource, Resource);
+
+FileResource.prototype.match = function (url) {
+  return url === '/my-file.html';
+}
+
+FileResource.prototype.handle = function (req, res) {
+  fs.createReadStream('my-file.html').pipe(res);
+}
+</code></pre>
+          </div>
+        </div>
+      
+    
+      
+        <div class="comment">
+
+          <h1 class="comment-hdr">
+              Resource.prototype.match()
+              
+          </h1>
+          
+            <h2 class="declaration">
+              
+              
+                
+              
+                
+              
+                
+              
+              Resource.prototype.match(url)
+            </h2>
+          
+          <ul class="tags">
+            
+              <li class="tag">
+                
+                
+                  <span class="tag-type">param</span>
+                  
+                
+                
+                  <span class="tag-name">url</span>
+                
+                  
+                  <span class="tag-types"><code>String</code></span>
+                
+                
+              </li>
+            
+              <li class="tag">
+                
+                
+                  <span class="tag-type">return</span>
+                  
+                
+                
+                  
+                  <span class="tag-types"><code>Boolean</code></span>
+                
+                
+              </li>
+            
+              <li class="tag">
+                
+                
+                  <span class="tag-type">api</span>
+                  
+                    <span class="tag-visibility">private</span>
+                  
+                
+                
+                
+                
+              </li>
+            
+          </ul>
+          <div class="desc">
+            <p>Check if the resource path matches <code>url</code>. This is how the <code>Router</code> <br />determines which <code>Resource</code> will <code>.handle()</code> the request.</p>
+
+<p>Note that only one resource can handle a request at a time.</p>
+          </div>
+        </div>
+      
+    
+      
+        <div class="comment">
+
+          <h1 class="comment-hdr">
+              Resource.prototype.parse()
+              
+          </h1>
+          
+            <h2 class="declaration">
+              
+              
+                
+              
+                
+              
+                
+              
+              Resource.prototype.parse(url)
+            </h2>
+          
+          <ul class="tags">
+            
+              <li class="tag">
+                
+                
+                  <span class="tag-type">param</span>
+                  
+                
+                
+                  <span class="tag-name">url</span>
+                
+                  
+                  <span class="tag-types"><code>String</code></span>
+                
+                
+              </li>
+            
+              <li class="tag">
+                
+                
+                  <span class="tag-type">return</span>
+                  
+                
+                
+                  
+                  <span class="tag-types"><code>Object</code></span>
+                
+                
+              </li>
+            
+              <li class="tag">
+                
+                
+                  <span class="tag-type">api</span>
+                  
+                    <span class="tag-visibility">private</span>
+                  
+                
+                
+                
+                
+              </li>
+            
+          </ul>
+          <div class="desc">
+            <p>Parse the <code>url</code> into a basepath, query, and parts.</p>
+          </div>
+        </div>
+      
+    
+      
+        <div class="comment">
+
+          <h1 class="comment-hdr">
+              Resource.prototype.handle()
+              
+          </h1>
+          
+            <h2 class="declaration">
+              
+              
+                
+              
+                
+              
+              Resource.prototype.handle(req, res)
+            </h2>
+          
+          <ul class="tags">
+            
+              <li class="tag">
+                
+                
+                  <span class="tag-type">param</span>
+                  
+                
+                
+                  <span class="tag-name">req</span>
+                
+                  
+                  <span class="tag-types"><code>ServerRequest</code></span>
+                
+                
+              </li>
+            
+              <li class="tag">
+                
+                
+                  <span class="tag-type">param</span>
+                  
+                
+                
+                  <span class="tag-name">res</span>
+                
+                  
+                  <span class="tag-types"><code>ServerResponse</code></span>
+                
+                
+              </li>
+            
+          </ul>
+          <div class="desc">
+            <p>Handle an incoming http <code>req</code> and <code>res</code>.</p>
+
+<h2>Example</h2>
+
+<p>Override the handle method to change how a resource handles HTTP.</p>
+
+<pre><code>function MyResource(settings) {
+  Resource.apply(this, arguments);
+}
+util.inherits(MyResource, Resource);
+
+MyResource.prototype.handle = function (req, res) {
+  res.end('My custon http resource');
+}
+</code></pre>
+          </div>
+        </div>
+      
+    
+      
+        <div class="comment">
+
+          <h1 class="comment-hdr">
+              Collection()
+              
+          </h1>
+          
+            <h2 class="declaration">
+              
+              
+                
+              
+                
+              
+              Collection(settings)
+            </h2>
+          
+          <ul class="tags">
+            
+              <li class="tag">
+                
+                
+                  <span class="tag-type">param</span>
+                  
+                
+                
+                  <span class="tag-name">settings</span>
+                
+                  
+                  <span class="tag-types"><code>Object</code></span>
+                
+                
+              </li>
+            
+              <li class="tag">
+                
+                
+                  <span class="tag-type">api</span>
+                  
+                    <span class="tag-visibility">private</span>
+                  
+                
+                
+                
+                
+              </li>
+            
+          </ul>
+          <div class="desc">
+            <p>A <code>Collection</code> proxies validates incoming requests then proxies them into a <code>Store</code>.</p>
+
+<h2>Settings</h2>
+
+<ul>
+<li><code>path</code>         the base path a resource should handle</li>
+<li><code>properties</code>   the properties of objects the collection should store </li>
+<li><code>db</code>           the database a collection will use for persistence</li>
+<li><code>onGet</code>        a function to execute after a collection gets an object</li>
+<li><code>onPost</code>       a function to execute before a collection creates an object</li>
+<li><code>onPut</code>        a function to execute before a collection updates an object</li>
+<li><code>onDelete</code>     a function to execute before a collection deletes an object</li>
+<li><code>onValidate</code>   a function to execute before a collection creates or updates an object</li>
+</ul>
+
+<h2>Example</h2>
+
+<pre><code>var properties = {title: {type: 'string'}, done: {type: 'boolean'}, created: {type: 'date'}}
+  , onPost = 'this.created = new Date()'
+  , todos = new Collection({properties: properties, onPost});
+</code></pre>
+          </div>
+        </div>
+      
+    
+      
+        <div class="comment">
+
+          <h1 class="comment-hdr">
+              Collection.prototype.validate()
+              
+          </h1>
+          
+            <h2 class="declaration">
+              
+              
+                
+              
+                
+              
+                
+              
+              Collection.prototype.validate(body)
+            </h2>
+          
+          <ul class="tags">
+            
+              <li class="tag">
+                
+                
+                  <span class="tag-type">param</span>
+                  
+                
+                
+                  <span class="tag-name">body</span>
+                
+                  
+                  <span class="tag-types"><code>Object</code></span>
+                
+                
+              </li>
+            
+              <li class="tag">
+                
+                
+                  <span class="tag-type">return</span>
+                  
+                
+                
+                  
+                  <span class="tag-types"><code>Object</code></span>
+                
+                
+                  <span class="tag-description">errors</span>
+                
+              </li>
+            
+              <li class="tag">
+                
+                
+                  <span class="tag-type">api</span>
+                  
+                    <span class="tag-visibility">private</span>
+                  
+                
+                
+                
+                
+              </li>
+            
+          </ul>
+          <div class="desc">
+            <p>Validate the request <code>body</code> against the <code>Collection</code> <code>properties</code> <br />and return an object containing any <code>errors</code>.</p>
+          </div>
+        </div>
+      
+    
+      
+        <div class="comment">
+
+          <h1 class="comment-hdr">
+              Collection.prototype.sanitize()
+              
+          </h1>
+          
+            <h2 class="declaration">
+              
+              
+                
+              
+                
+              
+                
+              
+              Collection.prototype.sanitize(body)
+            </h2>
+          
+          <ul class="tags">
+            
+              <li class="tag">
+                
+                
+                  <span class="tag-type">param</span>
+                  
+                
+                
+                  <span class="tag-name">body</span>
+                
+                  
+                  <span class="tag-types"><code>Object</code></span>
+                
+                
+              </li>
+            
+              <li class="tag">
+                
+                
+                  <span class="tag-type">return</span>
+                  
+                
+                
+                  
+                  <span class="tag-types"><code>Object</code></span>
+                
+                
+                  <span class="tag-description">sanitized</span>
+                
+              </li>
+            
+              <li class="tag">
+                
+                
+                  <span class="tag-type">api</span>
+                  
+                    <span class="tag-visibility">private</span>
+                  
+                
+                
+                
+                
+              </li>
+            
+          </ul>
+          <div class="desc">
+            <p>Sanitize the request <code>body</code> against the <code>Collection</code> <code>properties</code> <br />and return an object containing only properties that exist in the<br /><code>Collection.settings.properties</code> object.</p>
+          </div>
+        </div>
+      
+    
+      
+        <div class="comment">
+
+          <h1 class="comment-hdr">
+              Collection.prototype.handle()
+              
+          </h1>
+          
+            <h2 class="declaration">
+              
+              
+                
+              
+                
+              
+              Collection.prototype.handle(req, res)
+            </h2>
+          
+          <ul class="tags">
+            
+              <li class="tag">
+                
+                
+                  <span class="tag-type">param</span>
+                  
+                
+                
+                  <span class="tag-name">req</span>
+                
+                  
+                  <span class="tag-types"><code>ServerRequest</code></span>
+                
+                
+              </li>
+            
+              <li class="tag">
+                
+                
+                  <span class="tag-type">param</span>
+                  
+                
+                
+                  <span class="tag-name">res</span>
+                
+                  
+                  <span class="tag-types"><code>ServerResponse</code></span>
+                
+                
+              </li>
+            
+          </ul>
+          <div class="desc">
+            <p>Handle an incoming http <code>req</code> and <code>res</code> and execute<br />the correct <code>Store</code> proxy function based on <code>req.method</code>.</p>
+          </div>
+        </div>
+      
+    
+      
+        <div class="comment">
+
+          <h1 class="comment-hdr">
+              Collection.prototype.execListener()
+              
+          </h1>
+          
+            <h2 class="declaration">
+              
+              
+                
+              
+                
+              
+                
+              
+                
+              
+                
+              
+              Collection.prototype.execListener(method, session, query, item, callback)
+            </h2>
+          
+          <ul class="tags">
+            
+              <li class="tag">
+                
+                
+                  <span class="tag-type">param</span>
+                  
+                
+                
+                  <span class="tag-name">method</span>
+                
+                  
+                  <span class="tag-types"><code>String</code></span>
+                
+                
+              </li>
+            
+              <li class="tag">
+                
+                
+                  <span class="tag-type">param</span>
+                  
+                
+                
+                  <span class="tag-name">session</span>
+                
+                  
+                  <span class="tag-types"><code>Object</code></span>
+                
+                
+              </li>
+            
+              <li class="tag">
+                
+                
+                  <span class="tag-type">param</span>
+                  
+                
+                
+                  <span class="tag-name">query</span>
+                
+                  
+                  <span class="tag-types"><code>Object</code></span>
+                
+                
+              </li>
+            
+              <li class="tag">
+                
+                
+                  <span class="tag-type">param</span>
+                  
+                
+                
+                  <span class="tag-name">item</span>
+                
+                  
+                  <span class="tag-types"><code>Object|Array</code></span>
+                
+                
+              </li>
+            
+              <li class="tag">
+                
+                
+                  <span class="tag-type">param</span>
+                  
+                
+                
+                  <span class="tag-name">callback</span>
+                
+                  
+                  <span class="tag-types"><code>Function</code></span>
+                
+                
+              </li>
+            
+          </ul>
+          <div class="desc">
+            <p>Execute a collection event listener based on the given method.</p>
+
+<h2>Example</h2>
+
+<pre><code>var c = new Collection({
+  onPost: 'error("foo", "must not be bar")'
+});
+
+var item = {foo: 'bar'};
+
+c.execListener('Post', session, query, item, function (err, result) {
+  expect(result).to.eql({"foo": "must not be bar"});
+});
+</code></pre>
+          </div>
+        </div>
+      
+    
+      
+        <div class="comment">
+
+          <h1 class="comment-hdr">
+              Collection.prototype.find()
+              
+          </h1>
+          
+            <h2 class="declaration">
+              
+              
+                
+              
+                
+              
+                
+              
+              Collection.prototype.find(session, query, callback)
+            </h2>
+          
+          <ul class="tags">
+            
+              <li class="tag">
+                
+                
+                  <span class="tag-type">param</span>
+                  
+                
+                
+                  <span class="tag-name">session</span>
+                
+                  
+                  <span class="tag-types"><code>Object</code></span>
+                
+                
+              </li>
+            
+              <li class="tag">
+                
+                
+                  <span class="tag-type">param</span>
+                  
+                
+                
+                  <span class="tag-name">query</span>
+                
+                  
+                  <span class="tag-types"><code>Object</code></span>
+                
+                
+              </li>
+            
+              <li class="tag">
+                
+                
+                  <span class="tag-type">param</span>
+                  
+                
+                
+                  <span class="tag-name">callback(err,</span>
+                
+                  
+                  <span class="tag-types"><code>Function</code></span>
+                
+                
+                  <span class="tag-description">result)</span>
+                
+              </li>
+            
+          </ul>
+          <div class="desc">
+            <p>Find all the objects in a collection that match the given<br />query. Then execute its get listener on each object.</p>
+          </div>
+        </div>
+      
+    
+      
+        <div class="comment">
+
+          <h1 class="comment-hdr">
+              Collection.prototype.remove()
+              
+          </h1>
+          
+            <h2 class="declaration">
+              
+              
+                
+              
+                
+              
+                
+              
+              Collection.prototype.remove(session, query, callback)
+            </h2>
+          
+          <ul class="tags">
+            
+              <li class="tag">
+                
+                
+                  <span class="tag-type">param</span>
+                  
+                
+                
+                  <span class="tag-name">session</span>
+                
+                  
+                  <span class="tag-types"><code>Object</code></span>
+                
+                
+              </li>
+            
+              <li class="tag">
+                
+                
+                  <span class="tag-type">param</span>
+                  
+                
+                
+                  <span class="tag-name">query</span>
+                
+                  
+                  <span class="tag-types"><code>Object</code></span>
+                
+                
+              </li>
+            
+              <li class="tag">
+                
+                
+                  <span class="tag-type">param</span>
+                  
+                
+                
+                  <span class="tag-name">callback(err)</span>
+                
+                  
+                  <span class="tag-types"><code>Function</code></span>
+                
+                
+              </li>
+            
+          </ul>
+          <div class="desc">
+            <p>Execute the onDelete listener. If it succeeds, remove all objects in a<br />collection that match the given query.</p>
+          </div>
+        </div>
+      
+    
+      
+        <div class="comment">
+
+          <h1 class="comment-hdr">
+              Collection.prototype.save()
+              
+          </h1>
+          
+            <h2 class="declaration">
+              
+              
+                
+              
+                
+              
+                
+              
+                
+              
+              Collection.prototype.save(session, query, item, callback)
+            </h2>
+          
+          <ul class="tags">
+            
+              <li class="tag">
+                
+                
+                  <span class="tag-type">param</span>
+                  
+                
+                
+                  <span class="tag-name">session</span>
+                
+                  
+                  <span class="tag-types"><code>Object</code></span>
+                
+                
+              </li>
+            
+              <li class="tag">
+                
+                
+                  <span class="tag-type">param</span>
+                  
+                
+                
+                  <span class="tag-name">query</span>
+                
+                  
+                  <span class="tag-types"><code>Object</code></span>
+                
+                
+              </li>
+            
+              <li class="tag">
+                
+                
+                  <span class="tag-type">param</span>
+                  
+                
+                
+                  <span class="tag-name">item</span>
+                
+                  
+                  <span class="tag-types"><code>Object|Array</code></span>
+                
+                
+              </li>
+            
+              <li class="tag">
+                
+                
+                  <span class="tag-type">param</span>
+                  
+                
+                
+                  <span class="tag-name">callback(err,</span>
+                
+                  
+                  <span class="tag-types"><code>Function</code></span>
+                
+                
+                  <span class="tag-description">result)</span>
+                
+              </li>
+            
+          </ul>
+          <div class="desc">
+            <p>Execute the onPost or onPut listener. If it succeeds, <br />save the given item in the collection.</p>
+          </div>
+        </div>
+      
+    
+      
+        <div class="comment">
+
+          <h1 class="comment-hdr">
+              Router()
+              
+          </h1>
+          
+            <h2 class="declaration">
+              
+              
+                
+              
+                
+              
+              Router(resources)
+            </h2>
+          
+          <ul class="tags">
+            
+              <li class="tag">
+                
+                
+                  <span class="tag-type">param</span>
+                  
+                
+                
+                  <span class="tag-name">resources</span>
+                
+                  
+                  <span class="tag-types"><code>Store</code></span>
+                
+                
+              </li>
+            
+              <li class="tag">
+                
+                
+                  <span class="tag-type">api</span>
+                  
+                    <span class="tag-visibility">private</span>
+                  
+                
+                
+                
+                
+              </li>
+            
+          </ul>
+          <div class="desc">
+            <p>A <code>Router</code> routes incoming requests to the correct resource. It also initializes and<br />executes the correct methods on a resource.</p>
+          </div>
+        </div>
+      
+    
+      
+        <div class="comment">
+
+          <h1 class="comment-hdr">
+              Router.prototype.route()
+              
+          </h1>
+          
+            <h2 class="declaration">
+              
+              
+                
+              
+                
+              
+              Router.prototype.route(req, res)
+            </h2>
+          
+          <ul class="tags">
+            
+              <li class="tag">
+                
+                
+                  <span class="tag-type">param</span>
+                  
+                
+                
+                  <span class="tag-name">req</span>
+                
+                  
+                  <span class="tag-types"><code>ServerRequest</code></span>
+                
+                
+              </li>
+            
+              <li class="tag">
+                
+                
+                  <span class="tag-type">param</span>
+                  
+                
+                
+                  <span class="tag-name">res</span>
+                
+                  
+                  <span class="tag-types"><code>ServerResponse</code></span>
+                
+                
+              </li>
+            
+          </ul>
+          <div class="desc">
+            <p>Using every resource, route to the first match (when <code>resource.match(url)</code> returns true).<br />Hand the resource the <code>req</code> and <code>res</code> by calling its <code>resource.handle(req, res)</code> method.</p>
+
+<p>If the router does not find a resource, respond with <code>404</code>.</p>
+          </div>
+        </div>
+      
+    
+      
+        <div class="comment">
+
+          <h1 class="comment-hdr">
+              Session()
+              
+          </h1>
+          
+            <h2 class="declaration">
+              
+              
+              
+            </h2>
+          
+          <ul class="tags">
+            
+          </ul>
+          <div class="desc">
+            <p>Initialize a connection with a client (or user) that can be established<br />and torn down at a later time. An established communication session may<br />involve more than one message in each direction. This is implemented in<br />both HTTP and WebSockets. Each WebSocket connection is bound to a session.</p>
+
+<h2>Example</h2>
+
+<pre><code>var session = new Session(connection);
+
+session.on('connected', function () {
+  session.emit('hello world');
+});
+</code></pre>
+          </div>
+        </div>
+      
+    
+  </div>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+  <script src="prettify.js"></script>
+  <script>
+    $('pre').addClass('prettyprint');
+    // remove stupid markdown BRs
+    $('p br').each(function () {
+      $(this).after('&nbsp;');
+      $(this).remove();
+    });
+    prettyPrint();
+  </script>
+  
+  </body>
+</html>
+
+
+
