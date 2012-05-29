@@ -12,12 +12,13 @@
   "dependencies": {
     "mdoq": "0.9.0",
     "mdoq-http": "0.5.x",
-    "mdoq-mongodb": "0.6.x",
+    "mdoq-mongodb": "0.7.x",
     "revalidator": "0.1.x",
     "commander": "0.5.x",
     "express": "2.5.x",
     "formidable": "1.0.x",
-    "shelljs": "0.0.4"
+    "shelljs": "0.0.4",
+    "async-eval": "0.1.1"
   },
   "devDependencies": {
     "mocha": "*",
