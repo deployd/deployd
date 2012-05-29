@@ -80,8 +80,23 @@ data = {
         },
         age: {
           type: 'number'
+        },
+        likes: {
+          type: "number",
+          optional: true
         }
       }
+    },
+    likes: {
+      type: 'Collection',
+      path: '/likes',
+      properties: {
+        userId: {
+          type: 'string'
+        }
+      },
+      onGet: 'dpd.users.getOne(this.userId, function(user) { this.username = user.username; })',
+      onPost: 'dpd.users.put(this.userId, {$inc: {likes: 1}});'
     },
     avatars: {
       type: 'Static',
@@ -92,7 +107,7 @@ data = {
       path: '/'
     }
   },
-  users: [{email: 'foo@bar.com', password: 'foobar', age: 21, username: "Foo Bar"}],
+  users: [{email: 'foo@bar.com', password: 'foobar', age: 21, username: "Foo Bar", likes: 0}],
   todos: [{title: 'feed the dog', complete: false}, {title: 'blank cancel', complete: false}, {title: 'finish some stuff', complete: false}]
 }
 
@@ -125,7 +140,9 @@ beforeEach(function(done){
         resources.post(data.resources.index, function (ee) {
           resources.post(data.resources.avatars, function (er) {
             resources.post(data.resources.users, function (err, b, req, res) {
-              done(err || er || e);
+              resources.post(data.resources.likes, function (errr) {
+                done(err || er || e || errr);
+              });
             })
           })
         })
