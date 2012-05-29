@@ -1,7 +1,7 @@
 {
   "author": "Ritchie Martori",
   "name": "deployd",
-  "version": "0.4.7",
+  "version": "0.4.8",
   "repository": {
     "url": "git://github.com/deployd/deployd.git"
   },
