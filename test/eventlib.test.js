@@ -16,14 +16,14 @@ describe('Event IO', function() {
     });
   });
 
-  // describe('On GET /likes', function() {
-  //   it('should get another object', function(done) {
-  //     users.get(function(errU, user) {
-  //       var user = user[0];
-  //       unauthed.use('/likes').post({userId: user._id}, function(errL, like) {
-  //         done(errL)
-  //       });
-  //     });
-  //   });
-  // });
+  describe('On GET /likes', function() {
+    it('should get another object', function(done) {
+      users.get(function(errU, user) {
+        var user = user[0];
+        unauthed.use('/likes').post({userId: user._id}, function(errL, like) {
+          done(errL)
+        });
+      });
+    });
+  });
 });
