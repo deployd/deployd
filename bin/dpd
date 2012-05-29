@@ -12,6 +12,7 @@ var program = require('commander')
   , sh = require('shelljs')
   , url = require('url')
   , keygen = require('../lib/key').keygen
+  , os = require('os')
 ;
 
 /**
@@ -136,7 +137,13 @@ function listen(port, fn) {
         function start(key) {
           console.log('dpd is listening @', 'http://localhost:' + port);
           if(program.dashboard) {
-            exec('open http://localhost:' + port + '/__dashboard/?key=' + encodeURIComponent(JSON.stringify(key)))
+            var command = 'open';
+            if (os.platform() === 'win32') {
+              command = 'start explorer'; 
+            }
+            command += ' \"http://localhost:' + port + '/__dashboard/?key=' + encodeURIComponent(JSON.stringify(key))  + '\"';
+            console.log(command);
+            exec(command);
           }
 
           if(typeof fn === 'function') fn();
