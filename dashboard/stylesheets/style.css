@@ -367,6 +367,8 @@ table .span24{float:none;width:1884px;margin-left:0;}
 .icon-folder-open{background-position:-408px -120px;}
 .icon-resize-vertical{background-position:-432px -119px;}
 .icon-resize-horizontal{background-position:-456px -118px;}
+.icon-object{background-position:-49px -168px;}
+.icon-array{background-position:-71px -168px;}
 .dropdown{position:relative;}
 .dropdown-toggle{*margin-bottom:-3px;}
 .dropdown-toggle:active,.open .dropdown-toggle{outline:0;}
@@ -757,6 +759,8 @@ textarea.full-width{width:100%;}
 .ide-container .component-type-sidebar .component-type-list li.component-type-item i.string{background-position:-144px -48px;}
 .ide-container .component-type-sidebar .component-type-list li.component-type-item i.number{background-position:0 -96px;}
 .ide-container .component-type-sidebar .component-type-list li.component-type-item i.date{background-position:-48px -24px;}
+.ide-container .component-type-sidebar .component-type-list li.component-type-item i.object{background-position:-49px -168px;}
+.ide-container .component-type-sidebar .component-type-list li.component-type-item i.array{background-position:-71px -168px;}
 .ide-container .component-type-sidebar .component-type-list li.component-type-item i.password{background-position:-456px -96px;}
 .ide-container .component-type-sidebar .component-type-list li.component-type-item i.files,.ide-container .component-type-sidebar .component-type-list li.component-type-item i.static{background-position:-384px -120px;}
 .ide-container .component-type-sidebar .component-type-list li.component-type-item i.collection{background-position:-264px 0;}
@@ -767,6 +771,8 @@ textarea.full-width{width:100%;}
 .type-icons i.string{background-position:-144px -48px;}
 .type-icons i.number{background-position:0 -96px;}
 .type-icons i.date{background-position:-48px -24px;}
+.type-icons i.object{background-position:-49px -168px;}
+.type-icons i.array{background-position:-71px -168px;}
 .type-icons i.password{background-position:-456px -96px;}
 .type-icons i.files,.type-icons i.static{background-position:-384px -120px;}
 .type-icons i.collection{background-position:-264px 0;}
@@ -790,6 +796,8 @@ li.component-type-item{list-style:none;padding:10px;height:19px;width:180px;colo
 .component-item-header i.string{background-position:-144px -48px;}
 .component-item-header i.number{background-position:0 -96px;}
 .component-item-header i.date{background-position:-48px -24px;}
+.component-item-header i.object{background-position:-49px -168px;}
+.component-item-header i.array{background-position:-71px -168px;}
 .component-item-header i.password{background-position:-456px -96px;}
 .component-item-header i.files,.component-item-header i.static{background-position:-384px -120px;}
 .component-item-header i.collection{background-position:-264px 0;}
@@ -809,6 +817,8 @@ li.component-item i.boolean{background-position:-72px -96px;}
 li.component-item i.string{background-position:-144px -48px;}
 li.component-item i.number{background-position:0 -96px;}
 li.component-item i.date{background-position:-48px -24px;}
+li.component-item i.object{background-position:-49px -168px;}
+li.component-item i.array{background-position:-71px -168px;}
 li.component-item i.password{background-position:-456px -96px;}
 li.component-item i.files,li.component-item i.static{background-position:-384px -120px;}
 li.component-item i.collection{background-position:-264px 0;}
