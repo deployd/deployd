@@ -1,45 +1,6 @@
 var Resource = require('../lib/resource');
 
 describe('resource', function(){
-  describe('.match(url)', function(){
-    function example(path, url, expected) {
-      var r = new Resource({path: path})
-        , result = r.match(url);
-        
-      if(result != expected) console.log('Match Error:', path, url, expected);
-      expect(result).to.equal(expected);
-    }
-    
-    it('should return true if the resource settings match the url', function() {
-      // should pass
-      example('/foo', '/foo', true);
-      example('/foo', '/foo/index.html', true);
-      example('/foo', '/foo/index.htm', true);
-      example('/foo', '/foo?blah', true);
-      example('/foo', '/foo?q={"foo":"bar"}', true);
-      example('/foo', '/foo/', true);
-      example('/foo', '/foo?', true);
-      example('/foo', '/foo?q', true);
-      example('/foo', '/foo?q=', true);
-      example('/foo', '/foo?q=a', true);
-      example('/foo', '/foo/some-id', true);
-      example('/foo', '/foo/some-id/', true);
-      example('/foo', '/foo/bar', true);
-      example('/foo', '/foo/bar/', true);
-      // should fail
-      example('/foo', '/foo/bar/baz', false);
-      example('/foo', '/foo/bar/baz/blah', false);
-      example('/foo', '/foo/bar/baz/blah/a', false);
-      example('/foo', '/foo/bar/baz/blah/a/b', false);
-      example('/foo', '/foo/bar/baz/blah/a/b/c', false);
-      example('/foo', '/foo/bar/baz/blah/a/', false);
-      example('/foo', '/foo/bar/baz/blah/a/b/', false);
-      example('/foo', '/foo/bar/baz/blah/a/b/c/', false);
-      example('/foo', '/', false);
-      example('/foo', 'foo', false);
-      example('/foo', '/foo/../bar', false);
-    })
-  })
   
   describe('.parse(url)', function(){
     function example(url, basepath, id, parts, query) {
