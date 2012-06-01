@@ -1,103 +1,105 @@
-var Router = require('../lib/router');
-var Resource = require('../lib/resource');
+var Router = require('../lib/router')
+  , Resource = require('../lib/resource');
 
 describe('Router', function() {
 
   describe('.route()', function() {
     it('should route to a matching resource', function(done) {
+      var resource = new Resource({path: '/foo'})
+        , router = new Router([resource]);
+
       this.timeout(100);
 
-      var resource = new Resource({path: '/foo'})
       resource.handle = function() {
         done();
       };
-
-      var router = new Router([resource]);
-
+      
       router.route({url: '/foo/1234'}, {});
     });
 
     it ('should route to resources in turn', function(done) {
-      this.timeout(100);
-      var foobarCalled = false;
+      var foobar = new Resource({path: '/foo/bar'})
+        , foo = new Resource({path: '/foo'})
+        , router = new Router([foo, foobar])
+        , foobarCalled = false;
 
-      var foobar = new Resource({path: '/foo/bar'});
-      foobar.handle = function(ctx, res, next) {
+      this.timeout(100);
+
+      foobar.handle = function(ctx, next) {
         foobarCalled = true;
         next();
       };
-
-      var foo = new Resource({path: '/foo'})
       foo.handle = function() {
         expect(foobarCalled).to.be.true
         done();
       };
 
-      var router = new Router([foo, foobar]);
-
       router.route({url: '/foo/bar'}, {});
     });
 
     it ('should return 404 if no resources match', function(done) {
-      this.timeout(100);
       var foo = new Resource({path: '/foo'})
+        , router = new Router([foo]);
+
+      this.timeout(100);
+      
       foo.handle = function() {
         throw "/foo was handled"
       };
 
-      var router = new Router([foo]);
-
       router.route({url: '/dont-match'}, {end: function() {
-        expect(this.status).to.equal(404);
+        expect(this.statusCode).to.equal(404);
         done();
       }});
 
     });
 
     it ('should return 404 if all resources call next', function(done) {
+      var foobar = new Resource({path: '/foo/bar'})
+        , foo = new Resource({path: '/foo'})
+        , router = new Router([foo, foobar]);
+
       this.timeout(100);
-
-      var foobar = new Resource({path: '/foo/bar'});
-      foobar.handle = function(ctx, res, next) {
+      
+      foobar.handle = function(ctx, next) {
         next();
       };
 
-      var foo = new Resource({path: '/foo'})
-      foo.handle = function(ctx, res, next) {
+      foo.handle = function(ctx, next) {
         next();
       };
-
-      var router = new Router([foo, foobar]);
 
       router.route({url: '/foo/bar'}, {end: function() {
-        expect(this.status).to.equal(404);
+        expect(this.statusCode).to.equal(404);
         done();
       }});
     });
 
     it('should modify ctx.url to remove the base path', function(done) {
+      var foo = new Resource({path: '/foo'})
+        , router = new Router([foo]);
+
       this.timeout(1000);
 
-      var foo = new Resource({path: '/foo'});
       foo.handle = function(ctx, res) {
         expect(ctx.url).to.equal('/1234');
         done();
       }
 
-      var router = new Router([foo]);
       router.route({url: '/foo/1234'}, {});
     });
 
     it('should still have a leading slash for root resources', function(done) {
+      var resource = new Resource({path: '/'})
+        , router = new Router([resource]);
+
       this.timeout(1000);
 
-      var resource = new Resource({path: '/'});
       resource.handle = function(ctx, res) {
         expect(ctx.url).to.equal('/index.html');
         done();
       }
 
-      var router = new Router([resource]);
       router.route({url: '/index.html'}, {});
     });
   });
@@ -158,8 +160,8 @@ describe('Router', function() {
 
   describe('.generateRegex()', function() {
     function example(path, url, expected) {
-      var regex = Router.prototype.generateRegex(path);
-      var result = url.match(regex);
+      var regex = Router.prototype.generateRegex(path)
+        , result = url.match(regex);
 
       if (expected) {
         expect(result).to.be.ok;

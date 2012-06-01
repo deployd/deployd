@@ -1,4 +1,5 @@
 var Resource = require('../lib/resource');
+var Context = require('../lib/context');
 
 describe('resource', function(){
   
@@ -22,12 +23,12 @@ describe('resource', function(){
     })
   })
   
-  describe('.handle(ctx, res, next)', function(){
+  describe('.handle(ctx, next)', function(){
     it('should respond with 200 OK', function(done) {
       var r = new Resource({path: '/foo'});
       
       freq('/foo', null, function (req, res) {
-        r.handle(req, res);
+        r.handle(new Context(r, req, res));
       }, function (req, res) {
         expect(res.statusCode).to.equal(200);
         done();

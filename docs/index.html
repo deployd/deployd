@@ -11,6 +11,111 @@
         <div class="comment"> 
  
           <h1 class="comment-hdr"> 
+              Context() 
+               
+          </h1> 
+           
+            <h2 class="declaration"> 
+               
+               
+                 
+               
+                 
+               
+                 
+               
+              Context(resource, req, res) 
+            </h2> 
+           
+          <ul class="tags"> 
+             
+              <li class="tag"> 
+                 
+                 
+                  <span class="tag-type">param</span> 
+                   
+                 
+                 
+                  <span class="tag-name">resource</span> 
+                 
+                   
+                  <span class="tag-types"><code>Resource</code></span> 
+                 
+                 
+              </li> 
+             
+              <li class="tag"> 
+                 
+                 
+                  <span class="tag-type">param</span> 
+                   
+                 
+                 
+                  <span class="tag-name">req</span> 
+                 
+                   
+                  <span class="tag-types"><code>HttpRequest</code></span> 
+                 
+                 
+              </li> 
+             
+              <li class="tag"> 
+                 
+                 
+                  <span class="tag-type">param</span> 
+                   
+                 
+                 
+                  <span class="tag-name">res</span> 
+                 
+                   
+                  <span class="tag-types"><code>HttpResponse</code></span> 
+                 
+                 
+              </li> 
+             
+          </ul> 
+          <div class="desc"> 
+            <p>A <code>Context</code> gives access to a <code>req</code> and <code>res</code> object when passed to <code>resource.handle()</code>,<br />as well as several utility functions and properties.</p>
+
+<h2>Properties</h2>
+
+<ul>
+<li>req {HttpRequest} req</li>
+<li>res {HttpResponse} res</li>
+<li>url {String} The url of the request, stripped of the resource's base path</li>
+</ul> 
+          </div> 
+        </div> 
+       
+     
+       
+        <div class="comment"> 
+ 
+          <h1 class="comment-hdr"> 
+              Context.prototype.end() 
+               
+          </h1> 
+           
+            <h2 class="declaration"> 
+               
+               
+               
+            </h2> 
+           
+          <ul class="tags"> 
+             
+          </ul> 
+          <div class="desc"> 
+            <p>Alias for <code>ctx.res.end()</code></p> 
+          </div> 
+        </div> 
+       
+     
+       
+        <div class="comment"> 
+ 
+          <h1 class="comment-hdr"> 
               db.connect() 
                
           </h1> 
@@ -895,9 +1000,9 @@ server.listen();
 }
 util.inherits(MyFileResource, Resource);
 
-FileResource.prototype.handle = function (ctx, req, res, next) {
+FileResource.prototype.handle = function (ctx, next) {
   if (ctx.url === '/my-file.html') {
-    fs.createReadStream('my-file.html').pipe(res);
+    fs.createReadStream('my-file.html').pipe(ctx.res);
   } else {
     next();
   }
@@ -992,9 +1097,7 @@ FileResource.prototype.handle = function (ctx, req, res, next) {
                
                  
                
-                 
-               
-              Resource.prototype.handle(ctx, res, next) 
+              Resource.prototype.handle(ctx, next) 
             </h2> 
            
           <ul class="tags"> 
@@ -1006,27 +1109,10 @@ FileResource.prototype.handle = function (ctx, req, res, next) {
                    
                  
                  
-                  <span class="tag-name">ctx</span> 
+                  <span class="tag-name">ctx</span> 
                  
                    
-                  <span class="tag-types"><code>Object</code></span> 
-                 
-                 
-                  <span class="tag-description">context options</span> 
-                 
-              </li> 
-             
-              <li class="tag"> 
-                 
-                 
-                  <span class="tag-type">param</span> 
-                   
-                 
-                 
-                  <span class="tag-name">res</span> 
-                 
-                   
-                  <span class="tag-types"><code>ServerResponse</code></span> 
+                  <span class="tag-types"><code>Context</code></span> 
                  
                  
               </li> 
@@ -1048,26 +1134,19 @@ FileResource.prototype.handle = function (ctx, req, res, next) {
              
           </ul> 
           <div class="desc"> 
-            <p>Handle an incoming http <code>req</code> and <code>res</code>. This gets called by the router.<br />Call <code>next()</code> if the resource cannot handle the request.</p>
-
-<p><code>ctx</code> object:</p>
-
-<ul>
-<li><code>url</code>: The URL of the request, stripped of the resource's base url</li>
-<li><code>req</code>: The original ServerRequest object</li>
-</ul>
+            <p>Handle an incoming request. This gets called by the router.<br />Call <code>next()</code> if the resource cannot handle the request.</p>
 
 <h2>Example</h2>
 
-<p>Override the handle method to change how a resource handles HTTP.</p>
+<p>Override the handle method to return a string:</p>
 
 <pre><code>function MyResource(settings) {
   Resource.apply(this, arguments);
 }
 util.inherits(MyResource, Resource);
 
-MyResource.prototype.handle = function (req, res) {
-  res.end('My custom http resource');
+MyResource.prototype.handle = function (ctx, next) {
+  ctx.end('My custom http resource');
 }
 </code></pre> 
           </div> 
