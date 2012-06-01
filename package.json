@@ -18,7 +18,13 @@
   "devDependencies": {
     "mocha": "*",
     "chai": "*",
-    "node-markdown": "*"
+    "node-markdown": "*",
+    "dox": "*",
+    "ejs": "*"
   },
-  "bin": {}
+  "bin": {},
+  "scripts": {
+    "test": "mocha",
+    "docs": "node docs/src/build.js"
+  }
 }

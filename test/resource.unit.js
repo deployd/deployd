@@ -22,7 +22,7 @@ describe('resource', function(){
     })
   })
   
-  describe('.handle(req, res)', function(){
+  describe('.handle(ctx, res, next)', function(){
     it('should respond with 200 OK', function(done) {
       var r = new Resource({path: '/foo'});
       

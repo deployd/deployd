@@ -22,7 +22,7 @@ describe('Router', function() {
       var foobarCalled = false;
 
       var foobar = new Resource({path: '/foo/bar'});
-      foobar.handle = function(req, res, next) {
+      foobar.handle = function(ctx, res, next) {
         foobarCalled = true;
         next();
       };
@@ -58,12 +58,12 @@ describe('Router', function() {
       this.timeout(100);
 
       var foobar = new Resource({path: '/foo/bar'});
-      foobar.handle = function(req, res, next) {
+      foobar.handle = function(ctx, res, next) {
         next();
       };
 
       var foo = new Resource({path: '/foo'})
-      foo.handle = function(req, res, next) {
+      foo.handle = function(ctx, res, next) {
         next();
       };
 
@@ -75,12 +75,12 @@ describe('Router', function() {
       }});
     });
 
-    it('should modify req.url to remove the base path', function(done) {
+    it('should modify ctx.url to remove the base path', function(done) {
       this.timeout(1000);
 
       var foo = new Resource({path: '/foo'});
-      foo.handle = function(req, res) {
-        expect(req.url).to.equal('/1234');
+      foo.handle = function(ctx, res) {
+        expect(ctx.url).to.equal('/1234');
         done();
       }
 
@@ -92,8 +92,8 @@ describe('Router', function() {
       this.timeout(1000);
 
       var resource = new Resource({path: '/'});
-      resource.handle = function(req, res) {
-        expect(req.url).to.equal('/index.html');
+      resource.handle = function(ctx, res) {
+        expect(ctx.url).to.equal('/index.html');
         done();
       }
 
