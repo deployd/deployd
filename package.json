@@ -9,7 +9,11 @@
     "node": ">= 0.6.0"
   },
   "main":"index",
-  "dependencies": {},
+  "dependencies": {
+    "validation": "*",
+    "async-eval": "*",
+    "mongodb": "1.0.2"
+  },
   "devDependencies": {
     "mocha": "*",
     "chai": "*",
