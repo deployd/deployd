@@ -25,4 +25,7 @@
 # low
 
  - _id should be id
+ - /__dashboard should be /dashboard
+ - /resources should be /__resources
+
  

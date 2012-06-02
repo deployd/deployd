@@ -5,21 +5,28 @@
   "repository": {
     "url": "git://github.com/deployd/deployd.git"
   },
-  "engines": {
+"engines": {
     "node": ">= 0.6.0"
   },
   "main":"index",
   "dependencies": {
     "validation": "*",
-    "async-eval": "*",
-    "mongodb": "1.0.2"
+    "async-eval": "0.1.1",
+    "mongodb": "1.0.2",
+    "request": "2.x.x",
+    "commander": "0.6.0"
   },
   "devDependencies": {
     "mocha": "*",
     "chai": "*",
     "node-markdown": "*",
     "shelljs": "*",
-    "commander": "0.6.0"
+    "dox": "*",
+    "ejs": "*"
   },
   "bin": { "dpd": "./bin/dpd" }
+  "scripts": {
+    "test": "mocha",
+    "docs": "node docs/src/build.js"
+  }
 }
