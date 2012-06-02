@@ -1,5 +1,5 @@
 # high
-
+ - repl
  - [x] events should support io
  - event io should be wrappable in `set(key, fn)` so it only runs when `key` is selected
  - session w/ socket.io connection

@@ -17,7 +17,9 @@
   "devDependencies": {
     "mocha": "*",
     "chai": "*",
-    "node-markdown": "*"
+    "node-markdown": "*",
+    "shelljs": "*",
+    "commander": "0.6.0"
   },
-  "bin": {}
+  "bin": { "dpd": "./bin/dpd" }
 }

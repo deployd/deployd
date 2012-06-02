@@ -1,0 +1,29 @@
+#!/usr/bin/env node
+
+/**
+ * Dependencies
+ */
+
+var program = require('commander')
+	,	repl = require('../lib/client/repl');
+
+/**
+ * Get the version number from the package.json
+ */
+
+program.version(require('../package').version);
+
+/**
+ * Commands
+ */
+
+program
+	.command('repl [port] [host]')
+	.description('start an interactive shell (port, host - optional)')
+	.action(repl);
+
+/**
+ * Parse the arguments
+ */
+
+program.parse(process.argv);
