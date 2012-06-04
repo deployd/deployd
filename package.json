@@ -23,7 +23,7 @@
     "mocha": "*",
     "chai": "*",
     "node-markdown": "*",
-    "shelljs": "*",
+    "shelljs": "git://github.com/dallonf/shelljs.git",
     "dox": "*",
     "ejs": "*"
   },
