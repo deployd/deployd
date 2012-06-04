@@ -16,6 +16,7 @@
     "request": "2.x.x",
     "commander": "0.6.0",
     "cookies": ">= 0.3.0",
+    "socket.io": "0.9.x",
     "debug": "*"
   },
   "devDependencies": {

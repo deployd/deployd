@@ -1,6 +1,6 @@
 # deployd
 
-realtime bridge
+realtime resource server
 
 ## quick start
 
@@ -13,9 +13,10 @@ realtime bridge
  - automatic properties and relationships for complex queries without joins (or sql)
  - notify clients in realtime of events occurring within the database
  - simple security specific language for scripting access control based on context
- - useable in your existing node app or as a stand-alone server
+ - run as a stand-alone server or as a library in your existing node app
  - user and session management
  - all APIs exposed over REST / HTTP
+ - web socket authentication and session management
 
 ## goals
 
@@ -28,29 +29,35 @@ realtime bridge
  - follow the [ways of node](http://www.mikealrogers.com/posts/the-way-of-node.html)
  - follow the [12 factor methodology](http://www.12factor.net/)
 
-## modules
+## microscript
 
-**core**
+...
 
- - resource - base module, mountable at a URL
- - collection - allows users to query, save, and delete JSON objects
- - users collection - allows users to register / login / logout
- - ??? - allow users to listen and emit events 
- - file system - allows users to upload / download / stream files
- - router - determines a resource based on a URL
- - emitter - global message bus / event emitter
- - sessions - manage authentication of users
- - resources - internal access to mounted resources
- - db - used by all modules to persist data
- - http server - exposes APIs over HTTP
+## resources
 
-**external**
+You can write completely custom resources in deployd as simple, familiar node modules. All you have to do is extend the base `Resource` and implement a single function. Here is a simple `hello world` resource that emits `'hello'` to everyone when they connect and `'hello, bob'` if they are logged in as a user named bob.
 
- - client - simple client for remote access from node and browsers (more comming soon)
+		function HelloWorldResource() {
+			// init
+		}
+		util.inherits(HelloWorldResource, require('deployd').Resource);
+		module.exports = HelloWorldResource;
 
-**third party**
+		HelloWorldResource.prototype.handle(ctx) {
+			ctx.end('hello world');
+		}
 
-  coming soon
+		HelloWorldResource.prototype.middleware = function(ctx, next) {
+			if(req.url == '/foobar') ctx.end('foobar!');
+		}
+
+		HelloWorldResource.prototype.handleConnection(ctx) {
+			if(ctx.me) {
+				ctx.socket.emit('hello ' + me.name);
+			} else {
+				ctx.socket.emit('hello');
+			}
+		}
 
 ## questions
 
@@ -61,6 +68,7 @@ Consult the [documentation](http://deployd.github.com/deployd) or contact `ritch
 ### 0.5
 
   - removed `property.optional` in favor of `property.required`
+  - changed `object._id` to `object.id` on all stored objects
 
 ## license
 
