@@ -5,7 +5,7 @@
   "repository": {
     "url": "git://github.com/deployd/deployd.git"
   },
-"engines": {
+  "engines": {
     "node": ">= 0.6.0"
   },
   "main":"index",
@@ -15,17 +15,18 @@
     "mongodb": "1.0.2",
     "request": "2.x.x",
     "commander": "0.6.0",
-    "cookies": ">= 0.3.0"
+    "cookies": ">= 0.3.0",
+    "socket.io": "0.9.x"
   },
   "devDependencies": {
     "mocha": "*",
     "chai": "*",
     "node-markdown": "*",
-    "shelljs": "*",
+    "shelljs": "git://github.com/dallonf/shelljs.git",
     "dox": "*",
     "ejs": "*"
   },
-  "bin": { "dpd": "./bin/dpd" }
+  "bin": { "dpd": "./bin/dpd" },
   "scripts": {
     "test": "mocha",
     "docs": "node docs/src/build.js"
