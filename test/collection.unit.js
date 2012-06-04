@@ -139,7 +139,7 @@ describe('collection', function(){
     
     it('should handle PUT', function(done) {
       var testData = [{test: true}, {test: false}];
-      example('PUT', '/foo', {test: {type: 'boolean'}}, {test: false, _id: 7}, null,
+      example('PUT', '/foo', {test: {type: 'boolean'}}, {test: false, id: 7}, null,
         function (req, res, method, path, properties, body) {
           expect(res.statusCode).to.equal(200);
         },
@@ -149,7 +149,7 @@ describe('collection', function(){
     })
     
     it('should handle DELETE', function(done) {
-      example('DELETE', '/foo', {test: {type: 'boolean'}}, null, {_id: 7},
+      example('DELETE', '/foo', {test: {type: 'boolean'}}, null, {id: 7},
         function (req, res, method, path, properties, body) {
           expect(res.statusCode).to.equal(200);
         },
@@ -177,16 +177,16 @@ describe('collection', function(){
       var widgets = db.connect(TEST_DB).createStore('widgets');
       
       var c = new Collection({
-        onGet: 'var item = this; widgets.insert({foo:"bar"}, function(err, widget) { item._id = widget._id })',
+        onGet: 'var item = this; widgets.insert({foo:"bar"}, function(err, widget) { item.id = widget.id })',
         resources: {
           widgets: widgets
         }
       });
       
-      var items = [{_id: 1}, {_id: 1}, {_id: 1}];
+      var items = [{id: 1}, {id: 1}, {id: 1}];
       c.execListener('Get', {}, {}, items, function (err, result) {
         for(var i = 0; i < items.length; i++) {
-          expect(result[i]._id).to.not.equal(1);
+          expect(result[i].id).to.not.equal(1);
         }
         done(err);
       })

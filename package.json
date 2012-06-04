@@ -14,7 +14,8 @@
     "async-eval": "0.1.1",
     "mongodb": "1.0.2",
     "request": "2.x.x",
-    "commander": "0.6.0"
+    "commander": "0.6.0",
+    "cookies": ">= 0.3.0"
   },
   "devDependencies": {
     "mocha": "*",

@@ -1,7 +1,10 @@
 # high
- - repl
- - [x] events should support io
- - event io should be wrappable in `set(key, fn)` so it only runs when `key` is selected
+
+ - server init
+  - [x] var server = new Server(config);
+  - [x] server.defineResource({path: '/todos', ...})
+  - config
+  - $ dpd create hello-world
  - session w/ socket.io connection
  - user collection
  - file system / file store
@@ -9,8 +12,7 @@
  - json body parsing
  - resource crud / resource http api
  - dashboard / dev integration
- - client lib / client project
- - integration test port
+ - http client
  - cli
  - docs
  - separate modules / projects
@@ -18,13 +20,16 @@
 # medium
 
  - travis ci
+ - repl
+ - socket client
  - dates should be sortable
  - dates should be JS date objects in events
  - dates should be transfered as JSON dates over http
+ - event io should be wrappable in `set(key, fn)` so it only runs when `key` is selected
  
 # low
 
- - _id should be id
+ - [x] _id should be id
  - /__dashboard should be /dashboard
  - /resources should be /__resources
 

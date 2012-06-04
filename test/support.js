@@ -6,6 +6,7 @@ expect = require('chai').expect;
 request = require('request');
 http = require('http');
 TEST_DB = {name: 'test-db', host: 'localhost', port: 27017};
+mongodb = require('mongodb');
 
 // request mock
 var port = 7000;
@@ -31,3 +32,14 @@ freq = function(url, options, fn, callback) {
     request(options);
   })
 }
+
+// before(function (done) {
+//   var mdb = new mongodb.Db(TEST_DB.name, new mongodb.Server(TEST_DB.host, TEST_DB.port));
+
+//   mdb.open(function (err) {
+//     mdb.dropDatabase(function (err) {
+//       done(err);
+//       mdb.close();
+//     });
+//   })
+// })
