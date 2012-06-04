@@ -7,12 +7,14 @@
   - $ dpd create hello-world
   - $ cd hello-world && dpd
  - [x] session w/ socket.io connection
- - resource crud / resource http api
- - root session / isRoot
+ - [x] resource crud / resource http api
  - [x] json body parsing
- - dashboard / dev integration
+ - [x] root session / isRoot
+ - [x] removed ?q={}, now ?{}
+ - [x] Context sugar
  - http client
  - auto generated dpd.js
+ - dashboard / dev integration
  - integration tests ported from 0.4
  - user collection
 
