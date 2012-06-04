@@ -17,6 +17,7 @@
  - dashboard / dev integration
  - integration tests ported from 0.4
  - user collection
+ - files resource
 
 # medium
 
