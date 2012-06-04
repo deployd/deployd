@@ -15,7 +15,8 @@
     "mongodb": "1.0.2",
     "request": "2.x.x",
     "commander": "0.6.0",
-    "cookies": ">= 0.3.0"
+    "cookies": ">= 0.3.0",
+    "debug": "*"
   },
   "devDependencies": {
     "mocha": "*",
