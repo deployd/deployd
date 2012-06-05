@@ -37,7 +37,7 @@ describe('.parseBody()', function() {
 
     http.parseBody(req, 'application/json', function(err, result) {
       expect(err).to.not.exist;
-      expect(result).to.eql(obj);
+      expect(req.body).to.eql(obj);
       done();
     });
     req.emit('data', JSON.stringify(obj));
@@ -52,9 +52,9 @@ describe('.parseBody()', function() {
                 , ': "baz"'
                 , '}'];
 
-    http.parseBody(req, 'application/json', function(err, result) {
+    http.parseBody(req, 'application/json', function(err) {
       expect(err).to.not.exist;
-      expect(result).to.eql({"foo": "bar", "bar": "baz"});
+      expect(req.body).to.eql({"foo": "bar", "bar": "baz"});
       done();
     });
     chunks.forEach(function(c) {
@@ -67,9 +67,9 @@ describe('.parseBody()', function() {
     var value = "foo=bar&bar=baz"
       , req = new Stream();
 
-    http.parseBody(req, 'application/x-www-form-urlencoded', function(err, result) {
+    http.parseBody(req, 'application/x-www-form-urlencoded', function(err) {
       expect(err).to.not.exist;
-      expect(result).to.eql({"foo": "bar", "bar": "baz"});
+      expect(req.body).to.eql({"foo": "bar", "bar": "baz"});
       done();
     });
     req.emit('data', value);

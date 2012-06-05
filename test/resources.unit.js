@@ -7,13 +7,14 @@ var resources = require('../lib/resources')
   , db = require('../lib/db').connect({name: 'test-db', host: 'localhost', port: 27017})
   , testCollection = {type: 'Collection', path: '/my-objects', properties: {title: {type: 'string'}}}
   , Collection = require('../lib/resources/collection')
-  , configPath = './test/support/proj';
+  , configPath = './test/support/proj'
+  , Dashboard = require('../lib/resources/dashboard');
 
 describe('resources', function(){
   describe('.build(resourceConfig, server)', function(){
     it('should return a set of resource instances', function() {
       var resourceList = resources.build([testCollection], {db: db});
-      expect(resourceList).to.have.length(3);
+      expect(resourceList).to.have.length(4);
 
       expect(resourceList[0].properties).to.be.a('object');
       expect(resourceList[0] instanceof Collection).to.equal(true);
@@ -21,10 +22,12 @@ describe('resources', function(){
 
     it('should add internal resources', function() {
       var resourceList = resources.build([], {});
-      expect(resourceList).to.have.length(2);
+      expect(resourceList).to.have.length(3);
 
-      expect(resourceList[0] instanceof InternalResources).to.equal(true);
-      expect(resourceList[1] instanceof Files).to.equal(true);
+      expect(resourceList[0] instanceof Files).to.equal(true);
+      expect(resourceList[1] instanceof InternalResources).to.equal(true);
+      expect(resourceList[2] instanceof Dashboard).to.equal(true);
+    
     });
   })
 })
