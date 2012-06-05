@@ -16,7 +16,8 @@ describe('resources', function(){
     it('should return a set of resource instances', function(done) {
       resources.build(store).find(function (err, resources) {
         expect(resources).to.have.length(4);
-        // expect(resources[0] instanceof Collection).to.equal(true);
+        expect(resources[0].properties).to.be.a('object');
+        expect(resources[0] instanceof Collection).to.equal(true);
         done(err);
       })
     })

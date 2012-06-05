@@ -36,7 +36,6 @@ freq = function(url, options, fn, callback) {
 
 before(function (done) {
   var mdb = new mongodb.Db(TEST_DB.name, new mongodb.Server(TEST_DB.host, TEST_DB.port));
-
   mdb.open(function (err) {
     mdb.dropDatabase(function (err) {
       done(err);
@@ -94,4 +93,3 @@ fauxContext = function(resource, url, input, expectedOutput, behavior) {
 
   resource.handle(context, next);
 }
-
