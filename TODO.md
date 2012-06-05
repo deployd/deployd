@@ -4,8 +4,8 @@
   - [x] var server = new Server(config);
   - [x] server.defineResource({path: '/todos', ...})
   - config
-  - $ dpd create hello-world
-  - $ cd hello-world && dpd
+  - [x] $ dpd create hello-world
+  - [x] $ cd hello-world && dpd
  - [x] session w/ socket.io connection
  - [x] resource crud / resource http api
  - [x] json body parsing
@@ -32,6 +32,6 @@
 
  - [x] _id should be id
  - /__dashboard should be /dashboard
- - /resources should be /__resources
+ - [x] /resources should be /__resources
 
  
