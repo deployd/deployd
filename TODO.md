@@ -14,10 +14,18 @@
  - [x] user collection
  - [x] files resource
  - config
+ - installer
+  - dpd project file
  - dashboard / dev integration
- - http client
  - auto generated dpd.js
+  - server and client version
  - integration tests ported from 0.4
+ - add key check back to dashboard
+ - cli
+  - repl should start when you start server
+  - should have commands for 'dashboard', 'resources'
+  - scriptable with access to server object
+  - dpd deploy
  
 
 # medium
@@ -28,6 +36,7 @@
  - dates should be JS date objects in events
  - dates should be transfered as JSON dates over http
  - event io should be wrappable in `set(key, fn)` so it only runs when `key` is selected
+ - http client
  
 # low
 
