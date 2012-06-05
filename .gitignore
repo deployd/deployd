@@ -13,4 +13,4 @@ results
 .DS_Store
 node_modules
 npm-debug.log
-test/support
+test/support/proj
