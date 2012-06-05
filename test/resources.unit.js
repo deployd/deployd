@@ -10,7 +10,7 @@ var resources = require('../lib/resources')
   , configPath = './test/support/proj';
 
 describe('resources', function(){
-  describe('.build(resourceConfig)', function(){
+  describe('.build(resourceConfig, server)', function(){
     it('should return a set of resource instances', function() {
       var resourceList = resources.build([testCollection], {db: db});
       expect(resourceList).to.have.length(3);
@@ -20,7 +20,7 @@ describe('resources', function(){
     });
 
     it('should add internal resources', function() {
-      var resourceList = resources.build([]);
+      var resourceList = resources.build([], {});
       expect(resourceList).to.have.length(2);
 
       expect(resourceList[0] instanceof InternalResources).to.equal(true);
@@ -32,7 +32,7 @@ describe('resources', function(){
 describe('InternalResources', function() {
   describe('.handle(ctx)', function() {
     beforeEach(function(done) {
-      this.ir = new InternalResources({path: '/__resources', configPath: configPath});
+      this.ir = new InternalResources({path: '/__resources', configPath: configPath}, {});
       config.saveConfig([], configPath, function(err) {
         done(err);
       })
