@@ -3,7 +3,6 @@
  - server init
   - [x] var server = new Server(config);
   - [x] server.defineResource({path: '/todos', ...})
-  - config
   - [x] $ dpd create hello-world
   - [x] $ cd hello-world && dpd
  - [x] session w/ socket.io connection
@@ -13,11 +12,13 @@
  - [x] removed ?q={}, now ?{}
  - [x] Context sugar
  - [x] user collection
+ - [x] files resource
+ - config
+ - dashboard / dev integration
  - http client
  - auto generated dpd.js
- - dashboard / dev integration
  - integration tests ported from 0.4
- - files resource
+ 
 
 # medium
 
