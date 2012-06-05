@@ -36,21 +36,4 @@ describe('Server', function() {
 		});
 	});
 
-	describe('.defineResource(resource)', function() {
-		it('should create a resource based on its path', function(done) {
-			var server = new Server();
-
-			server.defineResource({
-				path: '/todos',
-				type: 'Collection',
-				properties: {
-					title: {type: 'string'},
-					order: {type: 'number'},
-					done: {type: 'boolean'}
-				}
-			}, function (err) {
-				done(err);				
-			});
-		});
-	});
 });
