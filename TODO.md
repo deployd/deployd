@@ -12,11 +12,11 @@
  - [x] root session / isRoot
  - [x] removed ?q={}, now ?{}
  - [x] Context sugar
+ - [x] user collection
  - http client
  - auto generated dpd.js
  - dashboard / dev integration
  - integration tests ported from 0.4
- - user collection
  - files resource
 
 # medium

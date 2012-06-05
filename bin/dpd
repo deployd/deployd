@@ -6,7 +6,8 @@
 
 var program = require('commander')
 	,	deployd = require('../')
-	,	repl = require('../lib/client/repl');
+	,	repl = require('../lib/client/repl')
+	, shelljs = require('shelljs/global');
 
 /**
  * Get the version number from the package.json
@@ -24,18 +25,37 @@ program
 	.action(repl);
 
 program
-	.command('start [port]')
-	.description('boot the server in the current directory (port - optional)')
-	.action(function (port) {
-		var dpd = deployd({port: port, db: {host: '127.0.0.1', port: 27017, name: 'test-db'}});
-		dpd.listen();
-		dpd.on('listening', function () {
-			console.info('listening on port', dpd.options);
-		})
+	.command('create [project-name]')
+	.description('create a project in a new directory')
+	.action(function(name) {
+		var name = name || 'my-deployd-app';
+		mkdir('-p', name);
+		mkdir('-p', name + '/resources');
+		mkdir('-p', name + '/public');
+		mkdir('-p', name + '/.dpd/data');
+		console.info('To start your app:');
+		console.info('\t$ cd', name);
+		console.info('\t$ dpd');
 	});
+
+function start(port) {
+	var dpd = deployd({port: port, db: {host: '127.0.0.1', port: 27017, name: '-deployd'}});
+	dpd.listen();
+	dpd.on('listening', function () {
+		console.info('listening on port', port);
+	});
+}
+
+program
+	.command('*')
+	.description('[default] start the server in the current project in development mode')
+	.action(start);
+
 
 /**
  * Parse the arguments
  */
 
 program.parse(process.argv);
+
+if(program.args.length === 0) start(2403);
