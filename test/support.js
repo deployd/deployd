@@ -7,6 +7,7 @@ request = require('request');
 http = require('http');
 TEST_DB = {name: 'test-db', host: 'localhost', port: 27017};
 mongodb = require('mongodb');
+var Stream = require('stream');
 
 // request mock
 var port = 7000;
@@ -43,3 +44,54 @@ before(function (done) {
     });
   })
 })
+
+
+/**
+ * Utility for easily testing resources with mock contexts
+ * 
+ * Inputs:
+ *  - url (relative to the base path)
+ *  - query object
+ *  - body object or stream
+ *  - headers object
+ *  - method (get,post,put,delete,etc)
+ * 
+ * Output:
+ *   Should be what context.done should be called with
+ * 
+ * Behavior:
+ *  - error true if should expect an error
+ *  - next should call next if 
+ */
+
+fauxContext = function(resource, url, input, expectedOutput, behavior) {
+  input = input || {};
+  var context = {
+    url: url,
+    body: input.body,
+    query: input.query,
+    done: function(err, res) {
+      if(behavior && behavior.next) throw new Error('should not call done');
+      if(expectedOutput && typeof expectedOutput == 'object') expect(res).to.eql(expectedOutput);
+      context.done = function() {
+        throw 'done called twice...';
+      }
+      if(behavior && behavior.done) behavior.done(err, res);
+    },
+    res: input.res || new Stream()
+  }
+
+  context.res.end = function() {
+    context.done();
+  }
+
+  function next(err) {
+    if(!(behavior && behavior.next)) {
+      throw new Error('should not call next')
+    }
+    if(behavior && behavior.done) behavior.done(err);
+  }
+
+  resource.handle(context, next);
+}
+
