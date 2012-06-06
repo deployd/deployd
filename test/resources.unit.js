@@ -45,7 +45,7 @@ describe('InternalResources', function() {
       var r = {path: '/foo', type: 'Bar'}
         , created = false;
 
-      this.ir.handle({req: {method: 'POST', url: '/__resources'}, body: r, done: function(resource) {
+      this.ir.handle({req: {method: 'POST', url: '/__resources'}, body: r, done: function(err, resource) {
         expect(resource.path).to.equal('/foo');
         expect(resource.type).to.equal('Bar');
         config.loadConfig(configPath, function(err, resourceList) {
@@ -81,7 +81,7 @@ describe('InternalResources', function() {
         , test = this;
 
       config.saveConfig([q, q2], configPath, function() {
-        test.ir.handle({req: {method: 'GET', url: '/__resources'}, url: '/', done: function(result) {
+        test.ir.handle({req: {method: 'GET', url: '/__resources'}, url: '/', done: function(err, result) {
           expect(result).to.have.length(2);
           result.forEach(function(r) {
             expect(r.id).to.exist;
