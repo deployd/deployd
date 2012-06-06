@@ -92,5 +92,38 @@ describe('InternalResources', function() {
         });
       });
     });
+
+    it('should find a single resource when handling a GET request', function(done) {
+      var q = {path: '/foo', type: 'Bar'}
+        , q2 = {path: '/bar', type: 'Bar'}
+        , test = this;
+
+      config.saveConfig([q, q2], configPath, function() {
+        test.ir.handle({req: {method: 'GET', url: '/__resources/1'}, url: '/1', done: function(err, result) {
+          expect(result).to.deep.eql(q2);
+          done();
+        }}, function() {
+          throw Error("next called");
+        });
+      });
+    });
+
+    it('should delete a resource when handling a DELETE request', function(done) {
+      var q = {path: '/foo', type: 'Bar'}
+        , q2 = {path: '/bar', type: 'Bar'}
+        , test = this;
+
+        config.saveConfig([q, q2], configPath, function() {
+          test.ir.handle({req: {method: 'DELETE', url: '/__resources/1'}, url: '/1', done: function() {
+            config.loadConfig(configPath, function(err, result) {
+              expect(result).to.have.length(1);
+              done(err);
+            });
+            
+          }}, function() {
+            throw Error("next called");
+          });
+        });
+    });
   });
 });
