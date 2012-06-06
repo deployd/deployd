@@ -17,6 +17,24 @@ describe('Router', function() {
       router.route({url: '/foo/1234'}, {});
     });
 
+    it('should route to an exactly matching resource', function(done) {
+      var resource = new Resource({path: '/foo'})
+        , other = new Resource({path: '/'})
+        , router = new Router([resource, other]);
+
+      this.timeout(100);
+
+      resource.handle = function() {
+        done();
+      };
+
+      other.handle = function() {
+        throw Error("This one shouldn't get called");
+      };
+      
+      router.route({url: '/foo'}, {});
+    });
+
     it ('should route to resources in turn', function(done) {
       var foobar = new Resource({path: '/foo/bar'})
         , foo = new Resource({path: '/foo'})
@@ -154,6 +172,11 @@ describe('Router', function() {
     it ('should order results by best match', function() {
       var result = this.router.matchResources('/foo/bar/12345');
       expect(paths(result)).to.eql(['/foo/bar', '/foo', '/']);
+    });
+
+    it('should match a route exactly', function() {
+      var result = this.router.matchResources('/foo');
+      expect(paths(result)).to.eql(['/foo', '/']);
     });
 
   });
