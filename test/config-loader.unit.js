@@ -25,21 +25,17 @@ describe('config-loader', function() {
         , 'test': 'value'
       };
 
-      fs.writeFileSync(path.join(basepath, '/resources.json'), JSON.stringify([resource1, resource2]));
+      fs.writeFileSync(path.join(basepath, '/resources.json'), JSON.stringify({'123': resource1, '456': resource2}));
 
       configLoader.loadConfig(basepath, function(err, resources) {
-        expect(resources.length).to.equal(2);
-        resources.forEach(function(r) {
-          if (r.path === '/foo') {
-            expect(r.type).to.equal('Collection');
-            expect(r.property).to.equal('value');
-          } else if (r.path === '/bar') {
-            expect(r.type).to.equal('Collection');
-            expect(r.test).to.equal('value');
-          } else {
-            throw Error("unexpected path " + r.path);
-          }
-        });
+        expect(Object.keys(resources)).to.have.length(2);
+        expect(resources['123'].path).equal('/foo');
+        expect(resources['123'].type).equal('Collection');
+        expect(resources['123'].property).equal('value');
+        expect(resources['456'].path).equal('/bar');
+        expect(resources['456'].type).equal('Collection');
+        expect(resources['456'].test).equal('value');
+        
         done();
       });
     });
@@ -58,14 +54,14 @@ describe('config-loader', function() {
         , 'test': 'value'
       };
 
-      configLoader.saveConfig([resource1, resource2], basepath, function(err) {
+      configLoader.saveConfig({'123': resource1, '456': resource2}, basepath, function(err) {
         var resourcePath = path.join(basepath, '/resources.json');
         
         var resources = JSON.parse(fs.readFileSync(resourcePath));
 
-        expect(resources.length).to.equal(2);
-        expect(resources[0]).to.deep.equal(resource1);
-        expect(resources[1]).to.deep.equal(resource2);
+        expect(Object.keys(resources)).to.have.length(2);
+        expect(resources['123']).to.deep.equal(resource1);
+        expect(resources['456']).to.deep.equal(resource2);
 
         done(err);
       });
