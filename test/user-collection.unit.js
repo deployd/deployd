@@ -21,6 +21,7 @@ describe('UserCollection', function() {
 		it('should login a user when credentials are POSTed to "/login"', function(done) {
 			var test = this;
 			this.ctx.url = '/login';
+			this.ctx.query = {};
 			this.ctx.session = {
 				set: function(changes) {
 					expect(changes).to.eql({uid: '123', path: '/users'});
