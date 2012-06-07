@@ -14,8 +14,6 @@
  - [x] user collection
  - [x] files resource
  - config
- - installer
-  - dpd project file
  - dashboard / dev integration
  - auto generated dpd.js
   - server and client version
@@ -26,6 +24,12 @@
   - should have commands for 'dashboard', 'resources'
   - scriptable with access to server object
   - dpd deploy
+ - resources settings changed
+ - collection
+  - rename properties
+  - drop collection when resourced removed
+ - installer
+  - dpd project file
  
 
 # medium
