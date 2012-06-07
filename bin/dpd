@@ -20,13 +20,8 @@ program.version(require('../package').version);
  */
 
 program
-	.command('repl [port] [host]')
-	.description('start an interactive shell (port, host - optional)')
-	.action(repl);
-
-program
 	.command('create [project-name]')
-	.description('create a project in a new directory')
+	.description('\tcreate a project in a new directory\n\teg. `dpd create my-app`')
 	.action(function(name) {
 		var name = name || 'my-deployd-app';
 		mkdir('-p', name);
@@ -43,12 +38,16 @@ function start(port) {
 	dpd.listen();
 	dpd.on('listening', function () {
 		console.info('listening on port', port);
+
+		repl(dpd);
 	});
 }
 
 program
 	.command('*')
-	.description('[default] start the server in the current project in development mode')
+	.description('\t[default] start the server in the current project in development mode\n' +
+							 '\twith an interactive shell/repl for interacting with the running server\n' + 
+							 '\teg. `dpd` (start at default port 2403) or `dpd 3000` (port 3000)')
 	.action(start);
 
 

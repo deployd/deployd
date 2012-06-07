@@ -15,20 +15,21 @@
  - [x] files resource
  - [x] config
  - [x] dashboard / dev integration
+  - eg. microscripts
  - auto generated dpd.js
   - server and client version
  - integration tests ported from 0.4
  - add key check back to dashboard
  - cli
-  - repl should start when you start server
-  - should have commands for 'dashboard', 'resources'
-  - scriptable with access to server object
+  - [x] repl should start when you start server
+  - [x] should have commands for 'dashboard', 'resources'
+  - [x] scriptable with access to server object
   - dpd deploy
- - resources settings changed hook
-  - for updating resource instance on change
- - collection
-  - rename properties
-  - drop collection when resourced removed
+ - [x] resources settings changed hook
+  - [x] for updating resource instance on change
+ - [x] collection
+  - [x] rename properties
+  - [x] drop collection when resourced removed
  - installer
   - dpd project file
  
