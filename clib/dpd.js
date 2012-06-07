@@ -89,7 +89,7 @@
       try {
         error = JSON.parse(xhr.responseText);
       } catch (ex) {
-        error = {message: xhr.responseText};
+        error = {message: xhr.responseText || xhr.statusText};
       }
 
       if (fn) fn(null, error);
@@ -126,7 +126,7 @@
       return $.ajax(joinPath(BASE_URL, options.path) + query, {
           type: method
         , contentType: "application/json"
-        , data: JSON.stringify(options.body)
+        , data: JSON.stringify(options.body || {})
         , success: returnSuccess(fn)
         , error: returnError(fn)
       });
@@ -185,7 +185,7 @@
 
   window.dpd = function(resource) {
 
-    return {
+    var r = {
       get: function(path, query, fn) {
         var settings = parseGetSignature(arguments);
         settings.path = joinPath(resource, settings.path);
@@ -210,6 +210,31 @@
         return baseMethods.del(settings, settings.fn);
       }
     };
+
+    r.do = function(rpc, path, body, fn) {
+      var settings = {}
+        , i = 0;
+
+      settings.rpc = arguments[i];
+      i++;
+
+      if (typeof arguments[i] === 'string') {
+        settings.path = arguments[i];
+        i++;
+      }
+
+      if (typeof arguments[i] === 'object') {
+        settings.body = arguments[i];
+        i++;
+      }
+
+      fn = arguments[i];
+
+      settings.path = joinPath(resource, settings.rpc, settings.path);
+      return baseMethods.post(settings, fn);
+    };
+
+    return r;
   };
 
 })(window.jQuery);
