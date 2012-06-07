@@ -15,6 +15,7 @@
  - [x] files resource
  - [x] config
  - [x] dashboard / dev integration
+  - eg. microscripts
  - auto generated dpd.js
   - server and client version
  - integration tests ported from 0.4
