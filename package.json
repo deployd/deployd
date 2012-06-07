@@ -19,13 +19,14 @@
     "socket.io": "0.9.x",
     "filed": ">= 0.0.6",
     "mkdirp": "*",
-    "debug": "*"
+    "debug": "*",
+    "scrubber": "*",
+    "shelljs": "git://github.com/dallonf/shelljs.git"
   },
   "devDependencies": {
     "mocha": "*",
     "chai": "*",
     "node-markdown": "*",
-    "shelljs": "git://github.com/dallonf/shelljs.git",
     "dox": "*",
     "ejs": "*"
   },
