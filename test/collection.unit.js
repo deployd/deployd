@@ -48,7 +48,7 @@ describe('collection', function(){
         }
       });
       
-      var errs = r.validate({title: 7, created: 'foo'});
+      var errs = r.validate({title: 7, created: 'foo'}, true);
       
       expect(errs).to.eql({title: 'must be a string', age: 'is required', created: 'must be a date'});
     })
