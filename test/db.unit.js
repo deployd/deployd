@@ -8,7 +8,7 @@ beforeEach(function(done){
   store.remove(function () {
     store.find(function (err, result) {
       expect(err).to.not.exist;
-      expect(result).to.not.exist;
+      expect(result).to.eql([]);
       done(err);
     })
   })
@@ -51,7 +51,7 @@ describe('store', function(){
   describe('.find(query, fn)', function(){
     it('should not find anything when the store is empty', function(done) {
       store.find(function (err, empty) {
-        expect(empty).to.not.exist;
+        expect(empty).to.eql([]);
         done(err);
       })
     })
@@ -102,7 +102,7 @@ describe('store', function(){
         store.remove(function (err, result) {
           expect(result).to.not.exist;
           store.find(function (err, result) {
-            expect(result).to.not.exist;
+            expect(result).to.eql([]);
             done(err);
           })
         })

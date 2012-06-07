@@ -21,6 +21,7 @@
  - integration tests ported from 0.4
  - add key check back to dashboard
  - cli
+  - mongodb manager
   - [x] repl should start when you start server
   - [x] should have commands for 'dashboard', 'resources'
   - [x] scriptable with access to server object
