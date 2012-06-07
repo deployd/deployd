@@ -199,7 +199,7 @@ describe('collection', function(){
       
       c.execListener('Get', {}, {}, [{a:'b'}], function (err) {
         expect(err.toString()).to.equal('Error: testing error');
-        expect(err.status).to.equal(123);
+        expect(err.statusCode).to.equal(123);
         done();
       })
     })
@@ -223,7 +223,7 @@ describe('collection', function(){
       });
       
       c.execListener('Post', {}, {}, {foo: 'bar'}, function (err, result) {
-        expect(result).to.eql({"foo": "must not be bar"});
+        expect(err).to.eql({"foo": "must not be bar"});
         done();
       })
     })
