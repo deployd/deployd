@@ -107,13 +107,24 @@
         , error: returnError(fn)
       });
     }
-    , post: function(options, fn) {
+    , del: function(options, fn) {
       var query = encodeIfComplex(options.query);
       if (query) query = '?' + query;
       else query = '';
 
       return $.ajax(joinPath(BASE_URL, options.path) + query, {
-          type: "POST"
+          type: "DELETE"
+        , success: returnSuccess(fn)
+        , error: returnError(fn)
+      });
+    }
+    , requestWithBody: function(method, options, fn) {
+      var query = encodeIfComplex(options.query);
+      if (query) query = '?' + query;
+      else query = '';
+
+      return $.ajax(joinPath(BASE_URL, options.path) + query, {
+          type: method
         , contentType: "application/json"
         , data: JSON.stringify(options.body)
         , success: returnSuccess(fn)
@@ -121,6 +132,14 @@
       });
     }
   }
+
+  baseMethods.post = function(options, fn) {
+    return baseMethods.requestWithBody("POST", options, fn);
+  };
+
+  baseMethods.put = function(options, fn) {
+    return baseMethods.requestWithBody("PUT", options, fn);
+  };
 
   function parseGetSignature(args) {
     var settings = {}
@@ -178,6 +197,17 @@
         settings.path = joinPath(resource, settings.path);
 
         return baseMethods.post(settings, settings.fn);
+      }
+      , put: function(path, query, body, fn) {
+        var settings = parsePostSignature(arguments);
+        settings.path = joinPath(resource, settings.path);
+
+        return baseMethods.put(settings, settings.fn);
+      }, del: function(path, query, fn) {
+        var settings = parseGetSignature(arguments);
+        settings.path = joinPath(resource, settings.path);
+
+        return baseMethods.del(settings, settings.fn);
       }
     };
   };
