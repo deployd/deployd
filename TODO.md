@@ -13,8 +13,8 @@
  - [x] Context sugar
  - [x] user collection
  - [x] files resource
- - config
- - dashboard / dev integration
+ - [x] config
+ - [x] dashboard / dev integration
  - auto generated dpd.js
   - server and client version
  - integration tests ported from 0.4
@@ -24,7 +24,8 @@
   - should have commands for 'dashboard', 'resources'
   - scriptable with access to server object
   - dpd deploy
- - resources settings changed
+ - resources settings changed hook
+  - for updating resource instance on change
  - collection
   - rename properties
   - drop collection when resourced removed
@@ -35,17 +36,14 @@
 # medium
 
  - travis ci
- - repl
  - dates should be sortable
  - dates should be JS date objects in events
  - dates should be transfered as JSON dates over http
- - event io should be wrappable in `set(key, fn)` so it only runs when `key` is selected
- - http client
  
 # low
 
  - [x] _id should be id
- - /__dashboard should be /dashboard
+ - [x] /__dashboard should be /dashboard
  - [x] /resources should be /__resources
 
  
