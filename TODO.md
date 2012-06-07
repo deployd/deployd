@@ -28,7 +28,7 @@
   - for updating resource instance on change
  - collection
   - rename properties
-  - drop collection when resourced removed
+  - [x] drop collection when resourced removed
  - installer
   - dpd project file
  

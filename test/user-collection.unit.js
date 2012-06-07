@@ -31,7 +31,7 @@ describe('UserCollection', function() {
 					expect(fn).to.be.a('function');
 					fn();
 				}
-			}
+			};
 			this.ctx.req.url = '/users/login';
 			this.ctx.req.method = 'POST';
 			this.ctx.req.body.email = 'foo@bar.com';
