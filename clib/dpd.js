@@ -145,11 +145,19 @@
     var settings = {}
       , i = 0;
 
+    // path/func
     if (typeof args[i] === 'string') {
       settings.path = args[i];
       i++;
     }
 
+    // join path to func
+    if (typeof args[i] === 'string') {
+      settings.path = joinPath(settings.path, args[i]);
+      i++;
+    }
+
+    // query
     if (typeof args[i] === 'object') {
       settings.query = args[i];
       i++;
@@ -164,14 +172,17 @@
     var settings = {}
       , i = 0;
 
+    //path
     if (typeof args[i] === 'string') {
       settings.path = args[i];
       i++;
     }
 
+    // body (required)
     settings.body = args[i];
     i++;
 
+    // query - if this exists the LAST obj was query and the new one is body
     if (typeof args[i] === 'object') {
       settings.query = settings.body;
       settings.body = args[i];
@@ -186,7 +197,7 @@
   window.dpd = function(resource) {
 
     var r = {
-      get: function(path, query, fn) {
+      get: function(func, path, query, fn) {
         var settings = parseGetSignature(arguments);
         settings.path = joinPath(resource, settings.path);
 
@@ -211,18 +222,20 @@
       }
     };
 
-    r.do = function(rpc, path, body, fn) {
+    r.do = function(func, path, body, fn) {
       var settings = {}
         , i = 0;
 
-      settings.rpc = arguments[i];
+      settings.func = arguments[i];
       i++;
 
+      // path
       if (typeof arguments[i] === 'string') {
         settings.path = arguments[i];
         i++;
       }
 
+      // body
       if (typeof arguments[i] === 'object') {
         settings.body = arguments[i];
         i++;
@@ -230,7 +243,7 @@
 
       fn = arguments[i];
 
-      settings.path = joinPath(resource, settings.rpc, settings.path);
+      settings.path = joinPath(resource, settings.func, settings.path);
       return baseMethods.post(settings, fn);
     };
 
