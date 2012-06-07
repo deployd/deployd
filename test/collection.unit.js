@@ -95,11 +95,11 @@ describe('collection', function(){
       var c = new Collection({path: path, db: db.connect(TEST_DB), properties: properties});
       
       function t() {
-        freq(path, {method: method, body: body, json: true}, function (req, res) {
+        freq(path, {method: method, url: '',  body: body, json: true}, function (req, res) {
           // faux body
           req.body = body;
           req.query = query;
-          c.handle({req: req, res: res, session: {}, done: function() {res.end()}});
+          c.handle({req: req, res: res, query: query || {}, session: {}, done: function() {res.end()}});
         }, function (req, res) {       
           test(req, res, method, path, properties, body, query);
           // cleanup

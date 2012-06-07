@@ -31,11 +31,19 @@ describe('http', function() {
 
 
 describe('.parseBody()', function() {
+  beforeEach(function () {
+    this.res = {
+      setHeader: function () {
+        
+      }
+    }
+  })
+
   it ('should parse json', function(done) {
     var obj = {foo: 'bar'}
       , req = new Stream();
 
-    http.parseBody(req, 'application/json', function(err, result) {
+    http.parseBody(req, this.res, 'application/json', function(err, result) {
       expect(err).to.not.exist;
       expect(req.body).to.eql(obj);
       done();
@@ -52,7 +60,7 @@ describe('.parseBody()', function() {
                 , ': "baz"'
                 , '}'];
 
-    http.parseBody(req, 'application/json', function(err) {
+    http.parseBody(req, this.res, 'application/json', function(err) {
       expect(err).to.not.exist;
       expect(req.body).to.eql({"foo": "bar", "bar": "baz"});
       done();
@@ -67,7 +75,7 @@ describe('.parseBody()', function() {
     var value = "foo=bar&bar=baz"
       , req = new Stream();
 
-    http.parseBody(req, 'application/x-www-form-urlencoded', function(err) {
+    http.parseBody(req, this.res, 'application/x-www-form-urlencoded', function(err) {
       expect(err).to.not.exist;
       expect(req.body).to.eql({"foo": "bar", "bar": "baz"});
       done();
