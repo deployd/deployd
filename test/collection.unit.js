@@ -158,14 +158,14 @@ describe('collection', function(){
     })
   })
   
-  describe('.execListener(method, session, query, item, fn)', function(){
+  describe('.execListener(method, session, query, item, client, fn)', function(){
     it('should execute a Get listener', function(done) {
       var c = new Collection({
         onGet: 'this.foo = 2 + 2;'
       });
       
       var items = [{foo: 1}, {foo: 1}, {foo: 1}];
-      c.execListener('Get', {}, {}, items, function (err) {
+      c.execListener('Get', {}, {}, items, {}, function (err) {
         for(var i = 0; i < items.length; i++) {
           expect(items[i].foo).to.equal(4);
         }
@@ -173,31 +173,31 @@ describe('collection', function(){
       })
     })
     
-    it('should be able to perform io', function(done) {
-      var widgets = db.connect(TEST_DB).createStore('widgets');
+    // it('should be able to perform io', function(done) {
+    //   var widgets = db.connect(TEST_DB).createStore('widgets');
       
-      var c = new Collection({
-        onGet: 'var item = this; widgets.insert({foo:"bar"}, function(err, widget) { item.id = widget.id })',
-        resources: {
-          widgets: widgets
-        }
-      });
+    //   var c = new Collection({
+    //     onGet: 'var item = this; widgets.insert({foo:"bar"}, function(err, widget) { item.id = widget.id })',
+    //     resources: {
+    //       widgets: widgets
+    //     }
+    //   });
       
-      var items = [{id: 1}, {id: 1}, {id: 1}];
-      c.execListener('Get', {}, {}, items, function (err, result) {
-        for(var i = 0; i < items.length; i++) {
-          expect(result[i].id).to.not.equal(1);
-        }
-        done(err);
-      })
-    })
+    //   var items = [{id: 1}, {id: 1}, {id: 1}];
+    //   c.execListener('Get', {}, {}, items, {}, function (err, result) {
+    //     for(var i = 0; i < items.length; i++) {
+    //       expect(result[i].id).to.not.equal(1);
+    //     }
+    //     done(err);
+    //   })
+    // })
     
     it('should have access to a validation dsl cancel() method', function(done) {
       var c = new Collection({
         onGet: 'cancel("testing error", 123)'
       });
       
-      c.execListener('Get', {}, {}, [{a:'b'}], function (err) {
+      c.execListener('Get', {}, {}, [{a:'b'}], {}, function (err) {
         expect(err.toString()).to.equal('Error: testing error');
         expect(err.statusCode).to.equal(123);
         done();
@@ -210,7 +210,7 @@ describe('collection', function(){
       });
       
       var items = [{secret: 'foobar'}];
-      c.execListener('Get', {}, {}, items, function (err, result) {
+      c.execListener('Get', {}, {}, items, {}, function (err, result) {
         expect(result[0].secret).to.not.equal('foobar');
         expect(result[0].secret).to.not.exist;
         done();
@@ -222,7 +222,7 @@ describe('collection', function(){
         onPost: 'error("foo", "must not be bar")'
       });
       
-      c.execListener('Post', {}, {}, {foo: 'bar'}, function (err, result) {
+      c.execListener('Post', {}, {}, {foo: 'bar'}, {}, function (err, result) {
         expect(err).to.eql({"foo": "must not be bar"});
         done();
       })
@@ -233,7 +233,7 @@ describe('collection', function(){
         onPut: 'protect("foo")'
       });
       
-      c.execListener('Put', {}, {}, {foo: 'bar'}, function (err, result) {
+      c.execListener('Put', {}, {}, {foo: 'bar'}, {}, function (err, result) {
         expect(result.foo).to.not.exist;
         done();
       })
