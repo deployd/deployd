@@ -6,7 +6,7 @@ describe('Router', function() {
   describe('.route()', function() {
     it('should route to a matching resource', function(done) {
       var resource = new Resource({path: '/foo'})
-        , router = new Router([resource]);
+        , router = new Router([resource], {});
 
       this.timeout(100);
 
@@ -20,7 +20,7 @@ describe('Router', function() {
     it('should route to an exactly matching resource', function(done) {
       var resource = new Resource({path: '/foo'})
         , other = new Resource({path: '/'})
-        , router = new Router([resource, other]);
+        , router = new Router([resource, other], {});
 
       this.timeout(100);
 
@@ -38,7 +38,7 @@ describe('Router', function() {
     it ('should route to resources in turn', function(done) {
       var foobar = new Resource({path: '/foo/bar'})
         , foo = new Resource({path: '/foo'})
-        , router = new Router([foo, foobar])
+        , router = new Router([foo, foobar], {})
         , foobarCalled = false;
 
       this.timeout(100);
@@ -57,7 +57,7 @@ describe('Router', function() {
 
     it ('should return 404 if no resources match', function(done) {
       var foo = new Resource({path: '/foo'})
-        , router = new Router([foo]);
+        , router = new Router([foo], {});
 
       this.timeout(100);
       
@@ -75,7 +75,7 @@ describe('Router', function() {
     it ('should return 404 if all resources call next', function(done) {
       var foobar = new Resource({path: '/foo/bar'})
         , foo = new Resource({path: '/foo'})
-        , router = new Router([foo, foobar]);
+        , router = new Router([foo, foobar], {});
 
       this.timeout(100);
       
@@ -95,7 +95,7 @@ describe('Router', function() {
 
     it('should modify ctx.url to remove the base path', function(done) {
       var foo = new Resource({path: '/foo'})
-        , router = new Router([foo]);
+        , router = new Router([foo], {});
 
       this.timeout(1000);
 
@@ -109,7 +109,7 @@ describe('Router', function() {
 
     it('should still have a leading slash for root resources', function(done) {
       var resource = new Resource({path: '/'})
-        , router = new Router([resource]);
+        , router = new Router([resource], {});
 
       this.timeout(1000);
 
@@ -133,7 +133,7 @@ describe('Router', function() {
         , new Resource({path: '/foo/bar'})
       ];
 
-      this.router = new Router(this.resources);
+      this.router = new Router(this.resources, {});
     });
 
     function paths(result) {

@@ -28,7 +28,7 @@ describe('resource', function(){
       var r = new Resource({path: '/foo'});
       
       freq('/foo', null, function (req, res) {
-        r.handle(new Context(r, req, res));
+        r.handle(new Context(r, req, res, {}));
       }, function (req, res) {
         expect(res.statusCode).to.equal(200);
         done();
