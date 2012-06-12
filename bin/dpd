@@ -7,13 +7,16 @@
 var program = require('commander')
 	,	deployd = require('../')
 	,	repl = require('../lib/client/repl')
-	, shelljs = require('shelljs/global');
+	, shelljs = require('shelljs/global')
+	, mongod = require('../lib/util/mongod');
 
 /**
  * Get the version number from the package.json
  */
 
-program.version(require('../package').version);
+program
+	.version(require('../package').version)
+	.option('-m, --mongod [path]', 'path to mongod executable (defaults to `mongod`)')
 
 /**
  * Commands
@@ -28,18 +31,22 @@ program
 		mkdir('-p', name + '/resources');
 		mkdir('-p', name + '/public');
 		mkdir('-p', name + '/.dpd/data');
+		mkdir('-p', name + '/.dpd/pids');
+		("{}").to(name + '/.dpd/resources.json');
+		("").to(name + '/.dpd/pids/mongod');
 		console.info('To start your app:');
 		console.info('\t$ cd', name);
 		console.info('\t$ dpd');
 	});
 
 function start(port) {
-	var dpd = deployd({port: port, db: {host: '127.0.0.1', port: 27017, name: '-deployd'}});
-	dpd.listen();
-	dpd.on('listening', function () {
-		console.info('listening on port', port);
-
-		repl(dpd);
+	mongod.restart(program.mongod || 'mongod', function() {
+		var dpd = deployd({port: port, db: {host: '127.0.0.1', port: 27017, name: '-deployd'}});
+		dpd.listen();
+		dpd.on('listening', function () {
+			console.info('listening on port', port);
+			repl(dpd);
+		});
 	});
 }
 
