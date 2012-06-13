@@ -213,7 +213,7 @@ describe('collection', function(){
       c.execListener('Get', {}, {}, items, {}, function (err, result) {
         expect(result[0].secret).to.not.equal('foobar');
         expect(result[0].secret).to.not.exist;
-        done();
+        done(err);
       })
     })
     
