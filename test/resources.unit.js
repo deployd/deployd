@@ -108,7 +108,7 @@ describe('InternalResources', function() {
 
       config.saveConfig({'123': q, '456': q2}, configPath, function() {
         test.ir.handle({req: {method: 'GET', url: '/__resources/456'}, url: '/456', done: function(err, result) {
-          expect(result).to.deep.eql(q2);
+          expect(result).to.eql(q2);
           done();
         }}, function() {
           throw Error("next called");

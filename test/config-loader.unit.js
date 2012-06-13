@@ -60,8 +60,8 @@ describe('config-loader', function() {
         var resources = JSON.parse(fs.readFileSync(resourcePath));
 
         expect(Object.keys(resources)).to.have.length(2);
-        expect(resources['123']).to.deep.equal(resource1);
-        expect(resources['456']).to.deep.equal(resource2);
+        expect(resources['123']).to.eql(resource1);
+        expect(resources['456']).to.eql(resource2);
 
         done(err);
       });
