@@ -8,7 +8,8 @@ var program = require('commander')
   , deployd = require('../')
   , repl = require('../lib/client/repl')
   , shelljs = require('shelljs/global')
-  , mongod = require('../lib/util/mongod');
+  , mongod = require('../lib/util/mongod')
+  , path = require('path');
 
 /**
  * Get the version number from the package.json
@@ -17,6 +18,7 @@ var program = require('commander')
 program
   .version(require('../package').version)
   .option('-m, --mongod [path]', 'path to mongod executable (defaults to `mongod`)')
+  .option('-p, --port [port]', 'port to host server (defaults to 2403)')
 
 /**
  * Commands
@@ -39,8 +41,13 @@ program
     console.info('\t$ dpd');
   });
 
-function start(port) {
+function start(file) {
+  var port = program.port || 2403;
+  if (file) {
+    process.chdir(path.dirname(file));
+  }
   if (test('-f', 'app.dpd')) {
+    console.info("Starting Deployd...");
     if (!test('-d', './.dpd')) mkdir('-p', './.dpd');
     if (!test('-d', './.dpd/pids')) mkdir('-p', './.dpd/pids');
     if (!test('-d', './data')) mkdir('-p', './data');
@@ -56,14 +63,16 @@ function start(port) {
   } else {
     console.info("This directory does not contain a Deployd app!");
     console.info("Use \"dpd create <appname>\" to create a new app");
+    console.info("or use \"dpd path/to/app.dpd\" to start an app in another directory");
   }
 }
 
 program
   .command('*')
   .description('\t[default] start the server in the current project in development mode\n' +
-               '\twith an interactive shell/repl for interacting with the running server\n' + 
-               '\teg. `dpd` (start at default port 2403) or `dpd 3000` (port 3000)')
+               '\twith an interactive shell/repl for interacting with the running server\n' +
+               '\te.g. dpd (starts server in current directory),\n' +
+               '\t     dpd my-app/app.dpd (starts app from file)')
   .action(start);
 
 
@@ -73,5 +82,5 @@ program
 
 program.parse(process.argv);
 
-if(program.args.length === 0) start(2403);
+if(program.args.length === 0) start();
 
