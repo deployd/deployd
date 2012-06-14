@@ -41,6 +41,10 @@ program
 
 function start(port) {
   if (test('-f', 'app.dpd')) {
+    if (!test('-d', './.dpd')) mkdir('-p', './.dpd');
+    if (!test('-d', './.dpd/pids')) mkdir('-p', './.dpd/pids');
+    if (!test('-d', './data')) mkdir('-p', './data');
+
     mongod.restart(program.mongod || 'mongod', function() {
       var dpd = deployd({port: port, db: {host: '127.0.0.1', port: 27017, name: '-deployd'}});
       dpd.listen();
@@ -70,3 +74,4 @@ program
 program.parse(process.argv);
 
 if(program.args.length === 0) start(2403);
+
