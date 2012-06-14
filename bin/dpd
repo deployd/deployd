@@ -5,57 +5,62 @@
  */
 
 var program = require('commander')
-	,	deployd = require('../')
-	,	repl = require('../lib/client/repl')
-	, shelljs = require('shelljs/global')
-	, mongod = require('../lib/util/mongod');
+  , deployd = require('../')
+  , repl = require('../lib/client/repl')
+  , shelljs = require('shelljs/global')
+  , mongod = require('../lib/util/mongod');
 
 /**
  * Get the version number from the package.json
  */
 
 program
-	.version(require('../package').version)
-	.option('-m, --mongod [path]', 'path to mongod executable (defaults to `mongod`)')
+  .version(require('../package').version)
+  .option('-m, --mongod [path]', 'path to mongod executable (defaults to `mongod`)')
 
 /**
  * Commands
  */
 
 program
-	.command('create [project-name]')
-	.description('\tcreate a project in a new directory\n\teg. `dpd create my-app`')
-	.action(function(name) {
-		var name = name || 'my-deployd-app';
-		mkdir('-p', name);
-		mkdir('-p', name + '/resources');
-		mkdir('-p', name + '/public');
-		mkdir('-p', name + '/.dpd/data');
-		mkdir('-p', name + '/.dpd/pids');
-		("{}").to(name + '/.dpd/resources.json');
-		("").to(name + '/.dpd/pids/mongod');
-		console.info('To start your app:');
-		console.info('\t$ cd', name);
-		console.info('\t$ dpd');
-	});
+  .command('create [project-name]')
+  .description('\tcreate a project in a new directory\n\teg. `dpd create my-app`')
+  .action(function(name) {
+    var name = name || 'my-deployd-app';
+    mkdir('-p', name);
+    mkdir('-p', name + '/public');
+    mkdir('-p', name + '/data');
+    mkdir('-p', name + '/.dpd');
+    mkdir('-p', name + '/.dpd/pids');
+    ('').to(name + '/.dpd/pids/mongod');
+    ("{}").to(name + '/app.dpd');
+    console.info('To start your app:');
+    console.info('\t$ cd', name);
+    console.info('\t$ dpd');
+  });
 
 function start(port) {
-	mongod.restart(program.mongod || 'mongod', function() {
-		var dpd = deployd({port: port, db: {host: '127.0.0.1', port: 27017, name: '-deployd'}});
-		dpd.listen();
-		dpd.on('listening', function () {
-			console.info('listening on port', port);
-			repl(dpd);
-		});
-	});
+  if (test('-f', 'app.dpd')) {
+    mongod.restart(program.mongod || 'mongod', function() {
+      var dpd = deployd({port: port, db: {host: '127.0.0.1', port: 27017, name: '-deployd'}});
+      dpd.listen();
+      dpd.on('listening', function () {
+        console.info('listening on port', port);
+        repl(dpd);
+      });
+    });
+  } else {
+    console.info("This directory does not contain a Deployd app!");
+    console.info("Use \"dpd create <appname>\" to create a new app");
+  }
 }
 
 program
-	.command('*')
-	.description('\t[default] start the server in the current project in development mode\n' +
-							 '\twith an interactive shell/repl for interacting with the running server\n' + 
-							 '\teg. `dpd` (start at default port 2403) or `dpd 3000` (port 3000)')
-	.action(start);
+  .command('*')
+  .description('\t[default] start the server in the current project in development mode\n' +
+               '\twith an interactive shell/repl for interacting with the running server\n' + 
+               '\teg. `dpd` (start at default port 2403) or `dpd 3000` (port 3000)')
+  .action(start);
 
 
 /**
