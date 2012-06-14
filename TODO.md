@@ -1,4 +1,3 @@
-# high
 
  - server init
   - [x] var server = new Server(config);
@@ -16,7 +15,7 @@
  - [x] config
  - [x] dashboard / dev integration
  - [x] auto generated dpd.js
-  - server and client version
+  - [x] server and client version
  - integration tests ported from 0.4
  - add key check back to dashboard
  - cli
@@ -32,19 +31,9 @@
   - [x] drop collection when resourced removed
  - installer
   - dpd project file
- 
-
-# medium
-
- - travis ci
- - dates should be sortable
- - dates should be JS date objects in events
- - dates should be transfered as JSON dates over http
- 
-# low
-
- - [x] _id should be id
- - [x] /__dashboard should be /dashboard
- - [x] /resources should be /__resources
+ - remove .dpd as a dependency
+  - should be able to send to other people
+ - getting started guide
+ -
 
  
