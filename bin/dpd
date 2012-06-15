@@ -61,14 +61,14 @@ function start(file) {
       var dpd = deployd(options);
       dpd.listen();
       dpd.on('listening', function () {
-        console.info('listening on port', port);
+        console.log('listening on port', port);
         repl(dpd);
       });
     });
   } else {
-    console.info("This directory does not contain a Deployd app!");
-    console.info("Use \"dpd create <appname>\" to create a new app");
-    console.info("or use \"dpd path/to/app.dpd\" to start an app in another directory");
+    console.log("This directory does not contain a Deployd app!");
+    console.log("Use \"dpd create <appname>\" to create a new app");
+    console.log("or use \"dpd path/to/app.dpd\" to start an app in another directory");
   }
 }
 
