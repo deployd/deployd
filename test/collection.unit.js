@@ -136,6 +136,17 @@ describe('collection', function(){
         testData
       );
     })
+
+    it('should handle GET without data', function(done) {
+      var testData = [];
+      example('GET', '/foo', {test: {type: 'boolean'}}, null, null,
+        function (req, res, method, path, properties, body) {
+          expect(res.statusCode).to.equal(200);
+        },
+        done,
+        testData
+      );
+    })
     
     it('should handle PUT', function(done) {
       var testData = [{test: true}, {test: false}];
@@ -177,7 +188,7 @@ describe('collection', function(){
     //   var widgets = db.connect(TEST_DB).createStore('widgets');
       
     //   var c = new Collection({
-    //     onGet: 'var item = this; widgets.insert({foo:"bar"}, function(err, widget) { item.id = widget.id })',
+    //     onGet: 'var item = this; dpd.widgets.put({foo:"bar"}, function(widget, err) { item.id = widget.id })',
     //     resources: {
     //       widgets: widgets
     //     }
