@@ -36,7 +36,7 @@ program
     mkdir('-p', name + '/.dpd/pids');
     ('').to(name + '/.dpd/pids/mongod');
     ("{}").to(name + '/app.dpd');
-    console.info('To start your app:');
+    console.info('to start your app:');
     console.info('\t$ cd', name);
     console.info('\t$ dpd');
   });
@@ -47,7 +47,7 @@ function start(file) {
     process.chdir(path.dirname(file));
   }
   if (test('-f', 'app.dpd')) {
-    console.info("Starting Deployd...");
+    console.log("starting deployd...");
     if (!test('-d', './.dpd')) mkdir('-p', './.dpd');
     if (!test('-d', './.dpd/pids')) mkdir('-p', './.dpd/pids');
     if (!test('-d', './data')) mkdir('-p', './data');
@@ -57,7 +57,7 @@ function start(file) {
 
       options.env = process.env.DPD_ENV || options.env;
       if(options.env !== 'development') console.log('starting in %s mode', options.env);
-      
+
       var dpd = deployd(options);
       dpd.listen();
       dpd.on('listening', function () {
