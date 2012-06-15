@@ -25,7 +25,7 @@ describe('config-loader', function() {
         , 'test': 'value'
       };
 
-      fs.writeFileSync(path.join(basepath, '/resources.json'), JSON.stringify({'123': resource1, '456': resource2}));
+      fs.writeFileSync(path.join(basepath, '/app.dpd'), JSON.stringify({'123': resource1, '456': resource2}));
 
       configLoader.loadConfig(basepath, function(err, resources) {
         expect(Object.keys(resources)).to.have.length(2);
@@ -55,7 +55,7 @@ describe('config-loader', function() {
       };
 
       configLoader.saveConfig({'123': resource1, '456': resource2}, basepath, function(err) {
-        var resourcePath = path.join(basepath, '/resources.json');
+        var resourcePath = path.join(basepath, '/app.dpd');
         
         var resources = JSON.parse(fs.readFileSync(resourcePath));
 
