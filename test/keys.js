@@ -1,6 +1,7 @@
 var Keys = require('../lib/keys');
 
 describe('Keys', function() {
+
 	describe('.get(key, callback)', function() {
 		it('should return a key if it exists', function(done) {
 			var keys = new Keys(__dirname + '/support/keys.json');
