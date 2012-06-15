@@ -60,7 +60,12 @@ function start(file) {
         console.log("Failed to start MongoDB");
         return stop(1);
       }
-      var dpd = deployd({port: port, db: {host: '127.0.0.1', port: 27017, name: '-deployd'}});
+      var options = {port: port, env: 'development', db: {host: '127.0.0.1', port: 27017, name: '-deployd'}}
+
+      options.env = process.env.DPD_ENV || options.env;
+      if(options.env !== 'development') console.log('starting in %s mode', options.env);
+      
+      var dpd = deployd(options);
       dpd.listen();
       dpd.on('listening', function () {
         console.info('listening on port', port);
