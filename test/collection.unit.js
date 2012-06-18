@@ -136,6 +136,17 @@ describe('collection', function(){
         testData
       );
     })
+
+    it('should handle GET without data', function(done) {
+      var testData = [];
+      example('GET', '/foo', {test: {type: 'boolean'}}, null, null,
+        function (req, res, method, path, properties, body) {
+          expect(res.statusCode).to.equal(200);
+        },
+        done,
+        testData
+      );
+    })
     
     it('should handle PUT', function(done) {
       var testData = [{test: true}, {test: false}];

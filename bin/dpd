@@ -9,7 +9,8 @@ var program = require('commander')
   , repl = require('../lib/client/repl')
   , shelljs = require('shelljs/global')
   , mongod = require('../lib/util/mongod')
-  , path = require('path');
+  , path = require('path')
+  , tty = require('tty');
 
 /**
  * Get the version number from the package.json
@@ -19,6 +20,8 @@ program
   .version(require('../package').version)
   .option('-m, --mongod [path]', 'path to mongod executable (defaults to `mongod`)')
   .option('-p, --port [port]', 'port to host server (defaults to 2403)')
+  .option('--wait', 'wait for input before exiting')
+  .option('-d, --dashboard', 'start the dashboard immediately')
 
 /**
  * Commands
@@ -52,7 +55,11 @@ function start(file) {
     if (!test('-d', './.dpd/pids')) mkdir('-p', './.dpd/pids');
     if (!test('-d', './data')) mkdir('-p', './data');
 
-    mongod.restart(program.mongod || 'mongod', function() {
+    mongod.restart(program.mongod || 'mongod', function(err) {
+      if (err) { 
+        console.log("Failed to start MongoDB");
+        return stop(1);
+      }
       var options = {port: port, env: 'development', db: {host: '127.0.0.1', port: 27017, name: '-deployd'}}
 
       options.env = process.env.DPD_ENV || options.env;
@@ -61,14 +68,19 @@ function start(file) {
       var dpd = deployd(options);
       dpd.listen();
       dpd.on('listening', function () {
-        console.log('listening on port', port);
-        repl(dpd);
+
+        console.info('listening on port', port);
+        var commands = repl(dpd);
+        if (program.dashboard) {
+          commands.dashboard();
+        }
       });
     });
   } else {
     console.log("This directory does not contain a Deployd app!");
     console.log("Use \"dpd create <appname>\" to create a new app");
     console.log("or use \"dpd path/to/app.dpd\" to start an app in another directory");
+    stop(1);
   }
 }
 
@@ -79,6 +91,28 @@ program
                '\te.g. dpd (starts server in current directory),\n' +
                '\t     dpd my-app/app.dpd (starts app from file)')
   .action(start);
+
+
+function stop(code) {
+  var fn = function() {
+    exit(code);
+  };
+
+  if (program.wait) {
+    process.stdin.resume();
+    tty.setRawMode(true);
+    process.stdout.write('\nPress any key to continue...\n');
+    process.stdin.on('keypress', fn);
+  } else {
+    fn();
+  }
+}
+
+process.on('uncaughtException', function(err) {
+  console.log(err);
+  console.log(err.stack);
+  stop(1);
+});
 
 
 /**
