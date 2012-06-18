@@ -173,25 +173,6 @@ describe('collection', function(){
       })
     })
     
-    // it('should be able to perform io', function(done) {
-    //   var widgets = db.connect(TEST_DB).createStore('widgets');
-      
-    //   var c = new Collection({
-    //     onGet: 'var item = this; widgets.insert({foo:"bar"}, function(err, widget) { item.id = widget.id })',
-    //     resources: {
-    //       widgets: widgets
-    //     }
-    //   });
-      
-    //   var items = [{id: 1}, {id: 1}, {id: 1}];
-    //   c.execListener('Get', {}, {}, items, {}, function (err, result) {
-    //     for(var i = 0; i < items.length; i++) {
-    //       expect(result[i].id).to.not.equal(1);
-    //     }
-    //     done(err);
-    //   })
-    // })
-    
     it('should have access to a validation dsl cancel() method', function(done) {
       var c = new Collection({
         onGet: 'cancel("testing error", 123)'
