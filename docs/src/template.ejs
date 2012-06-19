@@ -7,7 +7,7 @@
   
   <div class="docs">
     <% comments.forEach(function(comment) { %>
-      <% if(!comment.ignore) { %>
+      <% if(!comment.ignore && !comment.isPrivate) { %>
         <div class="comment">
 
           <h1 class="comment-hdr">
