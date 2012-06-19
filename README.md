@@ -2,9 +2,42 @@
 
 realtime resource server
 
-## quick start npm
+## install osx
 
-_currently requires mongodb_
+[Download](http://deployd.com) the installer (13.8mb).
 
-    [sudo] npm install deployd -g
-    dpd create hello
+## install win
+
+[Download](http://deployd.com) the installer (13.8mb).
+
+## install npm
+
+_currently requires [mongodb](http://www.mongodb.org/downloads)_
+
+	[sudo] npm install deployd -g
+
+## quick start
+
+	$ dpd create hello
+	$ cd hello
+	$ dpd
+	dpd> dashboard
+
+## docs
+
+
+
+## tests
+
+	$ npm install deployd -dg
+
+or
+
+	$ git clone git@github.com:deployd/deployd.git
+	$ npm link
+
+then
+
+	$ cd deployd
+	$ mongod
+	$ mocha
