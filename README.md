@@ -25,7 +25,11 @@ _currently requires [mongodb](http://www.mongodb.org/downloads)_
 
 ## docs
 
-
+ - Getting Started
+ - Examples
+ - Collections
+ - Users
+ - CLI
 
 ## tests
 
