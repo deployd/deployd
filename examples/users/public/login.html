@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+  <title>users</title>
+  <script src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
+  <script src="/dpd.js"></script>
+  <link href='http://fonts.googleapis.com/css?family=Bitter:400,700,400italic' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="http://deployd.com/stylesheets/style.css" type="text/css">
+  <style>
+    .well {margin-top: 40px;}
+    .row * {text-align: center !important;}
+    form {margin-bottom: 10px;}
+  </style>
+  
+</head>
+
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="span4 offset4">
+        <div class="well">
+          
+          <div class="nav">
+            <a class="btn" href="/register.html"><i class="icon-user"></i> Register</a>
+          </div>
+          <h1>Login</h1>
+          <!--
+            A simple table to display messages.
+          -->
+          <table id="messages" class="table table-bordered table-striped"></table>
+          
+          <form class="form-horizontal">
+              <!--
+                A simple input for creating a new message.
+              -->
+              <div class="control-group">
+                <input class="span2" placeholder="Email" id="email" size="16" type="text">
+              </div>
+              <div class="control-group">
+                <input class="span2" placeholder="Password" id="password" size="16" type="password">
+              </div>
+              <button class="btn btn-primary">Login</button>         
+          </form>
+          
+          <script>
+          
+                
+                //
+                // When a user clicks login...
+                //
+                $('button').click(function (e) {
+                  
+                  e.preventDefault();
+                  
+                  //
+                  // Create the credentials from the input text.
+                  //
+                  var credentials = {
+                    email: $('#email').val(),
+                    password: $('#password').val()
+                  };
+                  
+                  dpd.users.login(credentials, function (session) {
+                    if(session.uid) {
+                      dpd.users.put(session.uid, {visited: new Date()}, function () {
+                        window.location = '/';
+                      })
+                    }
+                  })
+                });
+                
+                //
+                // Also, send when the user presses enter.
+                //
+                $('input').keypress(function(e) {
+                    if(e.keyCode === 13) {
+                        e.preventDefault();
+                        $('button').click();
+                        return false;
+                    }
+                });
+                
+                
+          </script>
+        </div>  
+          
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>
