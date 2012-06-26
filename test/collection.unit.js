@@ -189,8 +189,9 @@ describe('collection', function(){
         onGet: 'cancel("testing error", 123)'
       });
       
-      c.execListener('Get', {}, {}, [{a:'b'}], {}, function (err) {
-        expect(err.toString()).to.equal('Error: testing error');
+      c.execListener('Get', {}, {}, {a:'b'}, {}, function (err) {
+
+        expect(err.message).to.equal('testing error');
         expect(err.statusCode).to.equal(123);
         done();
       })
