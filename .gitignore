@@ -14,5 +14,6 @@ results
 node_modules
 npm-debug.log
 test/support/proj
+test/support/keys.json
 bin/mongo
 bin/node
