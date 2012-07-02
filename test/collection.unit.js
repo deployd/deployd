@@ -232,4 +232,66 @@ describe('collection', function(){
       })
     })
   })
+
+  describe('.save()', function() {
+    it('should save the provided data', function(done) {
+      var c = new Collection({path: '/counts', db: db.connect(TEST_DB), properties: {count: {type: 'number'}}});
+
+      c.save({}, {count: 1}, {}, {}, function (err, item) {
+        expect(item.id).to.exist;
+        expect(err).to.not.exist;
+        done();
+      });
+    });
+
+    it('should pass commands like $inc', function(done) {
+      var c = new Collection({path: '/counts', db: db.connect(TEST_DB), properties: {count: {type: 'number'}}});
+
+      c.save({}, {count: 1}, {}, {}, function (err, item) {
+        expect(item.id).to.exist;
+        expect(err).to.not.exist;
+        c.save({}, {count: {$inc: 100}}, {id: item.id}, {}, function (err, updated) {
+          expect(err).to.not.exist;
+          expect(updated).to.exist;
+          expect(updated.count).to.equal(101);
+          done(err);
+        });
+      });
+    });
+  });
+
+  describe('.execCommands(type, obj)', function() {
+    it('$inc - should increment numbers', function() {
+      var c = new Collection()
+        , item = {count: 7};
+
+      c.execCommands('update', item, {count: {$inc: 7}});
+      expect(item.count).to.equal(14);
+      c.execCommands('update', item, {count: {$inc: -7}});
+      expect(item.count).to.equal(7);
+    });
+
+    it('$push - should add an object to an array', function() {
+      var c = new Collection()
+        , item = {names: ['joe', 'bob']};
+
+      c.execCommands('update', item, {names: {$push: 'sam'}});
+      expect(item.names).to.eql(['joe', 'bob', 'sam']);
+    });
+
+    it('$pushAll - should add an array of objects to an array', function() {
+      var c = new Collection()
+        , item = {names: ['joe', 'bob']};
+
+      c.execCommands('update', item, {names: {$pushAll: ['jim', 'sam']}});
+      expect(item.names).to.eql(['joe', 'bob', 'jim', 'sam']);
+    });
+
+    it('should not throw', function() {
+      var c = new Collection()
+        , item = {names: 78};
+
+      c.execCommands('update', item, {names: {$pushAll: ['jim', 'sam']}});
+    });
+  });
 })
