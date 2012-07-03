@@ -258,6 +258,17 @@ describe('collection', function(){
         });
       });
     });
+
+    // it('should pass commands to the validation listener', function(done) {
+    //   var c = new Collection({
+    //     onValidate: 'if(typeof this.count != "object") throw "didnt pass command to listener"',
+    //     properties: {
+    //       count: {type: 'number'}
+    //     }
+    //   });
+
+    //   c.save({}, {count: {$inc: 100}}, {id: 'foo'}, {}, done);
+    // });
   });
 
   describe('.execCommands(type, obj)', function() {
