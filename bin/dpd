@@ -45,7 +45,8 @@ program
   });
 
 function start(file) {
-  var port = program.port || 2403;
+  var port = program.port || generatePort()
+    , mongoPort = generatePort();
   if (file) {
     process.chdir(path.dirname(file));
   }
@@ -55,12 +56,12 @@ function start(file) {
     if (!test('-d', './.dpd/pids')) mkdir('-p', './.dpd/pids');
     if (!test('-d', './data')) mkdir('-p', './data');
 
-    mongod.restart(program.mongod || 'mongod', function(err) {
+    mongod.restart(program.mongod || 'mongod', process.env.DPD_ENV || 'development', mongoPort, function(err) {
       if (err) { 
         console.log("Failed to start MongoDB");
         return stop(1);
       }
-      var options = {port: port, env: 'development', db: {host: '127.0.0.1', port: 27017, name: '-deployd'}}
+      var options = {port: port, env: 'development', db: {host: '127.0.0.1', port: mongoPort, name: '-deployd'}}
 
       options.env = process.env.DPD_ENV || options.env;
       if(options.env !== 'development') console.log('starting in %s mode', options.env);
@@ -122,4 +123,13 @@ process.on('uncaughtException', function(err) {
 program.parse(process.argv);
 
 if(program.args.length === 0) start();
+
+/**
+ * Port generation
+ */
+
+function generatePort() {
+  var portRange = [ 3000, 9000 ];
+  return Math.floor(Math.random() * (portRange[1] - portRange[0])) + portRange[0];
+}
 
