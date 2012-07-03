@@ -289,7 +289,7 @@ describe('collection', function(){
       c.save({}, {count: 1}, {}, {}, function (err, item) {
         c.save({}, {count: 3}, {}, {}, function (err, item) {
           c.save({}, {count: 2}, {}, {}, function (err, item) {
-            c.find({}, {$query: {}, $orderby: {count: 1}}, {}, function (err, items) {
+            c.find({}, {$sort: {count: 1}}, {}, function (err, items) {
               expect(items.length).to.equal(3);
               for(var i = 0; i < 3; i++) {
                 delete items[i].id;
