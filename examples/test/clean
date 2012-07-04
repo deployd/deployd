@@ -1,0 +1,10 @@
+#!/usr/bin/env node
+
+require('shelljs/global');
+
+/**
+ * clear the data folder
+ */
+
+rm('-rf', __dirname + '/data');
+mkdir(__dirname + '/data');
