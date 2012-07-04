@@ -17,3 +17,4 @@ test/support/proj
 test/support/keys.json
 bin/mongo
 bin/node
+examples/test/data

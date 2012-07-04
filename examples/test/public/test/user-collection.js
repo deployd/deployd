@@ -1,0 +1,64 @@
+var credentials = {
+	email: 'foo@bar.com',
+	password: '123456'
+}
+
+describe('User Collection', function() {
+	describe('dpd.users', function() {
+		describe('.post', function() {
+			it('should create a user', function(done) {
+				dpd.users.post(credentials, function (user, err) {
+					expect(user).to.exist;
+					expect(user.id.length).to.equal(16)
+					delete user.id;
+					expect(user).to.eql({email: credentials.email});
+					done(err);
+				})
+			})
+		})
+		// describe('.login', function() {
+		// 	it('should login a user', function(done) {
+		// 		dpd.users.post(credentials, function (user, err) {
+		// 			expect(user.id.length).to.equal(16)
+		// 			dpd.users.login(credentials, function (session, err) {
+		// 				expect(session.id.length).to.equal(128)
+		// 				expect(session.uid.length).to.equal(16)
+		// 				done(err);
+		// 			})
+		// 		})
+		// 	})
+		// })
+		describe('.del({id: \'...\'}, fn)', function() {
+			it('should remove a user', function(done) {
+				dpd.users.post(credentials, function (user, err) {
+					expect(user.id.length).to.equal(16)
+					dpd.users.del({id: user.id}, function (session, err) {
+						dpd.users.get({id: user.id}, function (user) {
+							expect(user).to.not.exist;
+							done(err);
+						})
+					})
+				})
+			})
+		})
+	})
+
+	afterEach(function (done) {
+		this.timeout(10000);
+		dpd.users.get(function (users) {
+			var total = users.length;
+			if(total === 0) return done();
+			console.log(total);
+			users.forEach(function(user) {
+				dpd.users.del({id: user.id}, function () {
+					total--;
+					if(!total) {
+						done();
+					}
+				})
+			})
+		})
+	})
+
+})
+
