@@ -1,20 +1,18 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Deployd Test App</title>
+  <title>Mocha Tests</title>
   <link rel="stylesheet" href="mocha.css" />
   <script src="jquery.js"></script>
-  <script src="expect.js"></script>
+  <script src="/dpd.js"></script>
+  <script src="chai.js"></script>
   <script src="mocha.js"></script>
   <script>mocha.setup('bdd')</script>
-  <script src="test.array.js"></script>
-  <script src="test.object.js"></script>
-  <script src="test.xhr.js"></script>
+  <script src="test/collection.js"></script>
   <script>
+    expect = chai.expect;
     $(function(){
-      mocha
-        .globals(['foo', 'bar']) // acceptable globals
-        .run()
+      mocha.run();
     })
   </script>
 </head>
