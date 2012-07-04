@@ -45,7 +45,7 @@ program
   });
 
 function start(file) {
-  var port = program.port || generatePort()
+  var port = program.port || 2403
     , mongoPort = generatePort();
   if (file) {
     process.chdir(path.dirname(file));
