@@ -93,7 +93,7 @@ function start(file) {
 
 program
   .command('keygen')
-  .description('generate a key for remote access')
+  .description('\tgenerate a key for remote access (./.dpd/keys.json)')
   .action(function() {
     var Keys = require('../lib/keys')
       , keys = new Keys();
@@ -106,7 +106,8 @@ program
 
 program
   .command('remote [host]')
-  .description('connect to a remote host')
+  .description('\tconnect to a remote host using a key in the current directory (./.dpd/keys.json)\n' +
+               '\tthe key must be present on the remote server to connect')
   .action(function(host) {
     remote.createRemote(host, program.port || 3000);
   })
