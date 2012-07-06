@@ -21,7 +21,8 @@
     "mkdirp": "*",
     "debug": "*",
     "scrubber": "*",
-    "shelljs": "git://github.com/dallonf/shelljs.git"
+    "shelljs": "git://github.com/dallonf/shelljs.git",
+    "node-proxy": "0.8.x"
   },
   "devDependencies": {
     "mocha": "*",

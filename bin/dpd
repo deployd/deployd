@@ -10,7 +10,8 @@ var program = require('commander')
   , shelljs = require('shelljs/global')
   , mongod = require('../lib/util/mongod')
   , path = require('path')
-  , tty = require('tty');
+  , tty = require('tty')
+  , remote = require('../lib/client/remote');
 
 /**
  * Get the version number from the package.json
@@ -95,13 +96,20 @@ program
   .description('generate a key for remote access')
   .action(function() {
     var Keys = require('../lib/keys')
-      , keys = new Keys('.dpd/keys.json');
+      , keys = new Keys();
 
     keys.create(function(err, key) {
       if(err) return console.error(err);
       console.log('created key', key.substr(0, 16) + '...');
     });
   });
+
+program
+  .command('remote [host]')
+  .description('connect to a remote host')
+  .action(function(host) {
+    remote.createRemote(host, program.port || 3000);
+  })
 
 program
   .command('*')

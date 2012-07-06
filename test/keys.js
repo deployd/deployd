@@ -45,4 +45,14 @@ describe('Keys', function() {
 			});
 		});
 	});
+
+	describe('.getLocal(fn)', function() {
+		it('should get the first local key', function(done) {
+			var keys = new Keys(__dirname + '/support/keys.json');
+			keys.getLocal(function(err, key) {
+				expect(key).to.exist;
+				done(err);
+			});
+		});
+	});
 });
