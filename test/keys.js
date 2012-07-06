@@ -51,6 +51,7 @@ describe('Keys', function() {
 			var keys = new Keys(__dirname + '/support/keys.json');
 			keys.getLocal(function(err, key) {
 				expect(key).to.exist;
+				expect(key.length).to.equal(26);
 				done(err);
 			});
 		});
