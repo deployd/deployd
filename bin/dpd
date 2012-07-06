@@ -20,8 +20,9 @@ program
   .version(require('../package').version)
   .option('-m, --mongod [path]', 'path to mongod executable (defaults to `mongod`)')
   .option('-p, --port [port]', 'port to host server (defaults to 2403)')
-  .option('--wait', 'wait for input before exiting')
+  .option('-w, --wait', 'wait for input before exiting')
   .option('-d, --dashboard', 'start the dashboard immediately')
+  .option('-e, --environment [env]', 'defaults to development')
 
 /**
  * Commands
@@ -63,7 +64,7 @@ function start(file) {
       }
       var options = {port: port, env: 'development', db: {host: '127.0.0.1', port: mongoPort, name: '-deployd'}}
 
-      options.env = process.env.DPD_ENV || options.env;
+      options.env = program.environment || process.env.DPD_ENV || options.env;
       if(options.env !== 'development') console.log('starting in %s mode', options.env);
 
       var dpd = deployd(options);
