@@ -22,6 +22,7 @@ program
   .option('-p, --port [port]', 'port to host server (defaults to 2403)')
   .option('-w, --wait', 'wait for input before exiting')
   .option('-d, --dashboard', 'start the dashboard immediately')
+  .option('-o, --open', 'open in a browser')
   .option('-e, --environment [env]', 'defaults to development')
 
 /**
@@ -75,6 +76,8 @@ function start(file) {
         var commands = repl(dpd);
         if (program.dashboard) {
           commands.dashboard();
+        } else if (program.open) {
+          commands.open();
         }
       });
     });
@@ -85,6 +88,20 @@ function start(file) {
     stop(1);
   }
 }
+
+
+program
+  .command('keygen')
+  .description('generate a key for remote access')
+  .action(function() {
+    var Keys = require('../lib/keys')
+      , keys = new Keys('.dpd/keys.json');
+
+    keys.create(function(err, key) {
+      if(err) return console.error(err);
+      console.log('created key', key.substr(0, 16) + '...');
+    });
+  });
 
 program
   .command('*')
