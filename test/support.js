@@ -63,6 +63,9 @@ before(function (done) {
  *  - next should call next if 
  */
 
+var ServerRequest = require('http').ServerRequest
+  , ServerResponse = require('http').ServerResponse;
+
 fauxContext = function(resource, url, input, expectedOutput, behavior) {
   input = input || {};
   var context = {
@@ -77,7 +80,7 @@ fauxContext = function(resource, url, input, expectedOutput, behavior) {
       }
       if(behavior && behavior.done) behavior.done(err, res);
     },
-    res: input.res || new Stream()
+    res: input.res || new ServerResponse(new ServerRequest())
   }
 
   context.res.end = function() {

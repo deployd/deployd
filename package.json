@@ -22,7 +22,8 @@
     "debug": "*",
     "scrubber": "*",
     "shelljs": "git://github.com/dallonf/shelljs.git",
-    "node-proxy": "0.8.x"
+    "node-proxy": "0.8.x",
+    "send": "git://github.com/ritch/send.git"
   },
   "devDependencies": {
     "mocha": "*",
