@@ -2,14 +2,6 @@
 
 realtime resource server
 
-## install osx
-
-[Download](http://deployd.com) the installer (13.8mb).
-
-## install win
-
-[Download](http://deployd.com) the installer (13.8mb).
-
 ## install npm
 
 _currently requires [mongodb](http://www.mongodb.org/downloads)_
@@ -22,14 +14,6 @@ _currently requires [mongodb](http://www.mongodb.org/downloads)_
 	$ cd hello
 	$ dpd
 	dpd> dashboard
-
-## docs
-
- - Getting Started
- - Examples
- - Collections
- - Users
- - CLI
 
 ## tests
 
