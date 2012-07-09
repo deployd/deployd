@@ -37,7 +37,30 @@ describe('Collection', function() {
 				})
 			})
 		})
+
+		describe('.get({id: {$ne: "..."}}, fn)', function() {
+			it('should return all results that do not match the given id', function(done) {				
+				var titleA = Math.random().toString()
+					,	titleB = Math.random().toString();
+
+				dpd.todos.post({title: titleA}, function () {
+					dpd.todos.post({title: titleB}, function () {
+						dpd.todos.get({title: {$ne: titleA}}, function (todos, err) {
+							expect(todos.length).to.equal(1);
+							expect(todos[0].title).to.not.equal(titleA);
+							var id = todos[0].id;
+							dpd.todos.get({id: {$ne: id}}, function (todos, err) {
+								expect(todos.length).to.equal(1);
+								expect(todos[0].id).to.not.equal(id);
+								done(err);
+							})
+						})
+					})
+				})
+			})
+		})
 	})
+
 	afterEach(function (done) {
 		this.timeout(10000);
 		dpd.todos.get(function (todos) {
