@@ -59,6 +59,20 @@ describe('Collection', function() {
 				})
 			})
 		})
+
+		describe('.get({id: "non existent"}, fn)', function() {
+			it('should return a 404', function(done) {				
+				var titleA = Math.random().toString()
+					,	titleB = Math.random().toString();
+
+				dpd.todos.get({id: "non existent"}, function (todos, err) {
+					expect(todos).to.not.exist;
+					expect(err.message).to.equal('not found');
+					expect(err.statusCode).to.equal(404);
+					done();
+				})
+			})
+		})
 	})
 
 	afterEach(function (done) {
