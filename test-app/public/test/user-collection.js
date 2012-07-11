@@ -17,6 +17,18 @@ describe('User Collection', function() {
 					done(err);
 				})
 			})
+
+			it('should validate for duplicate email', function(done) {
+				chain(function(next) {
+					dpd.users.post(credentials, next);
+				}).chain(function(next) {
+					dpd.users.post(credentials, next);
+				}).chain(function(next, result, err) {
+					expect(result).to.not.exist;
+					expect(err.errors.email).to.be.ok;
+					done();
+				});
+			});
 		})
 		describe('.login(credentials, fn)', function() {
 			it('should login a user', function(done) {
