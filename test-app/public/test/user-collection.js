@@ -9,7 +9,6 @@ describe('User Collection', function() {
 			it('should create a user', function(done) {
 				dpd.users.post(credentials, function (user, err) {
 					if(!user) {
-						console.log('user did not exist', err);
 						throw 'user did not exist';
 					}
 					expect(user.id.length).to.equal(16)
@@ -66,7 +65,6 @@ describe('User Collection', function() {
 			dpd.users.get(function (users) {
 				var total = users.length;
 				if(total === 0) return done();
-				console.log(total);
 				users.forEach(function(user) {
 					dpd.users.del({id: user.id}, function () {
 						total--;

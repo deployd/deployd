@@ -49,6 +49,27 @@ describe('Collection', function() {
 			})
 		})
 
+		describe('.get({$sort: {title: 1}}, fn)', function() {
+			it('should order by title', function(done) {
+				chain(function(next) {
+					dpd.todos.post({title: "C"}, next);
+				}).chain(function(next) {
+					dpd.todos.post({title: "A"}, next);
+				}).chain(function(next) {
+					dpd.todos.post({title: "B"}, next);
+				}).chain(function(next) {
+					dpd.todos.get({$sort: {title: 1}}, next)
+				}).chain(function(next, result, err) {
+					expect(result).to.exist;
+					expect(result.length).to.equal(3);
+					expect(result[0].title).to.equal("A");
+					expect(result[1].title).to.equal("B");
+					expect(result[2].title).to.equal("C");
+					done(err);
+				});
+			});
+		});
+
 		describe('.get({id: {$ne: "..."}}, fn)', function() {
 			it('should return all results that do not match the given id', function(done) {				
 				var titleA = Math.random().toString()
