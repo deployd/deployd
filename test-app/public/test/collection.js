@@ -39,9 +39,11 @@ describe('Collection', function() {
 				var title = Math.random().toString();
 
 				dpd.todos.post({title: title}, function () {
-					dpd.todos.get(function (todos, err) {
-						expect(todos.length).to.equal(1);
-						done(err);
+					dpd.todos.post({title: "Some other"}, function() {
+						dpd.todos.get({title: title}, function (todos, err) {
+							expect(todos.length).to.equal(1);
+							done(err);
+						})	
 					})
 				})
 			})
@@ -94,6 +96,18 @@ describe('Collection', function() {
 						});
 					});
 				});
+			});
+		});
+
+		describe('.get({arbitrary: true}, fn)', function() {
+			it('should allow arbitrary query parameters', function(done) {
+				dpd.todos.post({title: 'foobar'}, function () {
+					dpd.todos.get({arbitrary: true}, function (todos, err) {
+						expect(todos.length).to.equal(1);
+						expect(todos[0].custom).to.equal('arbitrary');
+						done(err);
+					})
+				})
 			});
 		});
 

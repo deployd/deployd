@@ -1,29 +1,11 @@
 {
 	"0630a817ddb9194b": {
 		"properties": {
-			"title": {
+			"people": {
 				"required": false,
-				"type": "string",
-				"typeLabel": "string",
-				"id": "title"
-			},
-			"order": {
-				"required": false,
-				"type": "number",
-				"typeLabel": "string",
-				"id": "order"
-			},
-			"done": {
-				"required": false,
-				"type": "boolean",
-				"typeLabel": "string",
-				"id": "done"
-			},
-			"owner": {
-				"required": false,
-				"type": "string",
-				"typeLabel": "string",
-				"id": "owner"
+				"type": "object",
+				"typeLabel": "object",
+				"id": "people"
 			},
 			"tags": {
 				"required": false,
@@ -31,14 +13,32 @@
 				"typeLabel": "array",
 				"id": "tags"
 			},
-			"people": {
+			"owner": {
 				"required": false,
-				"type": "object",
-				"typeLabel": "object",
-				"id": "people"
+				"type": "string",
+				"typeLabel": "string",
+				"id": "owner"
+			},
+			"done": {
+				"required": false,
+				"type": "boolean",
+				"typeLabel": "string",
+				"id": "done"
+			},
+			"order": {
+				"required": false,
+				"type": "number",
+				"typeLabel": "string",
+				"id": "order"
+			},
+			"title": {
+				"required": false,
+				"type": "string",
+				"typeLabel": "string",
+				"id": "title"
 			}
 		},
-		"onGet": "if (query.title === \"$FAIL2\") {\n    var x = null;\n    x.fail();\n}\n\nif (query.title === \"$TESTFAIL2\") {\n    dpd.todos.get({title: \"$FAIL2\"}, function(todo, err) {\n        this.todo = todo;\n        this.err = err;\n    });\n}",
+		"onGet": "if (query.title === \"$FAIL2\") {\n    var x = null;\n    x.fail();\n}\n\nif (query.title === \"$TESTFAIL2\") {\n    dpd.todos.get({title: \"$FAIL2\"}, function(todo, err) {\n        this.todo = todo;\n        this.err = err;\n    });\n}\n\nif (query.arbitrary) {\n    this.custom = 'arbitrary';\n}",
 		"onPost": "if (this.title === \"$FAIL\") {\n    var x = null;\n    x.fail();\n}\n\nif (this.title === \"$TESTFAIL\") {\n    dpd.todos.post({title: \"$FAIL\"}, function(results, err) {\n        this.results = results;\n        this.err = err;\n    });\n}",
 		"onPut": "/* Readonly properties */\n// protect(\"creator\");\n",
 		"onDelete": "",
