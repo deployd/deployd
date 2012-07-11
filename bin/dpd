@@ -10,8 +10,12 @@ var program = require('commander')
   , shelljs = require('shelljs/global')
   , mongod = require('../lib/util/mongod')
   , path = require('path')
+  , fs = require('fs')
   , tty = require('tty')
-  , remote = require('../lib/client/remote');
+  , remote = require('../lib/client/remote')
+  , request = require('request')
+  , package = require('../package')
+  , latestversionFile = path.join(__dirname, '../.latestversion');
 
 /**
  * Get the version number from the package.json
@@ -54,7 +58,16 @@ function start(file) {
     process.chdir(path.dirname(file));
   }
   if (test('-f', 'app.dpd')) {
-    console.log("starting deployd...");
+    console.log("starting deployd v" + package.version + "...");
+
+    if (fs.existsSync(latestversionFile)) {
+      var latest = fs.readFileSync(latestversionFile, 'utf-8');
+      if (latest && latest !== package.version) {
+        console.log("deployd v" + latest + " is available. Use dpd-update command to install");
+      }  
+    }
+    checkForUpdates();
+    
     if (!test('-d', './.dpd')) mkdir('-p', './.dpd');
     if (!test('-d', './.dpd/pids')) mkdir('-p', './.dpd/pids');
     if (!test('-d', './data')) mkdir('-p', './data');
@@ -160,3 +173,18 @@ function generatePort() {
   return Math.floor(Math.random() * (portRange[1] - portRange[0])) + portRange[0];
 }
 
+function checkForUpdates() {
+  request('http://registry.npmjs.org/deployd', function(err, res, body) {
+    if (!err) {
+      var json;
+      try {
+        json = JSON.parse(body);  
+      } catch (ex) {}
+
+      if (json && json['dist-tags'] && json['dist-tags'].latest) {
+        var latest = json['dist-tags'].latest;
+        fs.writeFile(latestversionFile, latest);
+      }
+    }
+  });
+}
