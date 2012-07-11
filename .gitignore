@@ -19,3 +19,4 @@ test-app/data
 bin/mongo
 bin/node
 examples/test/data
+.latestversion

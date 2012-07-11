@@ -9,7 +9,6 @@ describe('User Collection', function() {
 			it('should create a user', function(done) {
 				dpd.users.post(credentials, function (user, err) {
 					if(!user) {
-						console.log('user did not exist', err);
 						throw 'user did not exist';
 					}
 					expect(user.id.length).to.equal(16)
@@ -18,6 +17,18 @@ describe('User Collection', function() {
 					done(err);
 				})
 			})
+
+			it('should validate for duplicate email', function(done) {
+				chain(function(next) {
+					dpd.users.post(credentials, next);
+				}).chain(function(next) {
+					dpd.users.post(credentials, next);
+				}).chain(function(next, result, err) {
+					expect(result).to.not.exist;
+					expect(err.errors.email).to.be.ok;
+					done();
+				});
+			});
 		})
 		describe('.login(credentials, fn)', function() {
 			it('should login a user', function(done) {
@@ -66,7 +77,6 @@ describe('User Collection', function() {
 			dpd.users.get(function (users) {
 				var total = users.length;
 				if(total === 0) return done();
-				console.log(total);
 				users.forEach(function(user) {
 					dpd.users.del({id: user.id}, function () {
 						total--;
