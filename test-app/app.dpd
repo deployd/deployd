@@ -42,7 +42,7 @@
 		"onPost": "if (this.title === \"$FAIL\") {\n    var x = null;\n    x.fail();\n}\n\nif (this.title === \"$TESTFAIL\") {\n    dpd.todos.post({title: \"$FAIL\"}, function(results, err) {\n        this.results = results;\n        this.err = err;\n    });\n}",
 		"onPut": "/* Readonly properties */\n// protect(\"creator\");\n",
 		"onDelete": "",
-		"onValidate": "/* Validation */\n// if (this.name.length < 10) {\n//   error(\"name\", \"Must be at least 10 characters\");\n// }\n",
+		"onValidate": "/* Validation */\n// if (this.name.length < 10) {\n//   error(\"name\", \"Must be at least 10 characters\");\n// }\n\n",
 		"path": "/todos",
 		"order": 1,
 		"typeLabel": "Collection",
@@ -50,6 +50,19 @@
 		"$renameFrom": "/todos"
 	},
 	"3f7b9cc9518729e6": {
+		"properties": {
+			"friends": {
+				"required": false,
+				"type": "array",
+				"typeLabel": "array",
+				"id": "friends"
+			}
+		},
+		"onGet": "dpd.users.get({id: {$in: this.friends}}, function(friends) {\n    if (friends) this.friends = friends;\n});",
+		"onPost": "/* Authentication */\n// if (!me || !me.isAdmin) {\n//   cancel(\"You must be an admin!\", 401);\n// }\n\n/* Automatic properties */\n// this.creator = me.id;\n// this.creatorName = me.name;\n",
+		"onPut": "/* Readonly properties */\n// protect(\"creator\");\n",
+		"onDelete": "",
+		"onValidate": "/* Validation */\n// if (this.name.length < 10) {\n//   error(\"name\", \"Must be at least 10 characters\");\n// }\n",
 		"path": "/users",
 		"order": 2,
 		"typeLabel": "Users Collection",
@@ -122,7 +135,7 @@
 				"id": "name"
 			}
 		},
-		"onGet": "dpd.recursive.get(function(result) {\n    this.more = result;\n});",
+		"onGet": "dpd.recursive.get(function(result, err) {\n    this.more = result;\n});",
 		"onPost": "/* Authentication */\n// if (!me || !me.isAdmin) {\n//   cancel(\"You must be an admin!\", 401);\n// }\n\n/* Automatic properties */\n// this.creator = me.id;\n// this.creatorName = me.name;\n",
 		"onPut": "/* Readonly properties */\n// protect(\"creator\");\n",
 		"onDelete": "",

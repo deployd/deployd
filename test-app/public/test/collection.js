@@ -110,13 +110,13 @@ describe('Collection', function() {
 			this.timeout(1000);
 			dpd.recursive.get(function(result, err) {
 				var obj = result[0];
-				expect(err).to.not.exist;
 				expect(result.length).to.equal(1);
 				expect(obj).to.exist;
 
 				expect(obj.more).to.exist;
 				expect(obj.more.length).to.equal(1);
 				expect(obj.more[0].more).to.not.be.ok;
+				done(err);
 			});
 		});
 
