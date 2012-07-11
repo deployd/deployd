@@ -1,1 +1,135 @@
-{"0630a817ddb9194b":{"properties":{"people":{"required":false,"type":"object","typeLabel":"object","id":"people"},"tags":{"required":false,"type":"array","typeLabel":"array","id":"tags"},"owner":{"required":false,"type":"string","typeLabel":"string","id":"owner"},"done":{"required":false,"type":"boolean","typeLabel":"string","id":"done"},"order":{"required":false,"type":"number","typeLabel":"string","id":"order"},"title":{"required":false,"type":"string","typeLabel":"string","id":"title"}},"onGet":"","onPost":"/* Authentication */\n// if (!me || !me.isAdmin) {\n//   cancel(\"You must be an admin!\", 401);\n// }\n\n/* Automatic properties */\n// this.creator = me.id;\n// this.creatorName = me.name;\n","onPut":"/* Readonly properties */\n// protect(\"creator\");\n","onDelete":"","onValidate":"/* Validation */\n// if (this.name.length < 10) {\n//   error(\"name\", \"Must be at least 10 characters\");\n// }\n","path":"/todos","order":1,"typeLabel":"Collection","type":"Collection","$renameFrom":"/todos"},"3f7b9cc9518729e6":{"path":"/users","order":2,"typeLabel":"Users Collection","type":"UserCollection","$renameFrom":"/users"},"4f78d38ea41398f8":{"path":"/empty","order":3,"typeLabel":"Collection","type":"Collection","$renameFrom":"/empty"},"372b90c73b850933":{"properties":{"array":{"required":false,"type":"array","typeLabel":"array","id":"array"},"object":{"required":false,"type":"object","typeLabel":"object","id":"object"},"date":{"required":false,"type":"date","typeLabel":"date","id":"date"},"boolean":{"required":false,"type":"boolean","typeLabel":"boolean","id":"boolean"},"number":{"required":false,"type":"number","typeLabel":"number","id":"number"},"string":{"required":false,"type":"string","typeLabel":"string","id":"string"}},"onGet":"","onPost":"/* Authentication */\n// if (!me || !me.isAdmin) {\n//   cancel(\"You must be an admin!\", 401);\n// }\n\n/* Automatic properties */\n// this.creator = me.id;\n// this.creatorName = me.name;\n","onPut":"/* Readonly properties */\n// protect(\"creator\");\n","onDelete":"","onValidate":"/* Validation */\n// if (this.name.length < 10) {\n//   error(\"name\", \"Must be at least 10 characters\");\n// }\n","path":"/full","order":4,"typeLabel":"Collection","type":"Collection"}}
+{
+	"0630a817ddb9194b": {
+		"properties": {
+			"title": {
+				"required": false,
+				"type": "string",
+				"typeLabel": "string",
+				"id": "title"
+			},
+			"order": {
+				"required": false,
+				"type": "number",
+				"typeLabel": "string",
+				"id": "order"
+			},
+			"done": {
+				"required": false,
+				"type": "boolean",
+				"typeLabel": "string",
+				"id": "done"
+			},
+			"owner": {
+				"required": false,
+				"type": "string",
+				"typeLabel": "string",
+				"id": "owner"
+			},
+			"tags": {
+				"required": false,
+				"type": "array",
+				"typeLabel": "array",
+				"id": "tags"
+			},
+			"people": {
+				"required": false,
+				"type": "object",
+				"typeLabel": "object",
+				"id": "people"
+			}
+		},
+		"onGet": "if (query.title === \"$FAIL2\") {\n    var x = null;\n    x.fail();\n}\n\nif (query.title === \"$TESTFAIL2\") {\n    dpd.todos.get({title: \"$FAIL2\"}, function(todo, err) {\n        this.todo = todo;\n        this.err = err;\n    });\n}",
+		"onPost": "if (this.title === \"$FAIL\") {\n    var x = null;\n    x.fail();\n}\n\nif (this.title === \"$TESTFAIL\") {\n    dpd.todos.post({title: \"$FAIL\"}, function(results, err) {\n        this.results = results;\n        this.err = err;\n    });\n}",
+		"onPut": "/* Readonly properties */\n// protect(\"creator\");\n",
+		"onDelete": "",
+		"onValidate": "/* Validation */\n// if (this.name.length < 10) {\n//   error(\"name\", \"Must be at least 10 characters\");\n// }\n",
+		"path": "/todos",
+		"order": 1,
+		"typeLabel": "Collection",
+		"type": "Collection",
+		"$renameFrom": "/todos"
+	},
+	"3f7b9cc9518729e6": {
+		"path": "/users",
+		"order": 2,
+		"typeLabel": "Users Collection",
+		"type": "UserCollection",
+		"$renameFrom": "/users"
+	},
+	"4f78d38ea41398f8": {
+		"path": "/empty",
+		"order": 3,
+		"typeLabel": "Collection",
+		"type": "Collection",
+		"$renameFrom": "/empty"
+	},
+	"372b90c73b850933": {
+		"path": "/full",
+		"order": 4,
+		"properties": {
+			"array": {
+				"required": false,
+				"type": "array",
+				"typeLabel": "array",
+				"id": "array"
+			},
+			"object": {
+				"required": false,
+				"type": "object",
+				"typeLabel": "object",
+				"id": "object"
+			},
+			"date": {
+				"required": false,
+				"type": "date",
+				"typeLabel": "date",
+				"id": "date"
+			},
+			"boolean": {
+				"required": false,
+				"type": "boolean",
+				"typeLabel": "boolean",
+				"id": "boolean"
+			},
+			"number": {
+				"required": false,
+				"type": "number",
+				"typeLabel": "number",
+				"id": "number"
+			},
+			"string": {
+				"required": false,
+				"type": "string",
+				"typeLabel": "string",
+				"id": "string"
+			}
+		},
+		"onGet": "",
+		"onPost": "/* Authentication */\n// if (!me || !me.isAdmin) {\n//   cancel(\"You must be an admin!\", 401);\n// }\n\n/* Automatic properties */\n// this.creator = me.id;\n// this.creatorName = me.name;\n",
+		"onPut": "/* Readonly properties */\n// protect(\"creator\");\n",
+		"onDelete": "",
+		"onValidate": "/* Validation */\n// if (this.name.length < 10) {\n//   error(\"name\", \"Must be at least 10 characters\");\n// }\n",
+		"typeLabel": "Collection",
+		"type": "Collection",
+		"$renameFrom": "/full"
+	},
+	"bcd2a45829254ac0": {
+		"properties": {
+			"name": {
+				"required": false,
+				"type": "string",
+				"typeLabel": "string",
+				"id": "name"
+			}
+		},
+		"onGet": "dpd.recursive.get(function(result) {\n    this.more = result;\n});",
+		"onPost": "/* Authentication */\n// if (!me || !me.isAdmin) {\n//   cancel(\"You must be an admin!\", 401);\n// }\n\n/* Automatic properties */\n// this.creator = me.id;\n// this.creatorName = me.name;\n",
+		"onPut": "/* Readonly properties */\n// protect(\"creator\");\n",
+		"onDelete": "",
+		"onValidate": "/* Validation */\n// if (this.name.length < 10) {\n//   error(\"name\", \"Must be at least 10 characters\");\n// }\n",
+		"path": "/recursive",
+		"order": 5,
+		"typeLabel": "Collection",
+		"type": "Collection"
+	}
+}

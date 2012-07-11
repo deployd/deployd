@@ -25,6 +25,15 @@ describe('Collection', function() {
 			})
 		})
 
+		describe('.post({title: "$TESTFAIL", fn)', function() {
+			it('should correctly respond to errors in event IO', function(done) {
+				dpd.todos.post({title: "$TESTFAIL"}, function(todo, err) {
+					expect(todo.err).to.exist;
+					done();
+				});
+			});
+		});
+
 		describe('.get({title: title}, fn)', function() {
 			it('should return a single result', function(done) {
 				var title = Math.random().toString();
@@ -73,7 +82,60 @@ describe('Collection', function() {
 				})
 			})
 		})
+
+		describe('.get({title: "$TESTFAIL2"}, fn)', function() {
+			it('should corretly respond to errors in event IO', function(done) {
+				dpd.todos.post({title: "$FAIL2"}, function() {
+					dpd.todos.post({title: "$TESTFAIL2"}, function() {
+						dpd.todos.get({title: "$TESTFAIL2"}, function(todos, err) {
+							expect(todos).to.exist;
+							expect(todos[0].err).to.exist;
+							done();
+						});
+					});
+				});
+			});
+		});
+
 	})
+
+	describe('dpd.recursive', function() {
+		beforeEach(function(done) {
+			dpd.recursive.post({name: "dataception"}, function() {
+				done();
+			});
+		});
+
+		it('should only go one level deep', function(done) {
+			this.timeout(1000);
+			dpd.recursive.get(function(result, err) {
+				var obj = result[0];
+				expect(err).to.not.exist;
+				expect(result.length).to.equal(1);
+				expect(obj).to.exist;
+
+				expect(obj.more).to.exist;
+				expect(obj.more.length).to.equal(1);
+				expect(obj.more[0].more).to.not.be.ok;
+			});
+		});
+
+		afterEach(function (done) {
+			this.timeout(10000);
+			dpd.recursive.get(function (recursive) {
+				var total = recursive.length;
+				if(total === 0) return done();
+				recursive.forEach(function(todo) {
+					dpd.recursive.del({id: todo.id}, function () {
+						total--;
+						if(!total) {
+							done();
+						}
+					})
+				})
+			})
+		})
+	});
 
 	afterEach(function (done) {
 		this.timeout(10000);
