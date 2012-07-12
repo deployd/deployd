@@ -1,5 +1,7 @@
 {
 	"0630a817ddb9194b": {
+		"path": "/todos",
+		"order": 1,
 		"properties": {
 			"people": {
 				"required": false,
@@ -43,13 +45,13 @@
 		"onPut": "/* Readonly properties */\n// protect(\"creator\");\n",
 		"onDelete": "",
 		"onValidate": "/* Validation */\n// if (this.name.length < 10) {\n//   error(\"name\", \"Must be at least 10 characters\");\n// }\n\n",
-		"path": "/todos",
-		"order": 1,
 		"typeLabel": "Collection",
 		"type": "Collection",
 		"$renameFrom": "/todos"
 	},
 	"3f7b9cc9518729e6": {
+		"path": "/users",
+		"order": 2,
 		"properties": {
 			"friends": {
 				"required": false,
@@ -63,8 +65,6 @@
 		"onPut": "/* Readonly properties */\n// protect(\"creator\");\n",
 		"onDelete": "",
 		"onValidate": "/* Validation */\n// if (this.name.length < 10) {\n//   error(\"name\", \"Must be at least 10 characters\");\n// }\n",
-		"path": "/users",
-		"order": 2,
 		"typeLabel": "Users Collection",
 		"type": "UserCollection",
 		"$renameFrom": "/users"
@@ -127,6 +127,8 @@
 		"$renameFrom": "/full"
 	},
 	"bcd2a45829254ac0": {
+		"path": "/recursive",
+		"order": 5,
 		"properties": {
 			"name": {
 				"required": false,
@@ -140,8 +142,13 @@
 		"onPut": "/* Readonly properties */\n// protect(\"creator\");\n",
 		"onDelete": "",
 		"onValidate": "/* Validation */\n// if (this.name.length < 10) {\n//   error(\"name\", \"Must be at least 10 characters\");\n// }\n",
-		"path": "/recursive",
-		"order": 5,
+		"typeLabel": "Collection",
+		"type": "Collection",
+		"$renameFrom": "/recursive"
+	},
+	"5b2a6326271c78ee": {
+		"path": "/my-objects",
+		"order": 6,
 		"typeLabel": "Collection",
 		"type": "Collection"
 	}
