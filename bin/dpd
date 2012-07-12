@@ -15,7 +15,8 @@ var program = require('commander')
   , remote = require('../lib/client/remote')
   , request = require('request')
   , package = require('../package')
-  , latestversionFile = path.join(__dirname, '../.latestversion');
+  , latestversionFile = path.join(__dirname, '../.latestversion')
+  , Deployment = require('../lib/client/deploy').Deployment;
 
 /**
  * Get the version number from the package.json
@@ -123,7 +124,42 @@ program
                '\tthe key must be present on the remote server to connect')
   .action(function(host) {
     remote.createRemote(host, program.port || 3000);
-  })
+  });
+
+program
+  .command('deploy [subdomain]')
+  .description('\tdeploy a testing instance on deploydapp.com')
+  .action(function () {
+    var d = new Deployment('.')
+      , tar = './.dpd/package.tgz'
+      , DPDAPP_URL = 'http://deploydapp.com'
+      , Keys = require('../lib/keys')
+      , keys = new Keys();
+
+    keys.getLocal(function (err, key) {
+      if(err) return console.error(err);
+      if(key) {
+        deploy(key);
+      } else {
+        keys.create(function(err, key) {
+          if(err) return console.error(err);
+          deploy(key);
+        });
+      }
+    });
+
+    function deploy(key) {
+      console.log('packaging...');
+      d.package(tar, function (err) {
+        if(err) return console.error(err);
+        console.log('pushing...');
+        d.publish(DPDAPP_URL, tar, key, function (err) {
+          if(err) return console.error('failed to push:', err.message || 'could not push app to ' + DPDAPP_URL);
+          console.log('deployd ' + d.subdomain + '!');
+        })
+      })
+    }
+  });
 
 program
   .command('*')

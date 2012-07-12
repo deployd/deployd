@@ -23,7 +23,10 @@
     "scrubber": "*",
     "shelljs": "git://github.com/dallonf/shelljs.git",
     "http-proxy": "0.8.1",
-    "send": "git://github.com/ritch/send.git"
+    "send": "git://github.com/ritch/send.git",
+    "fstream": "0.1.x",
+    "tar": "0.1.x",
+    "fstream-ignore": "0.0.x"
   },
   "devDependencies": {
     "mocha": "*",
