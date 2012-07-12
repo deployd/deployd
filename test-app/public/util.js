@@ -31,3 +31,18 @@ var chain = function(fn) {
 
 	return _chain(fn);
 };
+
+var cleanCollection = function(collection, done) {
+	collection.get(function (items) {
+		var total = items.length;
+		if(total === 0) return done();
+		items.forEach(function(item) {
+			collection.del({id: item.id}, function () {
+				total--;
+				if(!total) {
+					done();
+				}
+			})
+		})
+	})
+}
