@@ -1,5 +1,7 @@
 {
 	"0630a817ddb9194b": {
+		"path": "/todos",
+		"order": 1,
 		"properties": {
 			"people": {
 				"required": false,
@@ -52,6 +54,19 @@
 	"3f7b9cc9518729e6": {
 		"path": "/users",
 		"order": 2,
+		"properties": {
+			"friends": {
+				"required": false,
+				"type": "array",
+				"typeLabel": "array",
+				"id": "friends"
+			}
+		},
+		"onGet": "dpd.users.get({id: {$in: this.friends}}, function(friends) {\n    if (friends) this.friends = friends;\n});",
+		"onPost": "/* Authentication */\n// if (!me || !me.isAdmin) {\n//   cancel(\"You must be an admin!\", 401);\n// }\n\n/* Automatic properties */\n// this.creator = me.id;\n// this.creatorName = me.name;\n",
+		"onPut": "/* Readonly properties */\n// protect(\"creator\");\n",
+		"onDelete": "",
+		"onValidate": "/* Validation */\n// if (this.name.length < 10) {\n//   error(\"name\", \"Must be at least 10 characters\");\n// }\n",
 		"typeLabel": "Users Collection",
 		"type": "UserCollection",
 		"$renameFrom": "/users"
@@ -91,24 +106,34 @@
 			},
 			"object": {
 				"required": false,
-				"type": "object",
-				"typeLabel": "object",
-				"id": "object"
-			},
-			"array": {
-				"required": false,
-				"type": "array",
-				"typeLabel": "array",
-				"id": "array"
+				"type": "string",
+				"typeLabel": "string",
+				"id": "string"
 			}
 		},
 		"onGet": "",
 		"onPost": "/* Authentication */\n// if (!me || !me.isAdmin) {\n//   cancel(\"You must be an admin!\", 401);\n// }\n\n/* Automatic properties */\n// this.creator = me.id;\n// this.creatorName = me.name;\n",
-		"onPut": "if(this.number) {\n    error('number', 'is an error');\n}",
+		"onPut": "/* Readonly properties */\n// protect(\"creator\");\n",
 		"onDelete": "",
 		"onValidate": "/* Validation */\n// if (this.name.length < 10) {\n//   error(\"name\", \"Must be at least 10 characters\");\n// }\n",
+		"typeLabel": "Collection",
+		"type": "Collection",
+		"$renameFrom": "/full"
+	},
+	"bcd2a45829254ac0": {
+		"path": "/recursive",
+		"order": 5,
+		"properties": {
+			"name": {
 		"path": "/full",
 		"order": 4,
+		"typeLabel": "Collection",
+		"type": "Collection",
+		"$renameFrom": "/recursive"
+	},
+	"5b2a6326271c78ee": {
+		"path": "/my-objects",
+		"order": 6,
 		"typeLabel": "Collection",
 		"type": "Collection"
 	}
