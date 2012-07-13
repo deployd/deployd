@@ -38,17 +38,42 @@ program
   .command('create [project-name]')
   .description('\tcreate a project in a new directory\n\teg. `dpd create my-app`')
   .action(function(name) {
-    var name = name || 'my-deployd-app';
+    name = name || 'my-deployd-app';
+    if (test('-d',  name)) {
+      return console.info(name + " already exists in this directory");
+    }
+
     mkdir('-p', name);
-    mkdir('-p', name + '/public');
-    mkdir('-p', name + '/data');
+    cp('-Rf', path.join(__dirname, '/createtemplate/*'), name);
     mkdir('-p', name + '/.dpd');
     mkdir('-p', name + '/.dpd/pids');
     ('').to(name + '/.dpd/pids/mongod');
-    ("{}").to(name + '/app.dpd');
-    console.info('to start your app:');
-    console.info('\t$ cd', name);
-    console.info('\t$ dpd');
+    rm(ls('-R', name).filter(function(p) {
+      return path.basename(p) === 'PLACEHOLDER';
+    }).map(function(p) { return name + '/' + p}));
+
+
+
+    if (program.dashboard || program.open) {
+      start(name + '/app.dpd');
+    } else {
+      console.info('to start your app:');
+      console.info('\t$ cd', name);
+      console.info('\t$ dpd');
+    }
+    
+
+    
+
+    // var name = name || 'my-deployd-app';
+    // mkdir('-p', name);
+    // mkdir('-p', name + '/public');
+    // mkdir('-p', name + '/data');
+    // mkdir('-p', name + '/.dpd');
+    // mkdir('-p', name + '/.dpd/pids');
+    // ('').to(name + '/.dpd/pids/mongod');
+    // ("{}").to(name + '/app.dpd');
+    
   });
 
 function start(file) {
