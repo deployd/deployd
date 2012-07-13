@@ -1,8 +1,12 @@
 {
 	"0630a817ddb9194b": {
-		"path": "/todos",
-		"order": 1,
 		"properties": {
+			"message": {
+				"required": false,
+				"type": "string",
+				"typeLabel": "string",
+				"id": "message"
+			},
 			"people": {
 				"required": false,
 				"type": "object",
@@ -44,7 +48,9 @@
 		"onPost": "if (this.title === \"$FAIL\") {\n    var x = null;\n    x.fail();\n}\n\nif (this.title === \"$TESTFAIL\") {\n    dpd.todos.post({title: \"$FAIL\"}, function(results, err) {\n        this.results = results;\n        this.err = err;\n    });\n}",
 		"onPut": "/* Readonly properties */\n// protect(\"creator\");\n",
 		"onDelete": "",
-		"onValidate": "/* Validation */\n// if (this.name.length < 10) {\n//   error(\"name\", \"Must be at least 10 characters\");\n// }\n\n",
+		"onValidate": "if (this.message === 'notvalid') {\n    error('message', \"Message must not be notvalid\");\n}\n\nif (this.title === 'notvalid') {\n    error('title', \"Title must not be notvalid\");\n}",
+		"path": "/todos",
+		"order": 1,
 		"typeLabel": "Collection",
 		"type": "Collection",
 		"$renameFrom": "/todos"
@@ -145,11 +151,5 @@
 		"typeLabel": "Collection",
 		"type": "Collection",
 		"$renameFrom": "/recursive"
-	},
-	"5b2a6326271c78ee": {
-		"path": "/my-objects",
-		"order": 6,
-		"typeLabel": "Collection",
-		"type": "Collection"
 	}
 }

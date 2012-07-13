@@ -15,6 +15,28 @@ describe('Collection', function() {
       })
     })
 
+    describe('.post({title: "notvalid"}, fn)', function() {
+      it('should properly return an error', function(done) {
+        dpd.todos.post({title: "notvalid"}, function(result, err) {
+          expect(err).to.exist;
+          expect(err.errors).to.exist;
+          expect(err.errors.title).to.equal("Title must not be notvalid");
+          done();
+        });
+      });
+    });
+
+    describe('.post({message: "notvalid"}, fn)', function() {
+      it('should properly return an error', function(done) {
+        dpd.todos.post({message: "notvalid"}, function(result, err) {
+          expect(err).to.exist;
+          expect(err.errors).to.exist;
+          expect(err.errors.message).to.equal("Message must not be notvalid");
+          done();
+        });
+      });
+    });
+
     describe('.post({title: 7}, fn)', function() {
       it('should sanitize the title due to incorrect type', function(done) {
         dpd.todos.post({title: 7}, function (todo, err) {
@@ -271,6 +293,17 @@ describe('Collection', function() {
       this.timeout(10000);
       cleanCollection(dpd.recursive, done);
     })
+  });
+
+  describe('dpd.empty', function() {
+    describe('.get(fn)', function() {
+      it('should return an empty array', function(done) {
+        dpd.empty.get(function(result) {
+          expect(result).to.eql([]);
+          done();
+        })        
+      });
+    });
   });
 
   
