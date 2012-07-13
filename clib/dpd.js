@@ -268,4 +268,8 @@
     socket.on.apply(socket, arguments);
   };
 
+  if (console && console.log) {
+  	console.log = console.log.bind(console);
+  }
+
 })(window.jQuery);
