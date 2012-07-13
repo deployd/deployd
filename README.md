@@ -21,17 +21,13 @@ _currently requires [mongodb](http://www.mongodb.org/downloads)_
 	$ dpd
 	dpd> dashboard
 
-## tests
-
-	$ npm install deployd -dg
-
-or
-
-	$ git clone git@github.com:deployd/deployd.git
-	$ npm link
-
-then
+## unit tests
 
 	$ cd deployd
-	$ mongod
+	$ mongod &
 	$ mocha
+
+## integration tests
+	
+	cd test-app
+	dpd -o
