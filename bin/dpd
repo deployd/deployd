@@ -182,7 +182,7 @@ program
         console.log('pushing...');
         d.publish(DPDAPP_URL, tar, key, function (err) {
           if(err) return console.error('failed to push:', err.message || 'could not push app to ' + DPDAPP_URL);
-          console.log('deployd app to http://' + subdomain + '.deploydapp.com!');
+          console.log('deployd app to http://' + d.subdomain + '.deploydapp.com!');
         })
       })
     }
