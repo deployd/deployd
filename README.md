@@ -2,11 +2,17 @@
 
 realtime resource server
 
-## install npm
+<!-- ## install from npm
 
 _currently requires [mongodb](http://www.mongodb.org/downloads)_
 
-	[sudo] npm install deployd -g
+	[sudo] npm install deployd -g -->
+
+## install from github
+
+	git clone https://github.com/deployd/deployd.git
+	npm install
+	npm link
 
 ## quick start
 
@@ -15,17 +21,13 @@ _currently requires [mongodb](http://www.mongodb.org/downloads)_
 	$ dpd
 	dpd> dashboard
 
-## tests
-
-	$ npm install deployd -dg
-
-or
-
-	$ git clone git@github.com:deployd/deployd.git
-	$ npm link
-
-then
+## unit tests
 
 	$ cd deployd
-	$ mongod
+	$ mongod &
 	$ mocha
+
+## integration tests
+	
+	cd test-app
+	dpd -o

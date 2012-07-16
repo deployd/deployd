@@ -21,9 +21,9 @@
     "mkdirp": "*",
     "debug": "*",
     "scrubber": "*",
-    "shelljs": "git://github.com/dallonf/shelljs.git",
+    "shelljs": "https://github.com/dallonf/shelljs/tarball/master",
     "http-proxy": "0.8.1",
-    "send": "git://github.com/ritch/send.git",
+    "send": "0.0.2",
     "fstream": "0.1.x",
     "tar": "0.1.x",
     "fstream-ignore": "0.0.x"

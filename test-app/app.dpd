@@ -1,6 +1,12 @@
 {
 	"0630a817ddb9194b": {
 		"properties": {
+			"message": {
+				"required": false,
+				"type": "string",
+				"typeLabel": "string",
+				"id": "message"
+			},
 			"people": {
 				"required": false,
 				"type": "object",
@@ -38,11 +44,11 @@
 				"id": "title"
 			}
 		},
-		"onGet": "",
-		"onPost": "/* Authentication */\n// if (!me || !me.isAdmin) {\n//   cancel(\"You must be an admin!\", 401);\n// }\n\n/* Automatic properties */\n// this.creator = me.id;\n// this.creatorName = me.name;\n",
+		"onGet": "if (query.title === \"$FAIL2\") {\n    var x = null;\n    x.fail();\n}\n\nif (query.title === \"$TESTFAIL2\") {\n    dpd.todos.get({title: \"$FAIL2\"}, function(todo, err) {\n        this.todo = todo;\n        this.err = err;\n    });\n}\n\nif (query.arbitrary) {\n    this.custom = 'arbitrary';\n}",
+		"onPost": "if (this.title === \"$FAIL\") {\n    var x = null;\n    x.fail();\n}\n\nif (this.title === \"$TESTFAIL\") {\n    dpd.todos.post({title: \"$FAIL\"}, function(results, err) {\n        this.results = results;\n        this.err = err;\n    });\n}",
 		"onPut": "/* Readonly properties */\n// protect(\"creator\");\n",
 		"onDelete": "",
-		"onValidate": "/* Validation */\n// if (this.name.length < 10) {\n//   error(\"name\", \"Must be at least 10 characters\");\n// }\n",
+		"onValidate": "if (this.message === 'notvalid') {\n    error('message', \"Message must not be notvalid\");\n}\n\nif (this.title === 'notvalid') {\n    error('title', \"Title must not be notvalid\");\n}",
 		"path": "/todos",
 		"order": 1,
 		"typeLabel": "Collection",
@@ -52,6 +58,19 @@
 	"3f7b9cc9518729e6": {
 		"path": "/users",
 		"order": 2,
+		"properties": {
+			"friends": {
+				"required": false,
+				"type": "array",
+				"typeLabel": "array",
+				"id": "friends"
+			}
+		},
+		"onGet": "dpd.users.get({id: {$in: this.friends}}, function(friends) {\n    if (friends) this.friends = friends;\n});",
+		"onPost": "/* Authentication */\n// if (!me || !me.isAdmin) {\n//   cancel(\"You must be an admin!\", 401);\n// }\n\n/* Automatic properties */\n// this.creator = me.id;\n// this.creatorName = me.name;\n",
+		"onPut": "/* Readonly properties */\n// protect(\"creator\");\n",
+		"onDelete": "",
+		"onValidate": "/* Validation */\n// if (this.name.length < 10) {\n//   error(\"name\", \"Must be at least 10 characters\");\n// }\n",
 		"typeLabel": "Users Collection",
 		"type": "UserCollection",
 		"$renameFrom": "/users"
@@ -64,30 +83,14 @@
 		"$renameFrom": "/empty"
 	},
 	"372b90c73b850933": {
+		"path": "/full",
+		"order": 4,
 		"properties": {
-			"string": {
+			"array": {
 				"required": false,
-				"type": "string",
-				"typeLabel": "string",
-				"id": "string"
-			},
-			"number": {
-				"required": false,
-				"type": "number",
-				"typeLabel": "number",
-				"id": "number"
-			},
-			"boolean": {
-				"required": false,
-				"type": "boolean",
-				"typeLabel": "boolean",
-				"id": "boolean"
-			},
-			"date": {
-				"required": false,
-				"type": "date",
-				"typeLabel": "date",
-				"id": "date"
+				"type": "array",
+				"typeLabel": "array",
+				"id": "array"
 			},
 			"object": {
 				"required": false,
@@ -95,21 +98,58 @@
 				"typeLabel": "object",
 				"id": "object"
 			},
-			"array": {
+			"date": {
 				"required": false,
-				"type": "array",
-				"typeLabel": "array",
-				"id": "array"
+				"type": "date",
+				"typeLabel": "date",
+				"id": "date"
+			},
+			"boolean": {
+				"required": false,
+				"type": "boolean",
+				"typeLabel": "boolean",
+				"id": "boolean"
+			},
+			"number": {
+				"required": false,
+				"type": "number",
+				"typeLabel": "number",
+				"id": "number"
+			},
+			"string": {
+				"required": false,
+				"type": "string",
+				"typeLabel": "string",
+				"id": "string"
 			}
 		},
 		"onGet": "",
 		"onPost": "/* Authentication */\n// if (!me || !me.isAdmin) {\n//   cancel(\"You must be an admin!\", 401);\n// }\n\n/* Automatic properties */\n// this.creator = me.id;\n// this.creatorName = me.name;\n",
-		"onPut": "if(this.number) {\n    error('number', 'is an error');\n}",
+		"onPut": "/* Readonly properties */\n// protect(\"creator\");\n",
 		"onDelete": "",
 		"onValidate": "/* Validation */\n// if (this.name.length < 10) {\n//   error(\"name\", \"Must be at least 10 characters\");\n// }\n",
-		"path": "/full",
-		"order": 4,
 		"typeLabel": "Collection",
-		"type": "Collection"
+		"type": "Collection",
+		"$renameFrom": "/full"
+	},
+	"bcd2a45829254ac0": {
+		"path": "/recursive",
+		"order": 5,
+		"properties": {
+			"name": {
+				"required": false,
+				"type": "string",
+				"typeLabel": "string",
+				"id": "name"
+			}
+		},
+		"onGet": "dpd.recursive.get(function(result, err) {\n    this.more = result;\n});",
+		"onPost": "/* Authentication */\n// if (!me || !me.isAdmin) {\n//   cancel(\"You must be an admin!\", 401);\n// }\n\n/* Automatic properties */\n// this.creator = me.id;\n// this.creatorName = me.name;\n",
+		"onPut": "/* Readonly properties */\n// protect(\"creator\");\n",
+		"onDelete": "",
+		"onValidate": "/* Validation */\n// if (this.name.length < 10) {\n//   error(\"name\", \"Must be at least 10 characters\");\n// }\n",
+		"typeLabel": "Collection",
+		"type": "Collection",
+		"$renameFrom": "/recursive"
 	}
 }
