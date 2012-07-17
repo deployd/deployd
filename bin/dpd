@@ -16,7 +16,8 @@ var program = require('commander')
   , request = require('request')
   , package = require('../package')
   , latestversionFile = path.join(__dirname, '../.latestversion')
-  , Deployment = require('../lib/client/deploy').Deployment;
+  , Deployment = require('../lib/client/deploy').Deployment
+  , open = require('../lib/util/open');
 
 /**
  * Get the version number from the package.json
@@ -145,10 +146,20 @@ program
 
 program
   .command('remote [host]')
-  .description('\tconnect to a remote host using a key in the current directory (./.dpd/keys.json)\n' +
+  .description('\tconnect to a remote dashboard using a key in the current directory (./.dpd/keys.json)\n' +
                '\tthe key must be present on the remote server to connect')
   .action(function(host) {
-    remote.createRemote(host, program.port || 3000);
+    var Keys = require('../lib/keys')
+      , keys = new Keys();
+
+    host = host || Deployment.prototype.sanitize(path.basename(path.resolve('.'))) + '.deploydapp.com';
+    if(host.substr(0,7) !== 'http://') host = 'http://' + host;
+
+    keys.getLocal(function(err, key) {
+      if (key) {
+        open(host + '/dashboard/?key=' + key);
+      }
+    });
   });
 
 program
