@@ -49,11 +49,24 @@ describe('InternalResources', function() {
       })
     });
 
-    it('should create a resource when handling a POST request', function(done) {
+
+    it('should require root access', function(done) {
       var r = {path: '/foo', type: 'Bar'}
         , created = false;
 
       this.ir.handle({req: {method: 'POST', url: '/__resources'}, body: r, done: function(err, resource) {
+        expect(resource).to.not.exist;
+        expect(err).to.exist;
+        expect(err.statusCode).to.equal(401);
+        done();
+      }});
+    });
+
+    it('should create a resource when handling a POST request', function(done) {
+      var r = {path: '/foo', type: 'Bar'}
+        , created = false;
+
+      this.ir.handle({req: {method: 'POST', url: '/__resources', isRoot: true}, body: r, done: function(err, resource) {
         expect(resource.path).to.equal('/foo');
         expect(resource.type).to.equal('Bar');
         config.loadConfig(configPath, function(err, resourceList) {
@@ -70,7 +83,7 @@ describe('InternalResources', function() {
       config.saveConfig({'123': r}, configPath, function(err) {
 
         r.val = 2;
-        test.ir.handle({req: {method: 'PUT', url: '/__resources/123'}, url: '/123', body: r, done: function() {
+        test.ir.handle({req: {method: 'PUT', url: '/__resources/123', isRoot: true}, url: '/123', body: r, done: function() {
 
           config.loadConfig(configPath, function(err, resourceList) {
             expect(Object.keys(resourceList)).to.have.length(1);
@@ -89,7 +102,7 @@ describe('InternalResources', function() {
         , test = this;
 
       config.saveConfig({'123': q, '456': q2}, configPath, function() {
-        test.ir.handle({req: {method: 'GET', url: '/__resources'}, url: '/', done: function(err, result) {
+        test.ir.handle({req: {method: 'GET', url: '/__resources', isRoot: true}, url: '/', done: function(err, result) {
           expect(result).to.have.length(2);
           result.forEach(function(r) {
             expect(r.id).to.exist;
@@ -107,7 +120,7 @@ describe('InternalResources', function() {
         , test = this;
 
       config.saveConfig({'123': q, '456': q2}, configPath, function() {
-        test.ir.handle({req: {method: 'GET', url: '/__resources/456'}, url: '/456', done: function(err, result) {
+        test.ir.handle({req: {method: 'GET', url: '/__resources/456', isRoot: true}, url: '/456', done: function(err, result) {
           expect(result).to.eql(q2);
           done();
         }}, function() {
@@ -122,7 +135,7 @@ describe('InternalResources', function() {
         , test = this;
 
         config.saveConfig({'123': q, '456': q2}, configPath, function() {
-          test.ir.handle({req: {method: 'DELETE', url: '/__resources/456'}, url: '/456', done: function() {
+          test.ir.handle({req: {method: 'DELETE', url: '/__resources/456', isRoot: true}, url: '/456', done: function() {
             config.loadConfig(configPath, function(err, result) {
               expect(Object.keys(result)).to.have.length(1);
               done(err);
