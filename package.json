@@ -34,7 +34,7 @@
     "node-markdown": "*",
     "dox": "*",
     "ejs": "*"
-  },
+  }, 
   "bin": { "dpd": "./bin/dpd" },
   "scripts": {
     "test": "mocha",
