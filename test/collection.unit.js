@@ -216,7 +216,7 @@ describe('collection', function(){
       });
       
       c.execListener('Post', {}, {}, {foo: 'bar'}, {}, function (err, result) {
-        expect(err).to.eql({"foo": "must not be bar"});
+        expect(err).to.eql({errors: {"foo": "must not be bar"}});
         done();
       })
     })
