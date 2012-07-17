@@ -4,6 +4,29 @@ describe('Collection', function() {
       expect(dpd.todos).to.exist
     })
 
+    describe('dpd.on("createTodo", fn)', function() {
+      it('should respond to a realtime event', function(done) {
+        dpd.on('createTodo', function(todo) {
+          expect(todo).to.exist;
+          expect(todo.title).to.equal('$REALTIME');
+          done();
+        });
+
+        dpd.todos.post({title: '$REALTIME'});
+      })
+    })
+
+    describe('dpd.on("createTodo2", fn)', function() {
+      it('should respond to a realtime event without a parameter', function(done) {
+        dpd.on('createTodo2', function(todo) {
+          expect(todo).to.not.exist;
+          done();
+        });
+
+        dpd.todos.post({title: '$REALTIME2'});
+      })
+    })
+
     describe('.post({title: \'faux\'}, fn)', function() {
       it('should create a todo with an id', function(done) {
         dpd.todos.post({title: 'faux'}, function (todo, err) {
