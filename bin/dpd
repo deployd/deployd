@@ -145,21 +145,30 @@ program
   });
 
 program
-  .command('remote [host]')
-  .description('\tconnect to a remote dashboard using a key in the current directory (./.dpd/keys.json)\n' +
-               '\tthe key must be present on the remote server to connect')
-  .action(function(host) {
+  .command('showkey')
+  .description('\tshows current key for connecting to remote dashboard (./.dpd/keys.json)')
+  .action(function() {
     var Keys = require('../lib/keys')
       , keys = new Keys();
 
+    keys.getLocal(function(err, key) {
+      if(err) return console.error(err);
+      console.log("Copy this key for use in remote dashboard");
+      console.log();
+      console.log(key);
+      console.log();
+    });
+  });  
+
+program
+  .command('remote [host]')
+  .description('\topen the remote dashboard in your browser')
+  .action(function(host) {
     host = host || Deployment.prototype.sanitize(path.basename(path.resolve('.'))) + '.deploydapp.com';
     if(host.substr(0,7) !== 'http://') host = 'http://' + host;
 
-    keys.getLocal(function(err, key) {
-      if (key) {
-        open(host + '/dashboard/?key=' + key);
-      }
-    });
+    open(host + '/dashboard/');
+
   });
 
 program
