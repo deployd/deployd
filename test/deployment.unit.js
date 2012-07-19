@@ -11,6 +11,14 @@ describe('Deployment', function(){
     expect(d.user).to.equal('ritch');
   });
   
+  it('should allow a custom subdomain', function() {
+    var d = new Deployment(__dirname + '/../test-app', 'ritch', 'custom-subdomain');
+    
+    expect(d.name).to.equal('custom-subdomain');
+    expect(d.user).to.equal('ritch');
+    expect(d.subdomain).to.equal(d.name);
+  });
+  
   function shouldSanitizeAs(input, output) {
     expect(Deployment.prototype.sanitize(input)).to.equal(output);    
   }
@@ -91,7 +99,7 @@ describe('Deployment', function(){
       });
     });
 
-    it('should make error nicely', function(done) {
+    it('should error gracefully', function(done) {
       var d = new Deployment(__dirname + '/../test-app', 'test-app', 'ritch')
         , tar = __dirname + '/../test-app/.dpd/package.tgz'
         , port = 7008
