@@ -2,24 +2,35 @@
 
 realtime resource server
 
-<!-- ## install from npm
+## install osx
 
-_currently requires [mongodb](http://www.mongodb.org/downloads)_
+[Download](http://deployd.com/download.html) the installer.
 
-	[sudo] npm install deployd -g -->
+## install win
 
-## install from github
-
-	git clone https://github.com/deployd/deployd.git
-	npm install
-	npm link
+[Download](http://deployd.com/download.html) the installer.
 
 ## quick start
 
 	$ dpd create hello
 	$ cd hello
-	$ dpd
-	dpd> dashboard
+	$ dpd -d
+	
+## helpful resources
+
+ - [Docs](http://deployd.com/docs/)
+ - [Getting Started Guide](http://deployd.com/docs/)
+ - [Hello World Tutorial](http://deployd.com/docs/tutorials/hello-world.html)
+ - [Community Discussion Page](http://deployd.com/community.html)
+ - [Example Apps](http://deployd.com/docs/examples.html)
+
+
+## install from source
+
+	git clone https://github.com/deployd/deployd.git
+	npm install
+	npm link
+
 
 ## unit tests
 
