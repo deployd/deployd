@@ -54,8 +54,6 @@ program
       return path.basename(p) === 'PLACEHOLDER';
     }).map(function(p) { return name + '/' + p}));
 
-
-
     if (program.dashboard || program.open) {
       start(name + '/app.dpd');
     } else {
@@ -63,19 +61,6 @@ program
       console.info('\t$ cd', name);
       console.info('\t$ dpd');
     }
-    
-
-    
-
-    // var name = name || 'my-deployd-app';
-    // mkdir('-p', name);
-    // mkdir('-p', name + '/public');
-    // mkdir('-p', name + '/data');
-    // mkdir('-p', name + '/.dpd');
-    // mkdir('-p', name + '/.dpd/pids');
-    // ('').to(name + '/.dpd/pids/mongod');
-    // ("{}").to(name + '/app.dpd');
-    
   });
 
 function start(file) {
@@ -168,15 +153,14 @@ program
     if(host.substr(0,7) !== 'http://') host = 'http://' + host;
 
     open(host + '/dashboard/');
-
   });
 
 program
   .command('deploy [subdomain]')
   .description('\tdeploy a testing instance on deploydapp.com')
-  .action(function () {
+  .action(function (subdomain) {
     try {
-      var d = new Deployment('.')
+      var d = new Deployment('.', null, subdomain)
         , tar = './.dpd/package.tgz'
         , DPDAPP_URL = 'http://deploydapp.com'
         , Keys = require('../lib/keys')
@@ -204,13 +188,12 @@ program
           d.publish(DPDAPP_URL, tar, key, function (err) {
             if(err) return console.error('failed to push:', err.message || 'could not push app to ' + DPDAPP_URL);
             console.log('deployd app to http://' + d.subdomain + '.deploydapp.com!');
-          })
-        })
+          });
+        });
       }
     } catch (ex) {
       console.log(ex.message);
     }
-    
   });
 
 program
