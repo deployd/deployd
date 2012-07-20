@@ -236,7 +236,7 @@
       }
     };
 
-    r.do = function(func, path, body, fn) {
+    r.exec = function(func, path, body, fn) {
       var settings = {}
         , i = 0;
 
