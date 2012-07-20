@@ -146,13 +146,21 @@ program
   });  
 
 program
-  .command('remote [host]')
+  .command('remote')
   .description('\topen the remote dashboard in your browser')
-  .action(function(host) {
-    host = host || Deployment.prototype.sanitize(path.basename(path.resolve('.'))) + '.deploydapp.com';
-    if(host.substr(0,7) !== 'http://') host = 'http://' + host;
+  .action(function() {
+    var d = new Deployment('.');
+    var host = '';
 
-    open(host + '/dashboard/');
+    var config = d.getConfig();
+    console.log(config);
+    host = Object.keys(config)[0];
+
+    if (host) {
+      open('http://' + host + '/dashboard/');
+    } else {
+      console.log("This app has not yet been deployed");
+    }    
   });
 
 program
