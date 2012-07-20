@@ -269,7 +269,9 @@
   };
 
   if (console && console.log) {
-  	console.log = console.log.bind(console);
+  	console.log = function() {
+      console.log.apply(console, arguments);
+    };
   }
 
 })(window.jQuery);
