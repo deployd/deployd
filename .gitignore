@@ -14,7 +14,6 @@ results
 .DS_Store
 node_modules
 npm-debug.log
-test/support/proj
 test/support/keys.json
 test-app/data
 bin/mongo
