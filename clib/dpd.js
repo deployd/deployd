@@ -269,8 +269,9 @@
   };
 
   if (console && console.log) {
+    var originalLog = console.log;
   	console.log = function() {
-      console.log.apply(console, arguments);
+      originalLog.apply(console, arguments);
     };
   }
 
