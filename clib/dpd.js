@@ -269,9 +269,11 @@
   };
 
   if (console && console.log) {
-  	console.log = function() {
-      console.log.apply(console, arguments);
+    var originalLog = console.log;
+    console.log = function() {
+      originalLog.apply(console, arguments);
     };
   }
+
 
 })(window.jQuery);
