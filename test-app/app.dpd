@@ -151,5 +151,16 @@
 		"typeLabel": "Collection",
 		"type": "Collection",
 		"$renameFrom": "/recursive"
+	},
+	"bcd2a45829254ac1": {
+		"path": "/hello",
+		"order": 6,
+		"type": "Hello"
+	},
+	"bcd2a45829254ac2": {
+		"path": "/proxy",
+		"order": 7,
+		"remote": "http://google.com",
+		"type": "Proxy"
 	}
 }

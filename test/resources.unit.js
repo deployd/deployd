@@ -22,7 +22,6 @@ describe('resources', function(){
 
         done(err);
       });
-
     });
 
     it('should add internal resources', function(done) {
