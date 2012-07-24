@@ -25,18 +25,21 @@ describe('config-loader', function() {
         , 'test': 'value'
       };
 
-      fs.writeFileSync(path.join(basepath, '/app.dpd'), JSON.stringify({'123': resource1, '456': resource2}));
+      // fs.writeFileSync(path.join(basepath, '/app.dpd'), JSON.stringify({'123': resource1, '456': resource2}));
 
-      configLoader.loadConfig(basepath, function(err, resources) {
-        expect(Object.keys(resources)).to.have.length(2);
-        expect(resources['123'].path).equal('/foo');
-        expect(resources['123'].type).equal('Collection');
-        expect(resources['123'].property).equal('value');
-        expect(resources['456'].path).equal('/bar');
-        expect(resources['456'].type).equal('Collection');
-        expect(resources['456'].test).equal('value');
-        
-        done();
+      configLoader.saveConfig({'123': resource1, '456': resource2}, basepath, function(err) {
+        configLoader.loadConfig(basepath, function(err, resources) {
+          
+          expect(Object.keys(resources)).to.have.length(2);
+          expect(resources['foo'].path).equal('/foo');
+          expect(resources['foo'].type).equal('Collection');
+          expect(resources['foo'].property).equal('value');
+          expect(resources['bar'].path).equal('/bar');
+          expect(resources['bar'].type).equal('Collection');
+          expect(resources['bar'].test).equal('value');
+
+          done();
+        });
       });
     });
   });
@@ -57,11 +60,12 @@ describe('config-loader', function() {
       configLoader.saveConfig({'123': resource1, '456': resource2}, basepath, function(err) {
         var resourcePath = path.join(basepath, '/app.dpd');
         
-        var resources = JSON.parse(fs.readFileSync(resourcePath));
+        configLoader.loadConfig(basepath, function(err, resources) {
+          expect(Object.keys(resources)).to.have.length(2);
+          expect(resources.foo).to.eql(resource1);
+          expect(resources.bar).to.eql(resource2);
+        });
 
-        expect(Object.keys(resources)).to.have.length(2);
-        expect(resources['123']).to.eql(resource1);
-        expect(resources['456']).to.eql(resource2);
 
         done(err);
       });

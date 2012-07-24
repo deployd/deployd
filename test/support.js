@@ -8,6 +8,7 @@ http = require('http');
 TEST_DB = {name: 'test-db', host: 'localhost', port: 27017};
 mongodb = require('mongodb');
 var Stream = require('stream');
+sh = require('shelljs');
 
 // request mock
 var port = 7000;

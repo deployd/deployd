@@ -9,7 +9,6 @@ describe('Server', function() {
 			var server = new Server()
 				,	defaultOptions = {
 					port: 2403,
-					// host: 'localhost',
 					db: {
 						name: 'deployd',
 						port: 27017,

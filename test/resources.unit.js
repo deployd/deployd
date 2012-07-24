@@ -42,6 +42,12 @@ describe('resources', function(){
 describe('InternalResources', function() {
   describe('.handle(ctx)', function() {
     beforeEach(function(done) {
+      // reset
+      sh.rm('-rf', __dirname + '/support/proj');
+      if(!sh.test('-d', __dirname + '/support/proj')) {
+        sh.mkdir(__dirname + '/support/proj');
+      }
+      
       this.ir = new InternalResources({path: '/__resources', configPath: configPath}, {});
       config.saveConfig({}, configPath, function(err) {
         done(err);
@@ -75,18 +81,18 @@ describe('InternalResources', function() {
       }});
     });
 
-    it('should updating a resource when handling a PUT request', function(done) {
+    it('should update a resource when handling a PUT request', function(done) {
       var r = {path: '/foo', type: 'Bar', val: 1};
       var test = this;
 
-      config.saveConfig({'123': r}, configPath, function(err) {
+      config.saveConfig({'foo': r}, configPath, function(err) {
 
         r.val = 2;
-        test.ir.handle({req: {method: 'PUT', url: '/__resources/123', isRoot: true}, url: '/123', body: r, done: function() {
+        test.ir.handle({req: {method: 'PUT', url: '/__resources/foo', isRoot: true}, url: '/foo', body: r, done: function() {
 
           config.loadConfig(configPath, function(err, resourceList) {
             expect(Object.keys(resourceList)).to.have.length(1);
-            expect(resourceList['123'].val).to.equal(2);
+            expect(resourceList['foo'].val).to.equal(2);
             done();
           });
         }}, function() {
@@ -100,7 +106,7 @@ describe('InternalResources', function() {
         , q2 = {path: '/bar', type: 'Bar'}
         , test = this;
 
-      config.saveConfig({'123': q, '456': q2}, configPath, function() {
+      config.saveConfig({'foo': q, 'bar': q2}, configPath, function() {
         test.ir.handle({req: {method: 'GET', url: '/__resources', isRoot: true}, url: '/', done: function(err, result) {
           expect(result).to.have.length(2);
           result.forEach(function(r) {
@@ -118,8 +124,8 @@ describe('InternalResources', function() {
         , q2 = {path: '/bar', type: 'Bar'}
         , test = this;
 
-      config.saveConfig({'123': q, '456': q2}, configPath, function() {
-        test.ir.handle({req: {method: 'GET', url: '/__resources/456', isRoot: true}, url: '/456', done: function(err, result) {
+      config.saveConfig({'foo': q, 'bar': q2}, configPath, function() {
+        test.ir.handle({req: {method: 'GET', url: '/__resources/bar', isRoot: true}, url: '/bar', done: function(err, result) {
           expect(result).to.eql(q2);
           done();
         }}, function() {
@@ -133,8 +139,8 @@ describe('InternalResources', function() {
         , q2 = {path: '/bar', type: 'Bar'}
         , test = this;
 
-        config.saveConfig({'123': q, '456': q2}, configPath, function() {
-          test.ir.handle({req: {method: 'DELETE', url: '/__resources/456', isRoot: true}, url: '/456', done: function() {
+        config.saveConfig({'foo': q, 'bar': q2}, configPath, function() {
+          test.ir.handle({req: {method: 'DELETE', url: '/__resources/bar', isRoot: true}, url: '/bar', done: function() {
             config.loadConfig(configPath, function(err, result) {
               expect(Object.keys(result)).to.have.length(1);
               done(err);
