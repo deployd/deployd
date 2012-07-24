@@ -1,8 +1,10 @@
 @import "../bootstrap/less/bootstrap.less";
 
 // editor
+@import "layout.less";
 @import "editor.less";
 @import "prettify.less";
+@import "mixins.less";
 
 body {
   background: url(../img/outlets.png);
@@ -91,6 +93,7 @@ td {vertical-align: middle !important;}
   margin-bottom: 0;
   .border-radius(10px 10px 10px 10px);
   li {
+    position: relative;
     padding: 10px;
     .box-shadow(inset 3px 3px 40px rgba(0,0,0,.37));
     margin-bottom: 0px;
@@ -98,6 +101,28 @@ td {vertical-align: middle !important;}
     border-left: solid 1px darken(@black, 10%);
     border-bottom: solid 1px darken(@black, 20%);
     border-right: solid 1px darken(@black, 20%);
+
+    .options {
+      display: none;
+      position: absolute;
+      right: 8px;
+      top: 9px;
+      padding: 8px;
+
+      &:hover .caret {
+        border-top-color: #ffffff;
+      }
+
+      .caret {
+        border-top-color: #838181;
+        opacity: 1;
+      }
+    }
+
+    &:hover .options {
+      display: block;
+    }
+
     li {
       i {position: relative; top: -1px;}
       padding: 5px;
