@@ -1,1 +1,6 @@
-{"123":{"path":"/foo","type":"Collection","property":"value"},"456":{"path":"/bar","type":"Collection","test":"value"}}
+{
+	"123": {
+		"path": "/foo",
+		"type": "Bar"
+	}
+}
