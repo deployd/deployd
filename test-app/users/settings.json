@@ -1,0 +1,18 @@
+{
+	"path": "/users",
+	"properties": {
+		"friends": {
+			"required": false,
+			"type": "array",
+			"typeLabel": "array",
+			"id": "friends"
+		}
+	},
+	"onGet": "dpd.users.get({id: {$in: this.friends}}, function(friends) {\n    if (friends) this.friends = friends;\n});",
+	"onPost": "/* Authentication */\n// if (!me || !me.isAdmin) {\n//   cancel(\"You must be an admin!\", 401);\n// }\n\n/* Automatic properties */\n// this.creator = me.id;\n// this.creatorName = me.name;\n",
+	"onPut": "/* Readonly properties */\n// protect(\"creator\");\n",
+	"onDelete": "",
+	"onValidate": "/* Validation */\n// if (this.name.length < 10) {\n//   error(\"name\", \"Must be at least 10 characters\");\n// }\n",
+	"typeLabel": "Users Collection",
+	"type": "UserCollection"
+}

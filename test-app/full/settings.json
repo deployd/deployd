@@ -1,0 +1,50 @@
+{
+	"path": "/full",
+	"order": 4,
+	"properties": {
+		"array": {
+			"required": false,
+			"type": "array",
+			"typeLabel": "array",
+			"id": "array"
+		},
+		"object": {
+			"required": false,
+			"type": "object",
+			"typeLabel": "object",
+			"id": "object"
+		},
+		"date": {
+			"required": false,
+			"type": "date",
+			"typeLabel": "date",
+			"id": "date"
+		},
+		"boolean": {
+			"required": false,
+			"type": "boolean",
+			"typeLabel": "boolean",
+			"id": "boolean"
+		},
+		"number": {
+			"required": false,
+			"type": "number",
+			"typeLabel": "number",
+			"id": "number"
+		},
+		"string": {
+			"required": false,
+			"type": "string",
+			"typeLabel": "string",
+			"id": "string"
+		}
+	},
+	"onGet": "",
+	"onPost": "/* Authentication */\n// if (!me || !me.isAdmin) {\n//   cancel(\"You must be an admin!\", 401);\n// }\n\n/* Automatic properties */\n// this.creator = me.id;\n// this.creatorName = me.name;\n",
+	"onPut": "/* Readonly properties */\n// protect(\"creator\");\n",
+	"onDelete": "",
+	"onValidate": "/* Validation */\n// if (this.name.length < 10) {\n//   error(\"name\", \"Must be at least 10 characters\");\n// }\n",
+	"typeLabel": "Collection",
+	"type": "Collection",
+	"$renameFrom": "/full"
+}
