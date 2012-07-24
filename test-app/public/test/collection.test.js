@@ -26,6 +26,36 @@ describe('Collection', function() {
         dpd.todos.post({title: '$REALTIME2'});
       })
     })
+    
+    describe('dpd.todos.on("changed", fn)', function() {
+      it('should respond to the built-in changed event on post', function(done) {
+        dpd.todos.on('changed', function() {
+          done();
+        });
+
+        dpd.todos.post({title: 'changed - create'});
+      })
+      
+      it('should respond to the built-in changed event on put', function(done) {
+        dpd.todos.post({title: 'changed - create'}, function(item) {
+          dpd.todos.on('changed', function() {
+            done();
+          });
+          
+          dpd.todos.put(item.id, {title: 'changed - updated'});
+        });
+      })
+      
+      it('should respond to the built-in changed event on del', function(done) {
+        dpd.todos.post({title: 'changed - create'}, function(item) {
+          dpd.todos.on('changed', function() {
+            done();
+          });
+          
+          dpd.todos.del(item.id);
+        });
+      })
+    })
 
     describe('.post({title: \'faux\'}, fn)', function() {
       it('should create a todo with an id', function(done) {
