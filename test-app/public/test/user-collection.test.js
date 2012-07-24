@@ -69,6 +69,35 @@ describe('User Collection', function() {
 				})
 			})
 		})
+		describe('dpd.users.on("changed", fn)', function() {
+      it('should respond to the built-in changed event on post', function(done) {
+        dpd.users.on('changed', function() {
+          done();
+        });
+
+        dpd.users.post({email: 'foo@bar.com', password: '123456'});
+      })
+      
+      it('should respond to the built-in changed event on put', function(done) {
+        dpd.todos.post({email: 'foo2@bar.com', password: '123456'}, function(item) {
+          dpd.todos.on('changed', function() {
+            done();
+          });
+          
+          dpd.todos.put(item.id, {email: 'foo3@bar.com'});
+        });
+      })
+      
+      it('should respond to the built-in changed event on del', function(done) {
+        dpd.todos.post({title: 'changed - create'}, function(item) {
+          dpd.todos.on('changed', function() {
+            done();
+          });
+          
+          dpd.todos.del(item.id);
+        });
+      })
+    })
 	})
 
 	afterEach(function (done) {

@@ -46,7 +46,7 @@ describe('InternalResources', function() {
       this.ir = new InternalResources({path: '/__resources', configPath: configPath}, {});
       config.saveConfig({}, configPath, function(err) {
         done(err);
-      })
+      });
     });
 
 
