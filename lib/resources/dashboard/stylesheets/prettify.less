@@ -1,0 +1,83 @@
+.pln {
+color:@white;
+}
+@media screen {
+.str {
+color: lighten(@green, 30%);
+}
+.kwd {
+color:lighten(@blue, 30%);
+}
+.com {
+color:lighten(@black, 10%);
+}
+.typ {
+color:@yellow;
+}
+.lit {
+color: lighten(@green, 15%);
+}
+.pun,.opn,.clo {
+color:darken(@white, 20%);
+}
+.tag {
+color:lighten(@blue, 30%);
+}
+.atn {
+color:lighten(@orange, 20%);
+}
+.atv {
+color: lighten(@green, 30%);
+}
+.dec,.var {
+color:#606;
+}
+.fun {
+color:red
+}
+
+}
+@media print,projection {
+.str {
+color:#060;
+}
+.kwd {
+color:#006;font-weight:bold
+}
+.com {
+color:#600;font-style:italic
+}
+.typ {
+color:#404;font-weight:bold
+}
+.lit {
+color:#044;
+}
+.pun,.opn,.clo {
+color:#440;
+}
+.tag {
+color:#006;
+font-weight:bold;
+}
+.atn {
+color:#404;
+}
+.atv {
+color:#060;
+}
+
+}
+pre.prettyprint {
+padding:2px;
+border:1px solid #888;
+}
+ol.linenums {
+margin-top:0;margin-bottom:0
+}
+li.L0,li.L1,li.L2,li.L3,li.L5,li.L6,li.L7,li.L8 {
+  list-style-type:none
+}
+li.L1,li.L3,li.L5,li.L7,li.L9 {
+  background:#eee;
+}

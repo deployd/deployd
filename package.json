@@ -26,14 +26,14 @@
     "send": "0.0.2",
     "fstream": "0.1.x",
     "tar": "0.1.x",
-    "fstream-ignore": "0.0.x"
+    "fstream-ignore": "0.0.x",
+    "ejs": "0.7.x"
   },
   "devDependencies": {
     "mocha": "*",
     "chai": "*",
     "node-markdown": "*",
-    "dox": "*",
-    "ejs": "*"
+    "dox": "*"
   }, 
   "bin": { "dpd": "./bin/dpd" },
   "scripts": {
