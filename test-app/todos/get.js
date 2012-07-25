@@ -1,0 +1,15 @@
+if (query.title === "$FAIL2") {
+    var x = null;
+    x.fail();
+}
+
+if (query.title === "$TESTFAIL2") {
+    dpd.todos.get({title: "$FAIL2"}, function(todo, err) {
+        this.todo = todo;
+        this.err = err;
+    });
+}
+
+if (query.arbitrary) {
+    this.custom = 'arbitrary';
+}
