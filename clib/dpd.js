@@ -75,7 +75,7 @@
     if (obj) {
       for (var k in obj) {
         if (obj.hasOwnProperty(k)) {
-          if (typeof obj[k] === 'object') {
+          if (typeof obj[k] !== 'string') {
             return true;
           }
         }

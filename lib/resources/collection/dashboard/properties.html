@@ -1,5 +1,5 @@
-<div id="properties" class="container tab-pane active">
-  <div class="panel well stacked">
+<div id="properties">
+  <div class="panel well">
     <h3>
       Properties
     </h3>
@@ -72,7 +72,7 @@
   </div>
 
   <div id="property-now-what" class="alert alert-info hide" data-bind="visible: properties().length && !otherItems()">
-    When you're done adding properties, you should <a href="../data" class="cta-link">add some data</a> to this collection.
+    When you're done adding properties, you should <a data-bind="attr: {href: '/dashboard/' + Context.resourceId + '/data'}" class="cta-link">add some data</a> to this collection.
   </div>
 </div>
 
