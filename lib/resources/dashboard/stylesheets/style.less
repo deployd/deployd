@@ -5,6 +5,7 @@
 @import "editor.less";
 @import "prettify.less";
 @import "mixins.less";
+@import "ui.less";
 
 body {
   background: url(../img/outlets.png);
@@ -288,7 +289,6 @@ textarea.full-width {
     margin: 0;
     list-style: none;
     li.component-type-item {
-      .type-icons;
       width: auto;
       background: @black;
       color: @bodyBackground;
@@ -307,64 +307,63 @@ textarea.full-width {
 }
 
 
-.type-icons {
-  i {
+i.icon-custom {
+  .icon-asterisk;
+
+  &.boolean {
+    .icon-ok-sign;
+  }
+
+  &.string {
+    .icon-font;
+  }
+
+  &.number {
+    .icon-plus-sign;
+  }
+
+  &.date {
+    .icon-time;
+  }
   
-    &.boolean {
-      .icon-ok-sign;
-    }
+  &.object {
+    .icon-object;
+  }
+  
+  &.array {
+    .icon-array;
+  }
+  
+  &.password {
+    .icon-asterisk;
+  }
 
-    &.string {
-      .icon-font;
-    }
+  &.files, &.static {
+    .icon-folder-close;
+  }
 
-    &.number {
-      .icon-plus-sign;
-    }
+  &.collection {
+    .icon-th-list;
+  }
 
-    &.date {
-      .icon-time;
-    }
-    
-    &.object {
-      .icon-object;
-    }
-    
-    &.array {
-      .icon-array;
-    }
-    
-    &.password {
-      .icon-asterisk;
-    }
+  &.users-collection, &.usercollection {
+    .icon-user;
+  }
 
-    &.files, &.static {
-      .icon-folder-close;
-    }
+  &.properties {
+    .icon-list;
+  }
 
-    &.collection {
-      .icon-th-list;
-    }
+  &.data {
+    .icon-list-alt;
+  }
 
-    &.users-collection, &.usercollection {
-      .icon-user;
-    }
+  &.events {
+    .icon-exclamation-sign;
+  }
 
-    &.properties {
-      .icon-list;
-    }
-
-    &.data {
-      .icon-list-alt;
-    }
-
-    &.events {
-      .icon-exclamation-sign;
-    }
-
-    &.api {
-      .icon-info-sign;
-    }
+  &.api {
+    .icon-info-sign;
   }
 
 }
@@ -512,8 +511,6 @@ li.component-type-item {
 }
 
 .component-item-header {
-
-  .type-icons;
     
   .delete-btn {
     cursor: pointer;
@@ -606,8 +603,6 @@ li.component-item {
   .detail label {
     color: @bodyBackground;
   }
-  
-  .type-icons;
   
 }
 

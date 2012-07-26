@@ -9,5 +9,6 @@
 		}
 	},
 	"typeLabel": "Users Collection",
-	"type": "UserCollection"
+	"type": "UserCollection",
+	"onGet": "dpd.users.get({id: {$in: this.friends}}, function(friends) {\r\n    if (friends) this.friends = friends;\r\n});"
 }

@@ -15,14 +15,20 @@
 
 #dialog h1 {
   margin: 0 0 5px 0;
-  font-size: 16px;
-  font-weight: normal;
+  font-size: 20px;
+  padding-left: 0;
+  padding-top: 0;
 }
 
 #dialog p {
   margin: 0;
   padding: 0;
   font-size: .9em;
+}
+
+#dialog input {
+  background-color: #ffffff;
+  color: @textColor;
 }
 
 #dialog.modal {
@@ -104,13 +110,28 @@
 #overlay.hide {
   pointer-events: none;
   opacity: 0;
-}.confirmation .actions {
+}
+
+.confirmation .actions {
   border-top: 1px solid #eee;
-  padding: 5px;
+  padding: 10px;
   text-align: right;
   background: #fafafa;
   box-shadow: inset 0 1px 0 white;
-}.color-picker canvas {
+
+  button.cancel {
+    background: none;
+    border: none;
+    margin-right: 10px;
+  }
+
+  button.ok {
+    .btn;
+    .btn-primary;
+  }
+}
+
+.color-picker canvas {
   border: 1px solid #888;
 }
 .color-picker canvas:active {
@@ -143,8 +164,8 @@
 
 .notification h1 {
   margin: 0 0 5px 0;
-  font-size: 16px;
-  font-weight: normal;
+  padding: 0;
+  font-size: 18px;
 }
 
 .notification p {
