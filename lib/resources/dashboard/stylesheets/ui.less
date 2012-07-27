@@ -7,6 +7,7 @@
   border: 1px solid #eee;
   background: white;
   z-index: 1000;
+  .border-radius(5px);
 }
 
 #dialog .content {
@@ -152,10 +153,14 @@
 .notification {
   position: relative;
   max-width: 600px;
-  min-width: 250px;
-  border: 1px solid #eee;
-  background: white;
+  min-width: 300px;
   z-index: 100;
+  .border-radius(5px);
+  background: rgba(50, 50, 50, 0.97);
+  .box-shadow(none);
+  .box-shadow(inset 1px 1px 1px rgba(0,0,0,.25));
+  border: solid 1px rgba(0,0,0,.5);
+  color: white;
 }
 
 .notification .content {
@@ -166,6 +171,7 @@
   margin: 0 0 5px 0;
   padding: 0;
   font-size: 18px;
+  color: white;
 }
 
 .notification p {
@@ -179,7 +185,7 @@
   top: 5px;
   right: 10px;
   text-decoration: none;
-  color: #888;
+  color: #fff;
   display: none;
 }
 
@@ -188,7 +194,7 @@
 }
 
 .notification .close:hover {
-  color: black;
+  color: #fff;
 }
 
 .notification .close:active {
@@ -202,7 +208,7 @@
   top: 3px;
   right: 10px;
   text-decoration: none;
-  color: #888;
+  color: #fff;
   font-size: 16px;
   font-weight: bold;
   display: none;
@@ -211,11 +217,15 @@
 /* slide */
 
 .notification.slide {
+  display: block;
   -webkit-transition: opacity 300ms, top 300ms;
   -moz-transition: opacity 300ms, top 300ms;
+  opacity: 1;
+  top: 0;
 }
 
 .notification.slide.hide {
+  display: block;
   opacity: 0;
   top: -500px;
 }
@@ -278,6 +288,7 @@
   padding: 0;
   background: white;
   border: 1px solid rgba(0,0,0,0.2);
+  .border-radius(5px);
 }
 
 .menu li {
@@ -288,7 +299,7 @@
   display: block;
   padding: 5px 30px 5px 12px;
   text-decoration: none;
-  border-top: 1px solid #eee;
+  /* border-top: 1px solid #eee; */
   color: #2e2e2e;
   outline: none;
 }
@@ -299,7 +310,8 @@
 
 .menu li a:hover,
 .menu li.selected a {
-  background: #f1faff;
+  background: @dropdownLinkBackgroundHover;
+  color: @white;
 }
 
 /* from: http://desandro.github.com/3dtransforms */
