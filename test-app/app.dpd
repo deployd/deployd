@@ -76,6 +76,19 @@
 		"$renameFrom": "/users"
 	},
 	"4f78d38ea41398f8": {
+		"properties": {
+			"test": {
+				"required": false,
+				"type": "string",
+				"typeLabel": "string",
+				"id": "test"
+			}
+		},
+		"onGet": "",
+		"onPost": "cancel('testing cancel', 401);",
+		"onPut": "/* Readonly properties */\n// protect(\"creator\");\n",
+		"onDelete": "",
+		"onValidate": "dpd.empty.get(function(items) {\n   this.items = items;\n   this.async = true;\n});",
 		"path": "/empty",
 		"order": 3,
 		"typeLabel": "Collection",
