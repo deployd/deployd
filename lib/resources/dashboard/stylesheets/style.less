@@ -80,7 +80,14 @@ background-color: darken(@black, 10%);
   background: inherit !important;
 }
 
-input {background: darken(@black, 10%); color: @white; border: solid 1px @black;}
+input, textarea {background: darken(@black, 10%); color: @white; border: solid 1px @black;}
+#dialog, .modal {
+  input, textarea {
+    background-color: #ffffff;
+    color: @textColor; 
+  }
+}
+
 
 label {color: @white !important;}
 
@@ -794,4 +801,8 @@ pre {
   border-color: @black !important;
   background: #141414 !important;
   padding: 10px !important;
+}
+
+#basic-dashboard {
+  width: 485px;
 }

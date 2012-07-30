@@ -1,0 +1,25 @@
+<div class="well hide" id="basic-dashboard">
+  <h3>Settings</h3>
+  <form class="form-horizontal" id="settings-form">
+    
+  </form>
+</div>
+
+<script type="text/html" id="property-template">
+  <div class="control-group">
+    <label class="control-label code" for="prop-<%- name %>"><%- name %></label>
+    <div class="controls">
+      <% if (type === 'textarea') { %>
+        <textarea class="input-xlarge" rows="5" id="prop-<%- name %>"></textarea>
+      <% } else { %>
+        <input type="<%- type %>" class="input-xlarge" id="prop-<%- name %>">
+      <% 
+        }
+      %>
+      <% if (typeof description !== 'undefined') { %>
+        <p class="help-block"><%- description %></p>
+      <% } %>
+      
+    </div>
+  </div>
+</script>
