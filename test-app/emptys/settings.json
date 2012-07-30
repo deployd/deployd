@@ -1,8 +1,8 @@
 {
-	"path": "/empty",
+	"path": "/emptys",
 	"order": 3,
 	"typeLabel": "Collection",
 	"type": "Collection",
 	"$renameFrom": "/empty",
-	"ctime": 1343686236000
+	"ctime": 1343689851000
 }

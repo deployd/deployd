@@ -1,6 +1,7 @@
 {
 	"path": "/proxy",
 	"order": 7,
-	"remote": "http://google.com",
-	"type": "Proxy"
+	"remote": "http://yahoo.com",
+	"type": "Proxy",
+	"ctime": 1343686236000
 }

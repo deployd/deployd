@@ -47,8 +47,9 @@
 	"order": 1,
 	"typeLabel": "Collection",
 	"type": "Collection",
-	"onGet": "if (query.title === \"$FAIL2\") {\r\n    var x = null;\r\n    x.fail();\r\n}\r\n\r\nif (query.title === \"$TESTFAIL2\") {\r\n    dpd.todos.get({title: \"$FAIL2\"}, function(todo, err) {\r\n        this.todo = todo;\r\n        this.err = err;\r\n    });\r\n}\r\n\r\nif (query.arbitrary) {\r\n    this.custom = 'arbitrary';\r\n}",
-	"onPost": "if (this.title === \"$FAIL\") {\r\n    var x = null;\r\n    x.fail();\r\n}\r\n\r\nif (this.title === \"$TESTFAIL\") {\r\n    dpd.todos.post({title: \"$FAIL\"}, function(results, err) {\r\n        this.results = results;\r\n        this.err = err;\r\n    });\r\n}\r\n\r\nif (this.title === \"$REALTIME\") {\r\n    emit('createTodo', this);    \r\n}\r\n\r\nif (this.title === \"$REALTIME2\") {\r\n    emit('createTodo2');    \r\n}",
-	"onPut": "/* Readonly properties */\r\n// protect(\\\"creator\\\");\r\n",
-	"onValidate": "if (this.message === 'notvalid') {\r\n    error('message', \"Message must not be notvalid\");\r\n}\r\n\r\nif (this.title === 'notvalid') {\r\n    error('title', \"Title must not be notvalid\");\r\n}"
+	"onGet": "if (query.title === \"$FAIL2\") {\n    var x = null;\n    x.fail();\n}\n\nif (query.title === \"$TESTFAIL2\") {\n    dpd.todos.get({title: \"$FAIL2\"}, function(todo, err) {\n        this.todo = todo;\n        this.err = err;\n    });\n}\n\nif (query.arbitrary) {\n    this.custom = 'arbitrary';\n}",
+	"onPost": "if (this.title === \"$FAIL\") {\n    var x = null;\n    x.fail();\n}\n\nif (this.title === \"$TESTFAIL\") {\n    dpd.todos.post({title: \"$FAIL\"}, function(results, err) {\n        this.results = results;\n        this.err = err;\n    });\n}\n\nif (this.title === \"$REALTIME\") {\n    emit('createTodo', this);    \n}\n\nif (this.title === \"$REALTIME2\") {\n    emit('createTodo2');    \n}",
+	"onPut": "/* Readonly properties */\n// protect(\\\"creator\\\");\n",
+	"onValidate": "if (this.message === 'notvalid') {\n    error('message', \"Message must not be notvalid\");\n}\n\nif (this.title === 'notvalid') {\n    error('title', \"Title must not be notvalid\");\n}",
+	"ctime": 1343686236000
 }

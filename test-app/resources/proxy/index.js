@@ -20,3 +20,11 @@ Proxy.prototype.handle = function (ctx, next) {
 
 Proxy.label = 'HTTP Proxy';
 Proxy.defaultPath = '/proxy';
+
+Proxy.basicDashboard = {
+  settings: [{
+    name: "remote"
+    , type: "text" //"textarea" or "number" works as well
+    , description: "The remote server to proxy to."
+  }]
+}
