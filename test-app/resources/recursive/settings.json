@@ -12,6 +12,5 @@
 	"typeLabel": "Collection",
 	"type": "Collection",
 	"$renameFrom": "/recursive",
-	"onGet": "dpd.recursive.get(function(result, err) {\n    this.more = result;\n});",
-	"ctime": 1343686236000
+	"onGet": "dpd.recursive.get(function(result, err) {\r\n    this.more = result;\r\n});"
 }

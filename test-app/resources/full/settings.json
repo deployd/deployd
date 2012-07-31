@@ -53,6 +53,5 @@
 	},
 	"typeLabel": "Collection",
 	"type": "Collection",
-	"$renameFrom": "/full",
-	"ctime": 1343686236000
+	"$renameFrom": "/full"
 }

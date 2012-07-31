@@ -1,6 +1,5 @@
 {
 	"path": "/hello",
 	"order": 6,
-	"type": "Hello",
-	"ctime": 1343686236000
+	"type": "Hello"
 }

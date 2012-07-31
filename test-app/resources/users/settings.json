@@ -10,6 +10,5 @@
 	},
 	"typeLabel": "Users Collection",
 	"type": "UserCollection",
-	"onGet": "dpd.users.get({id: {$in: this.friends}}, function(friends) {\n    if (friends) this.friends = friends;\n});",
-	"ctime": 1343686236000
+	"onGet": "dpd.users.get({id: {$in: this.friends}}, function(friends) {\r\n    if (friends) this.friends = friends;\r\n});"
 }
