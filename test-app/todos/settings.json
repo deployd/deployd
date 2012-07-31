@@ -51,5 +51,6 @@
 	"onPost": "if (this.title === \"$FAIL\") {\n    var x = null;\n    x.fail();\n}\n\nif (this.title === \"$TESTFAIL\") {\n    dpd.todos.post({title: \"$FAIL\"}, function(results, err) {\n        this.results = results;\n        this.err = err;\n    });\n}\n\nif (this.title === \"$REALTIME\") {\n    emit('createTodo', this);    \n}\n\nif (this.title === \"$REALTIME2\") {\n    emit('createTodo2');    \n}",
 	"onPut": "/* Readonly properties */\n// protect(\\\"creator\\\");\n",
 	"onValidate": "if (this.message === 'notvalid') {\n    error('message', \"Message must not be notvalid\");\n}\n\nif (this.title === 'notvalid') {\n    error('title', \"Title must not be notvalid\");\n}",
-	"ctime": 1343686236000
+	"ctime": 1343686236000,
+	"$renameFrom": "/todosss"
 }
