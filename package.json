@@ -19,6 +19,7 @@
     "socket.io": "0.9.x",
     "filed": ">= 0.0.6",
     "mkdirp": "*",
+    "wrench": "1.3.x",
     "debug": "*",
     "scrubber": "*",
     "shelljs": "https://github.com/dallonf/shelljs/tarball/master",

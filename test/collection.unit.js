@@ -2,13 +2,19 @@ var Collection = require('../lib/resources/collection')
   , db = require('../lib/db');
 
 describe('collection', function(){
+  function createCollection(properties) {
+    return new Collection('objects', {
+      config: {
+        properties: properties
+      }
+    });
+  }
+
   describe('.validate(req)', function(){
     it('should validate the request', function() {
-      var r = new Collection({
-        properties: {
-          title: {
-            type: 'string'
-          }
+      var r = createCollection({
+        title: {
+          type: 'string'
         }
       });
       
@@ -18,11 +24,9 @@ describe('collection', function(){
     })
     
     it('should fail to validate the invalid request', function() {
-      var r = new Collection({
-        properties: {
-          title: {
-            type: 'string'
-          }
+      var r = createCollection({
+        title: {
+          type: 'string'
         }
       });
       
@@ -32,19 +36,17 @@ describe('collection', function(){
     })
     
     it('should fail to validate the invalid request with multiple errors', function() {
-      var r = new Collection({
-        properties: {
-          title: {
-            type: 'string',
-            required: true
-          },
-          age: {
-            type: 'number',
-            required: true
-          },
-          created: {
-            type: 'date'
-          }
+      var r = createCollection({
+        title: {
+          type: 'string',
+          required: true
+        },
+        age: {
+          type: 'number',
+          required: true
+        },
+        created: {
+          type: 'date'
         }
       });
       
@@ -56,11 +58,9 @@ describe('collection', function(){
   
   describe('.sanitize(body)', function(){
     it('should remove properties outside the schema', function() {
-      var r = new Collection({
-        properties: {
-          title: {
-            type: 'string'
-          }
+      var r = createCollection({
+        title: {
+          type: 'string'
         }
       });
       
@@ -72,11 +72,9 @@ describe('collection', function(){
     })
     
     it('should convert int strings to numbers', function() {
-      var r = new Collection({
-        properties: {
-          age: {
-            type: 'number'
-          }
+      var r = createCollection({
+        age: {
+          type: 'number'
         }
       });
       
@@ -87,12 +85,12 @@ describe('collection', function(){
   
   describe('.handle(ctx)', function(){
     it('should have a store', function() {
-      var c = new Collection({path: '/foo', db: db.connect(TEST_DB)});
+      var c = new Collection('foo', { db: db.connect(TEST_DB) });
       expect(c.store).to.exist;
     })
     
     function example(method, path, properties, body, query, test, done, testData) {
-      var c = new Collection({path: path, db: db.connect(TEST_DB), properties: properties});
+      var c = new Collection(path, {db: db.connect(TEST_DB), config: { properties: properties } });
       
       function t() {
         freq(path, {method: method, url: '',  body: body, json: true}, function (req, res) {
@@ -170,8 +168,14 @@ describe('collection', function(){
   })
   
   describe('.execListener(method, session, query, item, client, fn)', function(){
+    function createCollectionWithEvents(events) {
+      return new Collection('objects', {
+        config: events
+      });
+    }
+
     it('should execute a Get listener', function(done) {
-      var c = new Collection({
+      var c = createCollectionWithEvents({
         onGet: 'this.foo = 2 + 2;'
       });
       
@@ -185,7 +189,7 @@ describe('collection', function(){
     })
     
     it('should have access to a validation dsl cancel() method', function(done) {
-      var c = new Collection({
+      var c = createCollectionWithEvents({
         onGet: 'cancel("testing error", 123)'
       });
       
@@ -198,7 +202,7 @@ describe('collection', function(){
     })
     
     it('should have access to a validation dsl hide() method', function(done) {
-      var c = new Collection({
+      var c = createCollectionWithEvents({
         onGet: 'hide("secret")'
       });
       
@@ -211,7 +215,7 @@ describe('collection', function(){
     })
     
     it('should return errors when the error() method is called', function(done) {
-      var c = new Collection({
+      var c = createCollectionWithEvents({
         onPost: 'error("foo", "must not be bar")'
       });
       
@@ -222,7 +226,7 @@ describe('collection', function(){
     })
     
     it('should protect values from being changed via protect()', function(done) {
-      var c = new Collection({
+      var c = createCollectionWithEvents({
         onPut: 'protect("foo")'
       });
       
@@ -235,7 +239,7 @@ describe('collection', function(){
 
   describe('.save()', function() {
     it('should save the provided data', function(done) {
-      var c = new Collection({path: '/counts', db: db.connect(TEST_DB), properties: {count: {type: 'number'}}});
+      var c = new Collection('counts', {db: db.connect(TEST_DB), config: { properties: {count: {type: 'number'}}}});
 
       c.save({}, {count: 1}, {}, {}, function (err, item) {
         expect(item.id).to.exist;
@@ -245,7 +249,7 @@ describe('collection', function(){
     });
 
     it('should pass commands like $inc', function(done) {
-      var c = new Collection({path: '/counts', db: db.connect(TEST_DB), properties: {count: {type: 'number'}}});
+      var c = new Collection('counts', {db: db.connect(TEST_DB), config: { properties: {count: {type: 'number'}}}});
 
       c.save({}, {count: 1}, {}, {}, function (err, item) {
         expect(item.id).to.exist;
@@ -273,7 +277,7 @@ describe('collection', function(){
 
   describe('.get()', function() {
     it('should return the provided data', function(done) {
-      var c = new Collection({path: '/foo', db: db.connect(TEST_DB), properties: {count: {type: 'number'}}});
+      var c = new Collection('foo', {db: db.connect(TEST_DB), config: { properties: {count: {type: 'number'}}}});
 
       c.save({}, {count: 1}, {}, {}, function (err, item) {
         c.find({}, {}, {}, function (err, items) {
@@ -284,7 +288,7 @@ describe('collection', function(){
     });
 
     it('should return the provided data in sorted order', function(done) {
-      var c = new Collection({path: '/sort', db: db.connect(TEST_DB), properties: {count: {type: 'number'}}});
+      var c = new Collection('sort', { db: db.connect(TEST_DB), config: { properties: {count: {type: 'number'}}}});
 
       c.save({}, {count: 1}, {}, {}, function (err, item) {
         c.save({}, {count: 3}, {}, {}, function (err, item) {

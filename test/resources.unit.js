@@ -1,65 +1,34 @@
-var resources = require('../lib/resources')
-  , InternalResources = resources.InternalResources
+var InternalResources = require('../lib/resources/internal-resources')
   , Files = require('../lib/resources/files')
   , config = require('../lib/config-loader')
   , sh = require('shelljs')
   , fs = require('fs')
-  , db = require('../lib/db').connect({name: 'test-db', host: 'localhost', port: 27017})
+  , path = require('path')
   , testCollection = {type: 'Collection', path: '/my-objects', properties: {title: {type: 'string'}}}
   , Collection = require('../lib/resources/collection')
   , ClientLib = require('../lib/resources/client-lib')
   , configPath = './test/support/proj'
   , Dashboard = require('../lib/resources/dashboard');
-
-describe('resources', function(){
-  describe('.build(resourceConfig, server)', function(){
-    it('should return a set of resource instances', function(done) {
-      resources.build([testCollection], {db: db}, function(err, resourceList) {
-        expect(resourceList).to.have.length(5);
-
-        expect(resourceList[0].properties).to.be.a('object');
-        expect(resourceList[0] instanceof Collection).to.equal(true);
-
-        done(err);
-      });
-    });
-
-    it('should add internal resources', function(done) {
-      resources.build([], {}, function(err, resourceList) {
-        expect(resourceList).to.have.length(4);
-
-        expect(resourceList[0] instanceof Files).to.equal(true);
-        expect(resourceList[1] instanceof ClientLib).to.equal(true);
-        expect(resourceList[2] instanceof InternalResources).to.equal(true);
-        expect(resourceList[3] instanceof Dashboard).to.equal(true);      
-
-        done(err);  
-      });
-    });
-  })
-})
-
+  
 describe('InternalResources', function() {
   describe('.handle(ctx)', function() {
-    beforeEach(function(done) {
+    beforeEach(function() {
       // reset
       sh.rm('-rf', __dirname + '/support/proj');
       if(!sh.test('-d', __dirname + '/support/proj')) {
         sh.mkdir(__dirname + '/support/proj');
+        sh.mkdir('-p', __dirname + '/support/proj/resources');
       }
       
-      this.ir = new InternalResources({path: '/__resources', configPath: configPath}, {});
-      config.saveConfig({}, configPath, function(err) {
-        done(err);
-      });
+      this.ir = new InternalResources('__resources', {config: {configPath: configPath}});
     });
 
 
     it('should require root access', function(done) {
-      var r = {path: '/foo', type: 'Bar'}
+      var r = {type: 'Bar'}
         , created = false;
 
-      this.ir.handle({req: {method: 'POST', url: '/__resources'}, body: r, done: function(err, resource) {
+      this.ir.handle({req: {method: 'POST', url: '/__resources/foo'}, body: r, done: function(err, resource) {
         expect(resource).to.not.exist;
         expect(err).to.exist;
         expect(err.statusCode).to.equal(401);
@@ -67,70 +36,143 @@ describe('InternalResources', function() {
       }});
     });
 
-    it('should create a resource when handling a POST request', function(done) {
-      var r = {path: '/foo', type: 'Bar'}
+    it('should not allow a generic POST', function(done) {
+      var r = {type: 'Bar'}
         , created = false;
 
       this.ir.handle({req: {method: 'POST', url: '/__resources', isRoot: true}, body: r, done: function(err, resource) {
-        expect(resource.path).to.equal('/foo');
+        expect(resource).to.not.exist;
+        expect(err).to.exist;
+        expect(err.statusCode).to.equal(400);
+        done();
+      }});
+    });
+
+
+    it('should create a resource when handling a POST request', function(done) {
+      var r = {type: 'Bar'}
+        , created = false;
+
+      this.ir.handle({req: {method: 'POST', url: '/__resources/foo', isRoot: true}, url: '/foo', body: r, done: function(err, resource) {
+        if (err) return done(err);
         expect(resource.type).to.equal('Bar');
-        config.loadConfig(configPath, function(err, resourceList) {
-          expect(Object.keys(resourceList)).to.have.length(1);
-        });
+        var file = path.join(configPath, '/resources/foo/settings.json');
+        expect(sh.test('-f', file)).to.be.ok;
+        expect(JSON.parse(sh.cat(file)).type).to.equal('Bar');
+        done();
+      }});
+    });
+
+    it('should save a file when handling a POST request', function(done) {
+      var r = {type: 'Bar'}
+        , created = false;
+
+      sh.mkdir('-p', path.join(configPath, 'resources/foo'));
+      JSON.stringify(r).to(path.join(configPath, 'resources/foo/settings.json'));
+
+      this.ir.handle({req: {method: 'POST', url: '/__resources/foo/get.js', isRoot: true}, url: '/foo/get.js', body: {value: "this.foo = 'bar';"}, done: function(err, resource) {
+        if (err) return done(err);
+        var fileVal = sh.cat(path.join(configPath, 'resources/foo/get.js'));
+        expect(fileVal).to.exist.and.to.equal("this.foo = 'bar';");
         done();
       }});
     });
 
     it('should update a resource when handling a PUT request', function(done) {
-      var r = {path: '/foo', type: 'Bar', val: 1};
+      var r = {type: 'Bar', val: 1};
       var test = this;
 
-      config.saveConfig({'foo': r}, configPath, function(err) {
+      sh.mkdir('-p', path.join(configPath, 'resources/foo'));
+      JSON.stringify(r).to(path.join(configPath, 'resources/foo/settings.json'));
 
-        r.val = 2;
-        test.ir.handle({req: {method: 'PUT', url: '/__resources/foo', isRoot: true}, url: '/foo', body: r, done: function() {
-
-          config.loadConfig(configPath, function(err, resourceList) {
-            expect(Object.keys(resourceList)).to.have.length(1);
-            expect(resourceList['foo'].val).to.equal(2);
-            done();
-          });
-        }}, function() {
-          throw Error("next called");
-        });
+      r.val = 2;
+      test.ir.handle({req: {method: 'PUT', url: '/__resources/foo', isRoot: true}, url: '/foo', body: r, done: function() {
+        var file = path.join(configPath, '/resources/foo/settings.json');
+        expect(JSON.parse(sh.cat(file)).val).to.equal(2);
+        done();
+      }}, function() {
+        throw Error("next called");
       });
+
+    });
+
+    it('should partially update a resource when handing a PUT request', function(done) {
+      var r = {type: 'Bar', val: 1, other: 'test'};
+      var test = this;
+
+      sh.mkdir('-p', path.join(configPath, 'resources/foo'));
+      JSON.stringify(r).to(path.join(configPath, 'resources/foo/settings.json'));
+      test.ir.handle({req: {method: 'PUT', url: '/__resources/foo', isRoot: true}, url: '/foo', body: {val: 2}, done: function() {
+        var file = path.join(configPath, '/resources/foo/settings.json');
+        var json = JSON.parse(sh.cat(file));
+        expect(json.val).to.equal(2);
+        expect(json.other).to.equal('test');
+        done();
+      }}, function() {
+        throw Error("next called");
+      });
+
+    });
+
+    it('should update a resource when handing a PUT request with $setAll', function(done) {
+      var r = {type: 'Bar', val: 1, other: 'test'};
+      var test = this;
+
+      sh.mkdir('-p', path.join(configPath, 'resources/foo'));
+      JSON.stringify(r).to(path.join(configPath, 'resources/foo/settings.json'));
+      test.ir.handle({req: {method: 'PUT', url: '/__resources/foo', isRoot: true}, url: '/foo', body: {type: 'Bar', val: 2, $setAll: true}, done: function() {
+        var file = path.join(configPath, '/resources/foo/settings.json');
+        var json = JSON.parse(sh.cat(file));
+
+        expect(json.val).to.equal(2);
+        expect(json.other).to.not.exist;
+        done();
+      }}, function() {
+        throw Error("next called");
+      });
+
     });
 
     it('should find all resources when handling a GET request', function(done) {
-      var q = {path: '/foo', type: 'Bar'}
-        , q2 = {path: '/bar', type: 'Bar'}
+      var q = {type: 'Bar'}
+        , q2 = {type: 'Bar'}
         , test = this;
 
-      config.saveConfig({'foo': q, 'bar': q2}, configPath, function() {
-        test.ir.handle({req: {method: 'GET', url: '/__resources', isRoot: true}, url: '/', done: function(err, result) {
-          expect(result).to.have.length(2);
-          result.forEach(function(r) {
-            expect(r.id).to.exist;
-          });
-          done();
-        }}, function() {
-          throw Error("next called");
+      sh.mkdir('-p', path.join(configPath, 'resources/foo'));
+      sh.mkdir('-p', path.join(configPath, 'resources/bar'));
+      JSON.stringify(q).to(path.join(configPath, 'resources/foo/settings.json'));
+      JSON.stringify(q2).to(path.join(configPath, 'resources/bar/settings.json'));
+      
+      test.ir.handle({req: {method: 'GET', url: '/__resources', isRoot: true}, url: '/', done: function(err, result) {
+        if (err) return done(err);
+        expect(result).to.have.length(2);
+        result.forEach(function(r) {
+          expect(r.id).to.exist;
         });
+        done();
+      }}, function() {
+        throw Error("next called");
       });
     });
 
     it('should find a single resource when handling a GET request', function(done) {
-      var q = {path: '/foo', type: 'Bar'}
-        , q2 = {path: '/bar', type: 'Bar'}
+      var q = {type: 'Bar'}
+        , q2 = {type: 'Bar'}
         , test = this;
 
-      config.saveConfig({'foo': q, 'bar': q2}, configPath, function() {
-        test.ir.handle({req: {method: 'GET', url: '/__resources/bar', isRoot: true}, url: '/bar', done: function(err, result) {
-          expect(result).to.eql(q2);
-          done();
-        }}, function() {
-          throw Error("next called");
-        });
+      sh.mkdir('-p', path.join(configPath, 'resources/foo'));
+      sh.mkdir('-p', path.join(configPath, 'resources/bar'));
+      JSON.stringify(q).to(path.join(configPath, 'resources/foo/settings.json'));
+      JSON.stringify(q2).to(path.join(configPath, 'resources/bar/settings.json'));
+
+      test.ir.handle({req: {method: 'GET', url: '/__resources/bar', isRoot: true}, url: '/bar', done: function(err, result) {
+        if (err) return done(err);
+        expect(result).to.exist;
+        expect(result.id).to.equal('bar');
+        expect(result.type).to.equal('Bar');
+        done();
+      }}, function() {
+        throw Error("next called");
       });
     });
 
@@ -139,16 +181,16 @@ describe('InternalResources', function() {
         , q2 = {path: '/bar', type: 'Bar'}
         , test = this;
 
-        config.saveConfig({'foo': q, 'bar': q2}, configPath, function() {
-          test.ir.handle({req: {method: 'DELETE', url: '/__resources/bar', isRoot: true}, url: '/bar', done: function() {
-            config.loadConfig(configPath, function(err, result) {
-              expect(Object.keys(result)).to.have.length(1);
-              done(err);
-            });
-            
-          }}, function() {
-            throw Error("next called");
-          });
+        sh.mkdir('-p', path.join(configPath, 'resources/foo'));
+        sh.mkdir('-p', path.join(configPath, 'resources/bar'));
+        JSON.stringify(q).to(path.join(configPath, 'resources/foo/settings.json'));
+        JSON.stringify(q2).to(path.join(configPath, 'resources/bar/settings.json'));
+
+        test.ir.handle({req: {method: 'DELETE', url: '/__resources/bar', isRoot: true}, url: '/bar', done: function() {
+          expect(sh.test('-d', path.join(configPath, 'resources/bar'))).to.not.be.ok;
+          done();
+        }}, function() {
+          throw Error("next called");
         });
     });
   });

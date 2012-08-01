@@ -2,6 +2,13 @@ var configLoader = require('../lib/config-loader')
   , sh = require('shelljs')
   , path = require('path')
   , fs = require('fs')
+  , db = require('../lib/db').connect({name: 'test-db', host: 'localhost', port: 27017})
+  , Server = require('../lib/server')
+  , Collection = require('../lib/resources/collection')
+  , Files = require('../lib/resources/files')
+  , ClientLib = require('../lib/resources/client-lib')
+  , InternalResources = require('../lib/resources/internal-resources')
+  , Dashboard = require('../lib/resources/dashboard')
   , basepath = './test/support/proj';
 
 describe('config-loader', function() {
@@ -10,64 +17,55 @@ describe('config-loader', function() {
       sh.rm('-rf', basepath);
     }
     sh.mkdir('-p', basepath);
+    this.server = new Server();
   });
 
   describe('.loadConfig()', function() {
+
+
     it('should load resources', function(done) {
-      var resource1 = {
-          'path': '/foo'
-        , 'type': 'Collection'
-        , 'property': 'value'
-      };
-      var resource2 = {
-          'path': '/bar'
-        , 'type': 'Collection'
-        , 'test': 'value'
-      };
+      sh.mkdir('-p', path.join(basepath, 'resources/foo'));
+      sh.mkdir('-p', path.join(basepath, 'resources/bar'));
+      JSON.stringify({type: "Collection", val: 1}).to(path.join(basepath, 'resources/foo/settings.json'));
+      JSON.stringify({type: "Collection", val: 2}).to(path.join(basepath, 'resources/bar/settings.json'));
 
-      // fs.writeFileSync(path.join(basepath, '/app.dpd'), JSON.stringify({'123': resource1, '456': resource2}));
-
-      configLoader.saveConfig({'123': resource1, '456': resource2}, basepath, function(err) {
-        configLoader.loadConfig(basepath, function(err, resources) {
-          
-          expect(Object.keys(resources)).to.have.length(2);
-          expect(resources['foo'].path).equal('/foo');
-          expect(resources['foo'].type).equal('Collection');
-          expect(resources['foo'].property).equal('value');
-          expect(resources['bar'].path).equal('/bar');
-          expect(resources['bar'].type).equal('Collection');
-          expect(resources['bar'].test).equal('value');
-
-          done();
-        });
+      configLoader.loadConfig(basepath, this.server, function(err, resources) {
+        if (err) return done(err);
+        expect(resources).to.have.length(6);
+        expect(resources.filter(function(r) { return r.name == 'foo'})).to.have.length(1);
+        expect(resources.filter(function(r) { return r.name == 'bar'})).to.have.length(1);
+        done();  
       });
+
     });
-  });
 
-  describe('.saveConfig()', function() {
-    it('should save resources', function(done) {
-      var resource1 = {
-          'path': '/foo'
-        , 'type': 'Collection'
-        , 'property': 'value'
-      };
-      var resource2 = {
-          'path': '/bar'
-        , 'type': 'Collection'
-        , 'test': 'value'
-      };
+    it('should return a set of resource instances', function(done) {
+      sh.mkdir('-p', path.join(basepath, 'resources/foo'));
+      JSON.stringify({type: "Collection", properties: {}}).to(path.join(basepath, 'resources/foo/settings.json'));
 
-      configLoader.saveConfig({'123': resource1, '456': resource2}, basepath, function(err) {
-        var resourcePath = path.join(basepath, '/app.dpd');
-        
-        configLoader.loadConfig(basepath, function(err, resources) {
-          expect(Object.keys(resources)).to.have.length(2);
-          expect(resources.foo).to.eql(resource1);
-          expect(resources.bar).to.eql(resource2);
-        });
+      configLoader.loadConfig(basepath, {db: db}, function(err, resourceList) {
+        expect(resourceList).to.have.length(5);
 
+        expect(resourceList[0].config.properties).to.be.a('object');
+        expect(resourceList[0] instanceof Collection).to.equal(true);
 
         done(err);
+      });
+    });
+
+    it('should add internal resources', function(done) {
+      sh.mkdir('-p', path.join(basepath, 'resources/foo'));
+
+      configLoader.loadConfig(basepath, {}, function(err, resourceList) {
+        if (err) return done(err);
+        expect(resourceList).to.have.length(4);
+
+        expect(resourceList[0] instanceof Files).to.equal(true);
+        expect(resourceList[1] instanceof ClientLib).to.equal(true);
+        expect(resourceList[2] instanceof InternalResources).to.equal(true);
+        expect(resourceList[3] instanceof Dashboard).to.equal(true);      
+
+        done(err);  
       });
     });
   });
