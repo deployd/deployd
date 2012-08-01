@@ -52,6 +52,5 @@
 		}
 	},
 	"typeLabel": "Collection",
-	"type": "Collection",
-	"$renameFrom": "/full"
+	"type": "Collection"
 }

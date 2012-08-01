@@ -10,7 +10,5 @@
 		}
 	},
 	"typeLabel": "Collection",
-	"type": "Collection",
-	"$renameFrom": "/recursive",
-	"onGet": "dpd.recursive.get(function(result, err) {\r\n    this.more = result;\r\n});"
+	"type": "Collection"
 }
