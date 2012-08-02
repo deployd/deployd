@@ -354,9 +354,24 @@ describe('Collection', function() {
         dpd.empty.get(function(result) {
           expect(result).to.eql([]);
           done();
-        })        
+        });
       });
     });
+    
+    describe('cancel()', function(){
+      it('should cancel when POSTing', function(done) {
+        dpd.empty.post({}, function (item, err) {
+          expect(err).to.exist;
+          expect(err.message).to.equal('testing cancel');
+          done();
+        });
+      });
+    });
+    
+    afterEach(function (done) {
+      this.timeout(10000);
+      cleanCollection(dpd.empty, done);
+    })
   });
 
   
