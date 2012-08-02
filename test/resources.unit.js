@@ -56,7 +56,7 @@ describe('InternalResources', function() {
       this.ir.handle({req: {method: 'POST', url: '/__resources/foo', isRoot: true}, url: '/foo', body: r, done: function(err, resource) {
         if (err) return done(err);
         expect(resource.type).to.equal('Bar');
-        var file = path.join(configPath, '/resources/foo/settings.json');
+        var file = path.join(configPath, '/resources/foo/config.json');
         expect(sh.test('-f', file)).to.be.ok;
         expect(JSON.parse(sh.cat(file)).type).to.equal('Bar');
         done();
@@ -68,7 +68,7 @@ describe('InternalResources', function() {
         , created = false;
 
       sh.mkdir('-p', path.join(configPath, 'resources/foo'));
-      JSON.stringify(r).to(path.join(configPath, 'resources/foo/settings.json'));
+      JSON.stringify(r).to(path.join(configPath, 'resources/foo/config.json'));
 
       this.ir.handle({req: {method: 'POST', url: '/__resources/foo/get.js', isRoot: true}, url: '/foo/get.js', body: {value: "this.foo = 'bar';"}, done: function(err, resource) {
         if (err) return done(err);
@@ -83,11 +83,11 @@ describe('InternalResources', function() {
       var test = this;
 
       sh.mkdir('-p', path.join(configPath, 'resources/foo'));
-      JSON.stringify(r).to(path.join(configPath, 'resources/foo/settings.json'));
+      JSON.stringify(r).to(path.join(configPath, 'resources/foo/config.json'));
 
       r.val = 2;
       test.ir.handle({req: {method: 'PUT', url: '/__resources/foo', isRoot: true}, url: '/foo', body: r, done: function() {
-        var file = path.join(configPath, '/resources/foo/settings.json');
+        var file = path.join(configPath, '/resources/foo/config.json');
         expect(JSON.parse(sh.cat(file)).val).to.equal(2);
         done();
       }}, function() {
@@ -101,9 +101,9 @@ describe('InternalResources', function() {
       var test = this;
 
       sh.mkdir('-p', path.join(configPath, 'resources/foo'));
-      JSON.stringify(r).to(path.join(configPath, 'resources/foo/settings.json'));
+      JSON.stringify(r).to(path.join(configPath, 'resources/foo/config.json'));
       test.ir.handle({req: {method: 'PUT', url: '/__resources/foo', isRoot: true}, url: '/foo', body: {val: 2}, done: function() {
-        var file = path.join(configPath, '/resources/foo/settings.json');
+        var file = path.join(configPath, '/resources/foo/config.json');
         var json = JSON.parse(sh.cat(file));
         expect(json.val).to.equal(2);
         expect(json.other).to.equal('test');
@@ -119,9 +119,9 @@ describe('InternalResources', function() {
       var test = this;
 
       sh.mkdir('-p', path.join(configPath, 'resources/foo'));
-      JSON.stringify(r).to(path.join(configPath, 'resources/foo/settings.json'));
+      JSON.stringify(r).to(path.join(configPath, 'resources/foo/config.json'));
       test.ir.handle({req: {method: 'PUT', url: '/__resources/foo', isRoot: true}, url: '/foo', body: {type: 'Bar', val: 2, $setAll: true}, done: function() {
-        var file = path.join(configPath, '/resources/foo/settings.json');
+        var file = path.join(configPath, '/resources/foo/config.json');
         var json = JSON.parse(sh.cat(file));
 
         expect(json.val).to.equal(2);
@@ -140,8 +140,8 @@ describe('InternalResources', function() {
 
       sh.mkdir('-p', path.join(configPath, 'resources/foo'));
       sh.mkdir('-p', path.join(configPath, 'resources/bar'));
-      JSON.stringify(q).to(path.join(configPath, 'resources/foo/settings.json'));
-      JSON.stringify(q2).to(path.join(configPath, 'resources/bar/settings.json'));
+      JSON.stringify(q).to(path.join(configPath, 'resources/foo/config.json'));
+      JSON.stringify(q2).to(path.join(configPath, 'resources/bar/config.json'));
       
       test.ir.handle({req: {method: 'GET', url: '/__resources', isRoot: true}, url: '/', done: function(err, result) {
         if (err) return done(err);
@@ -162,8 +162,8 @@ describe('InternalResources', function() {
 
       sh.mkdir('-p', path.join(configPath, 'resources/foo'));
       sh.mkdir('-p', path.join(configPath, 'resources/bar'));
-      JSON.stringify(q).to(path.join(configPath, 'resources/foo/settings.json'));
-      JSON.stringify(q2).to(path.join(configPath, 'resources/bar/settings.json'));
+      JSON.stringify(q).to(path.join(configPath, 'resources/foo/config.json'));
+      JSON.stringify(q2).to(path.join(configPath, 'resources/bar/config.json'));
 
       test.ir.handle({req: {method: 'GET', url: '/__resources/bar', isRoot: true}, url: '/bar', done: function(err, result) {
         if (err) return done(err);
@@ -183,8 +183,8 @@ describe('InternalResources', function() {
 
         sh.mkdir('-p', path.join(configPath, 'resources/foo'));
         sh.mkdir('-p', path.join(configPath, 'resources/bar'));
-        JSON.stringify(q).to(path.join(configPath, 'resources/foo/settings.json'));
-        JSON.stringify(q2).to(path.join(configPath, 'resources/bar/settings.json'));
+        JSON.stringify(q).to(path.join(configPath, 'resources/foo/config.json'));
+        JSON.stringify(q2).to(path.join(configPath, 'resources/bar/config.json'));
 
         test.ir.handle({req: {method: 'DELETE', url: '/__resources/bar', isRoot: true}, url: '/bar', done: function() {
           expect(sh.test('-d', path.join(configPath, 'resources/bar'))).to.not.be.ok;

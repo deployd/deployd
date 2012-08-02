@@ -26,8 +26,8 @@ describe('config-loader', function() {
     it('should load resources', function(done) {
       sh.mkdir('-p', path.join(basepath, 'resources/foo'));
       sh.mkdir('-p', path.join(basepath, 'resources/bar'));
-      JSON.stringify({type: "Collection", val: 1}).to(path.join(basepath, 'resources/foo/settings.json'));
-      JSON.stringify({type: "Collection", val: 2}).to(path.join(basepath, 'resources/bar/settings.json'));
+      JSON.stringify({type: "Collection", val: 1}).to(path.join(basepath, 'resources/foo/config.json'));
+      JSON.stringify({type: "Collection", val: 2}).to(path.join(basepath, 'resources/bar/config.json'));
 
       configLoader.loadConfig(basepath, this.server, function(err, resources) {
         if (err) return done(err);
@@ -41,7 +41,7 @@ describe('config-loader', function() {
 
     it('should return a set of resource instances', function(done) {
       sh.mkdir('-p', path.join(basepath, 'resources/foo'));
-      JSON.stringify({type: "Collection", properties: {}}).to(path.join(basepath, 'resources/foo/settings.json'));
+      JSON.stringify({type: "Collection", properties: {}}).to(path.join(basepath, 'resources/foo/config.json'));
 
       configLoader.loadConfig(basepath, {db: db}, function(err, resourceList) {
         expect(resourceList).to.have.length(5);

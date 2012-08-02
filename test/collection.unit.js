@@ -169,9 +169,9 @@ describe('collection', function(){
   
   describe('.execListener(method, session, query, item, client, fn)', function(){
     function createCollectionWithEvents(events) {
-      return new Collection('objects', {
-        config: events
-      });
+      var collection = new Collection('objects');
+      collection.events = events;
+      return collection;
     }
 
     it('should execute a Get listener', function(done) {
