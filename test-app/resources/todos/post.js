@@ -17,3 +17,14 @@ if (this.title === "$REALTIME") {
 if (this.title === "$REALTIME2") {
     emit('createTodo2');    
 }
+
+if (this.title === "$CANCEL_TEST") {
+  dpd.todos.post({title: "$INTERNAL_CANCEL_TEST"}, function (results, err) {
+    this.err = err;
+    this.results = results;
+  });
+}
+
+if (this.title === "$INTERNAL_CANCEL_TEST") {
+  cancel('internal cancel');
+}

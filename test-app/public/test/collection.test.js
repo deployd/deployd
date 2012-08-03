@@ -321,6 +321,23 @@ describe('Collection', function() {
 
   })
 
+  describe('internal cancel()', function(){
+    it('should not cancel the internal call', function(done) {
+      dpd.todos.post({title: '$CANCEL_TEST'}, function (todo) {
+        expect(todo.err).to.not.exist;
+        dpd.todos.get({title: '$INTERNAL_CANCEL_TEST'}, function (todos) {
+          expect(todos.length).to.equal(1);
+          done();
+        })
+      })
+    })
+    
+    afterEach(function (done) {
+      this.timeout(10000);
+      cleanCollection(dpd.todos, done);
+    })
+  })
+
   describe('dpd.recursive', function() {
     beforeEach(function(done) {
       dpd.recursive.post({name: "dataception"}, function() {
