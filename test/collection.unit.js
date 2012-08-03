@@ -166,82 +166,12 @@ describe('collection', function(){
       );
     })
   })
-  
-  describe('.execListener(method, session, query, item, client, fn)', function(){
-    function createCollectionWithEvents(events) {
-      var collection = new Collection('objects');
-      collection.events = events;
-      return collection;
-    }
-
-    it('should execute a Get listener', function(done) {
-      var c = createCollectionWithEvents({
-        onGet: 'this.foo = 2 + 2;'
-      });
-      
-      var items = [{foo: 1}, {foo: 1}, {foo: 1}];
-      c.execListener('Get', {}, {}, items, {}, function (err) {
-        for(var i = 0; i < items.length; i++) {
-          expect(items[i].foo).to.equal(4);
-        }
-        done(err);
-      })
-    })
-    
-    it('should have access to a validation dsl cancel() method', function(done) {
-      var c = createCollectionWithEvents({
-        onGet: 'cancel("testing error", 123)'
-      });
-      
-      c.execListener('Get', {}, {}, {a:'b'}, {}, function (err) {
-
-        expect(err.message).to.equal('testing error');
-        expect(err.statusCode).to.equal(123);
-        done();
-      })
-    })
-    
-    it('should have access to a validation dsl hide() method', function(done) {
-      var c = createCollectionWithEvents({
-        onGet: 'hide("secret")'
-      });
-      
-      var items = [{secret: 'foobar'}];
-      c.execListener('Get', {}, {}, items, {}, function (err, result) {
-        expect(result[0].secret).to.not.equal('foobar');
-        expect(result[0].secret).to.not.exist;
-        done(err);
-      })
-    })
-    
-    it('should return errors when the error() method is called', function(done) {
-      var c = createCollectionWithEvents({
-        onPost: 'error("foo", "must not be bar")'
-      });
-      
-      c.execListener('Post', {}, {}, {foo: 'bar'}, {}, function (err, result) {
-        expect(err).to.eql({errors: {"foo": "must not be bar"}});
-        done();
-      })
-    })
-    
-    it('should protect values from being changed via protect()', function(done) {
-      var c = createCollectionWithEvents({
-        onPut: 'protect("foo")'
-      });
-      
-      c.execListener('Put', {}, {}, {foo: 'bar'}, {}, function (err, result) {
-        expect(result.foo).to.not.exist;
-        done();
-      })
-    })
-  })
 
   describe('.save()', function() {
     it('should save the provided data', function(done) {
       var c = new Collection('counts', {db: db.connect(TEST_DB), config: { properties: {count: {type: 'number'}}}});
 
-      c.save({}, {count: 1}, {}, {}, function (err, item) {
+      c.save({session: {}, body: {count: 1}, query: {}, dpd: {}}, function (err, item) {
         expect(item.id).to.exist;
         expect(err).to.not.exist;
         done();
@@ -251,10 +181,10 @@ describe('collection', function(){
     it('should pass commands like $inc', function(done) {
       var c = new Collection('counts', {db: db.connect(TEST_DB), config: { properties: {count: {type: 'number'}}}});
 
-      c.save({}, {count: 1}, {}, {}, function (err, item) {
+      c.save({body: {count: 1}}, function (err, item) {
         expect(item.id).to.exist;
         expect(err).to.not.exist;
-        c.save({}, {count: {$inc: 100}}, {id: item.id}, {}, function (err, updated) {
+        c.save({body: {count: {$inc: 100}}, query: {id: item.id}}, function (err, updated) {
           expect(err).to.not.exist;
           expect(updated).to.exist;
           expect(updated.count).to.equal(101);
@@ -279,8 +209,8 @@ describe('collection', function(){
     it('should return the provided data', function(done) {
       var c = new Collection('foo', {db: db.connect(TEST_DB), config: { properties: {count: {type: 'number'}}}});
 
-      c.save({}, {count: 1}, {}, {}, function (err, item) {
-        c.find({}, {}, {}, function (err, items) {
+      c.save({body: {count: 1}}, function (err, item) {
+        c.find({}, function (err, items) {
           expect(items.length).to.equal(1);
           done(err);
         });
@@ -290,10 +220,10 @@ describe('collection', function(){
     it('should return the provided data in sorted order', function(done) {
       var c = new Collection('sort', { db: db.connect(TEST_DB), config: { properties: {count: {type: 'number'}}}});
 
-      c.save({}, {count: 1}, {}, {}, function (err, item) {
-        c.save({}, {count: 3}, {}, {}, function (err, item) {
-          c.save({}, {count: 2}, {}, {}, function (err, item) {
-            c.find({}, {$sort: {count: 1}}, {}, function (err, items) {
+      c.save({body: {count: 1}}, function (err, item) {
+        c.save({body: {count: 3}}, function (err, item) {
+          c.save({body: {count: 2}}, function (err, item) {
+            c.find({query: {$sort: {count: 1}}}, function (err, items) {
               expect(items.length).to.equal(3);
               for(var i = 0; i < 3; i++) {
                 delete items[i].id;

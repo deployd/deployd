@@ -35,4 +35,5 @@ describe('resource', function(){
       })
     })
   })
+  
 })
