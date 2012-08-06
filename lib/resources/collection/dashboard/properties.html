@@ -90,8 +90,8 @@
       </li>
     </ul>
   </div>
-  <input type="text" placeholder="myPropertyName" data-bind="value: name, valueUpdate: 'afterkeydown', hasfocus: nameFocus, event: { keypress: onNameKeypress, keydown: onNameKeyDown }" />
-  <button class="btn" data-bind="click: toggleEditing, clickBubble: false, visible: !isNew">done</button>
+  <input type="text" placeholder="myPropertyName" data-bind="value: editingName, valueUpdate: 'afterkeydown', hasfocus: nameFocus, event: { keypress: onNameKeypress, keydown: onNameKeyDown }" />
+  <button class="btn" data-bind="click: commitName, clickBubble: false, visible: !isNew">done</button>
   <div class="pull-right">
     <label class="checkbox pull-left"><input type="checkbox" data-bind="checked: required" />Required</label>
     <a href="#" class="delete-btn" data-bind="click: $root.removeProperty, visible: !isNew"><i class="icon-white icon-remove"></i></a>

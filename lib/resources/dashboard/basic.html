@@ -1,8 +1,12 @@
 <div class="well hide" id="basic-dashboard">
-  <h3>Settings</h3>
+  <h3>Config</h3>
   <form class="form-horizontal" id="settings-form">
-    
+    <div class="form-actions" id="save-button-container">
+      <button class="btn btn-success" type="submit" id="save-button" disabled="disabled"><i class="icon-white icon-ok"></i> Save</button>
+      <button class="btn" type="button" id="cancel-button"><i class="icon-remove"></i> Cancel</button>
+    </div>
   </form>
+  
 </div>
 
 <script type="text/html" id="property-template">
@@ -19,7 +23,6 @@
       <% if (typeof description !== 'undefined') { %>
         <p class="help-block"><%- description %></p>
       <% } %>
-      
     </div>
   </div>
 </script>
