@@ -34,7 +34,8 @@
     "mocha": "*",
     "chai": "*",
     "node-markdown": "*",
-    "dox": "*"
+    "dox": "*",
+    "less": "*"
   }, 
   "bin": { "dpd": "./bin/dpd" },
   "scripts": {

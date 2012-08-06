@@ -1,2 +1,4 @@
 bin/node
 bin/mongo
+lib/resources/dashboard/bootstrap
+lib/resources/dashboard/stylesheet/*.less
