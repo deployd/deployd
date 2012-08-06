@@ -1,7 +1,22 @@
 var Resource = require('../lib/resource');
 var Context = require('../lib/context');
+var util = require('util');
 
 describe('resource', function(){
+  
+  describe('.emit(ev, data)', function(){
+    it('should work like an EventEmitter', function(done) {
+      function Test() {
+        this.on('test', function(data) {
+          expect(data).to.equal('foo');
+          done();
+        })
+      }
+      util.inherits(Test, Resource);
+      var t = new Test();
+      t.emit('test', 'foo');
+    })
+  })
   
   describe('.parse(url)', function(){
     function example(url, basepath, id, parts, query) {
