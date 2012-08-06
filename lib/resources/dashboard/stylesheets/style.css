@@ -5506,3 +5506,12 @@ pre {
 #basic-dashboard {
   width: 485px;
 }
+#basic-dashboard #settings-form {
+  margin-bottom: 0;
+}
+#basic-dashboard .form-actions {
+  background-color: inherit;
+  border-color: #333;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
