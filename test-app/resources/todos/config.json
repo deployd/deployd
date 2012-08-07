@@ -4,43 +4,60 @@
 			"required": false,
 			"type": "string",
 			"typeLabel": "string",
-			"id": "message"
+			"id": "message",
+			"name": "message",
+			"order": 0,
+			"$renameFrom": "messages"
 		},
 		"people": {
 			"required": false,
 			"type": "object",
 			"typeLabel": "object",
-			"id": "people"
+			"id": "people",
+			"name": "people",
+			"order": 1
 		},
 		"tags": {
 			"required": false,
 			"type": "array",
 			"typeLabel": "array",
-			"id": "tags"
+			"id": "tags",
+			"name": "tags",
+			"order": 2
 		},
 		"owner": {
 			"required": false,
 			"type": "string",
 			"typeLabel": "string",
-			"id": "owner"
+			"id": "owner",
+			"name": "owner",
+			"order": 3,
+			"$renameFrom": "ownerssss"
 		},
 		"done": {
 			"required": false,
 			"type": "boolean",
 			"typeLabel": "string",
-			"id": "done"
+			"id": "done",
+			"name": "done",
+			"order": 4
 		},
 		"order": {
 			"required": false,
 			"type": "number",
 			"typeLabel": "string",
-			"id": "order"
+			"id": "order",
+			"name": "order",
+			"order": 5
 		},
 		"title": {
 			"required": false,
 			"type": "string",
 			"typeLabel": "string",
-			"id": "title"
+			"id": "title",
+			"name": "title",
+			"order": 6,
+			"$renameFrom": "titlesss"
 		}
 	},
 	"path": "/todos",
