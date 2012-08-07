@@ -177,7 +177,6 @@ describe('store', function(){
         store.update({}, {$rename: {foo: 'RENAMED'}}, function (err) {
           if(err) throw err;
           store.find(function (err, all) {
-            console.log(all);
             all.forEach(function (item) {
               expect(item.RENAMED).to.exist;
               expect(item.foo).to.not.exist;
