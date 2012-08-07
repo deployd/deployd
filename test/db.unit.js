@@ -170,6 +170,23 @@ describe('store', function(){
         })
       })
     })
+    
+    it('should rename all objects', function(done) {
+      store.insert([{foo: 'bar'}, {foo: 'bat'}, {foo: 'baz'}], function (err) {
+        if(err) throw err;
+        store.update({}, {$rename: {foo: 'RENAMED'}}, function (err) {
+          if(err) throw err;
+          store.find(function (err, all) {
+            console.log(all);
+            all.forEach(function (item) {
+              expect(item.RENAMED).to.exist;
+              expect(item.foo).to.not.exist;
+            });
+            done(err);
+          })
+        })
+      })
+    })
   })
   
   describe('.rename(namespace, fn)', function(){

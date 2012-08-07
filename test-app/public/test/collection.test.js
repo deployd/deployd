@@ -312,7 +312,21 @@ describe('Collection', function() {
         });
       });
     });
-
+    
+    describe('.put({done: true})', function(){
+      it('should not update multiple items', function(done) {
+        chain(function(next) {
+          dpd.todos.post({title: 'foo'}, next);
+        }).chain(function(next) {
+          dpd.todos.post({title: 'bar'}, next);
+        }).chain(function(next, result) {
+          dpd.todos.put({done: true}, function (res, err) {
+            expect(err).to.exist;
+            done();
+          });
+        });
+      });
+    });
 
     afterEach(function (done) {
       this.timeout(10000);

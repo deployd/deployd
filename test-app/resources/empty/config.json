@@ -10,7 +10,8 @@
 			"typeLabel": "string",
 			"required": false,
 			"id": "name",
-			"order": 0
+			"order": 0,
+			"$renameFrom": "names"
 		}
 	}
 }
