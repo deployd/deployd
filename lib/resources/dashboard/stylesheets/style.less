@@ -501,7 +501,7 @@ li.component-type-item {
 }
 
 .placeholder {
-  margin-top: 20px;
+  
   padding: 10px;
   border: 1px dashed darken(@white, 65%);
   background: url(../img/fabric.png);
@@ -514,10 +514,24 @@ li.component-type-item {
     color: @linkColor;
   } 
 
+  &.new-item {
+    margin-top: 20px;
+  }
+
   
 }
 
 .component-item-header {
+
+  &:hover .handle {
+    display: inline-block;
+  }
+
+  .handle {
+    cursor: row-resize;
+    margin-top: -1px;
+    display: none;
+  }
     
   .delete-btn {
     cursor: pointer;
