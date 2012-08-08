@@ -43,7 +43,7 @@ The following resource would respond with a file at the url `/my-file.html`.
     }
     util.inherits(MyFileResource, Resource);
 
-    FileResource.prototype.handle = function (ctx, next) {
+    MyFileResource.prototype.handle = function (ctx, next) {
       if (ctx.url === '/my-file.html') {
         fs.createReadStream('my-file.html').pipe(ctx.res);
       } else {
