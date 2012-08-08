@@ -4,7 +4,7 @@
       Properties
     </h3>
     <div id="property-list">
-      <ul class="component-list">
+      <ul class="component-list" data-bind="sortable: properties">
         <li class="component-item locked"><div class="component-item-header">
           <i class="icon-white icon-custom string" data-bind="tooltip: {placement: 'left', title: 'string'}"></i>
           <span class="code name">id</span>
@@ -39,12 +39,13 @@
               <span class="code name" data-bind="text: name, click: toggleEditing"></span>
               <span class="label" data-bind="visible: required">required</span>
               <div class="pull-right">
+                <i class="icon-white icon-resize-vertical handle"></i>
                 <a href="#" data-bind="click: $root.removeProperty"><i class="icon-white icon-remove"></i></a>
               </div>
             </div>
           </div></li>
         <!-- /ko -->
-        <div class="placeholder component-item-header">
+        <div class="placeholder new-item component-item-header">
           <div data-bind="visible: !properties().length">
             <div class="get-started" style="margin-top: 0;">
               <!-- ko if: isUsers -->

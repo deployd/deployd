@@ -5241,7 +5241,6 @@ li.component-type-item {
   padding-bottom: 40px;
 }
 .placeholder {
-  margin-top: 20px;
   padding: 10px;
   border: 1px dashed #595959;
   background: url(../img/fabric.png);
@@ -5254,6 +5253,17 @@ li.component-type-item {
 .placeholder.highlight {
   border-color: #429e96;
   color: #429e96;
+}
+.placeholder.new-item {
+  margin-top: 20px;
+}
+.component-item-header:hover .handle {
+  display: inline-block;
+}
+.component-item-header .handle {
+  cursor: row-resize;
+  margin-top: -1px;
+  display: none;
 }
 .component-item-header .delete-btn {
   cursor: pointer;
