@@ -46,3 +46,28 @@ The callback will receive any error even if it occurs asynchronously.
     s.run({}, domain, function (e) {
       console.log(e); // test err
     });
+    
+## Default Domain
+
+Scripts are executed with a default sandbox and set of domain functions. These are functions that every `Script` needs. The following are available to every `Script`. These can be overridden by passing a value such as `{cancel: ...}` in a `domain`.
+
+### cancel(msg, status)
+
+Throws an error that immediately stops the execution of a context and calls the callback passed to `script.run()` passing the error as the first argument. 
+
+`cancel()` does not have an effect if the current `Context.isRoot` or `Context.internal` is true.
+
+### emit([collection], [query], event, data)
+
+    Stability: will change in 0.7
+
+Emits an `event` to all sessions. Can be passed an optional `UserCollection` and `query` to emit the event to only the users in the collection that match the query.
+
+### Sandbox
+
+The default sandbox or global object in a `Script` comes with several other properties:
+
+ - `me` - the current user if one exists on the `Context`
+ - `this` - an empty object if not overriden by the `domain`
+ - `query` - the current `Context`'s query
+ - `console` - support for `console.log()` and other `console` methods

@@ -1,6 +1,6 @@
 # Context
 
-Contexts are a thin abstraction between http requests, `Resource`s, and `Script`s. They provide utility methods to simplify interacting with the [http.ServerRequest] and [http.ServerResponse] objects.
+Contexts are a thin abstraction between http requests, `Resource`s, and `Script`s. They provide utility methods to simplify interacting with node's [http.ServerRequest](http://nodejs.org/api/http.html#http_class_http_serverrequest) and [http.ServerResponse](http://nodejs.org/api/http.html#http_class_http_serverresponse) objects.
 
 A `Context` is built from a request and response and passed to a matching `Resource` by the `Router`. This might originate from an external http request or a call to an **internal client** from a `Script`.
 
@@ -15,7 +15,7 @@ Contexts may be created without a real request and response. This is useful for 
 
 ### ctx.done(err, result)
 
-Continuous callback sugar for easily calling `res.end()`. Conforms to the idiomatic callback signature for most apis so it can be passed directly.
+Continuous callback sugar for easily calling `res.end()`. Conforms to the idiomatic callback signature for most node APIs. It can be passed directly to most APIs that require a callback in node.
 
     fs.readFile('bar.txt', ctx.done);
 

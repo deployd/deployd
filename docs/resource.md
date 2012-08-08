@@ -104,6 +104,8 @@ Here is an example of a simple resource that exposes a method on the external pr
       console.log(options.msg); // 'hello world'
     }
 
+When the `hello()` method is called a context does not need to be provided as the `dpd` object is built with a context. A callback may be provided which will be executed with results of `fn(err, result)`.
+
 `/my-project/public/hello.js`
 
     dpd.example.hello({msg: 'hello world'});
