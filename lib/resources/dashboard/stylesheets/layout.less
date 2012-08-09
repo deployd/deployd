@@ -1,12 +1,40 @@
 html, body {
-  height: 100%;
+  min-height: 100%;
+}
+
+body {
+  .display-box();
+  .box-orient(vertical);
+}
+
+#header {
+  background: none !important;
+  border-bottom: 1px solid #333;
+  margin: 0 20px;
+
+  .display-box();
+  .box-orient(horizontal);
+  .box-align(center);
+
+  .seperator {
+    .box-flex(1);
+  }
+  
+  h1, h2 {
+    white-space: nowrap;
+    color: @white;
+    display: inline-block;
+    margin: 0;
+  }
 }
 
 #body-container {
   padding: 20px;
+  padding-top: 10px;
   min-height: 100%;
   min-width: 1000px;
   .box-sizing(border-box);
+  .box-flex(1);
   .display-box();
 }
 

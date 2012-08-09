@@ -18,7 +18,7 @@ target.dashboard = function() {
     });
 
     parser.parse(lessSource, function (e, tree) {
-      if (e) return console.error(e);  
+      if (e) return console.error(e.message);  
       tree.toCSS().to('lib/resources/dashboard/stylesheets/style.css');
     });
 
