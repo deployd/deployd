@@ -4,7 +4,7 @@ The `internal-client` module is responsible for building a server-side version o
 
 *Note: As in dpd.js, the callback for an internal client request recieves the arguments `(data, err)`, which is different than the Node convention of `(err, data)`. This is for a better experience in writings `Script`s and events.*
 
-## internalClient.build(server, session, stack)
+## internalClient.build(server, [session], [stack])
 
     var internalClient = require('deployd/lib/internalClient');
     var dpd = internalClient.build(server, req.session, req.stack);
@@ -27,7 +27,7 @@ Used internally to prevent recursive calls to resources.
 
 ## Mock context
 
-In order to make requests on resources within the Deployd server, `internal-client` creates mock `req` and `res` objects. These objects are not Streams and cannot be treated exactly like the standard `HttpServerRequest` and `HttpServerResponse` objects in Node, but they imitate their interfaces with the following properties:
+In order to make requests on resources within the Deployd server, `internal-client` creates mock `req` and `res` objects. These objects are not Streams and cannot be treated exactly like the standard `http.ServerRequest` and `http.ServerResponse` objects in Node, but they imitate their interfaces with the following properties:
 
 ### req
 

@@ -4,11 +4,9 @@ Contexts are a thin abstraction between http requests, `Resource`s, and `Script`
 
 A `Context` is built from a request and response and passed to a matching `Resource` by the `Router`. This might originate from an external http request or a call to an **internal client** from a `Script`.
 
-## Faux Contexts
+## Mock Contexts
 
-Contexts may be created without a real request and response such as during an internal request using the `dpd` object. 
-
-**TODO: need more info here on internal contexts**
+Contexts may be created without a real request and response such as during an internal request using the `dpd` object. See: `internalClient` for more info.
 
 ## Class: Context
 
