@@ -163,6 +163,24 @@ This example creates a custom dashboard for the `Collection` resource. It automa
         , '/js/util.js'
       ]
     }
+
+* `path` {String}
+
+The absolute path to this resource's dashboard
+
+* `pages` {Array} *(optional)*
+
+An array of pages to appear in the sidebar. If this is not provided, the only page available will be "Config" (and "Events", if `MyResource.events` is set).
+
+The dashboard will load content from `[current-page].html` and `js/[current-page].js`.
+
+*Note: The "Config" page will load from `index.html` and `js/index.js`.*
+
+*Note: `events.html` is optional - if not provided, the dashboard will load a default event editor.*
+
+* `scripts` {Array} *(optional)*
+
+An array of extra JavaScript files to load with the dashboard pages.
     
 ## Basic Dashboard
 
@@ -171,8 +189,21 @@ In cases where a custom ui is not practical, a resource can describe the setting
     Proxy.basicDashboard = {
       settings: [{
         name: "remote"
-        , type: "text" //"textarea", "number", and "checkbox" work as well
+        , type: "text"
         , description: "The remote server to proxy to."
       }]
     }
 
+The `settings` object is an array of objects with these properties:
+
+* `name` {String}
+
+The name of the property in your config object. Make sure this is something easily accessible through JavaScript, i.e. `maxItems` rather than "Maximum Amount of Items".
+
+* `type` {String}
+
+The type of field to render in the dashboard. Supported options are `text`, `textarea`, `number`, and `checkbox`.
+
+* `description` {String}
+
+Text to appear beneath the property in the dashboard.
