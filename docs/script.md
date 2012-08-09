@@ -1,6 +1,14 @@
 # Script
 
-A `Script` provides a mechanism to run JavaScript source in a sandbox. A `Script` is executed with a `Context` and a `domain` object. Each `Script` runs independently. They do not share any scope (including global scope), nor do they share state with other scripts.
+A `Script` provides a mechanism to run JavaScript source in a sandbox. A `Script` is executed with a `Context` and a `domain` object using [the node vm module](http://nodejs.org/api/vm.html). Each `Script` runs independently. They do not share any scope (including global scope), nor do they share state with other scripts.
+
+## Async Mode
+
+Scripts can be run in an **async mode**. This mode is triggered when a `Script` is `run(ctx, domain, fn)` with a callback (`fn`). When run in this mode a `Script` will try scrub all functions in the domain for operations that require a callback. If a callback is required, the function is re-written to count the callbacks completion and notify the script. When all pending callbacks are complete the script is considered finished.
+
+## Async Errors
+
+If a script is run with a callback (in **async mode**), any error will emit an internal `error` event. This will stop the execution of the script and pass the error to the script's callback.
 
 ## Class: Script
 
@@ -9,7 +17,7 @@ A `Script` provides a mechanism to run JavaScript source in a sandbox. A `Script
 
 A `Script`'s source is compiled when its constructor is called. It can be `run()` many times with independent `Context`s and `domain`s.
 
-## script.run(ctx, domain, fn)
+## script.run(ctx, domain, [fn])
 
 * ctx {Context}
 
@@ -34,9 +42,9 @@ This example `domain` provides a log function to a script.
       console.log(msg); // 'hello world'
     });
 
-* fn(err)
+* fn(err) *optional*
 
-The callback will receive any error even if it occurs asynchronously.
+If a callback is provided the script will be run in **async mode**. The callback will receive any error even if the error occurs asynchronously. Otherwise it will be called without any arguments when the script is finished executing (see: async mode).
 
     var s = new Script('setTimeout(function() { throw "test err" }, 22)');
   
@@ -68,6 +76,6 @@ Emits an `event` to all sessions. Can be passed an optional `UserCollection` and
 The default sandbox or global object in a `Script` comes with several other properties:
 
  - `me` - the current user if one exists on the `Context`
- - `this` - an empty object if not overriden by the `domain`
+ - `this` - an empty object if not overridden by the `domain`
  - `query` - the current `Context`'s query
  - `console` - support for `console.log()` and other `console` methods

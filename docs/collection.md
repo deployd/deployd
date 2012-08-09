@@ -17,7 +17,13 @@ Example inheriting from `Collection`:
     MyCollection.external = Collection.external;
 
     util.inherits(MyCollection, Collection);
-    
+
+## collection.store
+
+* {Store}
+
+The backing persistence abstraction layer. Supports saving and reading data from a database. See `Store` for more info (/lib/db.js).
+
 ## collection.validate(body, create)
 
 Validate the request `body` against the `Collection` `properties` 

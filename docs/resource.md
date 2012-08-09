@@ -1,14 +1,14 @@
 # Resource
 
-Resources provide a way to handle `Context`s requesting a specific URL. A `Resource` must implement a `handle(ctx, next)` method that either handles a `Context` or calls `next()`.
+Resources provide a way to handle http requests at a root url. They must implement a `handle(ctx, next)` method that either handles a request or calls `next()` to give the request back to the router.
 
-Resources can also be attributed with meta-data that describes their configuration and dependencies. These can be used to dynamically render a dashboard editor gui for configuring a resource instance.
+Resources can also be attributed with meta-data to allow the dashboard to dynamically render an editor gui for configuring a resource instance.
 
 ## Events
 
-A `Resource` also provides a mechanism for executing event `Script`s during the handling of an http request. This allows instances to inject logic during their execution, keeping `Resource`s generic and reusable.
+A `Resource` can execute `Script`s during the handling of an http request. This allows users of the resource to inject logic during specific events during an http request without having to extend the resource or create their own.
 
-For example, the `Collection` resource executes the *get.js* event script when it retrieves each object from its store. If a *get.js* file exists in the instance folder of a resource (eg. `/my-project/resources/my-collection/get.js`), it will be pulled in by the resource and exposed as `myResource.events.get`.
+For example, the `Collection` resource executes the *get.js* event script when it retrieves each object from its store. If a *get.js* file exists in the instance folder of a resource (eg. `/my-project/resources/my-collection/get.js`), it will be pulled in by the resource and exposed as `myResource.scripts.get`.
 
 ## Class: Resource
 
@@ -17,10 +17,18 @@ A `Resource` inherits from `EventEmitter`. The following events are available.
  - `changed`      after a resource config has changed
  - `deleted`      after a resource config has been deleted
 
-Example:
+Inheriting from Resource:
 
-    var Resource = require('deployd/lib/resource');
-    var resource = new Resource(name, options);
+    var Resource = require('deployd/lib/resource')
+      , util = require('util');
+      
+    function MyResource(name, options) {
+      // run the parent constructor
+      // before using any properties/methods
+      Resource.apply(this, arguments);
+    }
+    util.inherits(MyResource, Resource);
+    module.exports = MyResource;
 
 * `name` {String}
 
@@ -28,9 +36,11 @@ The name of the resource.
 
 * `options` {Object}
 
- - `path`         the base path a resource should handle
- - `db`           the database a resource will use for persistence
- - `config`       the instance configuration
+ - `configPath`        the project relative path to the resource instance
+ - `path`              the base path a resource should handle
+ - `db` *(optional)*   the database a resource will use for persistence
+ - `config`            the instance configuration object
+ - `server`            the server object
 
 The following resource would respond with a file at the url `/my-file.html`.
 
@@ -74,11 +84,9 @@ Override the handle method to return a string:
       fs.readFile('myfile.txt', ctx.done);
     }
     
-## Reserved Methods
-
 ## resource.load(fn)
 
-Load any dependencies and call `fn(err)` with any errors that occur.
+Load any dependencies and call `fn(err)` with any errors that occur. This is automatically called by the runtime to support asynchronous construction of a resource (such as loading files).
 
 ## External Prototype
 
@@ -114,7 +122,9 @@ When the `hello()` method is called a context does not need to be provided as th
 
     dpd.example.hello({msg: 'hello world'});
 
-## Events
+## Resource.events
+
+* {Array}
 
 If a `Resource` constructor includes an array of events, it will try to load the scripts in its instance folder (eg. `/my-project/resources/my-resource/get.js`).
 

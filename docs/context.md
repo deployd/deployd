@@ -6,7 +6,9 @@ A `Context` is built from a request and response and passed to a matching `Resou
 
 ## Faux Contexts
 
-Contexts may be created without a real request and response. This is useful for testing how a `Resource` or `Script` might handle an http request without creating a mock socket, request, or response.
+Contexts may be created without a real request and response such as during an internal request using the `dpd` object. 
+
+**TODO: need more info here on internal contexts**
 
 ## Class: Context
 
@@ -27,7 +29,6 @@ An error if one occured during handling of the `ctx`. Otherwise it should be `nu
 
 The result of executing the `ctx`. This should be a `typeof` object and serialize-able as JSON.
 
-
 ### ctx.body
 
 * {Object}
@@ -39,3 +40,9 @@ The body of the request if sent as `application/json` or `application/x-www-form
 * {Object}
 
 The query string of the request serialized as an `Object`. Supports both `?key=value` as well as `?{"key":"value"}`.
+
+### ctx.method
+
+* {Object}
+
+An alias to the request's method.
