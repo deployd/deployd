@@ -4045,9 +4045,12 @@ body {
   -o-box-orient: vertical;
 }
 #header {
-  background: none !important;
-  border-bottom: 1px solid #333;
-  margin: 0 20px;
+  background: rgba(33, 33, 33, 0.5) url(../img/fabric.png) !important;
+  -webkit-box-shadow: inset 1px 1px 10px rgba(0, 0, 0, 0.5);
+  -moz-box-shadow: inset 1px 1px 10px rgba(0, 0, 0, 0.5);
+  box-shadow: inset 1px 1px 10px rgba(0, 0, 0, 0.5);
+  border-bottom: 1px solid #111111;
+  padding: 0 20px;
   display: box;
   display: -moz-box;
   display: -webkit-box;
