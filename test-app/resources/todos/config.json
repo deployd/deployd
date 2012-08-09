@@ -1,13 +1,12 @@
 {
 	"properties": {
-		"message": {
+		"tags": {
 			"required": false,
-			"type": "string",
-			"typeLabel": "string",
-			"id": "message",
-			"name": "message",
-			"order": 0,
-			"$renameFrom": "messages"
+			"type": "array",
+			"typeLabel": "array",
+			"id": "tags",
+			"name": "tags",
+			"order": 0
 		},
 		"people": {
 			"required": false,
@@ -17,30 +16,14 @@
 			"name": "people",
 			"order": 1
 		},
-		"tags": {
-			"required": false,
-			"type": "array",
-			"typeLabel": "array",
-			"id": "tags",
-			"name": "tags",
-			"order": 2
-		},
 		"owner": {
 			"required": false,
 			"type": "string",
 			"typeLabel": "string",
 			"id": "owner",
 			"name": "owner",
-			"order": 3,
+			"order": 2,
 			"$renameFrom": "ownerssss"
-		},
-		"done": {
-			"required": false,
-			"type": "boolean",
-			"typeLabel": "string",
-			"id": "done",
-			"name": "done",
-			"order": 4
 		},
 		"order": {
 			"required": false,
@@ -48,7 +31,16 @@
 			"typeLabel": "string",
 			"id": "order",
 			"name": "order",
-			"order": 5
+			"order": 3
+		},
+		"message": {
+			"required": false,
+			"type": "string",
+			"typeLabel": "string",
+			"id": "message",
+			"name": "message",
+			"order": 4,
+			"$renameFrom": "messages"
 		},
 		"title": {
 			"required": false,
@@ -56,8 +48,16 @@
 			"typeLabel": "string",
 			"id": "title",
 			"name": "title",
-			"order": 6,
+			"order": 5,
 			"$renameFrom": "titlesss"
+		},
+		"done": {
+			"required": false,
+			"type": "boolean",
+			"typeLabel": "string",
+			"id": "done",
+			"name": "done",
+			"order": 6
 		}
 	},
 	"path": "/todos",
