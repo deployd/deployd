@@ -5277,6 +5277,32 @@ li.component-type-item {
 .component-item-header .checkbox {
   margin-top: 6px;
 }
+.component-item-edit {
+  display: box;
+  display: -moz-box;
+  display: -webkit-box;
+  display: -ms-box;
+  display: -o-box;
+  box-orient: horizontal;
+  -moz-box-orient: horizontal;
+  -webkit-box-orient: horizontal;
+  -ms-box-orient: horizontal;
+  -o-box-orient: horizontal;
+}
+.component-item-edit input[type="text"] {
+  width: 50px !important;
+  box-flex: 1;
+  -moz-box-flex: 1;
+  -webkit-box-flex: 1;
+  -ms-box-flex: 1;
+  -o-box-flex: 1;
+  display: block;
+}
+.component-item-edit input[type="text"],
+.component-item-edit label,
+.component-item-edit button {
+  margin-right: 4px;
+}
 li.component-item {
   list-style: none;
   margin-bottom: 4px;

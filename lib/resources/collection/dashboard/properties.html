@@ -33,7 +33,7 @@
 
         <!-- ko foreach: properties -->
           <li class="component-item" data-bind="css: {active: editing}"><div class="component-item-header clearfix" data-bind="click: onClickHeader">
-            <div data-bind="template: 'property-single-template', visible: editing"></div>
+            <div class="component-item-edit" data-bind="template: 'property-single-template', visible: editing"></div>
             <div data-bind="visible: !editing()">
               <i class="icon-white icon-custom" data-bind="tooltip: {placement: 'left', title: typeLabel}, cssNamed: type"></i>
               <span class="code name" data-bind="text: name, click: toggleEditing"></span>
@@ -66,7 +66,7 @@
               <strong>Get started</strong> by adding properties to describe the <strong data-bind="text: isUsers ? 'users' : 'data'"></strong> you want to store in this collection.
             </div>
           </div>
-          <div data-bind="template: {name: 'property-single-template', data: newProperty}"></div>
+          <div class="component-item-edit" data-bind="template: {name: 'property-single-template', data: newProperty}"></div>
         </div>
       </ul>
     </div>
@@ -93,9 +93,7 @@
   </div>
   <input type="text" placeholder="myPropertyName" data-bind="value: editingName, valueUpdate: 'afterkeydown', hasfocus: nameFocus, event: { keypress: onNameKeypress, keydown: onNameKeyDown }" />
   <button class="btn" data-bind="click: commitName, clickBubble: false, visible: !isNew">done</button>
-  <div class="pull-right">
-    <label class="checkbox pull-left"><input type="checkbox" data-bind="checked: required" />Required</label>
-    <a href="#" class="delete-btn" data-bind="click: $root.removeProperty, visible: !isNew"><i class="icon-white icon-remove"></i></a>
-    <button class="btn btn-success" data-bind="click: $root.addProperty, visible: isNew"><i class="icon-white icon-plus"></i>&nbsp;Add</button>
-  </div>
+  <label class="checkbox"><input type="checkbox" data-bind="checked: required" />Required</label>
+  <a href="#" class="delete-btn" data-bind="click: $root.removeProperty, visible: !isNew"><i class="icon-white icon-remove"></i></a>
+  <button class="btn btn-success" data-bind="click: $root.addProperty, visible: isNew"><i class="icon-white icon-plus"></i>&nbsp;Add</button>
 </script>
