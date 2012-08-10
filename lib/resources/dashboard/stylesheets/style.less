@@ -88,9 +88,11 @@ background-color: darken(@black, 10%);
 
 input, textarea {background: darken(@black, 10%); color: @white; border: solid 1px @black;}
 #dialog, .modal {
+  color: @textColor;
+  label, input, textarea { color: @textColor !important; }
   input, textarea {
     background-color: #ffffff;
-    color: @textColor; 
+    
   }
 }
 
