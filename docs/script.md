@@ -55,6 +55,14 @@ If a callback is provided the script will be run in **async mode**. The callback
       console.log(e); // test err
     });
     
+## Script.load(path, fn)
+
+* path {String}
+
+* fn(err, script)
+
+Load a new `script` at the given file `path`. Callback with an error if one occured or a new `Script` loaded from the contents of the file.    
+    
 ## Default Domain
 
 Scripts are executed with a default sandbox and set of domain functions. These are functions that every `Script` needs. The following are available to every `Script`. These can be overridden by passing a value such as `{cancel: ...}` in a `domain`.
