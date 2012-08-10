@@ -4050,7 +4050,7 @@ body {
   -moz-box-shadow: inset 1px 1px 10px rgba(0, 0, 0, 0.5);
   box-shadow: inset 1px 1px 10px rgba(0, 0, 0, 0.5);
   border-bottom: 1px solid #111111;
-  padding: 0 20px;
+  padding: 0 22px;
   display: box;
   display: -moz-box;
   display: -webkit-box;
@@ -4076,6 +4076,7 @@ body {
 }
 #header h1,
 #header h2 {
+  padding-left: 20px;
   white-space: nowrap;
   color: #ffffff;
   display: inline-block;
@@ -4106,7 +4107,7 @@ body {
 }
 #resource-sidebar-container {
   width: 250px;
-  margin-right: 20px;
+  margin-right: 10px;
 }
 #main-container {
   box-flex: 1;
@@ -4121,7 +4122,7 @@ body {
   display: -webkit-box;
   display: -ms-box;
   display: -o-box;
-  margin-bottom: 1em;
+  margin-bottom: 10px;
 }
 .section-header h3 {
   vertical-align: middle;
@@ -4140,7 +4141,16 @@ body {
   -webkit-box-align: center;
   -ms-box-align: center;
   -o-box-align: center;
-  margin: 0;
+  margin: 0 !important;
+}
+.well h3 {
+  height: 28px;
+  line-height: 28px;
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+#resources-empty {
+  margin-bottom: 0;
 }
 .two-column-container {
   display: box;
@@ -4157,7 +4167,7 @@ body {
   -o-box-flex: 1;
 }
 .two-column-container .sidebar-column {
-  margin-left: 20px;
+  margin-left: 10px;
   width: 250px;
 }
 .ace-deployd .ace_editor {
@@ -4884,6 +4894,12 @@ p a {
   box-shadow: inset 1px 1px 1px rgba(0, 0, 0, 0.25);
   border: solid 1px rgba(0, 0, 0, 0.5);
 }
+.alert {
+  margin-bottom: 10px;
+}
+.well {
+  padding: 10px 20px 20px;
+}
 h3 {
   color: #ffffff;
 }
@@ -5246,6 +5262,9 @@ li.component-type-item {
 #current-data .table-container {
   overflow-x: scroll;
 }
+#current-data table {
+  margin-bottom: 10px;
+}
 #current-data table td,
 #current-data table th {
   white-space: nowrap;
@@ -5256,7 +5275,7 @@ li.component-type-item {
 }
 #current-data #current-data-querystring {
   display: block;
-  margin-top: 20px;
+  margin-top: 10px;
   width: 100%;
   margin-bottom: 0;
 }
@@ -5295,7 +5314,7 @@ li.component-type-item {
   color: #429e96;
 }
 .placeholder.new-item {
-  margin-top: 20px;
+  margin-top: 10px;
 }
 .component-item-header:hover .handle {
   display: inline-block;
@@ -5483,6 +5502,7 @@ table input[type=number] {
   -moz-box-shadow: inset 1px 1px 1px rgba(0, 0, 0, 0.25);
   box-shadow: inset 1px 1px 1px rgba(0, 0, 0, 0.25);
   border: solid 1px rgba(0, 0, 0, 0.5);
+  padding: 10px 20px 20px;
   background: #363535;
   color: #ffffff;
 }
@@ -5492,7 +5512,7 @@ table input[type=number] {
 }
 .get-started,
 .get-started-light {
-  margin: 20px 0;
+  margin: 10px 0;
   padding: 19px 19px 9px 19px;
   color: #ffffff;
 }
