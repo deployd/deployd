@@ -72,6 +72,10 @@ Call `next()` if the resource cannot handle the request.
 Otherwise call `cxt.done(err, res)` when the resource
 is ready to respond.
 
+* ctx {Context}
+
+The http context created by the `Router`. This provides an abstraction between the actual request and response. A `Resource` should call `ctx.done` or pipe to `ctx.res` if it can handle a request. Otherwise it should call `next()`.
+
 Override the handle method to return a string:
 
     function MyResource(settings) {
