@@ -27,6 +27,7 @@
     "fstream": "0.1.x",
     "tar": "0.1.x",
     "fstream-ignore": "0.0.x",
+    "underscore": "1.x.x",
     "ejs": "0.7.x"
   },
   "devDependencies": {
