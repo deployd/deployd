@@ -205,6 +205,15 @@ describe('Collection', function() {
           })
         })
       });
+      
+      it('should run events when an id is included', function(done) {
+        dpd.todos.post({title: 'foobar'}, function (todo) {
+          dpd.todos.get({arbitrary: true, id: todo.id}, function (t) {
+            expect(t.custom).to.equal('arbitrary');
+            done();
+          })
+        });
+      })
     });
 
     describe('.put(id, {done: true}, fn)', function() {
