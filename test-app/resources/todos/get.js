@@ -10,6 +10,8 @@ if (query.title === "$TESTFAIL2") {
     });
 }
 
+this.custom = 'custom';
+
 if (query.arbitrary) {
     this.custom = 'arbitrary';
 }

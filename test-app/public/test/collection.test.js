@@ -216,6 +216,17 @@ describe('Collection', function() {
       })
     });
 
+    describe('.get(id, fn)', function() {
+      it('should run events when an id is queried', function(done) {
+        dpd.todos.post({title: 'foobar'}, function (todo) {
+          dpd.todos.get(todo.id, function (t) {
+            expect(t.custom).to.equal('custom');
+            done();
+          })
+        });        
+      });
+    });
+
     describe('.put(id, {done: true}, fn)', function() {
       it('should add properties', function(done) {
         chain(function(next) {
