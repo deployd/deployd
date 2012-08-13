@@ -4106,6 +4106,7 @@ body {
   display: -o-box;
 }
 #resource-sidebar-container {
+  content: ' ';
   width: 250px;
   margin-right: 10px;
 }
