@@ -1,5 +1,5 @@
 var credentials = {
-	email: 'foo@bar.com',
+	username: 'foo@bar.com',
 	password: '123456'
 }
 
@@ -13,19 +13,19 @@ describe('User Collection', function() {
 					}
 					expect(user.id.length).to.equal(16)
 					delete user.id;
-					expect(user).to.eql({email: credentials.email});
+					expect(user).to.eql({username: credentials.username});
 					done(err);
 				})
 			})
 
-			it('should validate for duplicate email', function(done) {
+			it('should validate for duplicate username', function(done) {
 				chain(function(next) {
 					dpd.users.post(credentials, next);
 				}).chain(function(next) {
 					dpd.users.post(credentials, next);
 				}).chain(function(next, result, err) {
 					expect(result).to.not.exist;
-					expect(err.errors.email).to.be.ok;
+					expect(err.errors.username).to.be.ok;
 					done();
 				});
 			});
@@ -75,16 +75,16 @@ describe('User Collection', function() {
           done();
         });
 
-        dpd.users.post({email: 'foo@bar.com', password: '123456'});
+        dpd.users.post({username: 'foo@bar.com', password: '123456'});
       })
       
       it('should respond to the built-in changed event on put', function(done) {
-        dpd.todos.post({email: 'foo2@bar.com', password: '123456'}, function(item) {
+        dpd.todos.post({username: 'foo2@bar.com', password: '123456'}, function(item) {
           dpd.todos.on('changed', function() {
             done();
           });
           
-          dpd.todos.put(item.id, {email: 'foo3@bar.com'});
+          dpd.todos.put(item.id, {username: 'foo3@bar.com'});
         });
       })
       
