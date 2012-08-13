@@ -20,14 +20,14 @@
     <% if (resourceData.type === 'UserCollection') { %>
     <p>Register a new user in the <code><%= '/' + resourceData.id %></code> collection:</p>
     <pre class="code prettyprint">
-dpd<%= ns('/' + resourceData.id) %>.post({"email": "foo@bar.com", "password": "mypassword"}, function(user, err) {
+dpd<%= ns('/' + resourceData.id) %>.post({"username": "foo@bar.com", "password": "mypassword"}, function(user, err) {
   if(err) return console.log(err);
   console.log(user);
 });</pre>
 
     <p>Login an existing user in the <code><%= '/' + resourceData.id %></code> collection:</p>
     <pre class="code prettyprint">
-dpd<%= ns('/' + resourceData.id) %>.login({"email": "foo@bar.com", "password": "mypassword"}, function(user, err) {
+dpd<%= ns('/' + resourceData.id) %>.login({"username": "foo@bar.com", "password": "mypassword"}, function(user, err) {
   if(err) return console.log(err);
   console.log(user);
 });</pre>
@@ -153,7 +153,7 @@ dpd<%= ns('/' + resourceData.id) %>.del("000000000000000000000000", function (er
                 <td><a href="http://deployd.github.com/deployd/#Authenticating-a-user" target="_blank">Logging in</a></td>
                 <td>POST</td>
                 <td><%- '/' + resourceData.id %>/login</td>
-                <td><code>email</code> and <code>password</code> of user</td>
+                <td><code>username</code> and <code>password</code> of user</td>
                 <td>The user, plus session cookie (or error)</td>
               </tr>
               <tr>
