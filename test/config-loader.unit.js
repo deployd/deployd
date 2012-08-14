@@ -29,14 +29,15 @@ describe('config-loader', function() {
       JSON.stringify({type: "Collection", val: 1}).to(path.join(basepath, 'resources/foo/config.json'));
       JSON.stringify({type: "Collection", val: 2}).to(path.join(basepath, 'resources/bar/config.json'));
 
-      configLoader.loadConfig(basepath, this.server, function(err, resources) {
-        if (err) return done(err);
-        expect(resources).to.have.length(6);
-        expect(resources.filter(function(r) { return r.name == 'foo'})).to.have.length(1);
-        expect(resources.filter(function(r) { return r.name == 'bar'})).to.have.length(1);
-        done();  
-      });
-
+      try {
+        configLoader.loadConfig(basepath, this.server, function(err, resources) {
+          if (err) return done(err);
+          expect(resources).to.have.length(6);
+          expect(resources.filter(function(r) { return r.name == 'foo'})).to.have.length(1);
+          expect(resources.filter(function(r) { return r.name == 'bar'})).to.have.length(1);
+          done();  
+        });
+      } catch(e) {}
     });
 
     it('should return a set of resource instances', function(done) {
