@@ -1,5 +1,3 @@
-before_script: "DEBUG=type-loader,config-loader,internal-resources"
-
 language: node_js
 node_js:
   - 0.6
