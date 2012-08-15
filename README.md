@@ -47,7 +47,7 @@ Deployd is a toolkit for building realtime APIs for web and mobile apps. Ready-m
 	cd test-app
 	dpd -o
 
-## liscense
+## license
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
