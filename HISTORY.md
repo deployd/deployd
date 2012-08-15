@@ -1,6 +1,6 @@
 # History
 
-## 0.6
+## 0.6.0
 
 ### Breaking Changes
  - Restructured Deployd app folder structure. Let us know if you need to migrate any 0.5 apps.
