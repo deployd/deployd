@@ -62,7 +62,7 @@ dpd<%= ns('/' + resourceData.id) %>.get(function (result, err) {
   console.log(result);
 });</pre>
 
-    <p>Get all the objects in the <code><%= '/' + resourceData.id %></code> collection that match a <a href="http://www.mongodb.org/display/DOCS/Advanced+Queries">query</a>:</p>
+    <p>Get all the objects in the <code><%= '/' + resourceData.id %></code> collection that match a <a href="http://www.deployd.com/docs/resources/collection.html#docs-querying-data">query</a>:</p>
     <pre class="code prettyprint">
 var query = <%= getObj() %>;
 
@@ -76,7 +76,7 @@ dpd<%= ns('/' + resourceData.id) %>.first("000000000000000000000000", function (
   console.log(result);
 });</pre>
 
-    <p>Get a single object in the <code><%= '/' + resourceData.id %></code> collection that matches a <a href="http://www.mongodb.org/display/DOCS/Advanced+Queries">query</a>:</p>
+    <p>Get a single object in the <code><%= '/' + resourceData.id %></code> collection that matches a <a href="http://www.deployd.com/docs/resources/collection.html#docs-querying-data">query</a>:</p>
     <pre class="code prettyprint">
 var query = <%= getObj() %>;
 
@@ -114,35 +114,35 @@ dpd<%= ns('/' + resourceData.id) %>.del("000000000000000000000000", function (er
           </tr>
           <tbody>
             <tr>
-              <td><a href="http://deployd.github.com/deployd/#Listing-data" target="_blank">Listing data</a></td>
+              <td><a href="http://www.deployd.com/docs/resources/collection.html#docs-listing-data" target="_blank">Listing data</a></td>
               <td>GET</td>
               <td><a href="<%- '/' + resourceData.id %>" target="_blank"><%- '/' + resourceData.id %></a></td>
               <td><em>Nothing</em></td>
               <td>An array of objects</td>
             </tr>
             <tr>
-              <td><a href="http://deployd.github.com/deployd/#Saving-data" target="_blank">Creating an object</a></td>
+              <td><a href="http://www.deployd.com/docs/resources/collection.html#docs-creating-an-object" target="_blank">Creating an object</a></td>
               <td>POST</td>
               <td><%- '/' + resourceData.id %></td>
               <td>A single object</td>
               <td>The saved object (or errors)</td>
             </tr>
             <tr>
-              <td><a href="http://deployd.github.com/deployd/#Retrieving-a-specific-object" target="_blank">Getting an object</a></td>
+              <td><a href="http://www.deployd.com/docs/resources/collection.html#docs-getting-a-single-object" target="_blank">Getting an object</a></td>
               <td>GET</td>
               <td><%- '/' + resourceData.id %>/&lt;id&gt;</td>
               <td><em>Nothing</em></td>
               <td>A single object</td>
             </tr>
             <tr>
-              <td><a href="http://deployd.github.com/deployd/#Updating-an-object" target="_blank">Updating an object</a></td>
+              <td><a href="http://www.deployd.com/docs/resources/collection.html#docs-updating-an-object" target="_blank">Updating an object</a></td>
               <td>PUT</td>
               <td><%- '/' + resourceData.id %>/&lt;id&gt;</td>
               <td>A single object</td>
               <td>The saved object (or errors)</td>
             </tr>
             <tr>
-              <td><a href="http://deployd.github.com/deployd/#Deleting-an-object" target="_blank">Deleting an object</a></td>
+              <td><a href="http://www.deployd.com/docs/resources/collection.html#docs-deleting-an-object" target="_blank">Deleting an object</a></td>
               <td>DELETE</td>
               <td><%- '/' + resourceData.id %>/&lt;id&gt;</td>
               <td>A single object</td>
@@ -150,21 +150,21 @@ dpd<%= ns('/' + resourceData.id) %>.del("000000000000000000000000", function (er
             </tr>
             <% if (resourceData.type === 'UserCollection') { %>
               <tr>
-                <td><a href="http://deployd.github.com/deployd/#Authenticating-a-user" target="_blank">Logging in</a></td>
+                <td><a href="http://www.deployd.com/docs/resources/user-collection.html#docs-logging-in" target="_blank">Logging in</a></td>
                 <td>POST</td>
                 <td><%- '/' + resourceData.id %>/login</td>
                 <td><code>username</code> and <code>password</code> of user</td>
                 <td>The user, plus session cookie (or error)</td>
               </tr>
               <tr>
-                <td><a href="http://deployd.github.com/deployd/#Logging-out" target="_blank">Logging out</a></td>
+                <td><a href="http://www.deployd.com/docs/resources/user-collection.html#docs-logging-out" target="_blank">Logging out</a></td>
                 <td>POST</td>
                 <td><%- '/' + resourceData.id %>/logout</td>
                 <td><em>Nothing</em></td>
                 <td><em>Nothing</em></td>
               </tr>
               <tr>
-                <td><a href="http://deployd.github.com/deployd/#Current-user" target="_blank">Getting the current user</a></td>
+                <td><a href="http://www.deployd.com/docs/resources/user-collection.html#docs-getting-the-current-user" target="_blank">Getting the current user</a></td>
                 <td>GET</td>
                 <td><a href="<%- '/' + resourceData.id %>/me" target="_blank"><%- '/' + resourceData.id %>/me</a></td>
                 <td><em>Nothing</em></td>
