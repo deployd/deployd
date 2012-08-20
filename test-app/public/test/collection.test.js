@@ -79,6 +79,16 @@ describe('Collection', function() {
       });
     });
 
+    describe('.post({}, fn)', function() {
+      it('should return a validation error', function(done) {
+        dpd.todos.post({}, function(res, err) {
+          expect(err).to.exist;
+          expect(err.errors.title).to.be.ok;
+          done();
+        });
+      });
+    });
+
     describe('.post({message: "notvalid"}, fn)', function() {
       it('should properly return an error', function(done) {
         dpd.todos.post({message: "notvalid"}, function(result, err) {
@@ -90,11 +100,11 @@ describe('Collection', function() {
       });
     });
 
-    describe('.post({title: 7}, fn)', function() {
-      it('should sanitize the title due to incorrect type', function(done) {
-        dpd.todos.post({title: 7}, function (todo, err) {
+    describe('.post({title: "foo", owner: 7}, fn)', function() {
+      it('should sanitize the owner due to incorrect type', function(done) {
+        dpd.todos.post({title: "foo", owner: 7}, function (todo, err) {
           delete todo.id;
-          expect(todo).to.eql({done: false});
+          expect(todo).to.eql({title: "foo", done: false});
           done()
         })
       })

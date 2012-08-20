@@ -28,7 +28,7 @@
 		"order": {
 			"required": false,
 			"type": "number",
-			"typeLabel": "string",
+			"typeLabel": "number",
 			"id": "order",
 			"name": "order",
 			"order": 3
@@ -43,7 +43,7 @@
 			"$renameFrom": "messages"
 		},
 		"title": {
-			"required": false,
+			"required": true,
 			"type": "string",
 			"typeLabel": "string",
 			"id": "title",
