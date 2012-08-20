@@ -70,6 +70,13 @@ describe('User Collection', function() {
 					})
 				})
 			})
+
+      it('should not crash the server when called without a body', function(done) {
+        dpd.users.login(null, function(session, err) {
+          expect(err).to.exist;
+          done();
+        });
+      });
 		})
 		describe('.me(fn)', function() {
 			it('should return the current user', function(done) {
