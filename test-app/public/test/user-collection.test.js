@@ -29,6 +29,35 @@ describe('User Collection', function() {
 					done();
 				});
 			});
+
+      it('should properly show username and password errors', function(done) {
+        dpd.users.post({}, function(res, err) {
+          expect(res).to.not.exist;
+          expect(err.errors.username).to.be.ok;
+          expect(err.errors.password).to.be.ok;
+          done();
+        });
+      });
+
+      it('should update if id is passed in the body', function(done) {
+        chain(function(next) {
+          dpd.users.post({username: 'foo', password: 'bar'}, next);
+        }).chain(function(next, res, err) {
+          dpd.users.post({id: res.id, username: 'test'}, next);
+        }).chain(function(next, res, err) {
+          done(err);
+        })
+      });
+
+      it('should update if id is passed in the url', function(done) {
+        chain(function(next) {
+          dpd.users.post({username: 'foo', password: 'bar'}, next);
+        }).chain(function(next, res, err) {
+          dpd.users.post(res.id, {username: 'test'}, next);
+        }).chain(function(next, res, err) {
+          done(err);
+        })
+      });
 		})
 		describe('.login(credentials, fn)', function() {
 			it('should login a user', function(done) {
@@ -41,6 +70,13 @@ describe('User Collection', function() {
 					})
 				})
 			})
+
+      it('should not crash the server when called without a body', function(done) {
+        dpd.users.login(null, function(session, err) {
+          expect(err).to.exist;
+          done();
+        });
+      });
 		})
 		describe('.me(fn)', function() {
 			it('should return the current user', function(done) {
@@ -79,25 +115,37 @@ describe('User Collection', function() {
       })
       
       it('should respond to the built-in changed event on put', function(done) {
-        dpd.todos.post({username: 'foo2@bar.com', password: '123456'}, function(item) {
-          dpd.todos.on('changed', function() {
+        dpd.users.post({username: 'foo2@bar.com', password: '123456'}, function(item) {
+          dpd.users.on('changed', function() {
             done();
           });
           
-          dpd.todos.put(item.id, {username: 'foo3@bar.com'});
+          dpd.users.put(item.id, {username: 'foo3@bar.com'});
         });
       })
       
       it('should respond to the built-in changed event on del', function(done) {
-        dpd.todos.post({title: 'changed - create'}, function(item) {
-          dpd.todos.on('changed', function() {
+        dpd.users.post({username: 'foo2@bar.com', password: '123456'}, function(item) {
+          dpd.users.on('changed', function() {
             done();
           });
           
-          dpd.todos.del(item.id);
+          dpd.users.del(item.id);
         });
       })
     })
+
+    describe('dpd.users.put({}, fn)', function() {
+      it('should allow omitting username and password', function(done) {
+        chain(function(next) {
+          dpd.users.post({username: 'foo', password: 'bar'}, next);
+        }).chain(function(next, res, err) {
+          dpd.users.put(res.id, {username: 'test'}, next);
+        }).chain(function(next, res, err) {
+          done(err);
+        })
+      });
+    });
 	})
 
 	afterEach(function (done) {
