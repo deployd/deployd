@@ -1,5 +1,13 @@
 # History
 
+## 0.6.1
+
+ - Bumped the default recursion limit to 2 levels
+ - Fixed rare case where a resource's dashboard would not load
+ - Fixed user events
+ - Fixed several validation bugs
+ - In a UserCollection /users/me will return 204 instead of 401
+
 ## 0.6.0
 
 ### Breaking Changes
