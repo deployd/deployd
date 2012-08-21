@@ -4927,12 +4927,23 @@ textarea {
   color: #ffffff;
   border: solid 1px #363535;
 }
+#dialog,
+.modal {
+  color: #666666;
+}
+#dialog label,
+.modal label,
+#dialog input,
+.modal input,
+#dialog textarea,
+.modal textarea {
+  color: #666666 !important;
+}
 #dialog input,
 .modal input,
 #dialog textarea,
 .modal textarea {
   background-color: #ffffff;
-  color: #666666;
 }
 label {
   color: #ffffff !important;
