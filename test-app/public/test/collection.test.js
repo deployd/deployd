@@ -389,7 +389,7 @@ describe('Collection', function() {
       });
     });
 
-    it('should only go one level deep', function(done) {
+    it('should only go two levels deep', function(done) {
       this.timeout(1000);
       dpd.recursive.get(function(result, err) {
         var obj = result[0];
@@ -397,8 +397,29 @@ describe('Collection', function() {
         expect(obj).to.exist;
 
         expect(obj.more).to.exist;
-        expect(obj.more.length).to.equal(1);
-        expect(obj.more[0].more).to.not.be.ok;
+        expect(obj.more[0]).to.exist;
+        expect(obj.more[0].more).to.exist;
+        expect(obj.more[0].more[0]).to.exist;
+        expect(obj.more[0].more[0].more).to.not.exist;
+        done(err);
+      });
+    });
+
+    it('should be customizable', function(done) {
+      this.timeout(1000);
+      dpd.recursive.get({$limitRecursion: 10}, function(result, err) {
+        var obj = result[0];
+        expect(result.length).to.equal(1);
+        expect(obj).to.exist;
+        expect(obj.more).to.exist;
+
+        var current = obj.more[0];
+        for (var i = 0; i < 9; i++) {
+          expect(current).to.exist;
+          expect(current.more).to.exist;
+          current = current.more[0];
+        };
+        expect(current.more).to.not.exist;
         done(err);
       });
     });
