@@ -6,6 +6,7 @@ describe('Collection', function() {
 
     describe('dpd.on("createTodo", fn)', function() {
       it('should respond to a realtime event', function(done) {
+        this.timeout(1500);
         dpd.on('createTodo', function(todo) {
           expect(todo).to.exist;
           expect(todo.title).to.equal('$REALTIME');
@@ -269,6 +270,41 @@ describe('Collection', function() {
           dpd.todos.get(result.id, next);
         }).chain(function(next, result) {
           expect(result.title).to.equal('foobar');
+          expect(result.done).to.equal(true);
+          done();
+        })
+      });
+    });
+
+    describe('.put(id, {done: true}, fn)', function() {
+      it('should be able to access old properties in On Put', function(done) {
+        chain(function(next) {
+          dpd.todos.post({title: '$PUT_TEST', message: "x"}, next)
+        }).chain(function(next, result) {
+          dpd.todos.put(result.id, {done: true}, next)
+        }).chain(function(next, result) {
+          expect(result.message).to.equal("xx");
+          dpd.todos.get(result.id, next);
+        }).chain(function(next, result) {
+          expect(result.message).to.equal("xx");
+          expect(result.done).to.equal(true);
+          done();
+        })
+      });
+    });
+
+    describe('.put(id, {done: true}, fn)', function() {
+      it('should be able to access old properties in On Validate', function(done) {
+        chain(function(next) {
+          dpd.todos.post({title: '$VALIDATE_TEST', message: ""}, next)
+        }).chain(function(next, result) {
+          expect(result.message).to.equal("x");
+          dpd.todos.put(result.id, {done: true}, next)
+        }).chain(function(next, result) {
+          expect(result.message).to.equal("xx");
+          dpd.todos.get(result.id, next);
+        }).chain(function(next, result) {
+          expect(result.message).to.equal("xx");
           expect(result.done).to.equal(true);
           done();
         })

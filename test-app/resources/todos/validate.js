@@ -5,3 +5,7 @@ if (this.message === 'notvalid') {
 if (this.title === 'notvalid') {
     error('title', "Title must not be notvalid");
 }
+
+if (this.title === '$VALIDATE_TEST') {
+  this.message += "x";
+}

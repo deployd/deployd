@@ -161,19 +161,19 @@
       , i = 0;
 
     // path/func
-    if (typeof args[i] === 'string') {
+    if (typeof args[i] === 'string' || !args[i]) {
       settings.path = args[i];
       i++;
     }
 
     // join path to func
-    if (typeof args[i] === 'string') {
+    if (typeof args[i] === 'string' || !args[i]) {
       settings.path = joinPath(settings.path, args[i]);
       i++;
     }
 
     // query
-    if (typeof args[i] === 'object') {
+    if (typeof args[i] === 'object' || !args[i]) {
       settings.query = args[i];
       i++;
     }
@@ -188,7 +188,7 @@
       , i = 0;
 
     //path
-    if (typeof args[i] === 'string') {
+    if (typeof args[i] === 'string' || !args[i]) {
       settings.path = args[i];
       i++;
     }
