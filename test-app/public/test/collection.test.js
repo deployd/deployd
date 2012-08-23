@@ -119,6 +119,26 @@ describe('Collection', function() {
       });
     });
 
+    describe('.get(fn)', function() {
+      it('should not return any cancelled objects', function(done) {
+
+        chain(function(next) {
+          dpd.todos.post({title: "This one is OK"}, next);
+        }).chain(function(next, res, err) {
+          if (err) return done(err);
+          dpd.todos.post({title: "$GET_CANCEL"}, next);
+        }).chain(function(next, res, err) {
+          if (err) return done(err);
+          dpd.todos.get(next);
+        }).chain(function(next, res, err) {
+          if (err) return done(err);
+          expect(res.length).to.equal(1);
+          expect(res[0].title).to.equal("This one is OK");
+          done();
+        })
+      })
+    })
+
     describe('.get({title: title}, fn)', function() {
       it('should return a single result', function(done) {
         var title = Math.random().toString();

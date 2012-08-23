@@ -3,6 +3,10 @@ if (query.title === "$FAIL2") {
     x.fail();
 }
 
+if (this.title === "$GET_CANCEL") {
+  cancel("Cancelled");
+}
+
 if (query.title === "$TESTFAIL2") {
     dpd.todos.get({title: "$FAIL2"}, function(todo, err) {
         this.todo = todo;
