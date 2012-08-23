@@ -26,5 +26,5 @@ if (this.title === "$CANCEL_TEST") {
 }
 
 if (this.title === "$INTERNAL_CANCEL_TEST") {
-  cancel('internal cancel');
+  if (!internal) cancel('internal cancel');
 }
