@@ -440,7 +440,7 @@ describe('Collection', function() {
 
   describe('dpd.recursive', function() {
     beforeEach(function(done) {
-      dpd.recursive.post({name: "dataception"}, function() {
+      dpd.recursive.post({name: "dataception"}, function(res) {
         done();
       });
     });
@@ -478,6 +478,27 @@ describe('Collection', function() {
         expect(current.more).to.not.exist;
         done(err);
       });
+    });
+
+    it('should not change a query', function(done) {
+      this.timeout(1000);
+      chain(function(next) {
+        dpd.recursive.post({name: "test2"}, next);
+      }).chain(function(next) {
+        dpd.recursive.post({name: "test3"}, next);
+      }).chain(function(next) {
+        dpd.recursive.get({$limitRecursion: 10, mode: "self"}, next)
+      }).chain(function(next, res, err) {
+        if (err) return done(err);
+        expect(res.length).to.equal(3);
+        res.forEach(function(x) {
+          var self = x.self;
+          expect(self).to.exist;
+          expect(self.name).to.equal(x.name);
+          expect(self.id).to.equal(x.id);
+          expect(self.randQuery).to.equal(x.rand);
+        });
+      })
     });
 
     afterEach(function (done) {
