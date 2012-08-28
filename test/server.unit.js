@@ -3,12 +3,6 @@ var Server = require('../lib/server')
 	,	Store = require('../lib/db').Store
 	, Router = require('../lib/router');
 
-function genPort() {
-  var min = 6666, max = 9999;
-  var result = min + (Math.random() * (max - min))
-  return Math.floor(result);
-}
-
 describe('Server', function() {
 	describe('.listen()', function() {
 		it('should start a new deployd server', function(done) {

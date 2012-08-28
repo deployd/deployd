@@ -10,9 +10,17 @@ mongodb = require('mongodb');
 var Stream = require('stream');
 sh = require('shelljs');
 
+// port generation
+genPort = function() {
+  var min = 6666, max = 9999;
+  var result = min + (Math.random() * (max - min))
+  return Math.floor(result);
+}
+
+
 // request mock
-var port = 7000;
 freq = function(url, options, fn, callback) {
+  var port = genPort();
   options = options || {};
   options.url = 'http://localhost:' + port + url;
   var s = http.createServer(function (req, res) {
@@ -29,7 +37,7 @@ freq = function(url, options, fn, callback) {
     }
     fn(req, res);
   })
-  .listen(port++)
+  .listen(port)
   .on('listening', function () {
     request(options);
   })
