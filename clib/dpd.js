@@ -11,8 +11,10 @@
 /** Main Body **/
 (function ($, undefined) {
 
+  var root = window.location.origin;
+
   // initial socket connection
-  var socket = io.connect(window.location.origin);
+  var socket = io.connect(root);
 
   if(!$) throw Error('dpd.js depends on jQuery.ajax - you must include it before loading dpd.js');
 
@@ -115,7 +117,7 @@
     get: function(options, fn) {
       var query = encodeIfComplex(options.query);
 
-      return $.ajax(joinPath(BASE_URL, options.path), {
+      return $.ajax(root + joinPath(BASE_URL, options.path), {
           type: "GET"
         , data: query
         , success: returnSuccess(fn)
@@ -127,7 +129,7 @@
       if (query) query = '?' + query;
       else query = '';
 
-      return $.ajax(joinPath(BASE_URL, options.path) + query, {
+      return $.ajax(root + joinPath(BASE_URL, options.path) + query, {
           type: "DELETE"
         , success: returnSuccess(fn)
         , error: returnError(fn)
@@ -138,7 +140,7 @@
       if (query) query = '?' + query;
       else query = '';
 
-      return $.ajax(joinPath(BASE_URL, options.path) + query, {
+      return $.ajax(root + joinPath(BASE_URL, options.path) + query, {
           type: method
         , contentType: "application/json"
         , data: JSON.stringify(options.body || {})
