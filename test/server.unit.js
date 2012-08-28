@@ -3,23 +3,31 @@ var Server = require('../lib/server')
 	,	Store = require('../lib/db').Store
 	, Router = require('../lib/router');
 
+function genPort() {
+  var min = 6666, max = 9999;
+  var result = min + (Math.random() * (max - min))
+  return Math.floor(result);
+}
+
 describe('Server', function() {
 	describe('.listen()', function() {
 		it('should start a new deployd server', function(done) {
-			var server = new Server()
-				,	defaultOptions = {
-					port: 2403,
+		  var PORT = genPort();
+			var opts = {
+					port: PORT,
 					db: {
 						name: 'deployd',
 						port: 27017,
 						host: '127.0.0.1'
 					}
-				};
-
+			};
+			var server = new Server(opts);
+				
 			server.listen();
 			expect(server.db instanceof	Db).to.equal(true);
-			expect(server.options).to.eql(defaultOptions);
+			expect(server.options).to.eql(opts);
 			server.on('listening', function () {
+			  server.close();
 				done();
 			});
 		});
