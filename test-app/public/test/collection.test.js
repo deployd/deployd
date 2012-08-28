@@ -498,6 +498,7 @@ describe('Collection', function() {
           expect(self.id).to.equal(x.id);
           expect(self.randQuery).to.equal(x.rand);
         });
+        done();
       })
     });
 
