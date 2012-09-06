@@ -10,7 +10,7 @@ describe('uuid', function() {
 		var i = 1000; // replace this with a larger number to really test
 		while(i--) {
 			var next = uuid.create();
-			if(used[next]) throw 'already used'
+			if(used[next]) throw 'already used';
 			used[next] = 1;
 		}
 	});
@@ -36,8 +36,8 @@ describe('.parseBody()', function() {
       setHeader: function () {
         
       }
-    }
-  })
+    };
+  });
 
   it ('should parse json', function(done) {
     var obj = {foo: 'bar'}
@@ -53,8 +53,8 @@ describe('.parseBody()', function() {
   });
 
   it('should parse json in chunks', function(done) {
-  	var req = new Stream()
-      , chunks = ['{"fo',
+    var req = new Stream()
+      , chunks = ['{"fo'
                 , 'o": "bar"'
                 , ', "bar"'
                 , ': "baz"'
@@ -67,7 +67,7 @@ describe('.parseBody()', function() {
     });
     chunks.forEach(function(c) {
       req.emit('data', c);
-    })
+    });
     req.emit('end');
   });
 

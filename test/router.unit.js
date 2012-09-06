@@ -48,7 +48,7 @@ describe('Router', function() {
         next();
       };
       foo.handle = function() {
-        expect(foobarCalled).to.be.true
+        expect(foobarCalled).to.be['true'];
         done();
       };
 
@@ -62,7 +62,7 @@ describe('Router', function() {
       this.timeout(100);
       
       foo.handle = function() {
-        throw "/foo was handled"
+        throw "/foo was handled";
       };
 
       router.route({url: '/dont-match'}, {end: function() {
@@ -102,7 +102,7 @@ describe('Router', function() {
       foo.handle = function(ctx, res) {
         expect(ctx.url).to.equal('/1234');
         done();
-      }
+      };
 
       router.route({url: '/foo/1234'}, {});
     });
@@ -116,7 +116,7 @@ describe('Router', function() {
       resource.handle = function(ctx, res) {
         expect(ctx.url).to.equal('/index.html');
         done();
-      }
+      };
 
       router.route({url: '/index.html'}, {});
     });
@@ -137,7 +137,7 @@ describe('Router', function() {
     });
 
     function paths(result) {
-      return result.map(function(r) { return r.path });
+      return result.map(function(r) { return r.path; });
     }
 
     it ('should match /index.html to /', function() {
@@ -216,7 +216,7 @@ describe('Router', function() {
       expect('/food', '/foo', false);
       // TODO: I think this one's OK
       // example('/foo', '/foo/../bar', false);
-    })
+    });
 
   });
 

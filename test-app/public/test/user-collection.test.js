@@ -1,7 +1,7 @@
 var credentials = {
 	username: 'foo@bar.com',
 	password: '123456'
-}
+};
 
 describe('User Collection', function() {
 	describe('dpd.users', function() {
@@ -11,12 +11,12 @@ describe('User Collection', function() {
 					if(!user) {
 						throw 'user did not exist';
 					}
-					expect(user.id.length).to.equal(16)
+					expect(user.id.length).to.equal(16);
 					delete user.id;
 					expect(user).to.eql({username: credentials.username});
 					done(err);
-				})
-			})
+				});
+			});
 
 			it('should validate for duplicate username', function(done) {
 				chain(function(next) {
@@ -46,7 +46,7 @@ describe('User Collection', function() {
           dpd.users.post({id: res.id, username: 'test'}, next);
         }).chain(function(next, res, err) {
           done(err);
-        })
+        });
       });
 
       it('should update if id is passed in the url', function(done) {
@@ -56,20 +56,20 @@ describe('User Collection', function() {
           dpd.users.post(res.id, {username: 'test'}, next);
         }).chain(function(next, res, err) {
           done(err);
-        })
+        });
       });
-		})
+		});
 		describe('.login(credentials, fn)', function() {
 			it('should login a user', function(done) {
 				dpd.users.post(credentials, function (user, err) {
-					expect(user.id.length).to.equal(16)
+					expect(user.id.length).to.equal(16);
 					dpd.users.login(credentials, function (session, err) {
-						expect(session.id.length).to.equal(128)
-						expect(session.uid.length).to.equal(16)
+						expect(session.id.length).to.equal(128);
+						expect(session.uid.length).to.equal(16);
 						done(err);
-					})
-				})
-			})
+					});
+				});
+			});
 
       it('should not crash the server when called without a body', function(done) {
         dpd.users.login(null, function(session, err) {
@@ -77,34 +77,34 @@ describe('User Collection', function() {
           done();
         });
       });
-		})
+		});
 		describe('.me(fn)', function() {
 			it('should return the current user', function(done) {
 				dpd.users.post(credentials, function (user, err) {
-					expect(user.id.length).to.equal(16)
+					expect(user.id.length).to.equal(16);
 					dpd.users.login(credentials, function (session, err) {
 						dpd.users.me(function (me, err) {
 							expect(me).to.exist;
 							expect(me.id.length).to.equal(16);
 							done(err);
-						})
-					})
-				})
-			})
-		})
+						});
+					});
+				});
+			});
+		});
 		describe('.del({id: \'...\'}, fn)', function() {
 			it('should remove a user', function(done) {
 				dpd.users.post(credentials, function (user, err) {
-					expect(user.id.length).to.equal(16)
+					expect(user.id.length).to.equal(16);
 					dpd.users.del({id: user.id}, function (session, err) {
 						dpd.users.get({id: user.id}, function (user) {
 							expect(user).to.not.exist;
 							done(err);
-						})
-					})
-				})
-			})
-		})
+						});
+					});
+				});
+			});
+		});
 		describe('dpd.users.on("changed", fn)', function() {
       it('should respond to the built-in changed event on post', function(done) {
         dpd.users.on('changed', function() {
@@ -112,7 +112,7 @@ describe('User Collection', function() {
         });
 
         dpd.users.post({username: 'foo@bar.com', password: '123456'});
-      })
+      });
       
       it('should respond to the built-in changed event on put', function(done) {
         dpd.users.post({username: 'foo2@bar.com', password: '123456'}, function(item) {
@@ -122,7 +122,7 @@ describe('User Collection', function() {
           
           dpd.users.put(item.id, {username: 'foo3@bar.com'});
         });
-      })
+      });
       
       it('should respond to the built-in changed event on del', function(done) {
         dpd.users.post({username: 'foo2@bar.com', password: '123456'}, function(item) {
@@ -132,8 +132,8 @@ describe('User Collection', function() {
           
           dpd.users.del(item.id);
         });
-      })
-    })
+      });
+    });
 
     describe('dpd.users.put({}, fn)', function() {
       it('should allow omitting username and password', function(done) {
@@ -143,10 +143,10 @@ describe('User Collection', function() {
           dpd.users.put(res.id, {username: 'test'}, next);
         }).chain(function(next, res, err) {
           done(err);
-        })
+        });
       });
     });
-	})
+	});
 
 	afterEach(function (done) {
 		this.timeout(10000);
@@ -160,11 +160,11 @@ describe('User Collection', function() {
 						if(!total) {
 							done();
 						}
-					})
-				})
-			})			
-		})
-	})
+					});
+				});
+			});
+		});
+	});
 
-})
+});
 

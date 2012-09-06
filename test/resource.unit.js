@@ -10,13 +10,13 @@ describe('resource', function(){
         this.on('test', function(data) {
           expect(data).to.equal('foo');
           done();
-        })
+        });
       }
       util.inherits(Test, Resource);
       var t = new Test();
       t.emit('test', 'foo');
-    })
-  })
+    });
+  });
   
   describe('.parse(url)', function(){
     function example(url, basepath, id, parts, query) {
@@ -35,8 +35,8 @@ describe('resource', function(){
       example('/foo/bat/baz', 'foo', 'baz', ['foo', 'bat', 'baz']);
       // should also auto encode q={...}
       example('/foo/boo/bar/baz?q=' + encodeURI(JSON.stringify({"a":"b"})), 'foo', 'baz', ['foo', 'boo', 'bar', 'baz'], {'q':{'a': 'b'}});
-    })
-  })
+    });
+  });
   
   describe('.handle(ctx, next)', function(){
     it('should respond with 200 OK', function(done) {
@@ -47,8 +47,8 @@ describe('resource', function(){
       }, function (req, res) {
         expect(res.statusCode).to.equal(200);
         done();
-      })
-    })
-  })
+      });
+    });
+  });
   
-})
+});

@@ -10,9 +10,9 @@ beforeEach(function(done){
       expect(err).to.not.exist;
       expect(result).to.eql([]);
       done(err);
-    })
-  })
-})
+    });
+  });
+});
 
 describe('db', function(){
   describe('.connect(options)', function(){
@@ -22,9 +22,9 @@ describe('db', function(){
       tester.on('connected', function () {
         done();
       });
-    })
-  })
-})
+    });
+  });
+});
 
 describe('db', function(){
   // TODO: this takes forever, move to integration?
@@ -38,13 +38,13 @@ describe('db', function(){
   //           store.find(function (err, res) {
   //             expect(res).to.not.exist;
   //             done(err);
-  //           })
-  //         })
-  //       })
-  //     })
-  //   })
-  // })
-})
+  //           });
+  //         });
+  //       });
+  //     });
+  //   });
+  // });
+});
 
 describe('store', function(){
 
@@ -53,8 +53,8 @@ describe('store', function(){
       store.find(function (err, empty) {
         expect(empty).to.eql([]);
         done(err);
-      })
-    })
+      });
+    });
     
     it('should pass the query to the underlying database', function(done) {
       store.insert([{i:1},{i:2},{i:3}], function () {
@@ -65,9 +65,9 @@ describe('store', function(){
           });
           expect(result).to.have.length(2);
           done(err);
-        })
-      })
-    })
+        });
+      });
+    });
 
     describe('.find({$limit: n}, fn)', function() {
       it('should limit the result', function(done) {
@@ -76,10 +76,10 @@ describe('store', function(){
             expect(result).to.exist;
             expect(result).to.have.length(2);
             done(err);
-          })
-        })
-      })
-    })
+          });
+        });
+      });
+    });
 
     describe('.find({$skip: n}, fn)', function() {
       it('should skip the n results', function(done) {
@@ -88,25 +88,25 @@ describe('store', function(){
             expect(result).to.exist;
             expect(result[0].i).to.equal(33333);
             done(err);
-          })
-        })
-      })
-    })
-  })
+          });
+        });
+      });
+    });
+  });
 
   describe('.identify(object)', function() {
     it('should add an _id to the object', function() {
       var object = {};
       store.identify(object);
       expect(object._id.length).to.equal(16);
-    })
+    });
 
     it('should change _id to id', function() {
       var object = {_id: 'aaaaaaaabbbbbbbb'};
       store.identify(object);
       expect(object.id.length).to.equal(16);
-    })
-  })
+    });
+  });
   
   describe('.remove(query, fn)', function(){
     it('should remove all the objects that match the query', function(done) {
@@ -116,10 +116,10 @@ describe('store', function(){
           store.find(function (err, result) {
             expect(result).to.have.length(1);
             done(err);
-          })
-        })
-      })
-    })
+          });
+        });
+      });
+    });
     
     it('should remove all the objects', function(done) {
       store.insert([{i:1},{i:2},{i:3}], function () {
@@ -128,11 +128,11 @@ describe('store', function(){
           store.find(function (err, result) {
             expect(result).to.eql([]);
             done(err);
-          })
-        })
-      })
-    })
-  })
+          });
+        });
+      });
+    });
+  });
   
   describe('.insert(namespace, object, fn)', function(){
     it('should insert the given object into the namespace', function(done) {
@@ -140,8 +140,8 @@ describe('store', function(){
         expect(result.id).to.exist;
         expect(result.testing).to.equal(123);
         done();
-      })
-    })
+      });
+    });
     
     it('should insert the given array into the namespace', function(done) {
       store.insert([{a:1}, {b:2}], function (err, result) {
@@ -152,9 +152,9 @@ describe('store', function(){
         expect(result[1].b).to.equal(2);
         expect(result).to.have.length(2);
         done(err);
-      })
-    })
-  })
+      });
+    });
+  });
   
   describe('.update(query, updates, fn)', function(){
     it('should update only the properties provided', function(done) {
@@ -166,10 +166,10 @@ describe('store', function(){
           store.first(query, function (err, result) {
             expect(result.foo).to.equal('baz');
             done(err);
-          })
-        })
-      })
-    })
+          });
+        });
+      });
+    });
     
     it('should rename all objects', function(done) {
       store.insert([{foo: 'bar'}, {foo: 'bat'}, {foo: 'baz'}], function (err) {
@@ -182,11 +182,11 @@ describe('store', function(){
               expect(item.foo).to.not.exist;
             });
             done(err);
-          })
-        })
-      })
-    })
-  })
+          });
+        });
+      });
+    });
+  });
   
   describe('.rename(namespace, fn)', function(){
     it('should rename the underlying database representation of the store', function(done) {
@@ -200,11 +200,11 @@ describe('store', function(){
                 expect(result).to.exist;
                 expect(result).to.have.length(2);
                 done(err);
-              })
-            })
-          })
-        })
-      })
-    })
-  })
-})
+              });
+            });
+          });
+        });
+      });
+    });
+  });
+});

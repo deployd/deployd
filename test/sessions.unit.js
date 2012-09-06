@@ -21,8 +21,8 @@ describe('SessionStore', function() {
 				,	sid = store.createUniqueIdentifier();
 
 			expect(sid.length).to.equal(128);
-		})
-	})
+		});
+	});
 
 	describe('.createSession(fn)', function() {
 		it('should create a session', function(done) {
@@ -32,10 +32,10 @@ describe('SessionStore', function() {
 			store.createSession(function (err, session) {
 				expect(session.sid).to.have.length(128);
 				done(err);
-			})
-		})
-	})
-})
+			});
+		});
+	});
+});
 
 describe('Session', function() {
 	function createSession(fn) {
@@ -44,7 +44,7 @@ describe('Session', function() {
 		store.createSession(function (err, session) {
 			expect(session.sid).to.have.length(128);
 			fn(err, session);
-		})
+		});
 	}
 
 
@@ -89,9 +89,9 @@ describe('Session', function() {
 				session.set({foo: 'bar'});
 				expect(session.data).to.eql({id: session.sid, foo: 'bar'});
 				done(err);
-			})
-		})
-	})
+			});
+		});
+	});
 
 	describe('.save(fn)', function() {
 		it('should persist the session data in the store', function(done) {
@@ -100,11 +100,11 @@ describe('Session', function() {
 					session.store.first({id: session.sid}, function (err, sdata) {
 						expect(sdata.foo).to.equal('bar');
 						done(err);
-					})
-				})
-			})
-		})
-	})
+					});
+				});
+			});
+		});
+	});
 
 	describe('.remove(fn)', function() {
 		it('should remove the session data from the store', function(done) {
@@ -116,13 +116,13 @@ describe('Session', function() {
 							session.store.first({id: session.sid}, function (err, sdata) {
 								expect(sdata).to.not.exist;
 								done(err);
-							})
-						})
-					})
-				})
-			})
-		})
-	})
+							});
+						});
+					});
+				});
+			});
+		});
+	});
 
 	describe('.fetch(fn)', function() {
 		it('should fetch the session data from the store', function(done) {
@@ -133,10 +133,10 @@ describe('Session', function() {
 						session.fetch(function (err) {
 							expect(session.data).to.eql({id: session.sid, foo: 'bar'});
 							done(err);
-						})
-					})
-				})
-			})
-		})
-	})
-})
+						});
+					});
+				});
+			});
+		});
+	});
+});

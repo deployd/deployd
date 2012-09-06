@@ -11,7 +11,7 @@ after(function () {
   try {
     fs.unlink(__dirname + '/../test-app/.dpd/deployments.json');
   } catch(e) {}
-})
+});
 
 describe('Deployment', function(){
   it('should sanitize the name', function() {
@@ -25,7 +25,7 @@ describe('Deployment', function(){
     var d = new Deployment(__dirname + '/../test-app');
     d.setConfig('test-app.deploydapp.com', {subdomain: 'abcdefg'});
     // recreate
-    var d = new Deployment(__dirname + '/../test-app');
+    d = new Deployment(__dirname + '/../test-app');
     expect(d.subdomain).to.equal('abcdefg');
   });
   
@@ -87,8 +87,8 @@ describe('Deployment', function(){
       var json = require(__dirname + '/../test-app/.dpd/deployments.json');
       expect(json).to.exist;
       expect(json.foo).to.equal('bar');
-    })
-  })
+    });
+  });
   
   describe('.getConfig()', function(){
     it('should return a persisted config value', function() {
@@ -97,8 +97,8 @@ describe('Deployment', function(){
       d.setConfig('foo', 'bar');
       var val = d.getConfig('foo');
       expect(val).to.equal('bar');
-    })
-  })
+    });
+  });
 
   describe('.publish()', function() {
     it('should make an http request to POSTing a tar, username, key, and subdomain', function(done) {

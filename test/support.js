@@ -13,9 +13,9 @@ sh = require('shelljs');
 // port generation
 genPort = function() {
   var min = 6666, max = 9999;
-  var result = min + (Math.random() * (max - min))
+  var result = min + (Math.random() * (max - min));
   return Math.floor(result);
-}
+};
 
 
 // request mock
@@ -31,7 +31,7 @@ freq = function(url, options, fn, callback) {
         var r = end.apply(res, arguments);
         s.close();
         return r;
-      }
+      };
     } else {
       s.close();
     }
@@ -40,8 +40,8 @@ freq = function(url, options, fn, callback) {
   .listen(port)
   .on('listening', function () {
     request(options);
-  })
-}
+  });
+};
 
 before(function (done) {
   var mdb = new mongodb.Db(TEST_DB.name, new mongodb.Server(TEST_DB.host, TEST_DB.port));
@@ -50,8 +50,8 @@ before(function (done) {
       done(err);
       mdb.close();
     });
-  })
-})
+  });
+});
 
 
 /**
@@ -86,24 +86,24 @@ fauxContext = function(resource, url, input, expectedOutput, behavior) {
       if(expectedOutput && typeof expectedOutput == 'object') expect(res).to.eql(expectedOutput);
       context.done = function() {
         throw 'done called twice...';
-      }
+      };
       if(behavior && behavior.done) behavior.done(err, res);
     },
     res: input.res || new ServerResponse(new ServerRequest())
-  }
+  };
 
   context.res.end = function() {
     context.done();
-  }
+  };
 
   function next(err) {
     if(!(behavior && behavior.next)) {
-      throw new Error('should not call next')
+      throw new Error('should not call next');
     }
     if(behavior && behavior.done) behavior.done(err);
   }
 
   resource.handle(context, next);
-}
+};
 
 

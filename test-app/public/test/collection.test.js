@@ -1,8 +1,8 @@
 describe('Collection', function() {
   describe('dpd.todos', function() {
     it('should exist', function() {
-      expect(dpd.todos).to.exist
-    })
+      expect(dpd.todos).to.exist;
+    });
 
     describe('dpd.on("createTodo", fn)', function() {
       it('should respond to a realtime event', function(done) {
@@ -14,8 +14,8 @@ describe('Collection', function() {
         });
 
         dpd.todos.post({title: '$REALTIME'});
-      })
-    })
+      });
+    });
 
     describe('dpd.on("createTodo2", fn)', function() {
       it('should respond to a realtime event without a parameter', function(done) {
@@ -25,8 +25,8 @@ describe('Collection', function() {
         });
 
         dpd.todos.post({title: '$REALTIME2'});
-      })
-    })
+      });
+    });
     
     describe('dpd.todos.on("changed", fn)', function() {
       it('should respond to the built-in changed event on post', function(done) {
@@ -35,7 +35,7 @@ describe('Collection', function() {
         });
 
         dpd.todos.post({title: 'changed - create'});
-      })
+      });
       
       it('should respond to the built-in changed event on put', function(done) {
         dpd.todos.post({title: 'changed - create'}, function(item) {
@@ -45,7 +45,7 @@ describe('Collection', function() {
           
           dpd.todos.put(item.id, {title: 'changed - updated'});
         });
-      })
+      });
       
       it('should respond to the built-in changed event on del', function(done) {
         dpd.todos.post({title: 'changed - create'}, function(item) {
@@ -55,19 +55,19 @@ describe('Collection', function() {
           
           dpd.todos.del(item.id);
         });
-      })
-    })
+      });
+    });
 
     describe('.post({title: \'faux\'}, fn)', function() {
       it('should create a todo with an id', function(done) {
         dpd.todos.post({title: 'faux'}, function (todo, err) {
-          expect(todo.id.length).to.equal(16)
-          expect(todo.title).to.equal('faux')
-          expect(err).to.not.exist
-          done()
-        })
-      })
-    })
+          expect(todo.id.length).to.equal(16);
+          expect(todo.title).to.equal('faux');
+          expect(err).to.not.exist;
+          done();
+        });
+      });
+    });
 
     describe('.post({title: "notvalid"}, fn)', function() {
       it('should properly return an error', function(done) {
@@ -106,10 +106,10 @@ describe('Collection', function() {
         dpd.todos.post({title: "foo", owner: 7}, function (todo, err) {
           delete todo.id;
           expect(todo).to.eql({title: "foo", done: false});
-          done()
-        })
-      })
-    })
+          done();
+        });
+      });
+    });
 
     describe('.post({title: "$TESTFAIL", fn)', function() {
       it('should correctly respond to errors in event IO', function(done) {
@@ -136,9 +136,9 @@ describe('Collection', function() {
           expect(res.length).to.equal(1);
           expect(res[0].title).to.equal("This one is OK");
           done();
-        })
-      })
-    })
+        });
+      });
+    });
 
     describe('.get({title: title}, fn)', function() {
       it('should return a single result', function(done) {
@@ -149,11 +149,11 @@ describe('Collection', function() {
             dpd.todos.get({title: title}, function (todos, err) {
               expect(todos.length).to.equal(1);
               done(err);
-            })  
-          })
-        })
-      })
-    })
+            });
+          });
+        });
+      });
+    });
 
     describe('.get({$sort: {title: 1}}, fn)', function() {
       it('should order by title', function(done) {
@@ -164,7 +164,7 @@ describe('Collection', function() {
         }).chain(function(next) {
           dpd.todos.post({title: "B"}, next);
         }).chain(function(next) {
-          dpd.todos.get({$sort: {title: 1}}, next)
+          dpd.todos.get({$sort: {title: 1}}, next);
         }).chain(function(next, result, err) {
           expect(result).to.exist;
           expect(result.length).to.equal(3);
@@ -191,12 +191,12 @@ describe('Collection', function() {
                 expect(todos.length).to.equal(1);
                 expect(todos[0].id).to.not.equal(id);
                 done(err);
-              })
-            })
-          })
-        })
-      })
-    })
+              });
+            });
+          });
+        });
+      });
+    });
 
     describe('.get({id: "non existent"}, fn)', function() {
       it('should return a 404', function(done) {        
@@ -208,9 +208,9 @@ describe('Collection', function() {
           expect(err.message).to.equal('not found');
           expect(err.statusCode).to.equal(404);
           done();
-        })
-      })
-    })
+        });
+      });
+    });
 
     describe('.get({title: "$TESTFAIL2"}, fn)', function() {
       it('should correctly respond to errors in event IO', function(done) {
@@ -233,8 +233,8 @@ describe('Collection', function() {
             expect(todos.length).to.equal(1);
             expect(todos[0].custom).to.equal('arbitrary');
             done(err);
-          })
-        })
+          });
+        });
       });
       
       it('should run events when an id is included', function(done) {
@@ -242,9 +242,9 @@ describe('Collection', function() {
           dpd.todos.get({arbitrary: true, id: todo.id}, function (t) {
             expect(t.custom).to.equal('arbitrary');
             done();
-          })
+          });
         });
-      })
+      });
     });
 
     describe('.get(id, fn)', function() {
@@ -253,7 +253,7 @@ describe('Collection', function() {
           dpd.todos.get(todo.id, function (t) {
             expect(t.custom).to.equal('custom');
             done();
-          })
+          });
         });        
       });
     });
@@ -261,9 +261,9 @@ describe('Collection', function() {
     describe('.put(id, {done: true}, fn)', function() {
       it('should add properties', function(done) {
         chain(function(next) {
-          dpd.todos.post({title: 'foobar'}, next)
+          dpd.todos.post({title: 'foobar'}, next);
         }).chain(function(next, result) {
-          dpd.todos.put(result.id, {done: true}, next)
+          dpd.todos.put(result.id, {done: true}, next);
         }).chain(function(next, result) {
           expect(result.title).to.equal('foobar');
           expect(result.done).to.equal(true);
@@ -272,16 +272,16 @@ describe('Collection', function() {
           expect(result.title).to.equal('foobar');
           expect(result.done).to.equal(true);
           done();
-        })
+        });
       });
     });
 
     describe('.put(id, {done: true}, fn)', function() {
       it('should be able to access old properties in On Put', function(done) {
         chain(function(next) {
-          dpd.todos.post({title: '$PUT_TEST', message: "x"}, next)
+          dpd.todos.post({title: '$PUT_TEST', message: "x"}, next);
         }).chain(function(next, result) {
-          dpd.todos.put(result.id, {done: true}, next)
+          dpd.todos.put(result.id, {done: true}, next);
         }).chain(function(next, result) {
           expect(result.message).to.equal("xx");
           dpd.todos.get(result.id, next);
@@ -289,17 +289,17 @@ describe('Collection', function() {
           expect(result.message).to.equal("xx");
           expect(result.done).to.equal(true);
           done();
-        })
+        });
       });
     });
 
     describe('.put(id, {done: true}, fn)', function() {
       it('should be able to access old properties in On Validate', function(done) {
         chain(function(next) {
-          dpd.todos.post({title: '$VALIDATE_TEST', message: ""}, next)
+          dpd.todos.post({title: '$VALIDATE_TEST', message: ""}, next);
         }).chain(function(next, result) {
           expect(result.message).to.equal("x");
-          dpd.todos.put(result.id, {done: true}, next)
+          dpd.todos.put(result.id, {done: true}, next);
         }).chain(function(next, result) {
           expect(result.message).to.equal("xx");
           dpd.todos.get(result.id, next);
@@ -307,7 +307,7 @@ describe('Collection', function() {
           expect(result.message).to.equal("xx");
           expect(result.done).to.equal(true);
           done();
-        })
+        });
       });
     });
 
@@ -327,7 +327,7 @@ describe('Collection', function() {
           expect(result.tags.length).to.equal(2);
           expect(result.tags).to.include("red").and.include("blue");
           done();
-        })
+        });
       });
     });
 
@@ -355,7 +355,7 @@ describe('Collection', function() {
           done();
         });
       });
-    })
+    });
 
     describe('.put(id, {tags: {$pushAll: ["red", "yellow"]}}, fn)', function() {
       it('should update an array', function(done) {
@@ -369,7 +369,7 @@ describe('Collection', function() {
           done();
         });
       });
-    })
+    });
 
     describe('.put(id, tags: {$pull: "red"}, fn)', function() {
       it('should remove an item from an array', function(done) {
@@ -417,9 +417,9 @@ describe('Collection', function() {
     afterEach(function (done) {
       this.timeout(10000);
       cleanCollection(dpd.todos, done);
-    })
+    });
 
-  })
+  });
 
   describe('internal cancel()', function(){
     it('should not cancel the internal call', function(done) {
@@ -428,15 +428,15 @@ describe('Collection', function() {
         dpd.todos.get({title: '$INTERNAL_CANCEL_TEST'}, function (todos) {
           expect(todos.length).to.equal(1);
           done();
-        })
-      })
-    })
+        });
+      });
+    });
     
     afterEach(function (done) {
       this.timeout(10000);
       cleanCollection(dpd.todos, done);
-    })
-  })
+    });
+  });
 
   describe('dpd.recursive', function() {
     beforeEach(function(done) {
@@ -474,7 +474,7 @@ describe('Collection', function() {
           expect(current).to.exist;
           expect(current.more).to.exist;
           current = current.more[0];
-        };
+        }
         expect(current.more).to.not.exist;
         done(err);
       });
@@ -487,7 +487,7 @@ describe('Collection', function() {
       }).chain(function(next) {
         dpd.recursive.post({name: "test3"}, next);
       }).chain(function(next) {
-        dpd.recursive.get({$limitRecursion: 10, mode: "self"}, next)
+        dpd.recursive.get({$limitRecursion: 10, mode: "self"}, next);
       }).chain(function(next, res, err) {
         if (err) return done(err);
         expect(res.length).to.equal(3);
@@ -499,13 +499,13 @@ describe('Collection', function() {
           expect(self.randQuery).to.equal(x.rand);
         });
         done();
-      })
+      });
     });
 
     afterEach(function (done) {
       this.timeout(10000);
       cleanCollection(dpd.recursive, done);
-    })
+    });
   });
 
   describe('dpd.empty', function() {
@@ -531,8 +531,8 @@ describe('Collection', function() {
     afterEach(function (done) {
       this.timeout(10000);
       cleanCollection(dpd.empty, done);
-    })
+    });
   });
 
   
-})
+});

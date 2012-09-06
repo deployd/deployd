@@ -21,7 +21,7 @@ describe('collection', function(){
       var errs = r.validate({title: 'foobar'});
       
       expect(errs).to.not.exist;
-    })
+    });
     
     it('should fail to validate the invalid request', function() {
       var r = createCollection({
@@ -33,7 +33,7 @@ describe('collection', function(){
       var errs = r.validate({title: 7});
       
       expect(errs).to.eql({'title': 'must be a string'});
-    })
+    });
     
     it('should fail to validate the invalid request with multiple errors', function() {
       var r = createCollection({
@@ -53,8 +53,8 @@ describe('collection', function(){
       var errs = r.validate({title: 7, created: 'foo'}, true);
       
       expect(errs).to.eql({title: 'must be a string', age: 'is required', created: 'must be a date'});
-    })
-  })
+    });
+  });
   
   describe('.sanitize(body)', function(){
     it('should remove properties outside the schema', function() {
@@ -69,7 +69,7 @@ describe('collection', function(){
       expect(sanitized.foo).to.not.exist;
       expect(sanitized.bar).to.not.exist;
       expect(sanitized.title).to.equal('foo');
-    })
+    });
     
     it('should convert int strings to numbers', function() {
       var r = createCollection({
@@ -80,14 +80,14 @@ describe('collection', function(){
       
       var sanitized = r.sanitize({age: '22'});
       expect(sanitized.age).to.equal(22);
-    })
-  })
+    });
+  });
   
   describe('.handle(ctx)', function(){
     it('should have a store', function() {
       var c = new Collection('foo', { db: db.connect(TEST_DB) });
       expect(c.store).to.exist;
-    })
+    });
     
     function example(method, path, properties, body, query, test, done, testData) {
       var c = new Collection(path, {db: db.connect(TEST_DB), config: { properties: properties } });
@@ -97,14 +97,14 @@ describe('collection', function(){
           // faux body
           req.body = body;
           req.query = query;
-          c.handle({req: req, res: res, query: query || {}, session: {}, done: function() {res.end()}});
+          c.handle({req: req, res: res, query: query || {}, session: {}, done: function() {res.end();}});
         }, function (req, res) {       
           test(req, res, method, path, properties, body, query);
           // cleanup
           c.store.remove(function (err) {
             done(err);
-          })
-        })
+          });
+        });
       }
       
       if(testData) {
@@ -122,7 +122,7 @@ describe('collection', function(){
         },
         done
       );
-    })
+    });
     
     it('should handle GET', function(done) {
       var testData = [{test: true}, {test: false}];
@@ -133,7 +133,7 @@ describe('collection', function(){
         done,
         testData
       );
-    })
+    });
 
     it('should handle GET without data', function(done) {
       var testData = [];
@@ -144,7 +144,7 @@ describe('collection', function(){
         done,
         testData
       );
-    })
+    });
     
     it('should handle PUT', function(done) {
       var testData = [{test: true}, {test: false}];
@@ -155,7 +155,7 @@ describe('collection', function(){
         done,
         testData
       );
-    })
+    });
     
     it('should handle DELETE', function(done) {
       example('DELETE', '/foo', {test: {type: 'boolean'}}, null, {id: 7},
@@ -164,8 +164,8 @@ describe('collection', function(){
         },
         done
       );
-    })
-  })
+    });
+  });
 
   describe('.save()', function() {
     it('should save the provided data', function(done) {
@@ -271,4 +271,4 @@ describe('collection', function(){
       c.execCommands('update', item, {names: {$pushAll: ['jim', 'sam']}});
     });
   });
-})
+});

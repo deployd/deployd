@@ -15,7 +15,7 @@ describe('UserCollection', function() {
 				done: function(err, res) {
 					if(test.complete) test.complete(err, res);
 				}
-			}
+			};
 		});
 
 		it('should login a user when credentials are POSTed to "/login"', function(done) {
@@ -39,10 +39,10 @@ describe('UserCollection', function() {
 			this.uc.store.find = function(query, fn) {
 				expect(query).to.eql({email: 'foo@bar.com', password: 'abcd'});
 				fn(null, {id: '123', email: 'foo@bar.com'});
-			}
+			};
 			this.complete = function(err, res) {
 				done();
-			}
+			};
 
 			this.uc.handle(this.ctx);
 		});
@@ -57,7 +57,7 @@ describe('UserCollection', function() {
 					expect(fn).to.be.a('function');
 					fn();
 				}
-			}
+			};
 			this.ctx.req.url = '/users/logout';
 			this.ctx.req.method = 'POST';
 			this.ctx.req.body.email = 'foo@bar.com';
@@ -65,7 +65,7 @@ describe('UserCollection', function() {
 			this.complete = function(err, res) {
 				expect(removed).to.equal(true);
 				done();
-			}
+			};
 
 			this.uc.handle(this.ctx);
 		});
@@ -86,7 +86,7 @@ describe('UserCollection', function() {
 				expect(query).to.eql({id: '123', $fields: {password: 0}});
 				found = true;
 				fn();
-			}
+			};
 
 			uc.handleSession(ctx, function() {
 				expect(found).to.equal(true);

@@ -6,7 +6,7 @@ var Server = require('../lib/server')
 describe('Server', function() {
 	describe('.listen()', function() {
 		it('should start a new deployd server', function(done) {
-		  var PORT = genPort();
+			var PORT = genPort();
 			var opts = {
 					port: PORT,
 					db: {
@@ -21,7 +21,7 @@ describe('Server', function() {
 			expect(server.db instanceof	Db).to.equal(true);
 			expect(server.options).to.eql(opts);
 			server.on('listening', function () {
-			  server.close();
+				server.close();
 				done();
 			});
 		});

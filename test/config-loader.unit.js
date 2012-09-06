@@ -32,8 +32,8 @@ describe('config-loader', function() {
       configLoader.loadConfig(basepath, this.server, function(err, resources) {
         if (err) return done(err);
         expect(resources).to.have.length(6);
-        expect(resources.filter(function(r) { return r.name == 'foo'})).to.have.length(1);
-        expect(resources.filter(function(r) { return r.name == 'bar'})).to.have.length(1);
+        expect(resources.filter(function(r) { return r.name == 'foo';})).to.have.length(1);
+        expect(resources.filter(function(r) { return r.name == 'bar';})).to.have.length(1);
         done();  
       });
     });
