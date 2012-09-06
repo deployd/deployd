@@ -4,7 +4,7 @@ var less = require('less');
 
 target.all = function() {
   target.dashboard();
-}
+};
 
 target.dashboard = function() {
   cd(__dirname);
@@ -18,7 +18,7 @@ target.dashboard = function() {
     });
 
     parser.parse(lessSource, function (e, tree) {
-      if (e) return console.error(e.message);  
+      if (e) return console.error(e.message);
       tree.toCSS().to('lib/resources/dashboard/stylesheets/style.css');
     });
 
@@ -31,4 +31,4 @@ target.dashboard = function() {
   // } else {
   //   result.output.to('lib/resources/dashboard/stylesheets/style.css')
   // }
-}
+};
