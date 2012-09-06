@@ -11,13 +11,13 @@ var chain = function(fn) {
 			args.push.apply(args, lastResult.length ? lastResult : arguments);
 			func.apply(this, args);
 		}
-	}
+	};
 
 	var _next = function() {
 		executing = false;
 		lastResult = arguments;
 		execute();
-	}
+	};
 
 	var _chain = function(fn) {
 		queue.push(fn);	
@@ -42,7 +42,7 @@ var cleanCollection = function(collection, done) {
 				if(!total) {
 					done();
 				}
-			})
-		})
-	})
-}
+			});
+		});
+	});
+};
