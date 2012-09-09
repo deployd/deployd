@@ -45,3 +45,19 @@ Create a new `Store` for persisting data using the database info that was passed
 
     // Use the store to CRUD data
     todos.insert({name: 'go to the store', done: true}, ...); // see `Store` for more info
+    
+## Server.sockets
+
+The **socket.io** sockets `Manager` object ([view source](https://github.com/LearnBoost/socket.io/blob/master/lib/manager.js)).
+
+## Server.sessions
+
+The server's `SessionStore`.
+
+## Server.router
+
+The server's `Router`.
+
+## Server.resources
+
+An `Array` of the server's resource instances. These a built from the config and type loaders.
