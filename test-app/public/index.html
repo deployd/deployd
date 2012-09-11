@@ -4,8 +4,6 @@
   <meta charset="utf-8">
   <title>Mocha Tests</title>
   <link rel="stylesheet" href="mocha.css" />
-  <script src="jquery.js"></script>
-  <script src="jsdeferred.nodoc.js"></script>
   <script src="/dpd.js"></script>
   <script src="chai.js"></script>
   <script src="mocha.js"></script>
@@ -15,14 +13,13 @@
   <script src="test/util.test.js"></script>
   <script src="test/collection.test.js"></script>
   <script src="test/user-collection.test.js"></script>
-  <script>
-    expect = chai.expect;
-    $(function(){
-      mocha.run();
-    })
-  </script>
 </head>
 <body>
   <div id="mocha"></div>
+  <script>
+    expect = chai.expect;
+    
+    mocha.run();
+  </script>
 </body>
 </html>

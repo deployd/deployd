@@ -1,7 +1,7 @@
 {
   "author": "Ritchie Martori",
   "name": "deployd",
-  "version": "0.6.2",
+  "version": "0.6.3",
   "repository": {
     "url": "git://github.com/deployd/deployd.git"
   },
@@ -28,7 +28,8 @@
     "tar": "0.1.x",
     "fstream-ignore": "0.0.x",
     "underscore": "1.x.x",
-    "ejs": "0.7.x"
+    "ejs": "0.7.x",
+    "async": "0.1.x"
   },
   "devDependencies": {
     "mocha": "*",
