@@ -1,5 +1,7 @@
 (function (undefined) {
 
+  if (!window._dpd) window._dpd = {};
+
   var root = window.location.origin;
 
   // initial socket connection
@@ -272,7 +274,7 @@
 
   if (console && console.log) {
     var originalLog = console.log;
-    console.log = function() {
+    _dpd.log = function() {
       originalLog.apply(console, arguments);
     };
   }

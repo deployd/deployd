@@ -122,7 +122,6 @@ describe('Collection', function() {
 
     describe('.get(fn)', function() {
       it('should not return any cancelled objects', function(done) {
-
         chain(function(next) {
           dpd.todos.post({title: "This one is OK"}, next);
         }).chain(function(next, res, err) {

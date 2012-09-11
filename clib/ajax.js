@@ -7,15 +7,15 @@
 
 function parseBody(req) {
   var header = req.getResponseHeader('Content-Type');
-  if (header === "application/json" && req.response) {
+  if (header === "application/json" && req.responseText) {
     try {
-      return JSON.parse(req.response);
+      return JSON.parse(req.responseText);
     } catch (ex) {
-      console.error("Failed to parse \"" + req.response + "\" as JSON", ex);
-      return req.response;
+      console.error("Failed to parse \"" + req.responseText + "\" as JSON", ex);
+      return req.responseText;
     }
   } else {
-    return req.response;  
+    return req.responseText;  
   }
   
 }
@@ -34,7 +34,7 @@ function sendRequest(url,options) {
     req.setRequestHeader('Content-type', options.contentType || 'application/json');
   req.onreadystatechange = function () {
     if (req.readyState != 4) return;
-    if (req.status != 200 && req.state != 204 && req.status != 304) {
+    if (req.status != 200 && req.status != 204 && req.status != 304) {
       if (typeof options.error === 'function') options.error(parseBody(req));
       return;
     }
