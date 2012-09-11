@@ -32,6 +32,11 @@ function sendRequest(url,options) {
   // req.setRequestHeader('User-Agent','XMLHTTP/1.0');
   if (data)
     req.setRequestHeader('Content-type', options.contentType || 'application/json');
+  if (typeof sendRequest.headers === 'object') {
+    Object.keys(sendRequest.headers).forEach(function(k) {
+      req.setRequestHeader(k, sendRequest.headers[k]);
+    });
+  }
   req.onreadystatechange = function () {
     if (req.readyState != 4) return;
     if (req.status != 200 && req.status != 204 && req.status != 304) {
@@ -43,6 +48,8 @@ function sendRequest(url,options) {
   if (req.readyState == 4) return;
   req.send(data);
 }
+
+sendRequest.headers = {};
 
 var XMLHttpFactories = [
   function () {return new XMLHttpRequest()},
