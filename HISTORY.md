@@ -3,6 +3,7 @@
 
 ## 0.6.3
 - Removed dependency on jQuery for dpd.js
+- JSON-formatted "bad credentials" login error
 
 ## 0.6.2
 
