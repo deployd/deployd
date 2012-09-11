@@ -144,8 +144,8 @@
 
       return $.ajax(root + joinPath(BASE_URL, options.path) + query, {
           type: method
-        , contentType: "application/json"
-        , data: JSON.stringify(options.body || {})
+        , contentType: options.body && "application/json"
+        , data: JSON.stringify(options.body || {}) || "{}"
         , success: returnSuccess(fn)
         , error: returnError(fn)
       });
@@ -197,9 +197,11 @@
       i++;
     }
 
-    // body (required)
-    settings.body = args[i];
-    i++;
+    // body
+    if (typeof args[i] === 'object' || !args[i]) {
+      settings.body = args[i];
+      i++;
+    }
 
     // query - if this exists the LAST obj was query and the new one is body
     if (typeof args[i] === 'object') {
