@@ -1,5 +1,13 @@
 # History
 
+
+## 0.6.3
+- Removed dependency on jQuery for dpd.js
+
+## 0.6.2
+
+- Fixed rare but annoying bug where server would crash for no good reason ("Cannot set headers") on a request
+
 ## 0.6.1
 
  - Bumped the default recursion limit to 2 levels

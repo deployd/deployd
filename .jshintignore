@@ -12,5 +12,5 @@ lib/resources/dashboard/js/lib
 lib/resources/collection/dashboard/js/lib
 lib/resources/dashboard/bootstrap
 
-# TODO: We don't really want to ignore this, but the minified socket.io in the beginning throws it off so we need to find another way
-clib/dpd.js
+clib/socket.io.js
+clib/socket.io.min.js
