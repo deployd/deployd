@@ -14,7 +14,7 @@ var program = require('commander')
   , tty = require('tty')
   , remote = require('../lib/client/remote')
   , request = require('request')
-  , package = require('../package')
+  , packageInfo = require('../package')
   , latestversionFile = path.join(__dirname, '../.latestversion')
   , Deployment = require('../lib/client/deploy').Deployment
   , open = require('../lib/util/open');
@@ -30,7 +30,7 @@ program
   .option('-w, --wait', 'wait for input before exiting')
   .option('-d, --dashboard', 'start the dashboard immediately')
   .option('-o, --open', 'open in a browser')
-  .option('-e, --environment [env]', 'defaults to development')
+  .option('-e, --environment [env]', 'defaults to development');
 
 /**
  * Commands
@@ -64,17 +64,25 @@ program
   });
 
 function start(file) {
-  var port = program.port || 2403
-    , mongoPort = generatePort();
+  var port = program.port
+    , mongoPort = generatePort()
+    , env = program.environment || process.env.DPD_ENV || 'development'
+    , retries = 0;
+
+  if (!port) {
+    port = 2403;
+    retries = env === 'development' && 5;
+  }
+
   if (file) {
     process.chdir(path.dirname(file));
   }
   if (test('-f', 'app.dpd')) {
-    console.log("starting deployd v" + package.version + "...");
+    console.log("starting deployd v" + packageInfo.version + "...");
 
     if (fs.existsSync(latestversionFile)) {
       var latest = fs.readFileSync(latestversionFile, 'utf-8');
-      if (latest && latest !== package.version) {
+      if (latest && latest !== packageInfo.version) {
         console.log("deployd v" + latest + " is available. Use dpd-update command to install");
       }  
     }
@@ -84,28 +92,54 @@ function start(file) {
     if (!test('-d', './.dpd/pids')) mkdir('-p', './.dpd/pids');
     if (!test('-d', './data')) mkdir('-p', './data');
 
-    mongod.restart(program.mongod || 'mongod', process.env.DPD_ENV || 'development', mongoPort, function(err) {
+    mongod.restart(program.mongod || 'mongod', env, mongoPort, function(err) {
       if (err) { 
         console.log("Failed to start MongoDB");
         return stop(1);
       }
-      var options = {port: port, env: 'development', db: {host: '127.0.0.1', port: mongoPort, name: '-deployd'}}
+      var options = {port: port, env: 'development', db: {host: '127.0.0.1', port: mongoPort, name: '-deployd'}};
 
       options.env = program.environment || process.env.DPD_ENV || options.env;
       if(options.env !== 'development') console.log('starting in %s mode', options.env);
 
       var dpd = deployd(options);
       dpd.listen();
-      dpd.on('listening', function () {
 
-        console.info('listening on port', port);
+      var onListening = function () {
+
+        console.info('listening on port', options.port);
         var commands = repl(dpd);
         if (program.dashboard) {
           commands.dashboard();
         } else if (program.open) {
           commands.open();
         }
-      });
+      };
+
+      var onError = function(err) {
+        if (err.code === "EADDRINUSE") {
+          console.error();
+          console.error("ERROR: port " + options.port + " is already in use");
+          if (retries > 0) {
+            options.port++;
+            console.log("Trying again on port " + options.port + "...");
+            console.log();
+            retries--;
+            dpd = deployd(options);
+            dpd.listen();
+            dpd.on('listening', onListening);
+            dpd.on('error', onError);
+          } else {
+            process.exit();  
+          }          
+        } else {
+          console.error(err);
+          process.exit();  
+        }
+      };
+
+      dpd.on('listening', onListening);
+      dpd.on('error', onError);
     });
   } else {
     console.log("This directory does not contain a Deployd app!");
@@ -174,7 +208,7 @@ program
         , Keys = require('../lib/keys')
         , keys = new Keys();
 
-      if (process.env["DPDAPP_PORT"]) DPDAPP_URL += ':' + process.env["DPDAPP_PORT"];
+      if (process.env.DPDAPP_PORT) DPDAPP_URL += ':' + process.env.DPDAPP_PORT;
 
       keys.getLocal(function (err, key) {
         if(err) return console.error(err);
