@@ -8,7 +8,7 @@
 
   "undef": true,
   "browser": true,
-  "globals": {
+  "predef": {
 
       "describe": true
     , "it": true

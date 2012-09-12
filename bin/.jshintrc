@@ -4,22 +4,5 @@
   "proto": true,
   "lastsemic": true,
   "laxbreak": true,
-  "strict": false,
-
-  "undef": true,
-  "browser": true,
-  "globals": {
-
-      "describe": true
-    , "it": true
-    , "afterEach": true
-    , "beforeEach": true
-    
-    , "expect": true    
-
-    , "dpd": true
-
-    , "chain": true
-    , "cleanCollection": true
-  }
+  "strict": false
 }

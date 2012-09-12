@@ -17,7 +17,7 @@ function hint(pathName, fileName) {
   var lastPath = process.cwd();
   cd(pathName);
   echo("Linting " + pathName + (fileName ? ("/" + fileName) : "") + "...");
-  exec('jshint ' + (fileName || '.'));
+  exec('jshint ' + (fileName || '.') + " --extra-ext " + fileName);
   echo();
   cd(lastPath);
 }
@@ -36,5 +36,7 @@ target.jshintDpdJs = function() {
 };
 
 target.jshintCli = function() {
-  hint('bin', 'dpd');
+  cp('bin/dpd', 'bin/dpd.js');
+  hint('bin', 'dpd.js');
+  rm('bin/dpd.js');
 };
