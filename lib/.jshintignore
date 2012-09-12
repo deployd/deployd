@@ -1,0 +1,4 @@
+resources/collection/dashboard
+resources/dashboard
+
+util/uuid.js

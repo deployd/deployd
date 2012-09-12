@@ -4,5 +4,8 @@
   "proto": true,
   "lastsemic": true,
   "laxbreak": true,
-  "strict": false
+  "strict": false,
+
+  "undef": true,
+  "node": true
 }

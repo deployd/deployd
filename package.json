@@ -36,7 +36,8 @@
     "chai": "*",
     "node-markdown": "*",
     "dox": "*",
-    "less": "*"
+    "less": "*",
+    "jshint": "*"
   }, 
   "bin": { "dpd": "./bin/dpd" },
   "scripts": {

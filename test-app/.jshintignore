@@ -1,0 +1,5 @@
+node_modules
+public/chai.js
+public/mocha.js
+public/jquery.js
+resources

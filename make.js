@@ -1,34 +1,40 @@
 require('shelljs/make');
 
-var less = require('less');
+var path = require('path');
 
 target.all = function() {
-  target.dashboard();
+  target.jshint();
 };
 
-target.dashboard = function() {
-  cd(__dirname);
+target.jshint = function() {
+  target.jshintLib();
+  target.jshintTest();
+  target.jshintDpdJs();
+  target.jshintCli();
+};
 
-  var lessSource = cat('lib/resources/dashboard/stylesheets/style.less');
+function hint(pathName, fileName) {
+  var lastPath = process.cwd();
+  cd(pathName);
+  echo("Linting " + pathName + (fileName ? ("/" + fileName) : "") + "...");
+  exec('jshint ' + (fileName || '.'));
+  echo();
+  cd(lastPath);
+}
 
-  if (lessSource) {
-    var parser = new(less.Parser)({
-      paths: ['lib/resources/dashboard/stylesheets'], // Specify search paths for @import directives
-      filename: 'style.less' // Specify a filename, for better error messages
-    });
+target.jshintLib = function() {
+  hint('lib');
+};
 
-    parser.parse(lessSource, function (e, tree) {
-      if (e) return console.error(e.message);
-      tree.toCSS().to('lib/resources/dashboard/stylesheets/style.css');
-    });
+target.jshintTest = function() {
+  hint('test');
+  hint('test-app');
+};
 
-  }
+target.jshintDpdJs = function() {
+  hint('clib', 'dpd.js');
+};
 
-
-  // var result = exec('lessc lib/resources/dashboard/stylesheets/style.less', {silent: true});
-  // if (result.code) {
-  //   console.error(result.output);
-  // } else {
-  //   result.output.to('lib/resources/dashboard/stylesheets/style.css')
-  // }
+target.jshintCli = function() {
+  hint('bin', 'dpd');
 };

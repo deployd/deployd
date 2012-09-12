@@ -1,3 +1,5 @@
+/*global _dpd:true, io:true*/
+
 (function (undefined) {
 
   if (!window._dpd) window._dpd = {};
@@ -35,7 +37,7 @@
     return parts;
 }
 
-  normalizePath = function(path) {
+  var normalizePath = function(path) {
       var isAbsolute = path.charAt(0) === '/',
           trailingSlash = path.slice(-1) === '/';
 
