@@ -6,5 +6,7 @@ var Server = require('./lib/server')
  */
 
 module.exports = function (config) {
-  return new Server(config);
+  var server = new Server(config);
+  upgrade(server);
+  return server;
 };
