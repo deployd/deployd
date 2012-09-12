@@ -228,13 +228,6 @@ function stop(code) {
   }
 }
 
-process.on('uncaughtException', function(err) {
-  // console.log(err);
-  console.log(err.stack);
-  stop(1);
-});
-
-
 /**
  * Parse the arguments
  */
