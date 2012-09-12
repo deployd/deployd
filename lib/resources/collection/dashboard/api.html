@@ -12,10 +12,9 @@
 
   <div class="tab-content tab-content-styled">
     <div id="js-examples" class="tab-pane active">
-    <p>Deployd generates a browser JavaScript api for easily accessing data from the <code><%= '/' + resourceData.id %></code> collection. To use it you first need to include jQuery and the generated script.</p>
+    <p>Deployd generates a browser JavaScript api for easily accessing data from the <code><%= '/' + resourceData.id %></code> collection. To use it you first need to include the generated script.</p>
 
-    <pre class="prettyprint code">&lt;script src="http://code.jquery.com/jquery-latest.min.js"&gt;&lt;/script&gt;
-&lt;script src="dpd.js"&gt;&lt;/script&gt;</pre>
+    <pre class="prettyprint code">&lt;script src="dpd.js"&gt;&lt;/script&gt;</pre>
 
     <% if (resourceData.type === 'UserCollection') { %>
     <p>Register a new user in the <code><%= '/' + resourceData.id %></code> collection:</p>
