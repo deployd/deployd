@@ -225,6 +225,29 @@ describe('Collection', function() {
       });
     });
 
+    describe('.get(27, fn)', function() {
+      it('should not hang if given a number as id', function(done) {
+        dpd.todos.post({title: 'foobar'}, function () {
+          dpd.todos.get(27, function (todos, err) {
+            expect(err).to.exist;
+            done();
+          });
+        });
+      });
+    });
+
+    describe('.get({numberGet: true}, fn)', function() {
+      it('should not hang if given a number as id', function(done) {
+        dpd.todos.post({title: 'foobar'}, function () {
+          dpd.todos.get({numberGet: true}, function (todos, err) {
+            expect(todos.length).to.equal(1);
+            expect(todos[0].numberGet).to.equal('noResponse');
+            done(err);
+          });
+        });
+      });
+    });
+
     describe('.get({arbitrary: true}, fn)', function() {
       it('should allow arbitrary query parameters', function(done) {
         dpd.todos.post({title: 'foobar'}, function () {

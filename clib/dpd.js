@@ -95,24 +95,14 @@
 
   function returnSuccess(fn) {
     return function(data) {
-      if (fn) fn(data);
+      if (typeof fn === 'function') fn(data);
     };
   }
 
   function returnError(fn) {
     return function(data) {
-      if (fn) fn(null, data);
+      if (typeof fn === 'function') fn(null, data);
     };
-    // return function(xhr) {
-    //   var error;
-    //   try {
-    //     error = JSON.parse(xhr.responseText);
-    //   } catch (ex) {
-    //     error = {message: xhr.responseText || xhr.statusText};
-    //   }
-
-    //   if (fn) fn(null, error);
-    // };
   }
 
   var baseMethods = {
@@ -159,19 +149,27 @@
     return baseMethods.requestWithBody("PUT", options, fn);
   };
 
+  function isString(arg) {
+    return typeof arg === 'string' || typeof arg === 'number';
+  }
+
+  function toString(arg) {
+    return arg ? arg.toString() : null;
+  }
+
   function parseGetSignature(args) {
     var settings = {}
       , i = 0;
 
     // path/func
-    if (typeof args[i] === 'string' || !args[i]) {
-      settings.path = args[i];
+    if (isString(args[i]) || !args[i]) {
+      settings.path = toString(args[i]);
       i++;
     }
 
     // join path to func
-    if (typeof args[i] === 'string' || !args[i]) {
-      settings.path = joinPath(settings.path, args[i]);
+    if (isString(args[i])  || !args[i]) {
+      settings.path = joinPath(settings.path, toString(args[i]));
       i++;
     }
 
@@ -181,7 +179,9 @@
       i++;
     }
 
-    settings.fn = args[i];
+    if (typeof args[i] === 'function') {
+      settings.fn = args[i];  
+    }
 
     return settings;
 }
@@ -191,8 +191,8 @@
       , i = 0;
 
     //path
-    if (typeof args[i] === 'string' || !args[i]) {
-      settings.path = args[i];
+    if (isString(args[i]) || !args[i]) {
+      settings.path = toString(args[i]);
       i++;
     }
 
@@ -209,7 +209,9 @@
       i++;
     }
 
-    settings.fn = args[i];
+    if (typeof args[i] === 'function') {
+      settings.fn = args[i];  
+    }
 
     return settings;
   }
@@ -250,7 +252,7 @@
       i++;
 
       // path
-      if (typeof arguments[i] === 'string') {
+      if (isString(arguments[i])) {
         settings.path = arguments[i];
         i++;
       }
