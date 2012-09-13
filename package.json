@@ -29,7 +29,8 @@
     "fstream-ignore": "0.0.x",
     "underscore": "1.x.x",
     "ejs": "0.7.x",
-    "async": "0.1.x"
+    "async": "0.1.x",
+    "doh": "0.x.x"
   },
   "devDependencies": {
     "mocha": "*",
