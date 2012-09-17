@@ -4,6 +4,8 @@
 ## 0.6.3
 - Removed dependency on jQuery for dpd.js
 - JSON-formatted "bad credentials" login error
+- Improved error reporting on CLI when port is in use
+- If in development mode, and no port has been specifically requested, CLI will retry with up to 5 different ports
 
 ## 0.6.2
 
