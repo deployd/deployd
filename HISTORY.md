@@ -9,6 +9,8 @@
  - If in development mode, and no port has been specifically requested, CLI will retry with up to 5 different ports- Fixed "no open connections" bug on startup
  - Renamed `Db.connect()` to `Db.create()`
  - Db connections are now lazy and only occur once a request is made
+ - Added 500 and 404 error pages
+ - Added module domain error handling for better module errors
 
 ## 0.6.2
 
