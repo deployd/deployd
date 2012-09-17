@@ -2,9 +2,12 @@
 
 
 ## 0.6.3
-- Removed dependency on jQuery for dpd.js
-- JSON-formatted "bad credentials" login error
-
+ - Removed dependency on jQuery for dpd.js
+ - JSON-formatted "bad credentials" login error
+ - Fixed "no open connections" bug on startup
+ - Renamed Db.connect to Db.create
+ - Db connections are now lazy and only occur once a request is made
+ 
 ## 0.6.2
 
 - Fixed rare but annoying bug where server would crash for no good reason ("Cannot set headers") on a request
