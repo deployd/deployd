@@ -5,7 +5,7 @@ var SessionStore = require('../lib/session').SessionStore
 describe('SessionStore', function() {
 	it('should bind sockets to sessions', function() {
 		var sockets = new EventEmitter()
-			,	store = new SessionStore('sessions', db.connect(TEST_DB), sockets)
+			,	store = new SessionStore('sessions', db.create(TEST_DB), sockets)
 			, fauxSocket = {
 					handshake: {headers: {cookie: 'name=value; name2=value2; sid=123'}}
 				};
@@ -26,7 +26,7 @@ describe('SessionStore', function() {
 
 	describe('.createSession(fn)', function() {
 		it('should create a session', function(done) {
-			var store = new SessionStore('sessions', db.connect(TEST_DB))
+			var store = new SessionStore('sessions', db.create(TEST_DB))
 				,	sid = store.createUniqueIdentifier();
 
 			store.createSession(function (err, session) {
@@ -39,7 +39,7 @@ describe('SessionStore', function() {
 
 describe('Session', function() {
 	function createSession(fn) {
-		var store = new SessionStore('sessions', db.connect(TEST_DB));
+		var store = new SessionStore('sessions', db.create(TEST_DB));
 
 		store.createSession(function (err, session) {
 			expect(session.sid).to.have.length(128);
@@ -50,7 +50,7 @@ describe('Session', function() {
 
 	it('should make the socket available from the session', function(done) {
 		var sockets = new EventEmitter()
-			,	store = new SessionStore('sessions', db.connect(TEST_DB), sockets);
+			,	store = new SessionStore('sessions', db.create(TEST_DB), sockets);
 
 		store.createSession(function (err, session) {
 			var fauxSocket = {handshake: { headers: {cookie: 'name=value; name2=value2; sid=' + session.sid} } };
@@ -65,7 +65,7 @@ describe('Session', function() {
 
 		var sockets = new EventEmitter()
 			,	fauxSocket = new EventEmitter()
-			,	store = new SessionStore('sessions', db.connect(TEST_DB), sockets);
+			,	store = new SessionStore('sessions', db.create(TEST_DB), sockets);
 
 		store.createSession(function (err, session) {
 			// generate faux headers

@@ -1,6 +1,6 @@
 var db = require('../lib/db')
   , TEST_DB = {name: 'test-db', host: 'localhost', port: 27017}
-  , tester = db.connect(TEST_DB)
+  , tester = db.create(TEST_DB)
   , store = tester.createStore('test-store')
   , Store = require('../lib/db').Store;
 
@@ -15,35 +15,11 @@ beforeEach(function(done){
 });
 
 describe('db', function(){
-  describe('.connect(options)', function(){
-    it('should connect to the database', function(done) {
-      var tester = db.connect(TEST_DB);
-      
-      tester.on('connected', function () {
-        done();
-      });
+  describe('.create(options)', function(){
+    it('should create a database', function() {
+      var tester = db.create(TEST_DB);
     });
   });
-});
-
-describe('db', function(){
-  // TODO: this takes forever, move to integration?
-  // describe('.drop(fn)', function(){
-  //   it('should drop the database', function(done) {
-  //     var tester = db.connect(TEST_DB);
-  //     tester.on('connected', function () {
-  //       store.insert({foo: 'bar'}, function () {
-  //         tester.drop(function (err) {
-  //           expect(err).to.not.exist;
-  //           store.find(function (err, res) {
-  //             expect(res).to.not.exist;
-  //             done(err);
-  //           });
-  //         });
-  //       });
-  //     });
-  //   });
-  // });
 });
 
 describe('store', function(){

@@ -85,12 +85,12 @@ describe('collection', function(){
   
   describe('.handle(ctx)', function(){
     it('should have a store', function() {
-      var c = new Collection('foo', { db: db.connect(TEST_DB) });
+      var c = new Collection('foo', { db: db.create(TEST_DB) });
       expect(c.store).to.exist;
     });
     
     function example(method, path, properties, body, query, test, done, testData) {
-      var c = new Collection(path, {db: db.connect(TEST_DB), config: { properties: properties } });
+      var c = new Collection(path, {db: db.create(TEST_DB), config: { properties: properties } });
       
       function t() {
         freq(path, {method: method, url: '',  body: body, json: true}, function (req, res) {
@@ -169,7 +169,7 @@ describe('collection', function(){
 
   describe('.save()', function() {
     it('should save the provided data', function(done) {
-      var c = new Collection('counts', {db: db.connect(TEST_DB), config: { properties: {count: {type: 'number'}}}});
+      var c = new Collection('counts', {db: db.create(TEST_DB), config: { properties: {count: {type: 'number'}}}});
 
       c.save({session: {}, body: {count: 1}, query: {}, dpd: {}}, function (err, item) {
         expect(item.id).to.exist;
@@ -179,7 +179,7 @@ describe('collection', function(){
     });
 
     it('should pass commands like $inc', function(done) {
-      var c = new Collection('counts', {db: db.connect(TEST_DB), config: { properties: {count: {type: 'number'}}}});
+      var c = new Collection('counts', {db: db.create(TEST_DB), config: { properties: {count: {type: 'number'}}}});
 
       c.save({body: {count: 1}}, function (err, item) {
         expect(item.id).to.exist;
@@ -207,7 +207,7 @@ describe('collection', function(){
 
   describe('.get()', function() {
     it('should return the provided data', function(done) {
-      var c = new Collection('foo', {db: db.connect(TEST_DB), config: { properties: {count: {type: 'number'}}}});
+      var c = new Collection('foo', {db: db.create(TEST_DB), config: { properties: {count: {type: 'number'}}}});
 
       c.save({body: {count: 1}}, function (err, item) {
         c.find({}, function (err, items) {
@@ -218,7 +218,7 @@ describe('collection', function(){
     });
 
     it('should return the provided data in sorted order', function(done) {
-      var c = new Collection('sort', { db: db.connect(TEST_DB), config: { properties: {count: {type: 'number'}}}});
+      var c = new Collection('sort', { db: db.create(TEST_DB), config: { properties: {count: {type: 'number'}}}});
 
       c.save({body: {count: 1}}, function (err, item) {
         c.save({body: {count: 3}}, function (err, item) {

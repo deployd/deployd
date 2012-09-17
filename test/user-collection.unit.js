@@ -8,7 +8,7 @@ describe('UserCollection', function() {
 			var properties = {
 				name: {type: 'string'}
 			};
-			this.uc = new UserCollection('users', {db: db.connect(TEST_DB), config: {properties: properties}});
+			this.uc = new UserCollection('users', {db: db.create(TEST_DB), config: {properties: properties}});
 			this.ctx = {
 				req: {url: '/users', body: {}},
 				res: {},
@@ -76,7 +76,7 @@ describe('UserCollection', function() {
 			var properties = {
 				name: {type: 'string'}
 			};
-			var uc = new UserCollection('users', {db: db.connect(TEST_DB), config: { properties: properties } } );
+			var uc = new UserCollection('users', {db: db.create(TEST_DB), config: { properties: properties } } );
 
 			var ctx = {
 				session: {data: {path: '/users', uid: '123'}}
