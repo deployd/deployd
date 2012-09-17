@@ -64,8 +64,16 @@ program
   });
 
 function start(file) {
-  var port = program.port || 2403
-    , mongoPort = generatePort();
+  var port = program.port
+    , mongoPort = generatePort()
+    , env = program.environment || process.env.DPD_ENV || 'development'
+    , retries = 0;
+
+  if (!port) {
+    port = 2403;
+    retries = env === 'development' && 5;
+  }
+
   if (file) {
     process.chdir(path.dirname(file));
   }
@@ -84,7 +92,7 @@ function start(file) {
     if (!test('-d', './.dpd/pids')) mkdir('-p', './.dpd/pids');
     if (!test('-d', './data')) mkdir('-p', './data');
 
-    mongod.restart(program.mongod || 'mongod', process.env.DPD_ENV || 'development', mongoPort, function(err) {
+    mongod.restart(program.mongod || 'mongod', env, mongoPort, function(err) {
       if (err) { 
         console.log("Failed to start MongoDB");
         return stop(1);
@@ -96,16 +104,42 @@ function start(file) {
 
       var dpd = deployd(options);
       dpd.listen();
-      dpd.on('listening', function () {
 
-        console.info('listening on port', port);
+      var onListening = function () {
+
+        console.info('listening on port', options.port);
         var commands = repl(dpd);
         if (program.dashboard) {
           commands.dashboard();
         } else if (program.open) {
           commands.open();
         }
-      });
+      };
+
+      var onError = function(err) {
+        if (err.code === "EADDRINUSE") {
+          console.error();
+          console.error("ERROR: port " + options.port + " is already in use");
+          if (retries > 0) {
+            options.port++;
+            console.log("Trying again on port " + options.port + "...");
+            console.log();
+            retries--;
+            dpd = deployd(options);
+            dpd.listen();
+            dpd.on('listening', onListening);
+            dpd.on('error', onError);
+          } else {
+            process.exit();  
+          }          
+        } else {
+          console.error(err);
+          process.exit();  
+        }
+      };
+
+      dpd.on('listening', onListening);
+      dpd.on('error', onError);
     });
   } else {
     console.log("This directory does not contain a Deployd app!");
