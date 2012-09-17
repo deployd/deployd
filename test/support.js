@@ -46,10 +46,14 @@ freq = function(url, options, fn, callback) {
 before(function (done) {
   var mdb = new mongodb.Db(TEST_DB.name, new mongodb.Server(TEST_DB.host, TEST_DB.port));
   mdb.open(function (err) {
-    mdb.dropDatabase(function (err) {
+    if(err) {
       done(err);
-      mdb.close();
-    });
+    } else {
+      mdb.dropDatabase(function (err) {
+        done(err);
+        mdb.close();
+      });
+    }
   });
 });
 
