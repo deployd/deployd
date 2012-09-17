@@ -1,6 +1,35 @@
 var Router = require('../lib/router')
   , Resource = require('../lib/resource');
 
+function fauxReq(url) {
+  var fn = function (){};
+  return {
+    url: url,
+    headers: {},
+    resume: fn,
+    on: fn,
+    emit: fn
+  };
+}
+
+function fauxRes() {
+  var fn = function (){};
+  return {
+    headers: {},
+    resume: fn,
+    on: fn,
+    emit: fn,
+    setHeader: fn,
+    end: fn
+  };
+}
+
+function fauxServer() {
+  return {
+    emit: function () {}
+  }
+}
+
 describe('Router', function() {
 
   describe('.route()', function() {
@@ -20,7 +49,7 @@ describe('Router', function() {
     it('should route to an exactly matching resource', function(done) {
       var resource = new Resource('foo')
         , other = new Resource('')
-        , router = new Router([resource, other], {});
+        , router = new Router([resource, other], fauxServer());
 
       this.timeout(100);
 
@@ -38,7 +67,7 @@ describe('Router', function() {
     it ('should route to resources in turn', function(done) {
       var foobar = new Resource('foo/bar')
         , foo = new Resource('foo')
-        , router = new Router([foo, foobar], {})
+        , router = new Router([foo, foobar], fauxServer())
         , foobarCalled = false;
 
       this.timeout(100);
@@ -57,25 +86,29 @@ describe('Router', function() {
 
     it ('should return 404 if no resources match', function(done) {
       var foo = new Resource('foo')
-        , router = new Router([foo], {});
+        , router = new Router([foo], fauxServer());
 
       this.timeout(100);
+      
+      var req = fauxReq('/dont-match')
+        , res = fauxRes();
+        
+      res.end = function () {
+        if(res.statusCode != 404) throw new Error('incorrect status for resource not found');
+        done();
+      }
       
       foo.handle = function() {
         throw "/foo was handled";
       };
 
-      router.route({url: '/dont-match'}, {end: function() {
-        expect(this.statusCode).to.equal(404);
-        done();
-      }});
-
+      router.route(req, res);
     });
 
     it ('should return 404 if all resources call next', function(done) {
       var foobar = new Resource('foo/bar')
         , foo = new Resource('foo')
-        , router = new Router([foo, foobar], {});
+        , router = new Router([foo, foobar], fauxServer());
 
       this.timeout(100);
       
@@ -86,16 +119,21 @@ describe('Router', function() {
       foo.handle = function(ctx, next) {
         next();
       };
-
-      router.route({url: '/foo/bar'}, {end: function() {
-        expect(this.statusCode).to.equal(404);
+      
+      var req = fauxReq('/dont-match')
+        , res = fauxRes();
+        
+      res.end = function () {
+        if(res.statusCode != 404) throw new Error('incorrect status for resource not found');
         done();
-      }});
+      }
+
+      router.route(req, res);
     });
 
     it('should modify ctx.url to remove the base path', function(done) {
       var foo = new Resource('foo')
-        , router = new Router([foo], {});
+        , router = new Router([foo], fauxServer());
 
       this.timeout(1000);
 
@@ -103,8 +141,11 @@ describe('Router', function() {
         expect(ctx.url).to.equal('/1234');
         done();
       };
-
-      router.route({url: '/foo/1234'}, {});
+      
+      var req = fauxReq('/foo/1234')
+        , res = fauxRes();
+        
+      router.route(req, res);
     });
 
     it('should still have a leading slash for root resources', function(done) {
