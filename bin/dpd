@@ -5,7 +5,7 @@
  */
 
 var program = require('commander')
-  , deployd = require('../')
+  , deployd = require('../').createMonitor
   , repl = require('../lib/client/repl')
   , shelljs = require('shelljs/global')
   , mongod = require('../lib/util/mongod')
@@ -108,6 +108,7 @@ function start(file) {
       var onListening = function () {
 
         console.info('listening on port', options.port);
+        console.log('repl');
         var commands = repl(dpd);
         if (program.dashboard) {
           commands.dashboard();

@@ -8,7 +8,7 @@
   "engines": {
     "node": ">= 0.6.0"
   },
-  "main":"index",
+  "main": "index",
   "dependencies": {
     "validation": "*",
     "mongodb": "1.0.2",
@@ -30,7 +30,9 @@
     "underscore": "1.x.x",
     "ejs": "0.7.x",
     "async": "0.1.x",
-    "doh": "0.x.x"
+    "doh": "0.x.x",
+    "forever-monitor": "1.1.x",
+    "keypress": "~0.1.0"
   },
   "devDependencies": {
     "mocha": "*",
@@ -39,8 +41,10 @@
     "dox": "*",
     "less": "*",
     "jshint": "*"
-  }, 
-  "bin": { "dpd": "./bin/dpd" },
+  },
+  "bin": {
+    "dpd": "./bin/dpd"
+  },
   "scripts": {
     "test": "mocha",
     "docs": "node docs/src/build.js"
