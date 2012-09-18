@@ -27,7 +27,7 @@ function fauxRes() {
 function fauxServer() {
   return {
     emit: function () {}
-  }
+  };
 }
 
 describe('Router', function() {
@@ -96,7 +96,7 @@ describe('Router', function() {
       res.end = function () {
         if(res.statusCode != 404) throw new Error('incorrect status for resource not found');
         done();
-      }
+      };
       
       foo.handle = function() {
         throw "/foo was handled";
@@ -126,7 +126,7 @@ describe('Router', function() {
       res.end = function () {
         if(res.statusCode != 404) throw new Error('incorrect status for resource not found');
         done();
-      }
+      };
 
       router.route(req, res);
     });
