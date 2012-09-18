@@ -108,7 +108,6 @@ function start(file) {
       var onListening = function () {
 
         console.info('listening on port', options.port);
-        console.log('repl');
         var commands = repl(dpd);
         if (program.dashboard) {
           commands.dashboard();
