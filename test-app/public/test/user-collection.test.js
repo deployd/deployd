@@ -146,25 +146,52 @@ describe('User Collection', function() {
         });
       });
     });
+
+    afterEach(function (done) {
+      this.timeout(10000);
+      dpd.users.logout(function () {
+        dpd.users.get(function (users) {
+          var total = users.length;
+          if(total === 0) return done();
+          users.forEach(function(user) {
+            dpd.users.del({id: user.id}, function () {
+              total--;
+              if(!total) {
+                done();
+              }
+            });
+          });
+        });
+      });
+    });
 	});
 
-	afterEach(function (done) {
-		this.timeout(10000);
-		dpd.users.logout(function () {
-			dpd.users.get(function (users) {
-				var total = users.length;
-				if(total === 0) return done();
-				users.forEach(function(user) {
-					dpd.users.del({id: user.id}, function () {
-						total--;
-						if(!total) {
-							done();
-						}
-					});
-				});
-			});
-		});
-	});
+  describe('dpd.emptyusers', function() {
+    describe('.post()', function() {
+      it('should store a username', function(done) {
+        chain(function(next) {
+          dpd.emptyusers.post({username: "hello", password: "password"}, next);
+        }).chain(function(next, res, err) {
+          if (err) return done(err);
+          expect(res).to.exist;
+          expect(res.username).to.equal("hello");
+          dpd.emptyusers.get(res.id, next);
+        }).chain(function(next, res, err) {
+          if (err) return done(err);
+          expect(res).to.exist;
+          expect(res.username).to.equal("hello");
+          done();
+        });
+      });
+    });
 
+    afterEach(function(done) {
+      dpd.emptyusers.logout(function() {
+        cleanCollection(dpd.emptyusers, function() {
+          done();
+        });
+      });
+    });
+  });
 });
 
