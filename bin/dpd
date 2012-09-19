@@ -33,6 +33,7 @@ program
   .option('-o, --open', 'open in a browser')
   .option('-e, --environment [env]', 'defaults to development')
   .option('-h, --host [host]', 'specify host for mongo server')
+  .option('-P, --mongoPort [mongoPort]', 'mongodb port to connect to')
   .option('-n, --dbname [dbname]', 'name of the mongo database')
   .option('-a, --auth', 'prompts for mongo server credentials')
   ;
@@ -82,6 +83,10 @@ function start(file) {
     port = 2403;
     retries = env === 'development' && 5;
   }
+  
+  if (program.mongoPort) {
+      mongoPort = Number(program.mongoPort);
+  }
 
   if (file) {
     process.chdir(path.dirname(file));
@@ -112,8 +117,7 @@ function start(file) {
       options.env = program.environment || process.env.DPD_ENV || options.env;
       if(options.env !== 'development') console.log('starting in %s mode', options.env);
 
-      if(options.credentials !== undefined) options.credentials = credentials;
-
+      if(credentials !== undefined) options.db.credentials = credentials;
       var dpd = deployd(options);
       dpd.listen();
 
@@ -152,6 +156,11 @@ function start(file) {
 
       dpd.on('listening', onListening);
       dpd.on('error', onError);
+    }
+    
+    if (program.auth && program.host === undefined) {
+        console.error("Authentication requires the '-h' host flag... exiting.");
+        process.exit();
     }
     
     if (program.host) {
