@@ -1,10 +1,10 @@
-# deployd v0.6.3
+# deployd v0.6.4
 
 [![Build Status](https://secure.travis-ci.org/deployd/deployd.png)](http://travis-ci.org/deployd/deployd)
 
 ## overview
 
-Deployd is a toolkit for building realtime APIs for web and mobile apps. Ready-made, configurable Resources add common functionality to a Deployd backend, which can be further customized with JavaScript Events.
+Deployd is the simplest way to build realtime APIs for web and mobile apps. Ready-made, configurable Resources add common functionality to a Deployd backend, which can be further customized with JavaScript Events.
 
 [Read more about deployd](http://deployd.com)
 
