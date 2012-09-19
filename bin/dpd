@@ -5,7 +5,7 @@
  */
 
 var program = require('commander')
-  , deployd = require('../')
+  , deployd = require('../').createMonitor
   , repl = require('../lib/client/repl')
   , shelljs = require('shelljs/global')
   , mongod = require('../lib/util/mongod')
