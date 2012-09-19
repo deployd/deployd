@@ -13,6 +13,7 @@
  - Added 500 and 404 error pages
  - Added module domain error handling for better module errors
  - Added automatic reloading on error
+ - Dropped support for node 0.6
 
 ## 0.6.2
 
