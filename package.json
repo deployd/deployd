@@ -30,7 +30,7 @@
     "underscore": "1.x.x",
     "ejs": "0.7.x",
     "async": "0.1.x",
-    "doh": "0.x.x"
+    "doh": ">=0.0.4"
   },
   "devDependencies": {
     "mocha": "*",
