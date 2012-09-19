@@ -1,5 +1,8 @@
 # History
 
+## 0.6.4
+
+ - Fixed incorrect Content-Length response header.
 
 ## 0.6.3
 
@@ -17,7 +20,7 @@
 
 ## 0.6.2
 
-- Fixed rare but annoying bug where server would crash for no good reason ("Cannot set headers") on a request
+ - Fixed rare but annoying bug where server would crash for no good reason ("Cannot set headers") on a request
 
 ## 0.6.1
 
