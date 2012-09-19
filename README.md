@@ -1,4 +1,4 @@
-# deployd v0.6.2
+# deployd v0.6.3
 
 [![Build Status](https://secure.travis-ci.org/deployd/deployd.png)](http://travis-ci.org/deployd/deployd)
 
@@ -30,6 +30,10 @@ Deployd is a toolkit for building realtime APIs for web and mobile apps. Ready-m
  - [Community Discussion Page](http://deployd.com/community.html)
  - [Example Apps](http://deployd.com/docs/examples.html)
 
+## install from npm
+
+	npm install deployd -g
+
 ## install from source
 
 	git clone https://github.com/deployd/deployd.git
@@ -38,9 +42,9 @@ Deployd is a toolkit for building realtime APIs for web and mobile apps. Ready-m
 
 ## unit tests
 
-	$ cd deployd
-	$ mongod &
-	$ mocha
+	cd deployd
+	mongod &
+	npm test
 
 ## integration tests
 	
