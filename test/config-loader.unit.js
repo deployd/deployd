@@ -53,7 +53,7 @@ describe('config-loader', function() {
     });
 
     it('should add internal resources', function(done) {
-      sh.mkdir('-p', path.join(basepath, 'resources/foo'));
+      sh.mkdir('-p', path.join(basepath, 'resources'));
 
       configLoader.loadConfig(basepath, {}, function(err, resourceList) {
         if (err) return done(err);
