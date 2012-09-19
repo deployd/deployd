@@ -12,6 +12,7 @@
  - Db connections are now lazy and only occur once a request is made
  - Added 500 and 404 error pages
  - Added module domain error handling for better module errors
+ - Added automatic reloading on error
 
 ## 0.6.2
 
