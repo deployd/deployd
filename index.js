@@ -23,6 +23,8 @@ module.exports.createMonitor = function (config) {
     , server = new EventEmitter();
     
   keypress(process.stdin);
+  
+  server.options = config;
     
   server.listen = function () {
     monitor.start(function (err, commands, restarting) {
