@@ -17,6 +17,7 @@ var program = require('commander')
   , packageInfo = require('../package')
   , latestversionFile = path.join(__dirname, '../.latestversion')
   , Deployment = require('../lib/client/deploy').Deployment
+  , Step = require('step')
   , open = require('../lib/util/open');
 
 /**
@@ -33,7 +34,7 @@ program
   .option('-e, --environment [env]', 'defaults to development')
   .option('-h, --host [host]', 'specify host for mongo server')
   .option('-n, --dbname [dbname]', 'name of the mongo database')
-  //.option('-a, --auth', 'prompts for mongo server credentials')
+  .option('-a, --auth', 'prompts for mongo server credentials')
   ;
 
 /**
@@ -73,7 +74,9 @@ function start(file) {
     , dbname = program.dbname || '-deployd'
     , mongoPort = generatePort()
     , env = program.environment || process.env.DPD_ENV || 'development'
-    , retries = 0;
+    , retries = 0
+    , credentials
+    ;
 
   if (!port) {
     port = 2403;
@@ -98,15 +101,18 @@ function start(file) {
     if (!test('-d', './.dpd/pids')) mkdir('-p', './.dpd/pids');
     if (!test('-d', './data')) mkdir('-p', './data');
 
-    mongod.restart(program.mongod || 'mongod', env, mongoPort, function(err) {
+    function startup (err) {
       if (err) { 
         console.log("Failed to start MongoDB");
         return stop(1);
       }
+
       var options = {port: port, env: 'development', db: {host: host, port: mongoPort, name: dbname}};
 
       options.env = program.environment || process.env.DPD_ENV || options.env;
       if(options.env !== 'development') console.log('starting in %s mode', options.env);
+
+      if(options.credentials !== undefined) options.credentials = credentials;
 
       var dpd = deployd(options);
       dpd.listen();
@@ -146,7 +152,44 @@ function start(file) {
 
       dpd.on('listening', onListening);
       dpd.on('error', onError);
-    });
+    }
+    
+    if (program.host) {
+        if (program.auth) {
+            Step(function () {
+                    var next = this;
+                    credentials = {};
+                    program.prompt('username: ', function(username){
+                        if (username && username != '') {
+                            credentials.username = username;
+                            next();
+                        } else {
+                            console.error('Username cannot be blank.')
+                            process.exit();
+                        }
+                    });
+                }, 
+                function () {
+                    var next = this;
+                    program.password('Password: ', function(pass){
+                        if (pass && pass != '') {
+                            credentials.password = pass;
+                            next();
+                        } else {
+                            console.error('Password cannot be blank.')
+                            process.exit();
+                        }
+                    });
+                },
+                startup
+            );
+        } else {
+            startup();
+        }
+    } else {
+        mongod.restart(program.mongod || 'mongod', env, mongoPort, startup);
+    }
+    
   } else {
     console.log("This directory does not contain a Deployd app!");
     console.log("Use \"dpd create <appname>\" to create a new app");
