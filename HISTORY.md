@@ -1,5 +1,8 @@
 # History
 
+## 0.6.4
+
+ - Fixed incorrect Content-Length response header.
 
 ## 0.6.3
 
@@ -12,10 +15,12 @@
  - Db connections are now lazy and only occur once a request is made
  - Added 500 and 404 error pages
  - Added module domain error handling for better module errors
+ - Added automatic reloading on error
+ - Dropped support for node 0.6
 
 ## 0.6.2
 
-- Fixed rare but annoying bug where server would crash for no good reason ("Cannot set headers") on a request
+ - Fixed rare but annoying bug where server would crash for no good reason ("Cannot set headers") on a request
 
 ## 0.6.1
 

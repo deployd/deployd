@@ -1,14 +1,15 @@
 {
   "author": "Ritchie Martori",
   "name": "deployd",
-  "version": "0.6.3",
+  "version": "0.6.4",
+  "description": "the simplest way to build realtime APIs for web and mobile apps",
   "repository": {
     "url": "git://github.com/deployd/deployd.git"
   },
   "engines": {
-    "node": ">= 0.6.0"
+    "node": ">= 0.8.0"
   },
-  "main":"index",
+  "main": "index",
   "dependencies": {
     "validation": "*",
     "mongodb": "1.0.2",
@@ -19,7 +20,7 @@
     "filed": ">= 0.0.6",
     "mkdirp": "*",
     "wrench": "1.3.x",
-    "debug": "*",
+    "debug": ">= 0.7.0",
     "scrubber": "*",
     "shelljs": "https://github.com/dallonf/shelljs/tarball/master",
     "http-proxy": "0.8.1",
@@ -30,7 +31,9 @@
     "underscore": "1.x.x",
     "ejs": "0.7.x",
     "async": "0.1.x",
-    "doh": "0.x.x"
+    "doh": "0.x.x",
+    "forever-monitor": "1.1.x",
+    "keypress": "~0.1.0"
   },
   "devDependencies": {
     "mocha": "*",
@@ -39,8 +42,10 @@
     "dox": "*",
     "less": "*",
     "jshint": "*"
-  }, 
-  "bin": { "dpd": "./bin/dpd" },
+  },
+  "bin": {
+    "dpd": "./bin/dpd"
+  },
   "scripts": {
     "test": "mocha",
     "docs": "node docs/src/build.js"
