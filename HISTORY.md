@@ -1,5 +1,7 @@
 # History
 
+## 0.6.5
+
 ## 0.6.4
 
  - Fixed incorrect Content-Length response header.
