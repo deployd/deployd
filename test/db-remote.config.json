@@ -1,0 +1,11 @@
+{
+    "warning": "This test is going to wipe your db, don't use a production machine",
+    "you've": "been warned...",
+    "host": "foo.com",
+    "port": 27017,
+    "name": "test-collection",
+    "credentials": {
+        "username": "foo",
+        "password": "secret"
+    }
+}
