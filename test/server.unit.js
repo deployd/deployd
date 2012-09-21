@@ -1,10 +1,17 @@
 var Server = require('../lib/server')
 	,	Db = require('../lib/db').Db
 	,	Store = require('../lib/db').Store
-	, Router = require('../lib/router');
+	, Router = require('../lib/router')
+	, sh = require('shelljs');
 
 describe('Server', function() {
 	describe('.listen()', function() {
+		beforeEach(function() {
+			sh.cd('./test/support/proj');
+			sh.rm('-rf', 'resources');
+			sh.mkdir('resources');
+		});
+
 		it('should start a new deployd server', function(done) {
 			var PORT = genPort();
 			var opts = {
@@ -16,14 +23,19 @@ describe('Server', function() {
 					}
 			};
 			var server = new Server(opts);
-				
+			
 			server.listen();
+
 			expect(server.db instanceof	Db).to.equal(true);
 			expect(server.options).to.eql(opts);
 			server.on('listening', function () {
 				server.close();
 				done();
 			});
+		});
+
+		afterEach(function() {
+			sh.cd('../../../');
 		});
 	});
 

@@ -53,7 +53,7 @@ describe('config-loader', function() {
     });
 
     it('should add internal resources', function(done) {
-      sh.mkdir('-p', path.join(basepath, 'resources/foo'));
+      sh.mkdir('-p', path.join(basepath, 'resources'));
 
       configLoader.loadConfig(basepath, {}, function(err, resourceList) {
         if (err) return done(err);
@@ -65,6 +65,26 @@ describe('config-loader', function() {
         expect(resourceList[3] instanceof Dashboard).to.equal(true);      
 
         done(err);  
+      });
+    });
+
+    it('should not attempt to load files', function(done) {
+      sh.mkdir('-p', path.join(basepath, 'resources'));
+      ('').to(path.join(basepath, 'resources/.DS_STORE'));
+
+      configLoader.loadConfig(basepath, {}, function(err, resourceList) {
+        if (err) return done(err);
+        done();
+      });
+    });
+
+    it('should throw a sane error when looking for config.json', function(done) {
+      sh.mkdir('-p', path.join(basepath, 'resources/foo'));
+
+      configLoader.loadConfig(basepath, {}, function(err, resourceList) {
+        expect(err).to.exist;
+        expect(err.message).to.equal("Expected file: " + path.join('resources', 'foo', 'config.json'));
+        done();
       });
     });
   });
