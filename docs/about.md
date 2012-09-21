@@ -6,6 +6,6 @@ An example of a resource is a data collection. You only have to define the prope
 
 ## Install
 
- - [Download](http://deployd.com) the OSX installer (13.8mb).
- - [Download](http://deployd.com) the Windows installer (13.8mb).
+ - [Download](http://www.deployd.com/download.html) the OSX installer (13.8mb).
+ - [Download](http://www.deployd.com/download.html) the Windows installer (13.8mb).
 

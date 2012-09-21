@@ -22,7 +22,7 @@ The Dashboard is where you will create the *resources* that make up your app's b
 
 This new app doesn't contain any resources yet, so add one now by clicking on "Resources +" and choosing Collection. Click "Create" (leave it at its default name of `my-objects`). 
 
-![Dashboard](/img/tutorials/hello-world-dashboard.png)
+![Dashboard](http://deployd.com/img/tutorials/hello-world-dashboard.png)
 
 You have just added your first resource to Deployd!
 
@@ -30,7 +30,7 @@ You have just added your first resource to Deployd!
 
 The dashboard should open up the Collection Property editor.
 
-![Properties](/img/tutorials/hello-world-properties.png)
+![Properties](http://deployd.com/img/tutorials/hello-world-properties.png)
 
 This is where you define the objects that you want to store in this Collection. For now, make sure `string` is selected as the type and enter `name` as the property. Click "Add". This means that every object stored in the `my-objects` collection will have a `name` property.
 

@@ -202,4 +202,4 @@ The source code for this chapter includes a few extra features. If you're feelin
 - A refresh button that reloads the comments without refreshing the page
 - Edit and Delete links next to each comment. Hint: use the `put()` and `del()` functions from dpd.js.
 
-<a class="btn btn-primary" href="/downloads/tutorials/dpd-comments-1.zip"><i class="icon-white icon-download"></i> Download Source</a>
+<a class="btn btn-primary" href="http://deployd.com/downloads/tutorials/dpd-comments-1.zip"><i class="icon-white icon-download"></i> Download Source</a>
