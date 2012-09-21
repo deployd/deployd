@@ -31,7 +31,8 @@
     "underscore": "1.x.x",
     "ejs": "0.7.x",
     "async": "0.1.x",
-    "doh": "0.x.x",
+    "doh": ">=0.0.4",
+    "step": ">=0.0.5",
     "forever-monitor": "1.1.x",
     "keypress": "~0.1.0"
   },
