@@ -96,4 +96,4 @@ This was just a quick tour through Deployd. To learn more:
 - Check out [the community](/community.html) and ask questions about Deployd.
 - Start reading the [Comments App](/docs/tutorials/comments-1.html) tutorial to see how to make a full app
 
-<a class="btn btn-primary" href="/downloads/tutorials/dpd-hello-world.zip"><i class="icon-white icon-download"></i> Download Source</a>
+<a class="btn btn-primary" href="http://deployd.com/downloads/tutorials/dpd-hello-world.zip"><i class="icon-white icon-download"></i> Download Source</a>

@@ -1,6 +1,6 @@
 # Building a Comments app
 
-In this tutorial, you'll see how to create a simple app from the ground up in Deployd. This tutorial assumes a working knowledge of jQuery. It doesn't assume any knowledge of Deployd, but it's recommended to read the [Hello World](/docs/tutorials/hello-world.html) tutorial if you haven't already.
+In this tutorial, you'll see how to create a simple app from the ground up in Deployd. This tutorial assumes a working knowledge of jQuery. It doesn't assume any knowledge of Deployd, but it's recommended to read the [Hello World](hello-world.md) tutorial if you haven't already.
 
 ## Getting started
 

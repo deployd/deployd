@@ -1,6 +1,6 @@
 # Advanced Queries
 
-When querying a [Collection](../resources/collection.html), you can use special commands to create a more advanced query. 
+When querying a [Collection](../resources/collection.md), you can use special commands to create a more advanced query. 
 
 Deployd supports all of [MongoDB's conditional operators](http://www.mongodb.org/display/DOCS/Advanced+Queries#AdvancedQueries-ConditionalOperators); only the common operators and Deployd's custom commands are documented here.
 
