@@ -1,5 +1,3 @@
-<% title("dpd.js") %>
-
 # dpd.js
 
 The Deployd client library (`dpd.js`) can optionally be included in your web app to simplify backend requests. Include it with this script tag in your `<head>` or `<body>`:

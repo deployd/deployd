@@ -1,5 +1,3 @@
-<% title("Advanced Queries") %>
-
 # Advanced Queries
 
 When querying a [Collection](/docs/resources/collection.html), you can use special commands to create a more advanced query. 

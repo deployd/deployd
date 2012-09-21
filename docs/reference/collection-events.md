@@ -1,5 +1,3 @@
-<% title("Collection Events") %>
-
 # Collection Events Reference
 
 Events allow you to add custom logic to your Collection using JavaScript. Deployd is compatible with ECMAScript 5, so you can use functional-style programming, such as `forEach()`, `map()`, and `filter()`.

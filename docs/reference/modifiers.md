@@ -1,5 +1,3 @@
-<% title("Update Modifiers") %>
-
 # Update Modifiers
 
 When updating an object in a [Collection](/docs/resources/collection.html), you can use special modifier commands to more granularly change property values. 

@@ -1,5 +1,3 @@
-<% title("Deploying Your App") %>
-
 # Deploying Your App
 
 When you want to share your app with the world, you can use Deployd's beta hosting service to host it online in seconds.

@@ -1,5 +1,3 @@
-<% title("Hello World Tutorial") %>
-
 # Hello World
 
 In this tutorial, you'll get a taste of how to use Deployd by creating a simple backend.

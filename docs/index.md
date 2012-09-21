@@ -1,14 +1,6 @@
-<% title("Guide") %>
-
 # Deployd Guide
 
-<div class="sidebar">
-<%= partial("video") %>
-</div>
-
 Deployd is a new way of building data-driven backends for web apps. Ready-made, configurable *Resources* add common functionality to a Deployd backend, which can be further customized with JavaScript *Events*. 
-
-<div class="sidebar-clear"></div>
 
 # Getting Started
 
