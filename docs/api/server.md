@@ -10,16 +10,19 @@ Servers are created when calling the deployd exported function.
       , options = {port: 3000}
       , server = deployd(options);
     
-* options {Object}
+* `options` {Object}
 
- - port {Number} - the port to listen on
- - db {Object} - the database to connect to
- 
-* db {Object}
+  - port {Number} - the port to listen on
+  - db {Object} - the database to connect to
+    - port {Number} - the port of the database server
+    - host {String} - the ip or domain of the database server
+    - name {String} - the name of the database
+    - credentials {Object} - credentials for the server
+      - username {String}
+      - password {String}
+  - env {String} - the environment to run in.
 
- - port - the port of the database server
- - host - the ip or domain of the database server
- - name - the name of the database
+*Note:* If `options.env` is "development", the dashboard will not require authentication and configuration will not be cached. Make sure to change this to "production" or something similar when deploying.
 
 ## Server.listen([port], [host])
 
