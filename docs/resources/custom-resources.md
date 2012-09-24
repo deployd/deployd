@@ -152,7 +152,10 @@ This will load your resources' editor from the dashboard path. It will load the 
  - `js/[current-page].js`
  - `style.css`
 
-The default page is `index`; the `config` page will also redirect to `index`. The `events` page will load the default event editor if no `events.html` file is provided.
+The default page is `index`; the `config` page will also redirect to `index`. 
+
+The `config` or `index` page will load the basic dashboard if no `index.html` file is provided.
+The `events` page will load the default event editor if no `events.html` file is provided.
 
 To embed the event editor in your dashboard, include this empty div:
   
@@ -162,17 +165,18 @@ For styling, the dashboard uses a reskinned version of [Twitter Bootstrap 2.0.2]
 
 The dashboard provides several JavaScript libraries by default:
 
- - [jQuery 1.7.2](http://jquery.com/)
- - [jquery.cookie](https://github.com/carhartl/jquery-cookie/)
- - [Underscore 1.3.3](http://underscorejs.org/)
- - [Twitter Bootstrap 2.0.2](http://twitter.github.com/bootstrap/javascript.html)
- - [UIKit](http://visionmedia.github.com/uikit/)
- - [Ace Editor](https://github.com/ajaxorg/ace) (noconflict version)
- -- JavaScript mode
- -- JSON mode
- -- Custom theme for the Dashboard (`ace/theme/deployd`)
- - [Google Code Prettify](http://code.google.com/p/google-code-prettify/)
- - dpd.js
+- [jQuery 1.7.2](http://jquery.com/)
+- [jquery.cookie](https://github.com/carhartl/jquery-cookie/)
+- [Underscore 1.3.3](http://underscorejs.org/)
+- [Twitter Bootstrap 2.0.2](http://twitter.github.com/bootstrap/javascript.html)
+- [UIKit](http://visionmedia.github.com/uikit/)
+- [Ace Editor](https://github.com/ajaxorg/ace) (noconflict version)
+    - JavaScript mode
+    - JSON mode
+    - Custom theme for the Dashboard (`ace/theme/deployd`)
+- [Google Code Prettify](http://code.google.com/p/google-code-prettify/)
+- dpd.js
+    - *Note:* all dpd.js requests will be sent as root, which gives special priveleges, such as ignoring `cancel()` in events.
 
 Within the dashboard, a `Context` object is available:
 
