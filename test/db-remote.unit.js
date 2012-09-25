@@ -1,17 +1,15 @@
 var fs = require('fs') 
   , db = require('../lib/db')
-  , configContents = fs.readFileSync('db-remote.config.json','utf8')
-  , config = JSON.parse(configContents)
+  , config = require(__dirname + '/support/db-remote.config.json')
   , tester = db.create(config)
   , store = tester.createStore('test-store')
-  , Store = require('../lib/db').Store
   , assert = require('assert')
-  ; 
-  
-if (config.host == 'foo.com') {
-    console.warn('Before you run db-remote.unit.js tests, set up the configuration in "db-remote.config.json".')
-    return;
-}
+  , cp = require('child_process');
+
+before(function (done) {
+  var cmd = "mongo " + config.name + " --eval 'db.system.users.remove({}); db.addUser(\"" + config.credentials.username + "\", \"" + config.credentials.password + "\");'";
+  cp.exec(cmd, done);
+});
 
 beforeEach(function(done){
   store.remove(function () {
