@@ -24,6 +24,8 @@ describe('config-loader', function() {
 
 
     it('should load resources', function(done) {
+      this.timeout(10000);
+      
       sh.mkdir('-p', path.join(basepath, 'resources/foo'));
       sh.mkdir('-p', path.join(basepath, 'resources/bar'));
       JSON.stringify({type: "Collection", val: 1}).to(path.join(basepath, 'resources/foo/config.json'));
