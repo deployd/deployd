@@ -4,16 +4,28 @@ var fs = require('fs')
   , tester = db.create(config)
   , store = tester.createStore('test-store')
   , assert = require('assert')
-  , cp = require('child_process');
+  , mongodb = require('mongodb');
 
-before(function (done) {
-  var cmd = "mongo " + config.name + " --eval 'db.system.users.remove({}); db.addUser(\"" + config.credentials.username + "\", \"" + config.credentials.password + "\");'";
-  if (process.platform == 'win32') {
-    cmd = cmd.replace(/'/g, '\'\'')
-             .replace(/"/g, '\'')
-             .replace(/''/g, '\"');
-  }
-  cp.exec(cmd, done);
+var mdb = new mongodb.Db(config.name, new mongodb.Server(config.host, config.port));
+
+before(function(done){
+  mdb.open(function (err) {
+    if(err) {
+      done(err);
+    } else {
+      mdb.removeUser(config.credentials.username, function (err) {
+        if(err) return done(err);
+        mdb.addUser(config.credentials.username, config.credentials.password, done)
+      });
+    }
+  });
+});
+
+after(function(done){
+  mdb.removeUser(config.credentials.username, function (err) {
+    mdb.close();
+    done(err);
+  });
 });
 
 beforeEach(function(done){
@@ -30,7 +42,7 @@ describe('db', function(){
   describe('.create(options)', function(){
     it('should connect to a remote database', function(done) {
       store.find(function (err, empty) {
-        assert.equal(empty.length, 0);
+        assert.equal(empty.length, 0)
         done(err);
       });
     });
@@ -52,7 +64,7 @@ describe('store', function(){
         store.find({i: {$lt: 3}}, function (err, result) {
           assert.equal(result.length, 2);
           result.forEach(function (obj) {
-            assert.equal(typeof obj.id, 'string');
+            assert.equal(typeof obj.id, 'string')
           });
           done(err);
         });
