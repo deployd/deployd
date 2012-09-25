@@ -8,6 +8,11 @@ var fs = require('fs')
 
 before(function (done) {
   var cmd = "mongo " + config.name + " --eval 'db.system.users.remove({}); db.addUser(\"" + config.credentials.username + "\", \"" + config.credentials.password + "\");'";
+  if (process.platform == 'win32') {
+    cmd = cmd.replace(/'/g, '\'\'')
+             .replace(/"/g, '\'')
+             .replace(/''/g, '\"');
+  }
   cp.exec(cmd, done);
 });
 
@@ -25,7 +30,7 @@ describe('db', function(){
   describe('.create(options)', function(){
     it('should connect to a remote database', function(done) {
       store.find(function (err, empty) {
-        assert.equal(empty.length, 0)
+        assert.equal(empty.length, 0);
         done(err);
       });
     });
@@ -47,7 +52,7 @@ describe('store', function(){
         store.find({i: {$lt: 3}}, function (err, result) {
           assert.equal(result.length, 2);
           result.forEach(function (obj) {
-            assert.equal(typeof obj.id, 'string')
+            assert.equal(typeof obj.id, 'string');
           });
           done(err);
         });
