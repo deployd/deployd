@@ -4,11 +4,28 @@ var fs = require('fs')
   , tester = db.create(config)
   , store = tester.createStore('test-store')
   , assert = require('assert')
-  , cp = require('child_process');
+  , mongodb = require('mongodb');
 
-before(function (done) {
-  var cmd = "mongo " + config.name + " --eval 'db.system.users.remove({}); db.addUser(\"" + config.credentials.username + "\", \"" + config.credentials.password + "\");'";
-  cp.exec(cmd, done);
+var mdb = new mongodb.Db(config.name, new mongodb.Server(config.host, config.port));
+
+before(function(done){
+  mdb.open(function (err) {
+    if(err) {
+      done(err);
+    } else {
+      mdb.removeUser(config.credentials.username, function (err) {
+        if(err) return done(err);
+        mdb.addUser(config.credentials.username, config.credentials.password, done)
+      });
+    }
+  });
+});
+
+after(function(done){
+  mdb.removeUser(config.credentials.username, function (err) {
+    mdb.close();
+    done(err);
+  });
 });
 
 beforeEach(function(done){
