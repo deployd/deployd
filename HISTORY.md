@@ -1,6 +1,9 @@
 # History
 
 ## 0.6.5
+ 
+ - Fixed `process.send` bug
+ - Remote DB Authentication
 
 ## 0.6.4
 
