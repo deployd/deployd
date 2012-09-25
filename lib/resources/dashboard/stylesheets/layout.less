@@ -1,8 +1,11 @@
-html, body {
-  min-height: 100%;
+
+
+html {
+  height: 100%;  
 }
 
 body {
+  min-height: 100%;
   .display-box();
   .box-orient(vertical);
 }
@@ -50,6 +53,8 @@ body {
 
 #main-container {
   .box-flex(1);
+  .display-box();
+  .box-orient(vertical);
 }
 
 .section-header {
@@ -63,6 +68,10 @@ body {
     .box-align(center);
     margin: 0 !important;
   }
+}
+
+#main-container .well.full-page {
+  .box-flex(1);
 }
 
 .well h3 {

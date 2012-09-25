@@ -1,9 +1,37 @@
 require('shelljs/make');
 
-var path = require('path');
+var path = require('path')
+  , less = require('less');
 
 target.all = function() {
+  target.dashboard();
   target.jshint();
+};
+
+target.dashboard = function() {
+  cd(__dirname);
+
+  var lessSource = cat('lib/resources/dashboard/stylesheets/style.less');
+
+  if (lessSource) {
+    var parser = new(less.Parser)({
+      paths: ['lib/resources/dashboard/stylesheets'], // Specify search paths for @import directives
+      filename: 'style.less' // Specify a filename, for better error messages
+    });
+
+    parser.parse(lessSource, function (e, tree) {
+      if (e) return console.error(e.message);  
+      try {
+        tree.toCSS().to('lib/resources/dashboard/stylesheets/style.css');  
+      } catch (ex) {
+        console.error(path.basename(ex.filename) + ":" + ex.line + " - " + ex.message);
+        ex.extract.forEach(function(line) {
+          console.error("    " + line);
+        });
+      }
+    });
+
+  }
 };
 
 target.jshint = function() {
