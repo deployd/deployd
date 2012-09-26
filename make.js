@@ -39,6 +39,8 @@ target.jshint = function() {
   target.jshintTest();
   target.jshintDpdJs();
   target.jshintCli();
+  target.jshintDashboard();
+  target.jshintCollectionDashboard();
 };
 
 function hint(pathName, fileName) {
@@ -67,4 +69,12 @@ target.jshintCli = function() {
   cp('bin/dpd', 'bin/dpd.js');
   hint('bin', 'dpd.js');
   rm('bin/dpd.js');
+};
+
+target.jshintDashboard = function() {
+  hint('lib/resources/dashboard/js');
+};
+
+target.jshintCollectionDashboard = function() {
+  hint('lib/resources/collection/dashboard/js');
 };
