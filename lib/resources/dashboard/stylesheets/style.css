@@ -4043,6 +4043,7 @@ body {
   -webkit-box-orient: vertical;
   -ms-box-orient: vertical;
   -o-box-orient: vertical;
+  width: 100%;
 }
 #header {
   background: rgba(33, 33, 33, 0.5) url(../img/fabric.png) !important;
@@ -4086,6 +4087,7 @@ body {
   padding: 20px;
   padding-top: 10px;
   min-height: 100%;
+  width: 100%;
   min-width: 1000px;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -4125,6 +4127,7 @@ body {
   -webkit-box-orient: vertical;
   -ms-box-orient: vertical;
   -o-box-orient: vertical;
+  width: 100%;
 }
 .section-header {
   display: box;
@@ -4175,6 +4178,14 @@ body {
   display: -webkit-box;
   display: -ms-box;
   display: -o-box;
+  width: 100%;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  box-sizing: border-box;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
 }
 .two-column-container .main-column {
   box-flex: 1;

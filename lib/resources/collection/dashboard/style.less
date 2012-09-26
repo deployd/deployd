@@ -1,0 +1,65 @@
+@import '../../dashboard/stylesheets/mixins.less';
+
+@background: url('../../img/outlets.png');
+
+#data {
+  // .box-flex(1);
+  .display-box();
+  .box-orient(vertical);
+}
+
+#table-container {
+  position: relative;
+  height: 0;
+  .box-flex(1);
+  .display-box();
+  .box-orient(vertical); 
+  overflow: auto;
+
+  table {
+    width: auto;
+  }
+
+  table tr:hover td, table tr:hover td {
+    background-color: inherit;
+  }
+
+  table td, table th {
+    max-width: 200px;
+    min-width: 200px;
+  }
+
+  table .margin {
+    max-width: 20px;
+    min-width: 20px;
+  }
+
+  #margin {
+    background: @background;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+  }
+
+  #headers {
+    background: @background;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  #new-row {
+    background: @background;
+    position: absolute;
+    bottom: 0;
+    left: 0; 
+    margin: 0;
+  }
+
+  #body-table {
+    background: @background;
+    margin: 0;
+  }
+}
+

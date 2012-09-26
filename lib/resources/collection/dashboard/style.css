@@ -1,0 +1,72 @@
+#data {
+  display: box;
+  display: -moz-box;
+  display: -webkit-box;
+  display: -ms-box;
+  display: -o-box;
+  box-orient: vertical;
+  -moz-box-orient: vertical;
+  -webkit-box-orient: vertical;
+  -ms-box-orient: vertical;
+  -o-box-orient: vertical;
+}
+#table-container {
+  position: relative;
+  height: 0;
+  box-flex: 1;
+  -moz-box-flex: 1;
+  -webkit-box-flex: 1;
+  -ms-box-flex: 1;
+  -o-box-flex: 1;
+  display: box;
+  display: -moz-box;
+  display: -webkit-box;
+  display: -ms-box;
+  display: -o-box;
+  box-orient: vertical;
+  -moz-box-orient: vertical;
+  -webkit-box-orient: vertical;
+  -ms-box-orient: vertical;
+  -o-box-orient: vertical;
+  overflow: auto;
+}
+#table-container table {
+  width: auto;
+}
+#table-container table tr:hover td,
+#table-container table tr:hover td {
+  background-color: inherit;
+}
+#table-container table td,
+#table-container table th {
+  max-width: 200px;
+  min-width: 200px;
+}
+#table-container table .margin {
+  max-width: 20px;
+  min-width: 20px;
+}
+#table-container #margin {
+  background: url('../../img/outlets.png');
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+}
+#table-container #headers {
+  background: url('../../img/outlets.png');
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+#table-container #new-row {
+  background: url('../../img/outlets.png');
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  margin: 0;
+}
+#table-container #body-table {
+  background: url('../../img/outlets.png');
+  margin: 0;
+}
