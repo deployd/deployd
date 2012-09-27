@@ -4135,6 +4135,7 @@ body {
   display: -webkit-box;
   display: -ms-box;
   display: -o-box;
+  width: 100%;
   margin-bottom: 10px;
 }
 .section-header h3 {
@@ -5375,6 +5376,7 @@ li.component-type-item {
   -webkit-box-orient: horizontal;
   -ms-box-orient: horizontal;
   -o-box-orient: horizontal;
+  width: 100%;
 }
 .component-item-edit input[type="text"] {
   width: 50px !important;
@@ -5389,6 +5391,12 @@ li.component-type-item {
 .component-item-edit label,
 .component-item-edit button {
   margin-right: 4px;
+}
+.component-item-edit > .type-selector,
+.component-item-edit > button,
+.component-item-edit > label,
+.component-item-edit > a {
+  display: block;
 }
 li.component-item {
   list-style: none;
@@ -5552,6 +5560,7 @@ table input[type=number] {
 }
 #properties {
   width: 485px;
+  max-width: 485px;
 }
 #properties label {
   margin-right: 12px;
