@@ -1,10 +1,10 @@
-/*global _dpd:true, io:true*/
-
 (function (undefined) {
 
   if (!window._dpd) window._dpd = {};
 
   var root = window.location.origin;
+
+  var consoleLog = (typeof console !== 'undefined') && console.log;
 
   // initial socket connection
   var socket = io.connect(root);
@@ -35,33 +35,25 @@
     }
 
     return parts;
-}
+  }
 
-  var normalizePath = function(path) {
-      var isAbsolute = path.charAt(0) === '/',
-          trailingSlash = path.slice(-1) === '/';
-
-      // Normalize the path
-      path = normalizeArray(path.split('/').filter(function(p) {
-        return !!p;
-      }), !isAbsolute).join('/');
-
-      if (!path && !isAbsolute) {
-        path = '.';
+  function filterArray(list, fn) {
+    if (Array.prototype.filter) return Array.prototype.filter.call(list, fn);
+    var newList = [];
+    for (var i = 0; i < list.length; i++) {
+      if (fn(list[i])) {
+        newList.push(list[i]);
       }
-      if (path && trailingSlash) {
-        path += '/';
-      }
-
-      return (isAbsolute ? '/' : '') + path;
-    };
-
+    }
+    return newList;
+  }
 
   function joinPath() {
     var paths = Array.prototype.slice.call(arguments, 0);
-    return normalizePath(paths.filter(function(p, index) {
+    paths = paths.join('/').split('/');
+    return '/' + filterArray(paths, function(p, index) {
       return p && typeof p === 'string';
-    }).join('/'));
+    }).join('/');
   }
 
   function isComplex(obj) {
@@ -79,9 +71,11 @@
 
   function createQueryString(query) {
     var parts = [];
-    Object.keys(query).forEach(function(k) {
-      parts.push(encodeURIComponent(k) + "=" + encodeURIComponent(query[k]));
-    });
+    for (var k in query) {
+      if (query.hasOwnProperty(k)) {
+        parts.push(encodeURIComponent(k) + "=" + encodeURIComponent(query[k]));  
+      }
+    }
     return parts.join('&');
   }
 
@@ -95,12 +89,14 @@
 
   function returnSuccess(fn) {
     return function(data) {
+      if (fn === consoleLog) return console.log(data);
       if (typeof fn === 'function') fn(data);
     };
   }
 
   function returnError(fn) {
     return function(data) {
+      if (fn === consoleLog) return console.error(data);
       if (typeof fn === 'function') fn(null, data);
     };
   }
@@ -174,12 +170,12 @@
     }
 
     // query
-    if (typeof args[i] === 'object' || !args[i]) {
+    if (args[i] !== consoleLog && typeof args[i] === 'object' || !args[i]) { // IE considers console.log to be an object. 
       settings.query = args[i];
       i++;
     }
 
-    if (typeof args[i] === 'function') {
+    if (typeof args[i] === 'function' || args[i] === consoleLog) {
       settings.fn = args[i];  
     }
 
@@ -197,19 +193,19 @@
     }
 
     // body
-    if (typeof args[i] === 'object' || !args[i]) {
+    if (args[i] !== consoleLog && typeof args[i] === 'object' || !args[i]) {
       settings.body = args[i];
       i++;
     }
 
     // query - if this exists the LAST obj was query and the new one is body
-    if (typeof args[i] === 'object') {
+    if (args[i] !== consoleLog && typeof args[i] === 'object') {
       settings.query = settings.body;
       settings.body = args[i];
       i++;
     }
 
-    if (typeof args[i] === 'function') {
+    if (typeof args[i] === 'function' || args[i] === consoleLog) {
       settings.fn = args[i];  
     }
 
@@ -275,13 +271,6 @@
   window.dpd.on = function() {
     socket.on.apply(socket, arguments);
   };
-
-  if (console && console.log) {
-    var originalLog = console.log;
-    _dpd.log = function() {
-      originalLog.apply(console, arguments);
-    };
-  }
 
 
 })();

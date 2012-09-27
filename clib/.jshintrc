@@ -9,7 +9,7 @@
   "undef": true,
   "browser": true,
   "devel": true,
-  "globals": {
+  "predef": {
       "io": true
     , "_dpd": true
   }

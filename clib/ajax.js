@@ -33,9 +33,11 @@ function sendRequest(url,options) {
   if (data)
     req.setRequestHeader('Content-type', options.contentType || 'application/json');
   if (typeof sendRequest.headers === 'object') {
-    Object.keys(sendRequest.headers).forEach(function(k) {
-      req.setRequestHeader(k, sendRequest.headers[k]);
-    });
+    for (var k in sendRequest.headers) {
+      if (sendRequest.headers.hasOwnProperty(k)) {
+        req.setRequestHeader(k, sendRequest.headers[k]);  
+      }
+    }
   }
   req.onreadystatechange = function () {
     if (req.readyState != 4) return;
