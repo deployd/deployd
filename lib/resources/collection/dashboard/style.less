@@ -1,13 +1,19 @@
 @import '../../dashboard/stylesheets/mixins.less';
 
 @background: url('../../img/outlets.png');
+@cellHeight: 38px;
+
+.unloaded-content {
+  display: none !important;
+}
 
 #data-container {
   .box-flex(1);
   width: 100%;
   .display-box();
   .box-orient(vertical);
-  .box-align(start);
+  // .box-align(start);
+
 }
 
 #data {
@@ -22,9 +28,9 @@
   .box-flex(1);
   .display-box();
   .box-orient(vertical); 
-  overflow: auto;
+  overflow: scroll;
 
-  table {
+  table { 
     width: auto;
   }
 
@@ -35,6 +41,7 @@
   table td, table th {
     max-width: 200px;
     min-width: 200px;
+    height: @cellHeight - 16px;
   }
 
   table .margin {
@@ -42,7 +49,11 @@
     min-width: 20px;
   }
 
-  @cellHeight: 38px;
+  .load-space td {
+    padding: 0;
+    margin: 0;
+  }
+  
 
   #margin-container {
     position: fixed;
@@ -53,22 +64,43 @@
     overflow: hidden;
     z-index: 10;
 
+    &:before, &:after {
+      content: '';
+      z-index: 11;
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: @cellHeight;
+      background: @background;
+      border: #363535 1px solid;
+    }
+
+    &:after {
+      bottom: 0;
+    }
+
     #margin {
       background: @background;
       position: absolute;
       top: 0;
       bottom: 0;
       left: 0;
+
+      .delete-btn {
+        opacity: 0.4;
+
+        &:hover {
+          opacity: 1;
+        }
+      }
     }
   }
-
- 
 
   #headers-container {
     position: fixed;
     top: 0px;
     left: 0px;
-    height: @cellHeight;
+    height: @cellHeight + 2;
     overflow: hidden;
 
     #headers {
@@ -81,7 +113,7 @@
 
   #new-row-container {  
     position: fixed;
-    height: @cellHeight;
+    height: @cellHeight + 2;
     overflow: hidden;
 
     #new-row {

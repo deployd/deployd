@@ -1,3 +1,6 @@
+.unloaded-content {
+  display: none !important;
+}
 #data-container {
   box-flex: 1;
   -moz-box-flex: 1;
@@ -15,11 +18,6 @@
   -webkit-box-orient: vertical;
   -ms-box-orient: vertical;
   -o-box-orient: vertical;
-  box-align: start;
-  -moz-box-align: start;
-  -webkit-box-align: start;
-  -ms-box-align: start;
-  -o-box-align: start;
 }
 #data {
   display: box;
@@ -51,7 +49,7 @@
   -webkit-box-orient: vertical;
   -ms-box-orient: vertical;
   -o-box-orient: vertical;
-  overflow: auto;
+  overflow: scroll;
 }
 #table-container table {
   width: auto;
@@ -64,10 +62,15 @@
 #table-container table th {
   max-width: 200px;
   min-width: 200px;
+  height: 22px;
 }
 #table-container table .margin {
   max-width: 20px;
   min-width: 20px;
+}
+#table-container .load-space td {
+  padding: 0;
+  margin: 0;
 }
 #table-container #margin-container {
   position: fixed;
@@ -78,6 +81,20 @@
   overflow: hidden;
   z-index: 10;
 }
+#table-container #margin-container:before,
+#table-container #margin-container:after {
+  content: '';
+  z-index: 11;
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 38px;
+  background: url('../../img/outlets.png');
+  border: #363535 1px solid;
+}
+#table-container #margin-container:after {
+  bottom: 0;
+}
 #table-container #margin-container #margin {
   background: url('../../img/outlets.png');
   position: absolute;
@@ -85,11 +102,17 @@
   bottom: 0;
   left: 0;
 }
+#table-container #margin-container #margin .delete-btn {
+  opacity: 0.4;
+}
+#table-container #margin-container #margin .delete-btn:hover {
+  opacity: 1;
+}
 #table-container #headers-container {
   position: fixed;
   top: 0px;
   left: 0px;
-  height: 38px;
+  height: 40px;
   overflow: hidden;
 }
 #table-container #headers-container #headers {
@@ -100,7 +123,7 @@
 }
 #table-container #new-row-container {
   position: fixed;
-  height: 38px;
+  height: 40px;
   overflow: hidden;
 }
 #table-container #new-row-container #new-row {
