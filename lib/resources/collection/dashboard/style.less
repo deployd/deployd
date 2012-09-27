@@ -2,6 +2,14 @@
 
 @background: url('../../img/outlets.png');
 
+#data-container {
+  .box-flex(1);
+  width: 100%;
+  .display-box();
+  .box-orient(vertical);
+  .box-align(start);
+}
+
 #data {
   // .box-flex(1);
   .display-box();
@@ -34,28 +42,57 @@
     min-width: 20px;
   }
 
-  #margin {
-    background: @background;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
+  @cellHeight: 38px;
+
+  #margin-container {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: @cellHeight;
+    height: 0px;
+    overflow: hidden;
+    z-index: 10;
+
+    #margin {
+      background: @background;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+    }
   }
 
-  #headers {
-    background: @background;
-    position: absolute;
-    top: 0;
-    left: 0;
+ 
+
+  #headers-container {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    height: @cellHeight;
+    overflow: hidden;
+
+    #headers {
+      background: @background;
+      position: absolute;
+      top: 0px;
+      left: 0px;
+    }
   }
 
-  #new-row {
-    background: @background;
-    position: absolute;
-    bottom: 0;
-    left: 0; 
-    margin: 0;
+  #new-row-container {  
+    position: fixed;
+    height: @cellHeight;
+    overflow: hidden;
+
+    #new-row {
+      background: @background;
+      position: absolute;
+      bottom: 0;
+      left: 0; 
+      margin: 0;
+    }
   }
+  
 
   #body-table {
     background: @background;
