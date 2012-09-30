@@ -29,6 +29,7 @@ function sendRequest(url,options) {
   var data = options.data;
   var method = options.method || "GET";
   req.open(method,url,true);
+  req.withCredentials = true;
   // req.setRequestHeader('User-Agent','XMLHTTP/1.0');
   if (data)
     req.setRequestHeader('Content-type', options.contentType || 'application/json');
@@ -57,7 +58,8 @@ var XMLHttpFactories = [
   function () {return new XMLHttpRequest()},
   function () {return new ActiveXObject("Msxml2.XMLHTTP")},
   function () {return new ActiveXObject("Msxml3.XMLHTTP")},
-  function () {return new ActiveXObject("Microsoft.XMLHTTP")}
+  function () {return new ActiveXObject("Microsoft.XMLHTTP")},
+  function () {return new XDomainRequest()}
 ];
 
 function createXMLHTTPObject() {
