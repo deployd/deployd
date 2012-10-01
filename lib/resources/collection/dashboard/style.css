@@ -133,6 +133,9 @@
   left: 0;
   margin: 0;
 }
+#table-container #new-row-container #new-row .hint {
+  opacity: 0.5;
+}
 #table-container #body-table {
   background: url('../../img/outlets.png');
   margin: 0;

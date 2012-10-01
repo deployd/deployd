@@ -59,7 +59,7 @@
                 </td>
                 <!-- ko foreach: $root.properties -->
                   <td>
-                    <div class="value">test</div>
+                    <div class="value" data-bind="text: $parent.textFor(name)"></div>
                   </td>
                 <!-- /ko -->
               </tr>
