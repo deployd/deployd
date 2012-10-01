@@ -443,6 +443,57 @@ describe('Collection', function() {
 
   });
 
+  describe('issue 76', function() {
+    it('should prevent unauthorized post', function(done) {
+      chain(function(next) {
+        dpd.todos.post({title: "$REQUIRE_AUTH"}, next);
+      }).chain(function(next, res, err) {
+        expect(err).to.exist;
+        done();
+      });
+    });
+
+    it('should allow logged in user to post', function(done) {
+      chain(function(next) {
+        dpd.users.post({username: 'foo', password: 'bar'}, next);
+      }).chain(function(next) {
+        dpd.users.login({username: 'foo', password: 'bar'}, next);
+      }).chain(function(next) {
+        dpd.todos.post({title: "$REQUIRE_AUTH"}, next);
+      }).chain(function(next, res, err) {
+        expect(err).to.not.exist;
+        expect(res.title).to.equal("$REQUIRE_AUTH");
+        done();
+      });
+    });
+
+    it('should allow logged in user to post after second try', function(done) {
+      chain(function(next) {
+        dpd.users.post({username: 'foo', password: 'bar'}, next);
+      }).chain(function(next) {
+        dpd.users.login({username: 'foo', password: 'bar'}, next);
+      }).chain(function(next) {
+        dpd.todos.post({title: "$REQUIRE_AUTH"}, next);
+      }).chain(function(next) {
+        dpd.todos.post({title: "$REQUIRE_AUTH"}, next);
+      }).chain(function(next, res, err) {
+        expect(err).to.not.exist;
+        expect(res.title).to.equal("$REQUIRE_AUTH");
+        done();
+      });
+    });
+
+
+    afterEach(function(done) {
+      this.timeout(10000);
+      dpd.users.logout(function() {
+        cleanCollection(dpd.users, function() {
+          cleanCollection(dpd.todos, done);
+        });  
+      });
+    });
+  });
+
   describe('internal cancel()', function(){
     it('should not cancel the internal call', function(done) {
       dpd.todos.post({title: '$CANCEL_TEST'}, function (todo) {
@@ -453,6 +504,8 @@ describe('Collection', function() {
         });
       });
     });
+
+
     
     afterEach(function (done) {
       this.timeout(10000);
