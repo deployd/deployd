@@ -58,7 +58,7 @@
                   <div class="value" data-bind="text: id"></div>
                 </td>
                 <!-- ko foreach: $root.properties -->
-                  <td>
+                  <td data-bind="css: {highlight: $root.selectedRow() === $parent && $root.selectedProp() === $data}, click: $parent._selectCell">
                     <div class="value" data-bind="text: $parent.textFor(name)"></div>
                   </td>
                 <!-- /ko -->
@@ -78,13 +78,13 @@
       </div>
       <div id="new-row-container" data-bind="style: {bottom: view.dimensions().bottomRelative + view.scrollWidth() + 'px', left: view.dimensions().left + 'px', width: view.dimensions().width - view.scrollWidth() + 'px'}">
         <table id="new-row" class="table table-bordered" data-bind="style: {left: -view.scrollX() + 'px'}">
-            <tr>
+            <tr data-bind="with: newRow">
               <td class="margin">&nbsp;</td>
               <td class="id-cell">
                 <div class="hint value">id</div>
               </td>
-              <!-- ko foreach: properties -->
-                <td>
+              <!-- ko foreach: $parent.properties -->
+                <td data-bind="css: {highlight: $root.selectedRow() === $parent && $root.selectedProp() === $data}, click: $parent._selectCell">
                   <div class="hint value" data-bind="text: name"></div>
                 </td>
               <!-- /ko -->
