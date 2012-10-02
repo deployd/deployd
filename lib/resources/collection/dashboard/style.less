@@ -1,6 +1,8 @@
 @import '../../dashboard/stylesheets/mixins.less';
 
+
 @background: url('../../img/outlets.png');
+@backgroundLight: url('../../img/outlets-light.png');
 @cellHeight: 38px;
 
 .unloaded-content {
@@ -16,6 +18,29 @@
 
 }
 
+#table-viewport {
+  position: relative;
+  .box-flex(1);
+
+  #inline-editor {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 100;
+
+    .mini-edit {
+      position: absolute;
+      background: @backgroundLight;
+      height: @cellHeight;
+      .box-sizing(border-box);
+      width: 300px;
+    }
+  }
+}
+
 #data {
   // .box-flex(1);
   .display-box();
@@ -23,9 +48,12 @@
 }
 
 #table-container {
-  position: relative;
-  height: 0;
-  .box-flex(1);
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  
   .display-box();
   .box-orient(vertical); 
   overflow: scroll;
@@ -138,5 +166,7 @@
     background: @background;
     margin: 0;
   }
+
+  
 }
 

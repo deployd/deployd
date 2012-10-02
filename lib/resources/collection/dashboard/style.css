@@ -19,6 +19,32 @@
   -ms-box-orient: vertical;
   -o-box-orient: vertical;
 }
+#table-viewport {
+  position: relative;
+  box-flex: 1;
+  -moz-box-flex: 1;
+  -webkit-box-flex: 1;
+  -ms-box-flex: 1;
+  -o-box-flex: 1;
+}
+#table-viewport #inline-editor {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 100;
+}
+#table-viewport #inline-editor .mini-edit {
+  position: absolute;
+  background: url('../../img/outlets-light.png');
+  height: 38px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  width: 300px;
+}
 #data {
   display: box;
   display: -moz-box;
@@ -32,13 +58,11 @@
   -o-box-orient: vertical;
 }
 #table-container {
-  position: relative;
-  height: 0;
-  box-flex: 1;
-  -moz-box-flex: 1;
-  -webkit-box-flex: 1;
-  -ms-box-flex: 1;
-  -o-box-flex: 1;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
   display: box;
   display: -moz-box;
   display: -webkit-box;

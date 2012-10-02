@@ -1,95 +1,102 @@
 <div id="data-container">
   <div id="data" class="well full-page" data-bind="scrollbarWidth: view.scrollWidth">
     <h3>Data</h3>
-    <div id="table-container" data-bind="scrollY: view.scrollY, scrollX: view.scrollX, screenDimensions: view.dimensions, reflow: properties">
-      <div id="margin-container" data-bind="style: {top: view.dimensions().top + 'px', left: view.dimensions().left + 'px', height: view.dimensions().height - view.scrollWidth() + 'px'}">
-        <table id="margin" class="table table-bordered" data-bind="style: {top: -view.scrollY() + 'px'}">
-          <thead><tr><th class="margin">&nbsp;</th></tr></thead>
-          <tbody>
-            <tr class="load-space" data-bind="visible: view.loadSpaceBefore">
-              <td class="margin" data-bind="style: {height: view.loadSpaceBefore() + 'px'}">&nbsp;</td>
-            </tr>
-            <!-- ko foreach: data -->
-              <tr><td class="margin"><a href="#" class="delete-btn"><i class="icon-white icon-trash"></i></a></td></tr>
-            <!-- /ko -->
-          </tbody>
-          <tfoot>
-            <tr><td class="margin">&nbsp;</td></tr>
-          </tfoot>
-        </table>
+    <div id="table-viewport">
+      <div id="inline-editor" data-bind="visible: inlineEdit.editing, if: inlineEdit.editing, click: inlineEdit.dismiss">
+        <div class="mini-edit" data-bind="style: {top: view.selectedCellY() + 'px', left: view.selectedCellX() + 'px'}">
+        </div>
       </div>
+      <div id="table-container" data-bind="scrollY: view.scrollY, scrollX: view.scrollX, screenDimensions: view.dimensions, reflow: properties">
+        
+        <div id="margin-container" data-bind="style: {top: view.dimensions().top + 'px', left: view.dimensions().left + 'px', height: view.dimensions().height - view.scrollWidth() + 'px'}">
+          <table id="margin" class="table table-bordered" data-bind="style: {top: -view.scrollY() + 'px'}">
+            <thead><tr><th class="margin">&nbsp;</th></tr></thead>
+            <tbody>
+              <tr class="load-space" data-bind="visible: view.loadSpaceBefore">
+                <td class="margin" data-bind="style: {height: view.loadSpaceBefore() + 'px'}">&nbsp;</td>
+              </tr>
+              <!-- ko foreach: data -->
+                <tr><td class="margin"><a href="#" class="delete-btn"><i class="icon-white icon-trash"></i></a></td></tr>
+              <!-- /ko -->
+            </tbody>
+            <tfoot>
+              <tr><td class="margin">&nbsp;</td></tr>
+            </tfoot>
+          </table>
+        </div>
 
 
-      <div id="headers-container" data-bind="style: {top: view.dimensions().top + 'px', left: view.dimensions().left + 'px', width: view.dimensions().width - view.scrollWidth() + 'px'}">
-        <table id="headers" class="table table-bordered" data-bind="style: {left: -view.scrollX() + 'px'}" >
-          <thead>
-            <tr>
-              <th class="margin">&nbsp;</th>
-              <th class="id-cell"> <i class="icon-custom icon-white string" data-bind="tooltip: 'id'"></i> id</th>
-              <!-- ko foreach: properties -->
-              <th> <i class="icon-custom icon-white" data-bind="cssNamed: type, tooltip: typeLabel"></i> <span data-bind="text: name"></span></th>
-              <!-- /ko -->
-            </tr>
-          </thead>
-        </table>
-      </div>
-      <div id="body-table-container">
-        <table id="body-table" class="table table-bordered" data-bind="element: view.$table">
-          <thead>
-            <tr>
-              <th class="margin">&nbsp;</th>
-              <th class="id-cell">&nbsp;</th>
-              <!-- ko foreach: properties -->
-              <th>&nbsp;</th>
-              <!-- /ko -->
-            </tr>
-          </thead>
-          <tbody>
-            <tr class="load-space" data-bind="visible: view.loadSpaceBefore">
-              <td class="margin"></td>
-              <td data-bind="attr: {colspan: 2 + properties().length}, style: {height: view.loadSpaceBefore() + 'px'}">
-              </td>
-            </tr>
-            <!-- ko foreach: data -->
+        <div id="headers-container" data-bind="style: {top: view.dimensions().top + 'px', left: view.dimensions().left + 'px', width: view.dimensions().width - view.scrollWidth() + 'px'}">
+          <table id="headers" class="table table-bordered" data-bind="style: {left: -view.scrollX() + 'px'}" >
+            <thead>
               <tr>
-                <td class="margin">
+                <th class="margin">&nbsp;</th>
+                <th class="id-cell"> <i class="icon-custom icon-white string" data-bind="tooltip: 'id'"></i> id</th>
+                <!-- ko foreach: properties -->
+                <th> <i class="icon-custom icon-white" data-bind="cssNamed: type, tooltip: typeLabel"></i> <span data-bind="text: name"></span></th>
+                <!-- /ko -->
+              </tr>
+            </thead>
+          </table>
+        </div>
+        <div id="body-table-container">
+          <table id="body-table" class="table table-bordered" data-bind="element: view.$table">
+            <thead>
+              <tr>
+                <th class="margin">&nbsp;</th>
+                <th class="id-cell">&nbsp;</th>
+                <!-- ko foreach: properties -->
+                <th>&nbsp;</th>
+                <!-- /ko -->
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="load-space" data-bind="visible: view.loadSpaceBefore">
+                <td class="margin"></td>
+                <td data-bind="attr: {colspan: 2 + properties().length}, style: {height: view.loadSpaceBefore() + 'px'}">
                 </td>
+              </tr>
+              <!-- ko foreach: data -->
+                <tr>
+                  <td class="margin">
+                  </td>
+                  <td class="id-cell">
+                    <div class="value" data-bind="text: id"></div>
+                  </td>
+                  <!-- ko foreach: $root.properties -->
+                    <td data-bind="css: {highlight: $root.selectedRow() === $parent && $root.selectedProp() === $data}, click: $parent._selectCell, event: {dblclick: $parent._editProp}">
+                      <div class="value" data-bind="text: $parent._textFor(name)"></div>
+                    </td>
+                  <!-- /ko -->
+                </tr>
+              <!-- /ko -->
+            </tbody>
+            <tfoot>
+              <tr>
+                <th class="margin">&nbsp;</th>
+                <th class="id-cell">&nbsp;</th>
+                <!-- ko foreach: properties -->
+                <th>&nbsp;</th>
+                <!-- /ko -->
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+        <div id="new-row-container" data-bind="style: {bottom: view.dimensions().bottomRelative + view.scrollWidth() + 'px', left: view.dimensions().left + 'px', width: view.dimensions().width - view.scrollWidth() + 'px'}">
+          <table id="new-row" class="table table-bordered" data-bind="style: {left: -view.scrollX() + 'px'}">
+              <tr data-bind="with: newRow">
+                <td class="margin">&nbsp;</td>
                 <td class="id-cell">
-                  <div class="value" data-bind="text: id"></div>
+                  <div class="hint value">id</div>
                 </td>
-                <!-- ko foreach: $root.properties -->
+                <!-- ko foreach: $parent.properties -->
                   <td data-bind="css: {highlight: $root.selectedRow() === $parent && $root.selectedProp() === $data}, click: $parent._selectCell">
-                    <div class="value" data-bind="text: $parent.textFor(name)"></div>
+                    <div class="hint value" data-bind="text: name"></div>
                   </td>
                 <!-- /ko -->
               </tr>
-            <!-- /ko -->
-          </tbody>
-          <tfoot>
-            <tr>
-              <th class="margin">&nbsp;</th>
-              <th class="id-cell">&nbsp;</th>
-              <!-- ko foreach: properties -->
-              <th>&nbsp;</th>
-              <!-- /ko -->
-            </tr>
-          </tfoot>
-        </table>
-      </div>
-      <div id="new-row-container" data-bind="style: {bottom: view.dimensions().bottomRelative + view.scrollWidth() + 'px', left: view.dimensions().left + 'px', width: view.dimensions().width - view.scrollWidth() + 'px'}">
-        <table id="new-row" class="table table-bordered" data-bind="style: {left: -view.scrollX() + 'px'}">
-            <tr data-bind="with: newRow">
-              <td class="margin">&nbsp;</td>
-              <td class="id-cell">
-                <div class="hint value">id</div>
-              </td>
-              <!-- ko foreach: $parent.properties -->
-                <td data-bind="css: {highlight: $root.selectedRow() === $parent && $root.selectedProp() === $data}, click: $parent._selectCell">
-                  <div class="hint value" data-bind="text: name"></div>
-                </td>
-              <!-- /ko -->
-            </tr>
-        </table>
+          </table>
+        </div>
       </div>
     </div>
   </div>
