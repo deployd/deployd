@@ -1,3 +1,7 @@
+if (this.title == "$REQUIRE_AUTH") {
+    if (!me) cancel("You are not authorized", 401);
+}
+
 if (this.title === "$FAIL") {
     var x = null;
     x.fail();

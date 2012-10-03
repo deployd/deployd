@@ -3,7 +3,7 @@ if (query.title === "$FAIL2") {
     x.fail();
 }
 
-if (this.title === "$GET_CANCEL") {
+if (this.title === "$GET_CANCEL" && !query.clean) {
   cancel("Cancelled");
 }
 
