@@ -33,6 +33,11 @@ Otherwise, you will need to install Deployd as a dependency of your app itself u
 
 You can use the `dpd` CLI to run your server; this will start up an instance of MongoDB automatically, using the "data" folder. (Requires MongoDB installed on the server)
 
+## Dashboard Accesss
+To set up the dashboard on your server, type `dpd keygen` on your server's command line to create a remote access key. Type `dpd showkey` to get the key; you should store this somewhere secure.
+
+Now you can go to the `/dashboard` route on the server and type in this key to gain access.
+
 ## Server Script
 
 For more control, you can create a simple script to run the server. Here's an example:
@@ -59,6 +64,7 @@ For more control, you can create a simple script to run the server. Here's an ex
     server.on('listening', function() {
       console.log("Server is listening");
     });
+
     server.on('error', function(err) {
       console.error(err);
       process.nextTick(function() { // Give the server a chance to return an error
