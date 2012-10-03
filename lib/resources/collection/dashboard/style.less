@@ -11,6 +11,7 @@
 
 #data-container {
   .box-flex(1);
+
   width: 100%;
   .display-box();
   .box-orient(vertical);
@@ -18,26 +19,29 @@
 
 }
 
-#table-viewport {
-  position: relative;
-  .box-flex(1);
+#inline-editor {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
 
-  #inline-editor {
+  // height: @cellHeight;
+  // width: 100px;
+
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 100;
+
+  #inline-editor-table-overlay {
+    position: fixed;
+  }
+
+  .mini-edit {
     position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 100;
-
-    .mini-edit {
-      position: absolute;
-      background: @backgroundLight;
-      height: @cellHeight;
-      .box-sizing(border-box);
-      width: 300px;
-    }
+    background: @backgroundLight;
+    height: @cellHeight;
+    .box-sizing(border-box);
+    width: 300px;
   }
 }
 
@@ -48,11 +52,9 @@
 }
 
 #table-container {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  position: relative;
+  .box-flex(1);
+  height: 0;
   
   .display-box();
   .box-orient(vertical); 
