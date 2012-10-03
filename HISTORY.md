@@ -1,5 +1,10 @@
 # History
 
+## 0.6.6
+ 
+ - Exposed the server object to modules as `process.server`
+ - Fixed minor bug when loading only node modules
+
 ## 0.6.5
  
  - Fixed `process.send` bug
