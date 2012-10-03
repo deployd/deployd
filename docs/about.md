@@ -1,4 +1,4 @@
-# About Deployd Server
+# About Deployd
 
 We call Deployd a **resource server**. A resource server is not a library, but a complete server that works out of the box, and can be customized to fit the needs of your app by adding resources. Resources are ready-made components that live at a URL and provide functionality to your client app.
 
