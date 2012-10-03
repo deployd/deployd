@@ -2,6 +2,7 @@
 
 ## 0.6.6
  
+ - Added CORS support
  - Exposed the server object to modules as `process.server`
  - Fixed a rare bug where the first request after a login would not be authenticated
  - Fixed minor bug when loading only node modules
