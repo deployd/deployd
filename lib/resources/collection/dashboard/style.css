@@ -32,13 +32,27 @@
   position: fixed;
 }
 #inline-editor .mini-edit {
+  padding: 8px;
   position: absolute;
   background: url('../../img/outlets-light.png');
-  height: 38px;
   box-sizing: border-box;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
-  width: 300px;
+}
+#inline-editor .mini-edit input {
+  margin: 0;
+}
+#inline-editor .mini-edit input[type=text] {
+  min-width: 200px;
+  max-width: 300px;
+}
+#inline-editor .mini-edit label {
+  min-width: 200px;
+}
+#inline-editor .mini-edit label input[type=checkbox] {
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 8px;
 }
 #data {
   display: box;

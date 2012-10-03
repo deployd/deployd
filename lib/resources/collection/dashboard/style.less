@@ -37,11 +37,29 @@
   }
 
   .mini-edit {
+    padding: 8px;
     position: absolute;
     background: @backgroundLight;
-    height: @cellHeight;
     .box-sizing(border-box);
-    width: 300px;
+
+    input {
+      margin: 0;
+    }
+
+    input[type=text] {
+      min-width: 200px;
+      max-width: 300px;
+    }
+
+    label {
+      min-width: 200px;
+      input[type=checkbox] {
+        display: inline-block;
+        vertical-align: middle;
+        margin-right: 8px;
+      }  
+    }
+    
   }
 }
 
