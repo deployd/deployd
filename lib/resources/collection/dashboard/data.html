@@ -31,7 +31,7 @@
               <td class="margin" data-bind="style: {height: view.loadSpaceBefore() + 'px'}">&nbsp;</td>
             </tr>
             <!-- ko foreach: data -->
-              <tr><td class="margin"><a href="#" class="delete-btn"><i class="icon-white icon-trash"></i></a></td></tr>
+              <tr><td class="margin"><a href="#" class="delete-btn" data-bind="click: _deleteRow"><i class="icon-white icon-trash"></i></a></td></tr>
             <!-- /ko -->
           </tbody>
           <tfoot>
@@ -105,7 +105,7 @@
             <tr data-bind="with: newRow">
               <td class="margin">&nbsp;</td>
               <td class="id-cell">
-                <div class="hint value">id</div>
+                <div class="hint value"><i class="icon-asterisk icon-white"></i></div>
               </td>
               <!-- ko foreach: $parent.properties -->
                 <td data-bind="css: {highlight: $root.selectedRow() === $parent && $root.selectedProp() === $data}, click: $parent._selectCell, event: {dblclick: $parent._editProp}">

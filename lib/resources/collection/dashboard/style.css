@@ -188,6 +188,9 @@
   left: 0;
   margin: 0;
 }
+#table-container #new-row-container #new-row .id-cell {
+  font-style: italic;
+}
 #table-container #new-row-container #new-row .hint {
   opacity: 0.5;
 }
