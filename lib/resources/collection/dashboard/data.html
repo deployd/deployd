@@ -13,10 +13,10 @@
               <input type="text" data-bind="hasfocus: vm.inlineEdit.focusInput, value: inlineEdit.editValue, valueUpdate: 'afterkeydown'" />
             <!-- /ko -->
             <!-- ko if: selectedProp().type === 'number' -->
-              <input type="number" data-bind="hasfocus: vm.inlineEdit.focusInput" />
+              <input type="number" data-bind="hasfocus: vm.inlineEdit.focusInput, numberValue: inlineEdit.editValue, valueUpdate: 'input'" />
             <!-- /ko -->
             <!-- ko if: selectedProp().type === 'boolean' -->
-              <label><input type="checkbox" data-bind="hasfocus: vm.inlineEdit.focusInput" /><span data-bind="text: selectedProp().name"></span></label>
+              <label><input type="checkbox" data-bind="hasfocus: vm.inlineEdit.focusInput, checked: inlineEdit.editValue" /><span data-bind="text: selectedProp().name"></span></label>
             <!-- /ko -->
           </div>
         </div>
