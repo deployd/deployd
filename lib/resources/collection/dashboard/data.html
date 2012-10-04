@@ -10,10 +10,10 @@
         <div id="inline-editor-table-overlay" data-bind="style: {top: view.dimensions().top + 'px', left: view.dimensions().left + 'px', bottom: view.dimensions().bottomRelative + 'px', right: view.dimensions().rightRelative + 'px' }">
           <div class="mini-edit" data-bind="style: {top: view.selectedCellPos().top + 'px', left: view.selectedCellPos().left + 'px'}, if: inlineEdit.editing, click: view.noOp, clickBubble: false">
             <!-- ko if: selectedProp().type === 'string' -->
-              <input type="text" data-bind="hasfocus: vm.inlineEdit.focusInput, value: inlineEdit.editValue, valueUpdate: 'afterkeydown'" />
+              <input type="text" data-bind="hasfocus: vm.inlineEdit.focusInput, select: 'selectEditor', value: inlineEdit.editValue, valueUpdate: 'afterkeydown'" />
             <!-- /ko -->
             <!-- ko if: selectedProp().type === 'number' -->
-              <input type="number" data-bind="hasfocus: vm.inlineEdit.focusInput, numberValue: inlineEdit.editValue, valueUpdate: 'input'" />
+              <input type="text" class="number" data-bind="hasfocus: vm.inlineEdit.focusInput, select: 'selectEditor', numberValue: inlineEdit.editValue, valueUpdate: 'afterkeydown'" />
             <!-- /ko -->
             <!-- ko if: selectedProp().type === 'boolean' -->
               <label><input type="checkbox" data-bind="hasfocus: vm.inlineEdit.focusInput, checked: inlineEdit.editValue" /><span data-bind="text: selectedProp().name"></span></label>
