@@ -38,6 +38,9 @@
             <tr><td class="margin">&nbsp;</td></tr>
           </tfoot>
         </table>
+        <div id="margin-footer" data-bind="if: propertiesLoaded">
+          <a href="#" title="Save Row" data-bind="visible: newRow._isValid, click: newRow._save"><i class="icon-ok icon-white"></i></a>
+        </div>
       </div>
 
 
@@ -97,7 +100,7 @@
           </tfoot>
         </table>
       </div>
-      <div id="new-row-container" data-bind="style: {bottom: view.dimensions().bottomRelative + view.scrollWidth() + 'px', left: view.dimensions().left + 'px', width: view.dimensions().width - view.scrollWidth() + 'px'}">
+      <div id="new-row-container" data-bind="style: {bottom: view.dimensions().bottomRelative + view.scrollWidth() + 'px', left: view.dimensions().left + 'px', width: view.dimensions().width - view.scrollWidth() + 'px'}, if: propertiesLoaded">
         <table id="new-row" class="table table-bordered" data-bind="style: {left: -view.scrollX() + 'px'}, element: view.$newRow">
             <tr data-bind="with: newRow">
               <td class="margin">&nbsp;</td>
@@ -106,7 +109,12 @@
               </td>
               <!-- ko foreach: $parent.properties -->
                 <td data-bind="css: {highlight: $root.selectedRow() === $parent && $root.selectedProp() === $data}, click: $parent._selectCell, event: {dblclick: $parent._editProp}">
-                  <div class="hint value" data-bind="text: name"></div>
+                  <!-- ko if: $parent[name]() -->
+                    <div class="value" data-bind="text: $parent._textFor($data)"></div>
+                  <!-- /ko -->
+                  <!-- ko if: !$parent[name]() -->
+                    <div class="hint value" data-bind="text: name"></div>
+                  <!-- /ko -->
                 </td>
               <!-- /ko -->
             </tr>

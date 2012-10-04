@@ -90,6 +90,13 @@
     max-width: 200px;
     min-width: 200px;
     height: @cellHeight - 16px;
+   
+    .value {
+      max-height: @cellHeight - 16px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
   }
 
   table tr td.highlight {
@@ -116,7 +123,7 @@
     overflow: hidden;
     z-index: 10;
 
-    &:before, &:after {
+    &:before {
       content: '';
       z-index: 11;
       position: absolute;
@@ -125,10 +132,6 @@
       height: @cellHeight;
       background: @background;
       border: #363535 1px solid;
-    }
-
-    &:after {
-      bottom: 0;
     }
 
     #margin {
@@ -145,6 +148,19 @@
           opacity: 1;
         }
       }
+    }
+
+    #margin-footer {
+      z-index: 11;
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: @cellHeight + 2;
+      background: @background;
+      border: #363535 1px solid;
+      .box-sizing(border-box);
+      padding: 8px;
     }
   }
 
