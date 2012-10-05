@@ -1,12 +1,12 @@
 <div id="data" class="well full-page" data-bind="scrollbarWidth: view.scrollWidth">
   <h3>Data</h3>
 
-  <div class="alert alert-info hide" data-bind="css: {hide: !(propertiesLoaded() && !properties().length)}">
+  <div id="no-property-warning" class="alert alert-info hide">
     You do not have any properties added to this collection. <br />
     <a href="../properties">Add some now</a> before editing data.
   </div>
 
-  <div id="table-container" data-bind="scrollY: view.scrollY, scrollX: view.scrollX, screenDimensions: view.dimensions, reflow: properties, visible: !(propertiesLoaded() && !properties().length)">      
+  <div id="table-container" data-bind="scrollY: view.scrollY, scrollX: view.scrollX, screenDimensions: view.dimensions, reflow: properties">      
 
     <div id="editor-modal" class="modal hide" data-bind="if: propertiesLoaded, bootstrapModal: edit.editingModal">
       <div class="modal-header">
