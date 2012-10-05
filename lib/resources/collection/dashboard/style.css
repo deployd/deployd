@@ -1,30 +1,12 @@
 .unloaded-content {
   display: none !important;
 }
-#data-container {
-  box-flex: 1;
-  -moz-box-flex: 1;
-  -webkit-box-flex: 1;
-  -ms-box-flex: 1;
-  -o-box-flex: 1;
-  width: 100%;
-  display: box;
-  display: -moz-box;
-  display: -webkit-box;
-  display: -ms-box;
-  display: -o-box;
-  box-orient: vertical;
-  -moz-box-orient: vertical;
-  -webkit-box-orient: vertical;
-  -ms-box-orient: vertical;
-  -o-box-orient: vertical;
-}
 #inline-editor {
   position: fixed;
   top: 0;
   bottom: 0;
-  left: 0;
   right: 0;
+  left: 0;
   background: rgba(0, 0, 0, 0.5);
   z-index: 100;
 }
@@ -74,16 +56,6 @@
   -ms-box-flex: 1;
   -o-box-flex: 1;
   height: 0;
-  display: box;
-  display: -moz-box;
-  display: -webkit-box;
-  display: -ms-box;
-  display: -o-box;
-  box-orient: vertical;
-  -moz-box-orient: vertical;
-  -webkit-box-orient: vertical;
-  -ms-box-orient: vertical;
-  -o-box-orient: vertical;
   overflow: scroll;
 }
 #table-container table {

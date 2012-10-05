@@ -9,22 +9,12 @@
   display: none !important;
 }
 
-#data-container {
-  .box-flex(1);
-
-  width: 100%;
-  .display-box();
-  .box-orient(vertical);
-  // .box-align(start);
-
-}
-
 #inline-editor {
   position: fixed;
   top: 0;
   bottom: 0;
-  left: 0;
   right: 0;
+  left: 0;
 
   // height: @cellHeight;
   // width: 100px;
@@ -64,7 +54,6 @@
 }
 
 #data {
-  // .box-flex(1);
   .display-box();
   .box-orient(vertical);
 }
@@ -74,8 +63,8 @@
   .box-flex(1);
   height: 0;
   
-  .display-box();
-  .box-orient(vertical); 
+  // .display-box();
+  // .box-orient(vertical); 
   overflow: scroll;
 
   table { 

@@ -1,125 +1,141 @@
-<div id="data-container">
-    
+<div id="data" class="well full-page" data-bind="scrollbarWidth: view.scrollWidth">
+  <h3>Data</h3>
 
-    <div id="data" class="well full-page" data-bind="scrollbarWidth: view.scrollWidth">
-    <h3>Data</h3>
+  <div class="alert alert-info hide" data-bind="css: {hide: !(propertiesLoaded() && !properties().length)}">
+    You do not have any properties added to this collection. <br />
+    <a href="../properties">Add some now</a> before editing data.
+  </div>
 
-    <div id="table-container" data-bind="scrollY: view.scrollY, scrollX: view.scrollX, screenDimensions: view.dimensions, reflow: properties">      
+  <div id="table-container" data-bind="scrollY: view.scrollY, scrollX: view.scrollX, screenDimensions: view.dimensions, reflow: properties, visible: !(propertiesLoaded() && !properties().length)">      
 
-      <div id="inline-editor" data-bind="style: {visibility: inlineEdit.editing() ? 'visible' : 'hidden'}, click: inlineEdit.dismiss">
-        <div id="inline-editor-table-overlay" data-bind="style: {top: view.dimensions().top + 'px', left: view.dimensions().left + 'px', bottom: view.dimensions().bottomRelative + 'px', right: view.dimensions().rightRelative + 'px' }">
-          <div class="mini-edit" data-bind="style: {top: view.selectedCellPos().top + 'px', left: view.selectedCellPos().left + 'px'}, if: inlineEdit.editing, click: view.noOp, clickBubble: false">
-            <!-- ko if: selectedProp().type === 'string' -->
-              <input type="text" data-bind="hasfocus: vm.inlineEdit.focusInput, select: 'selectEditor', value: inlineEdit.editValue, valueUpdate: 'afterkeydown'" />
-            <!-- /ko -->
-            <!-- ko if: selectedProp().type === 'number' -->
-              <input type="text" class="number" data-bind="hasfocus: vm.inlineEdit.focusInput, select: 'selectEditor', numberValue: inlineEdit.editValue, valueUpdate: 'afterkeydown'" />
-            <!-- /ko -->
-            <!-- ko if: selectedProp().type === 'boolean' -->
-              <label><input type="checkbox" data-bind="hasfocus: vm.inlineEdit.focusInput, checked: inlineEdit.editValue" /><span data-bind="text: selectedProp().name"></span></label>
-            <!-- /ko -->
-          </div>
-        </div>
-        
+    <div id="editor-modal" class="modal hide" data-bind="if: propertiesLoaded, bootstrapModal: edit.editingModal">
+      <div class="modal-header">
+        <a href="#" class="close" data-bind="click: edit.cancel">&times;</a>
+        <h3 data-bind="text: selectedProp().name"></h3>
       </div>
-
-      <div id="margin-container" data-bind="style: {top: view.dimensions().top + 'px', left: view.dimensions().left + 'px', height: view.dimensions().height - view.scrollWidth() + 'px'}">
-        <table id="margin" class="table table-bordered" data-bind="style: {top: -view.scrollY() + 'px'}">
-          <thead><tr><th class="margin">&nbsp;</th></tr></thead>
-          <tbody>
-            <tr class="load-space" data-bind="visible: view.loadSpaceBefore">
-              <td class="margin" data-bind="style: {height: view.loadSpaceBefore() + 'px'}">&nbsp;</td>
-            </tr>
-            <!-- ko foreach: data -->
-              <tr><td class="margin"><a href="#" class="delete-btn" data-bind="click: _deleteRow"><i class="icon-white icon-trash"></i></a></td></tr>
-            <!-- /ko -->
-          </tbody>
-          <tfoot>
-            <tr><td class="margin">&nbsp;</td></tr>
-          </tfoot>
-        </table>
-        <div id="margin-footer" data-bind="if: propertiesLoaded">
-          <a href="#" title="Save Row" data-bind="visible: newRow._isValid, click: newRow._save"><i class="icon-ok icon-white"></i></a>
+      <div class="modal-body">
+        <div data-bind="text: edit.editValue">
         </div>
       </div>
-
-
-      <div id="headers-container" data-bind="style: {top: view.dimensions().top + 'px', left: view.dimensions().left + 'px', width: view.dimensions().width - view.scrollWidth() + 'px'}">
-        <table id="headers" class="table table-bordered" data-bind="style: {left: -view.scrollX() + 'px'}" >
-          <thead>
-            <tr>
-              <th class="margin">&nbsp;</th>
-              <th class="id-cell"> <i class="icon-custom icon-white string" data-bind="tooltip: 'id'"></i> id</th>
-              <!-- ko foreach: properties -->
-              <th> <i class="icon-custom icon-white" data-bind="cssNamed: type, tooltip: typeLabel"></i> <span data-bind="text: name"></span></th>
-              <!-- /ko -->
-            </tr>
-          </thead>
-        </table>
-      </div>
-      <div id="body-table-container">
-        <table id="body-table" class="table table-bordered" data-bind="element: view.$table">
-          <thead>
-            <tr>
-              <th class="margin">&nbsp;</th>
-              <th class="id-cell">&nbsp;</th>
-              <!-- ko foreach: properties -->
-              <th>&nbsp;</th>
-              <!-- /ko -->
-            </tr>
-          </thead>
-          <tbody>
-            <tr class="load-space" data-bind="visible: view.loadSpaceBefore">
-              <td class="margin"></td>
-              <td data-bind="attr: {colspan: 2 + properties().length}, style: {height: view.loadSpaceBefore() + 'px'}">
-              </td>
-            </tr>
-            <!-- ko foreach: data -->
-              <tr>
-                <td class="margin">
-                </td>
-                <td class="id-cell">
-                  <div class="value" data-bind="text: id"></div>
-                </td>
-                <!-- ko foreach: $root.properties -->
-                  <td data-bind="css: {highlight: $root.selectedRow() === $parent && $root.selectedProp() === $data}, click: $parent._selectCell, event: {dblclick: $parent._editProp}">
-                    <div class="value" data-bind="text: $parent._textFor($data)"></div>
-                  </td>
-                <!-- /ko -->
-              </tr>
-            <!-- /ko -->
-          </tbody>
-          <tfoot>
-            <tr>
-              <th class="margin">&nbsp;</th>
-              <th class="id-cell">&nbsp;</th>
-              <!-- ko foreach: properties -->
-              <th>&nbsp;</th>
-              <!-- /ko -->
-            </tr>
-          </tfoot>
-        </table>
-      </div>
-      <div id="new-row-container" data-bind="style: {bottom: view.dimensions().bottomRelative + view.scrollWidth() + 'px', left: view.dimensions().left + 'px', width: view.dimensions().width - view.scrollWidth() + 'px'}, if: propertiesLoaded">
-        <table id="new-row" class="table table-bordered" data-bind="style: {left: -view.scrollX() + 'px'}, element: view.$newRow">
-            <tr data-bind="with: newRow">
-              <td class="margin">&nbsp;</td>
-              <td class="id-cell">
-                <div class="hint value"><i class="icon-asterisk icon-white"></i></div>
-              </td>
-              <!-- ko foreach: $parent.properties -->
-                <td data-bind="css: {highlight: $root.selectedRow() === $parent && $root.selectedProp() === $data}, click: $parent._selectCell, event: {dblclick: $parent._editProp}">
-                  <!-- ko if: $parent[name]() -->
-                    <div class="value" data-bind="text: $parent._textFor($data)"></div>
-                  <!-- /ko -->
-                  <!-- ko if: !$parent[name]() -->
-                    <div class="hint value" data-bind="text: name"></div>
-                  <!-- /ko -->
-                </td>
-              <!-- /ko -->
-            </tr>
-        </table>
+      <div class="modal-footer">
+        <a href="#" class="btn" data-bind="click: edit.cancel">Close</a>
+        <a href="#" class="btn btn-primary">Save changes</a>
       </div>
     </div>
+
+    <div id="inline-editor" data-bind="style: {visibility: edit.editingInline() ? 'visible' : 'hidden'}, click: edit.dismiss">
+      <div id="inline-editor-table-overlay" data-bind="style: {top: view.dimensions().top + 'px', left: view.dimensions().left + 'px', bottom: view.dimensions().bottomRelative + 'px', right: view.dimensions().rightRelative + 'px' }">
+        <div class="mini-edit" data-bind="style: {top: view.selectedCellPos().top + 'px', left: view.selectedCellPos().left + 'px'}, if: edit.editingInline, click: view.noOp, clickBubble: false">
+          <!-- ko if: selectedProp().type === 'string' -->
+            <input type="text" data-bind="hasfocus: vm.edit.focusInput, select: 'selectEditor', value: edit.editValue, valueUpdate: 'afterkeydown'" />
+          <!-- /ko -->
+          <!-- ko if: selectedProp().type === 'number' -->
+            <input type="text" class="number" data-bind="hasfocus: vm.edit.focusInput, select: 'selectEditor', numberValue: edit.editValue, valueUpdate: 'afterkeydown'" />
+          <!-- /ko -->
+          <!-- ko if: selectedProp().type === 'boolean' -->
+            <label><input type="checkbox" data-bind="hasfocus: vm.edit.focusInput, checked: edit.editValue" /><span data-bind="text: selectedProp().name"></span></label>
+          <!-- /ko -->
+        </div>
+      </div>
+      
+    </div>
+
+    <div id="margin-container" data-bind="style: {top: view.dimensions().top + 'px', left: view.dimensions().left + 'px', height: view.dimensions().height - view.scrollWidth() + 'px'}">
+      <table id="margin" class="table table-bordered" data-bind="style: {top: -view.scrollY() + 'px'}">
+        <thead><tr><th class="margin">&nbsp;</th></tr></thead>
+        <tbody>
+          <tr class="load-space" data-bind="visible: view.loadSpaceBefore">
+            <td class="margin" data-bind="style: {height: view.loadSpaceBefore() + 'px'}">&nbsp;</td>
+          </tr>
+          <!-- ko foreach: data -->
+            <tr><td class="margin"><a href="#" class="delete-btn" data-bind="click: _deleteRow"><i class="icon-white icon-trash"></i></a></td></tr>
+          <!-- /ko -->
+        </tbody>
+        <tfoot>
+          <tr><td class="margin">&nbsp;</td></tr>
+        </tfoot>
+      </table>
+      <div id="margin-footer" data-bind="if: propertiesLoaded">
+        <a href="#" title="Save Row" data-bind="visible: newRow._isValid, click: newRow._save"><i class="icon-ok icon-white"></i></a>
+      </div>
+    </div>
+
+
+    <div id="headers-container" data-bind="style: {top: view.dimensions().top + 'px', left: view.dimensions().left + 'px', width: view.dimensions().width - view.scrollWidth() + 'px'}">
+      <table id="headers" class="table table-bordered" data-bind="style: {left: -view.scrollX() + 'px'}" >
+        <thead>
+          <tr>
+            <th class="margin">&nbsp;</th>
+            <th class="id-cell"> <i class="icon-custom icon-white string" data-bind="tooltip: 'id'"></i> id</th>
+            <!-- ko foreach: properties -->
+            <th> <i class="icon-custom icon-white" data-bind="cssNamed: type, tooltip: typeLabel"></i> <span data-bind="text: name"></span></th>
+            <!-- /ko -->
+          </tr>
+        </thead>
+      </table>
+    </div>
+    <div id="body-table-container">
+      <table id="body-table" class="table table-bordered" data-bind="element: view.$table">
+        <thead>
+          <tr>
+            <th class="margin">&nbsp;</th>
+            <th class="id-cell">&nbsp;</th>
+            <!-- ko foreach: properties -->
+            <th>&nbsp;</th>
+            <!-- /ko -->
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="load-space" data-bind="visible: view.loadSpaceBefore">
+            <td class="margin"></td>
+            <td data-bind="attr: {colspan: 2 + properties().length}, style: {height: view.loadSpaceBefore() + 'px'}">
+            </td>
+          </tr>
+          <!-- ko foreach: data -->
+            <tr>
+              <td class="margin">
+              </td>
+              <td class="id-cell">
+                <div class="value" data-bind="text: id"></div>
+              </td>
+              <!-- ko foreach: $root.properties -->
+                <td data-bind="css: {highlight: $root.selectedRow() === $parent && $root.selectedProp() === $data}, click: $parent._selectCell, event: {dblclick: $parent._editProp}">
+                  <div class="value" data-bind="text: $parent._textFor($data)"></div>
+                </td>
+              <!-- /ko -->
+            </tr>
+          <!-- /ko -->
+        </tbody>
+        <tfoot>
+          <tr>
+            <th class="margin">&nbsp;</th>
+            <th class="id-cell">&nbsp;</th>
+            <!-- ko foreach: properties -->
+            <th>&nbsp;</th>
+            <!-- /ko -->
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+    <div id="new-row-container" data-bind="style: {bottom: view.dimensions().bottomRelative + view.scrollWidth() + 'px', left: view.dimensions().left + 'px', width: view.dimensions().width - view.scrollWidth() + 'px'}, if: propertiesLoaded">
+      <table id="new-row" class="table table-bordered" data-bind="style: {left: -view.scrollX() + 'px'}, element: view.$newRow">
+          <tr data-bind="with: newRow">
+            <td class="margin">&nbsp;</td>
+            <td class="id-cell">
+              <div class="hint value"><i class="icon-asterisk icon-white"></i></div>
+            </td>
+            <!-- ko foreach: $parent.properties -->
+              <td data-bind="css: {highlight: $root.selectedRow() === $parent && $root.selectedProp() === $data}, click: $parent._selectCell, event: {dblclick: $parent._editProp}">
+                <!-- ko if: $parent[name]() -->
+                  <div class="value" data-bind="text: $parent._textFor($data)"></div>
+                <!-- /ko -->
+                <!-- ko if: !$parent[name]() -->
+                  <div class="hint value" data-bind="text: name"></div>
+                <!-- /ko -->
+              </td>
+            <!-- /ko -->
+          </tr>
+      </table>
+    </div>
   </div>
-</div>
+</div>  
