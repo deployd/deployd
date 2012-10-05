@@ -6,8 +6,8 @@
 }
 #editor-modal .editor {
   display: block;
-  width: 100%;
   height: 300px;
+  width: 530px;
 }
 #inline-editor {
   position: fixed;
