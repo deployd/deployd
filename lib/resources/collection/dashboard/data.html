@@ -14,12 +14,12 @@
         <h3 data-bind="text: selectedProp().name"></h3>
       </div>
       <div class="modal-body">
-        <div data-bind="text: edit.editValue">
+        <div class="editor" data-bind="aceEditor: edit.editValue, aceEditorResize: edit.editingModal, aceEditorFocus: edit.focusModal, aceEditorSelect: 'selectEditor'">
         </div>
       </div>
       <div class="modal-footer">
         <a href="#" class="btn" data-bind="click: edit.cancel">Close</a>
-        <a href="#" class="btn btn-primary">Save changes</a>
+        <a href="#" class="btn btn-primary" data-bind="click: edit.dismiss">Save changes</a>
       </div>
     </div>
 
@@ -27,13 +27,13 @@
       <div id="inline-editor-table-overlay" data-bind="style: {top: view.dimensions().top + 'px', left: view.dimensions().left + 'px', bottom: view.dimensions().bottomRelative + 'px', right: view.dimensions().rightRelative + 'px' }">
         <div class="mini-edit" data-bind="style: {top: view.selectedCellPos().top + 'px', left: view.selectedCellPos().left + 'px'}, if: edit.editingInline, click: view.noOp, clickBubble: false">
           <!-- ko if: selectedProp().type === 'string' -->
-            <input type="text" data-bind="hasfocus: vm.edit.focusInput, select: 'selectEditor', value: edit.editValue, valueUpdate: 'afterkeydown'" />
+            <input type="text" data-bind="hasfocus: edit.focusInput, select: 'selectEditor', value: edit.editValue, valueUpdate: 'afterkeydown'" />
           <!-- /ko -->
           <!-- ko if: selectedProp().type === 'number' -->
-            <input type="text" class="number" data-bind="hasfocus: vm.edit.focusInput, select: 'selectEditor', numberValue: edit.editValue, valueUpdate: 'afterkeydown'" />
+            <input type="text" class="number" data-bind="hasfocus: edit.focusInput, select: 'selectEditor', numberValue: edit.editValue, valueUpdate: 'afterkeydown'" />
           <!-- /ko -->
           <!-- ko if: selectedProp().type === 'boolean' -->
-            <label><input type="checkbox" data-bind="hasfocus: vm.edit.focusInput, checked: edit.editValue" /><span data-bind="text: selectedProp().name"></span></label>
+            <label><input type="checkbox" data-bind="hasfocus: edit.focusInput, checked: edit.editValue" /><span data-bind="text: selectedProp().name"></span></label>
           <!-- /ko -->
         </div>
       </div>

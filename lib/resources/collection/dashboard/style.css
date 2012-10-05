@@ -1,6 +1,14 @@
 .unloaded-content {
   display: none !important;
 }
+#editor-modal .modal-body {
+  height: 300px;
+}
+#editor-modal .editor {
+  display: block;
+  width: 100%;
+  height: 300px;
+}
 #inline-editor {
   position: fixed;
   top: 0;
