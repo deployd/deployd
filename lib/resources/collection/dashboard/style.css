@@ -29,6 +29,11 @@
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
 }
+#inline-editor .mini-edit a {
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 2px;
+}
 #inline-editor .mini-edit input {
   margin: 0;
 }
