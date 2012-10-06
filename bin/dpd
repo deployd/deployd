@@ -34,6 +34,7 @@ program
   .option('-e, --environment [env]', 'defaults to development')
   .option('-h, --host [host]', 'specify host for mongo server')
   .option('-P, --mongoPort [mongoPort]', 'mongodb port to connect to')
+  .option('-s, --startScript [scriptPath]', 'provide another start.js script')
   .option('-n, --dbname [dbname]', 'name of the mongo database')
   .option('-a, --auth', 'prompts for mongo server credentials')
   ;
@@ -74,6 +75,7 @@ function start(file) {
     , host = program.host || '127.0.0.1'
     , dbname = program.dbname || '-deployd'
     , mongoPort = generatePort()
+    , startScript = program.startScript
     , env = program.environment || process.env.DPD_ENV || 'development'
     , retries = 0
     , credentials
@@ -112,7 +114,7 @@ function start(file) {
         return stop(1);
       }
 
-      var options = {port: port, env: 'development', db: {host: host, port: mongoPort, name: dbname}};
+      var options = {port: port, env: 'development', db: {host: host, port: mongoPort, name: dbname}, startScript: startScript};
 
       options.env = program.environment || process.env.DPD_ENV || options.env;
       if(options.env !== 'development') console.log('starting in %s mode', options.env);
