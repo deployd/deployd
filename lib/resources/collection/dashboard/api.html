@@ -6,12 +6,88 @@
   <h3>API</h3>
 
   <ul class="nav nav-tabs" id="event-nav">
-    <li class="active"><a href="#js-examples" data-toggle='tab'>JavaScript</a></li>
-    <li><a href="#rest-examples" data-toggle='tab'>REST</a></li>
+    <li class="active"><a href="#rest-examples" data-toggle='tab'>REST</a></li>
+    <li><a href="#js-examples" data-toggle='tab'>JavaScript</a></li>
   </ul>
 
   <div class="tab-content tab-content-styled">
-    <div id="js-examples" class="tab-pane active">
+    <div id="rest-examples" class="tab-pane active">
+      <p>Access the <code><%= '/' + resourceData.id %></code> collection over http.</p>
+
+      <table class="table table-bordered table-striped">
+        <thead>
+          <tr>
+            <th>Task</th>
+            <th>Method</th>
+            <th>Route</th>
+            <th>Accepts</th>
+            <th>Returns</th>
+          </tr>
+          <tbody>
+            <tr>
+              <td><a href="http://www.deployd.com/docs/resources/collection.html#docs-listing-data" target="_blank">Listing data</a></td>
+              <td>GET</td>
+              <td><a href="<%- '/' + resourceData.id %>" target="_blank"><%- '/' + resourceData.id %></a></td>
+              <td><em>Nothing</em></td>
+              <td>An array of objects</td>
+            </tr>
+            <tr>
+              <td><a href="http://www.deployd.com/docs/resources/collection.html#docs-creating-an-object" target="_blank">Creating an object</a></td>
+              <td>POST</td>
+              <td><%- '/' + resourceData.id %></td>
+              <td>A single object</td>
+              <td>The saved object (or errors)</td>
+            </tr>
+            <tr>
+              <td><a href="http://www.deployd.com/docs/resources/collection.html#docs-getting-a-single-object" target="_blank">Getting an object</a></td>
+              <td>GET</td>
+              <td><%- '/' + resourceData.id %>/&lt;id&gt;</td>
+              <td><em>Nothing</em></td>
+              <td>A single object</td>
+            </tr>
+            <tr>
+              <td><a href="http://www.deployd.com/docs/resources/collection.html#docs-updating-an-object" target="_blank">Updating an object</a></td>
+              <td>PUT</td>
+              <td><%- '/' + resourceData.id %>/&lt;id&gt;</td>
+              <td>A single object</td>
+              <td>The saved object (or errors)</td>
+            </tr>
+            <tr>
+              <td><a href="http://www.deployd.com/docs/resources/collection.html#docs-deleting-an-object" target="_blank">Deleting an object</a></td>
+              <td>DELETE</td>
+              <td><%- '/' + resourceData.id %>/&lt;id&gt;</td>
+              <td>A single object</td>
+              <td><em>Nothing</em></td>
+            </tr>
+            <% if (resourceData.type === 'UserCollection') { %>
+              <tr>
+                <td><a href="http://www.deployd.com/docs/resources/user-collection.html#docs-logging-in" target="_blank">Logging in</a></td>
+                <td>POST</td>
+                <td><%- '/' + resourceData.id %>/login</td>
+                <td><code>username</code> and <code>password</code> of user</td>
+                <td>The user, plus session cookie (or error)</td>
+              </tr>
+              <tr>
+                <td><a href="http://www.deployd.com/docs/resources/user-collection.html#docs-logging-out" target="_blank">Logging out</a></td>
+                <td>POST</td>
+                <td><%- '/' + resourceData.id %>/logout</td>
+                <td><em>Nothing</em></td>
+                <td><em>Nothing</em></td>
+              </tr>
+              <tr>
+                <td><a href="http://www.deployd.com/docs/resources/user-collection.html#docs-getting-the-current-user" target="_blank">Getting the current user</a></td>
+                <td>GET</td>
+                <td><a href="<%- '/' + resourceData.id %>/me" target="_blank"><%- '/' + resourceData.id %>/me</a></td>
+                <td><em>Nothing</em></td>
+                <td>A single object</td>
+              </tr>
+            <% } %>
+          </tbody>
+        </thead>
+      </table>
+    </div>
+
+    <div id="js-examples" class="tab-pane">
     <p>Deployd generates a browser JavaScript api for easily accessing data from the <code><%= '/' + resourceData.id %></code> collection. To use it you first need to include the generated script.</p>
 
     <pre class="prettyprint code">&lt;script src="dpd.js"&gt;&lt;/script&gt;</pre>
@@ -99,80 +175,6 @@ dpd<%= ns('/' + resourceData.id) %>.del("000000000000000000000000", function (er
     </div>
 
 
-    <div id="rest-examples" class="tab-pane">
-      <p>Access the <code><%= '/' + resourceData.id %></code> collection over http.</p>
-
-      <table class="table table-bordered table-striped">
-        <thead>
-          <tr>
-            <th>Task</th>
-            <th>Method</th>
-            <th>Route</th>
-            <th>Accepts</th>
-            <th>Returns</th>
-          </tr>
-          <tbody>
-            <tr>
-              <td><a href="http://www.deployd.com/docs/resources/collection.html#docs-listing-data" target="_blank">Listing data</a></td>
-              <td>GET</td>
-              <td><a href="<%- '/' + resourceData.id %>" target="_blank"><%- '/' + resourceData.id %></a></td>
-              <td><em>Nothing</em></td>
-              <td>An array of objects</td>
-            </tr>
-            <tr>
-              <td><a href="http://www.deployd.com/docs/resources/collection.html#docs-creating-an-object" target="_blank">Creating an object</a></td>
-              <td>POST</td>
-              <td><%- '/' + resourceData.id %></td>
-              <td>A single object</td>
-              <td>The saved object (or errors)</td>
-            </tr>
-            <tr>
-              <td><a href="http://www.deployd.com/docs/resources/collection.html#docs-getting-a-single-object" target="_blank">Getting an object</a></td>
-              <td>GET</td>
-              <td><%- '/' + resourceData.id %>/&lt;id&gt;</td>
-              <td><em>Nothing</em></td>
-              <td>A single object</td>
-            </tr>
-            <tr>
-              <td><a href="http://www.deployd.com/docs/resources/collection.html#docs-updating-an-object" target="_blank">Updating an object</a></td>
-              <td>PUT</td>
-              <td><%- '/' + resourceData.id %>/&lt;id&gt;</td>
-              <td>A single object</td>
-              <td>The saved object (or errors)</td>
-            </tr>
-            <tr>
-              <td><a href="http://www.deployd.com/docs/resources/collection.html#docs-deleting-an-object" target="_blank">Deleting an object</a></td>
-              <td>DELETE</td>
-              <td><%- '/' + resourceData.id %>/&lt;id&gt;</td>
-              <td>A single object</td>
-              <td><em>Nothing</em></td>
-            </tr>
-            <% if (resourceData.type === 'UserCollection') { %>
-              <tr>
-                <td><a href="http://www.deployd.com/docs/resources/user-collection.html#docs-logging-in" target="_blank">Logging in</a></td>
-                <td>POST</td>
-                <td><%- '/' + resourceData.id %>/login</td>
-                <td><code>username</code> and <code>password</code> of user</td>
-                <td>The user, plus session cookie (or error)</td>
-              </tr>
-              <tr>
-                <td><a href="http://www.deployd.com/docs/resources/user-collection.html#docs-logging-out" target="_blank">Logging out</a></td>
-                <td>POST</td>
-                <td><%- '/' + resourceData.id %>/logout</td>
-                <td><em>Nothing</em></td>
-                <td><em>Nothing</em></td>
-              </tr>
-              <tr>
-                <td><a href="http://www.deployd.com/docs/resources/user-collection.html#docs-getting-the-current-user" target="_blank">Getting the current user</a></td>
-                <td>GET</td>
-                <td><a href="<%- '/' + resourceData.id %>/me" target="_blank"><%- '/' + resourceData.id %>/me</a></td>
-                <td><em>Nothing</em></td>
-                <td>A single object</td>
-              </tr>
-            <% } %>
-          </tbody>
-        </thead>
-      </table>
-    </div>
+    
   </div>
 </script>
