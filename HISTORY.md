@@ -1,5 +1,8 @@
 # History
 
+## 0.6.7
+ - Added new data editor
+
 ## 0.6.6
  - Fixed a rare bug where the first request after a login would not be authenticated
 
