@@ -28,6 +28,7 @@
   box-sizing: border-box;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
+  white-space: nowrap;
 }
 #inline-editor .mini-edit a {
   display: inline-block;
