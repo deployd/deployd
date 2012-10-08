@@ -27,8 +27,8 @@
       <div id="inline-editor-table-overlay" data-bind="style: {top: view.dimensions().top + 'px', left: view.dimensions().left + 'px', bottom: view.dimensions().bottomRelative + 'px', right: view.dimensions().rightRelative + 'px' }">
         <div class="mini-edit" data-bind="style: {top: view.selectedCellPos().top + 'px', left: view.selectedCellPos().left + 'px'}, if: edit.editingInline, click: view.noOp, clickBubble: false">
           <!-- ko if: selectedProp().type === 'string' -->
-            <input type="text" data-bind="hasfocus: edit.focusInput, select: 'selectEditor', value: edit.editValue, valueUpdate: 'afterkeydown'" />
             <a href="#" title="Edit in modal" data-bind="click: edit.openModal"><i class="icon-edit icon-white"></i></a>
+            <input type="text" data-bind="hasfocus: edit.focusInput, select: 'selectEditor', value: edit.editValue, valueUpdate: 'afterkeydown'" />
           <!-- /ko -->
           <!-- ko if: selectedProp().type === 'number' -->
             <input type="text" class="number" data-bind="hasfocus: edit.focusInput, select: 'selectEditor', numberValue: edit.editValue, valueUpdate: 'afterkeydown'" />
