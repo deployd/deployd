@@ -46,10 +46,14 @@
         <thead><tr><th class="margin">&nbsp;</th></tr></thead>
         <tbody>
           <tr class="load-space" data-bind="visible: view.loadSpaceBefore">
-            <td class="margin" data-bind="style: {height: view.loadSpaceBefore() + 'px'}">&nbsp;</td>
+            <td class="margin" data-bind="style: {height: view.loadSpaceBefore() + 'px'}"></td>
           </tr>
           <!-- ko foreach: data -->
-            <tr><td class="margin"><a href="#" class="delete-btn" data-bind="click: _deleteRow"><i class="icon-white icon-trash"></i></a></td></tr>
+            <tr><td class="margin">
+              <div class="value">
+                <a href="#" class="delete-btn" data-bind="click: _deleteRow"><i class="icon-white icon-trash"></i></a>
+              </div>
+            </td></tr>
           <!-- /ko -->
         </tbody>
         <tfoot>
@@ -67,9 +71,12 @@
         <thead>
           <tr>
             <th class="margin">&nbsp;</th>
-            <th class="id-cell"> <i class="icon-custom icon-white string" data-bind="tooltip: 'id'"></i> id</th>
+            <th class="id-cell">
+              <div class="value"><i class="icon-custom icon-white string" data-bind="tooltip: 'id'"></i> id</div> 
+            </th>
             <!-- ko foreach: properties -->
-            <th> <i class="icon-custom icon-white" data-bind="cssNamed: type, tooltip: typeLabel"></i> <span data-bind="text: name"></span></th>
+            <th>
+             <dv class="value"><i class="icon-custom icon-white" data-bind="cssNamed: type, tooltip: typeLabel"></i> <span data-bind="text: name"></span></value></th>
             <!-- /ko -->
           </tr>
         </thead>
@@ -82,7 +89,7 @@
             <th class="margin">&nbsp;</th>
             <th class="id-cell">&nbsp;</th>
             <!-- ko foreach: properties -->
-            <th>&nbsp;</th>
+            <th><div class="value">&nbsp;</div></th>
             <!-- /ko -->
           </tr>
         </thead>
@@ -110,7 +117,7 @@
         <tfoot>
           <tr>
             <th class="margin">&nbsp;</th>
-            <th class="id-cell">&nbsp;</th>
+            <th class="id-cell"><div class="value">&nbsp;</div></th>
             <!-- ko foreach: properties -->
             <th>&nbsp;</th>
             <!-- /ko -->

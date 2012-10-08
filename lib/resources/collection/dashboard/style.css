@@ -68,11 +68,12 @@
   -webkit-box-flex: 1;
   -ms-box-flex: 1;
   -o-box-flex: 1;
-  height: 0;
+  height: 0px;
   overflow: scroll;
 }
 #table-container table {
   width: auto;
+  table-layout: fixed;
 }
 #table-container table tr:hover td,
 #table-container table tr:hover td {
@@ -87,6 +88,7 @@
 #table-container table td .value,
 #table-container table th .value {
   max-height: 22px;
+  height: 22px;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -99,6 +101,7 @@
   min-width: 20px;
 }
 #table-container .load-space td {
+  height: 0;
   padding: 0;
   margin: 0;
 }
@@ -127,6 +130,9 @@
   top: 0;
   bottom: 0;
   left: 0;
+}
+#table-container #margin-container #margin tr {
+  height: 38px;
 }
 #table-container #margin-container #margin .delete-btn {
   opacity: 0.4;
@@ -178,6 +184,11 @@
 }
 #table-container #new-row-container #new-row .hint {
   opacity: 0.5;
+}
+#table-container #body-table-container {
+  float: left;
+  width: 1px;
+  overflow: visible;
 }
 #table-container #body-table {
   background: url('../../img/outlets.png');

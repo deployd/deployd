@@ -29,9 +29,6 @@
   right: 0;
   left: 0;
 
-  // height: @cellHeight;
-  // width: 100px;
-
   background: rgba(0, 0, 0, 0.5);
   z-index: 100;
 
@@ -80,14 +77,15 @@
 #table-container {
   position: relative;
   .box-flex(1);
-  height: 0;
+  height: 0px;
   
-  // .display-box();
-  // .box-orient(vertical); 
   overflow: scroll;
+  // width: 600px;
+  // max-width: 100%;
 
   table { 
     width: auto;
+    table-layout: fixed;
   }
 
   table tr:hover td, table tr:hover td {
@@ -101,6 +99,7 @@
    
     .value {
       max-height: @cellHeight - 16px;
+      height: @cellHeight - 16px;
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
@@ -117,6 +116,7 @@
   }
 
   .load-space td {
+    height: 0;
     padding: 0;
     margin: 0;
   }
@@ -148,6 +148,10 @@
       top: 0;
       bottom: 0;
       left: 0;
+
+      tr {
+        height: @cellHeight;
+      }
 
       .delete-btn {
         opacity: 0.4;
@@ -209,6 +213,11 @@
     }
   }
   
+  #body-table-container { //wtf - fixes a bug in firefox
+    float: left;
+    width: 1px;
+    overflow: visible;
+  }
 
   #body-table {
     background: @background;
