@@ -55,6 +55,9 @@
               </div>
             </td></tr>
           <!-- /ko -->
+          <tr class="load-space" data-bind="visible: view.loadSpaceAfter">
+            <td class="margin" data-bind="style: {height: view.loadSpaceAfter() + 'px'}"></td>
+          </tr>
         </tbody>
         <tfoot>
           <tr><td class="margin">&nbsp;</td></tr>
@@ -113,6 +116,11 @@
               <!-- /ko -->
             </tr>
           <!-- /ko -->
+          <tr class="load-space" data-bind="visible: view.loadSpaceAfter">
+            <td class="margin"></td>
+            <td data-bind="attr: {colspan: 2 + properties().length}, style: {height: view.loadSpaceAfter() + 'px'}">
+            </td>
+          </tr>
         </tbody>
         <tfoot>
           <tr>
