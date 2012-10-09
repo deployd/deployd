@@ -1,11 +1,14 @@
 @import "../bootstrap/less/bootstrap.less";
 
+
 // editor
 @import "layout.less";
 @import "editor.less";
 @import "prettify.less";
 @import "mixins.less";
 @import "ui.less";
+
+
 
 body {
   background: url(../img/outlets.png) #030202;
@@ -545,6 +548,7 @@ li.component-type-item {
 .component-item-edit {
   .display-box();
   .box-orient(horizontal);
+  width: 100%;
 
   input[type="text"] {
     width: 50px !important;
@@ -554,6 +558,10 @@ li.component-type-item {
 
   input[type="text"], label, button {
     margin-right: 4px;
+  }
+
+  > .type-selector, > button, > label, > a {
+    display: block;
   }
 }
 
@@ -735,6 +743,7 @@ table input {
 
 #properties {
   width: 485px;
+  max-width: 485px;
 
   label {
     margin-right: 12px;

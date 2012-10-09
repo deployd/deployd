@@ -1,10 +1,14 @@
-html, body {
-  min-height: 100%;
+
+
+html {
+  height: 100%;  
 }
 
 body {
+  min-height: 100%;
   .display-box();
   .box-orient(vertical);
+  width: 100%;
 }
 
 #header {
@@ -37,6 +41,7 @@ body {
   padding: 20px;
   padding-top: 10px;
   min-height: 100%;
+  width: 100%;
   min-width: 1000px;
   .box-sizing(border-box);
   .box-flex(1);
@@ -50,10 +55,14 @@ body {
 
 #main-container {
   .box-flex(1);
+  .display-box();
+  .box-orient(vertical);
+  width: 100%;
 }
 
 .section-header {
   .display-box();
+  width: 100%;
   margin-bottom: 10px;
 
   h3 {
@@ -63,6 +72,10 @@ body {
     .box-align(center);
     margin: 0 !important;
   }
+}
+
+#main-container .well.full-page {
+  .box-flex(1);
 }
 
 .well h3 {
@@ -78,6 +91,8 @@ body {
 
 .two-column-container {
   .display-box();
+  width: 100%;
+  .box-sizing(border-box);
 
   .main-column {
     .box-flex(1);

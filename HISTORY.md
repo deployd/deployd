@@ -1,5 +1,8 @@
 # History
 
+## 0.6.7
+ - Added new data editor
+
 ## 0.6.6
  
  - Exposed the server object to modules as `process.server`
