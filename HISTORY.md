@@ -1,5 +1,8 @@
 # History
 
+## 0.6.7
+ - Added new data editor
+
 ## 0.6.6
  
  - Added CORS support

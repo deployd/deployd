@@ -4028,11 +4028,11 @@ a.thumbnail:hover {
 .invisible {
   visibility: hidden;
 }
-html,
-body {
-  min-height: 100%;
+html {
+  height: 100%;
 }
 body {
+  min-height: 100%;
   display: box;
   display: -moz-box;
   display: -webkit-box;
@@ -4043,6 +4043,7 @@ body {
   -webkit-box-orient: vertical;
   -ms-box-orient: vertical;
   -o-box-orient: vertical;
+  width: 100%;
 }
 #header {
   background: rgba(33, 33, 33, 0.5) url(../img/fabric.png) !important;
@@ -4086,6 +4087,7 @@ body {
   padding: 20px;
   padding-top: 10px;
   min-height: 100%;
+  width: 100%;
   min-width: 1000px;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -4106,7 +4108,6 @@ body {
   display: -o-box;
 }
 #resource-sidebar-container {
-  content: ' ';
   width: 250px;
   margin-right: 10px;
 }
@@ -4116,6 +4117,17 @@ body {
   -webkit-box-flex: 1;
   -ms-box-flex: 1;
   -o-box-flex: 1;
+  display: box;
+  display: -moz-box;
+  display: -webkit-box;
+  display: -ms-box;
+  display: -o-box;
+  box-orient: vertical;
+  -moz-box-orient: vertical;
+  -webkit-box-orient: vertical;
+  -ms-box-orient: vertical;
+  -o-box-orient: vertical;
+  width: 100%;
 }
 .section-header {
   display: box;
@@ -4123,6 +4135,7 @@ body {
   display: -webkit-box;
   display: -ms-box;
   display: -o-box;
+  width: 100%;
   margin-bottom: 10px;
 }
 .section-header h3 {
@@ -4144,6 +4157,13 @@ body {
   -o-box-align: center;
   margin: 0 !important;
 }
+#main-container .well.full-page {
+  box-flex: 1;
+  -moz-box-flex: 1;
+  -webkit-box-flex: 1;
+  -ms-box-flex: 1;
+  -o-box-flex: 1;
+}
 .well h3 {
   height: 28px;
   line-height: 28px;
@@ -4159,6 +4179,14 @@ body {
   display: -webkit-box;
   display: -ms-box;
   display: -o-box;
+  width: 100%;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  box-sizing: border-box;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
 }
 .two-column-container .main-column {
   box-flex: 1;
@@ -5348,6 +5376,7 @@ li.component-type-item {
   -webkit-box-orient: horizontal;
   -ms-box-orient: horizontal;
   -o-box-orient: horizontal;
+  width: 100%;
 }
 .component-item-edit input[type="text"] {
   width: 50px !important;
@@ -5362,6 +5391,12 @@ li.component-type-item {
 .component-item-edit label,
 .component-item-edit button {
   margin-right: 4px;
+}
+.component-item-edit > .type-selector,
+.component-item-edit > button,
+.component-item-edit > label,
+.component-item-edit > a {
+  display: block;
 }
 li.component-item {
   list-style: none;
@@ -5525,6 +5560,7 @@ table input[type=number] {
 }
 #properties {
   width: 485px;
+  max-width: 485px;
 }
 #properties label {
   margin-right: 12px;

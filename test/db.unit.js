@@ -68,6 +68,18 @@ describe('store', function(){
         });
       });
     });
+
+    describe('.count({}, fn)', function() {
+      it('should count the results', function(done) {
+        store.insert([{i:1},{i:2},{i:33333},{i:4},{i:5},{i:6},{i:7},{i:8},{i:9}], function () {
+          store.count({}, function (err, result) {
+            expect(result).to.exist;
+            expect(result).to.equal(9);
+            done(err);
+          });
+        });
+      });
+    });
   });
 
   describe('.identify(object)', function() {
