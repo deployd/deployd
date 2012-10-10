@@ -51,6 +51,7 @@
   margin-right: 8px;
 }
 #data {
+  visibility: hidden;
   display: box;
   display: -moz-box;
   display: -webkit-box;

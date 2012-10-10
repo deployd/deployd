@@ -1,4 +1,5 @@
-<div id="data" class="well full-page" data-bind="scrollbarWidth: view.scrollWidth">
+<div data-bind="scrollbarWidth: view.scrollWidth"></div>
+<div id="data" class="well full-page">
   <h3>Data</h3>
 
   <div id="no-property-warning" class="alert alert-info hide">
@@ -6,7 +7,7 @@
     <a href="../properties">Add some now</a> before editing data.
   </div>
 
-  <div id="table-container" data-bind="scrollY: view.scrollY, scrollX: view.scrollX, screenDimensions: view.dimensions, reflow: properties">      
+  <div id="table-container" data-bind="scrollY: view.scrollY, scrollX: view.scrollX, screenDimensions: view.dimensions, reflow: view.init">      
 
     <div id="editor-modal" class="modal hide" data-bind="if: propertiesLoaded, bootstrapModal: edit.editingModal">
       <div class="modal-header">
@@ -55,6 +56,9 @@
               </div>
             </td></tr>
           <!-- /ko -->
+          <tr class="load-space" data-bind="visible: view.loadSpaceAfter">
+            <td class="margin" data-bind="style: {height: view.loadSpaceAfter() + 'px'}"></td>
+          </tr>
         </tbody>
         <tfoot>
           <tr><td class="margin">&nbsp;</td></tr>
@@ -76,7 +80,7 @@
             </th>
             <!-- ko foreach: properties -->
             <th>
-             <dv class="value"><i class="icon-custom icon-white" data-bind="cssNamed: type, tooltip: typeLabel"></i> <span data-bind="text: name"></span></value></th>
+             <div class="value"><i class="icon-custom icon-white" data-bind="cssNamed: type, tooltip: typeLabel"></i> <span data-bind="text: name"></span></div></th>
             <!-- /ko -->
           </tr>
         </thead>
@@ -100,7 +104,7 @@
             </td>
           </tr>
           <!-- ko foreach: data -->
-            <tr>
+            <tr data-bind="fadeIn: 'fadeInRow', postbox: $root.postbox">
               <td class="margin">
               </td>
               <td class="id-cell">
@@ -113,6 +117,11 @@
               <!-- /ko -->
             </tr>
           <!-- /ko -->
+          <tr class="load-space" data-bind="visible: view.loadSpaceAfter">
+            <td class="margin"></td>
+            <td data-bind="attr: {colspan: 2 + properties().length}, style: {height: view.loadSpaceAfter() + 'px'}">
+            </td>
+          </tr>
         </tbody>
         <tfoot>
           <tr>
