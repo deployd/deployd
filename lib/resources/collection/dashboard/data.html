@@ -1,4 +1,5 @@
-<div id="data" class="well full-page" data-bind="scrollbarWidth: view.scrollWidth">
+<div data-bind="scrollbarWidth: view.scrollWidth"></div>
+<div id="data" class="well full-page">
   <h3>Data</h3>
 
   <div id="no-property-warning" class="alert alert-info hide">
@@ -6,7 +7,7 @@
     <a href="../properties">Add some now</a> before editing data.
   </div>
 
-  <div id="table-container" data-bind="scrollY: view.scrollY, scrollX: view.scrollX, screenDimensions: view.dimensions, reflow: properties">      
+  <div id="table-container" data-bind="scrollY: view.scrollY, scrollX: view.scrollX, screenDimensions: view.dimensions, reflow: view.init">      
 
     <div id="editor-modal" class="modal hide" data-bind="if: propertiesLoaded, bootstrapModal: edit.editingModal">
       <div class="modal-header">
