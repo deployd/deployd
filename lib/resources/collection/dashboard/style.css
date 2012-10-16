@@ -103,10 +103,10 @@
   -o-transition-duration: 0ms;
 }
 #table-container table tr {
-  transition-property: opacity;
-  -moz-transition-property: opacity;
-  -webkit-transition-property: opacity;
-  -o-transition-property: opacity;
+  transition-property: background-color;
+  -moz-transition-property: background-color;
+  -webkit-transition-property: background-color;
+  -o-transition-property: background-color;
   transition-duration: 800ms;
   -moz-transition-duration: 800ms;
   -webkit-transition-duration: 800ms;
@@ -117,7 +117,7 @@
   -moz-transition-duration: 0ms;
   -webkit-transition-duration: 0ms;
   -o-transition-duration: 0ms;
-  opacity: 0;
+  background: rgba(255, 255, 247, 0.2);
 }
 #table-container table .margin {
   max-width: 20px;
