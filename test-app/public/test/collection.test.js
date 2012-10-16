@@ -99,6 +99,21 @@ describe('Collection', function() {
           done();
         });
       });
+
+      it('should not post the message', function(done) {
+        chain(function(next) {
+          dpd.todos.post({title: "$POSTERROR"}, next);
+        }).chain(function(next, res, err) {
+          expect(err).to.exist;
+          expect(err.errors).to.exist;
+          expect(err.errors.title).to.equal("POST error");
+          dpd.todos.get(next);
+        }).chain(function(next, res) {
+          expect(res.length).to.equal(0);
+          done();
+        });
+        
+      });
     });
 
     describe('.post({title: "foo", owner: 7}, fn)', function() {
@@ -310,6 +325,29 @@ describe('Collection', function() {
         }).chain(function(next, result) {
           expect(result.message).to.equal("xx");
           expect(result.done).to.equal(true);
+          done();
+        });
+      });
+    });
+
+    describe('.put(id, {message: "notvalidput"}, fn)', function() {
+      it('should cancel the update', function(done) {
+        var todoId;
+        chain(function(next) {
+          dpd.todos.post({title: "Some todo"}, next);
+        }).chain(function(next, res, err) {
+          if (err) return done(err);
+          todoId = res.id;
+          dpd.todos.put(todoId, {message: "notvalidput"}, next);
+        }).chain(function(next, res, err) {
+          console.log(res, err);
+          expect(err).to.exist;
+          expect(err.errors).to.exist;
+          expect(err.errors.message).to.equal("message should not be notvalidput");
+          dpd.todos.get(todoId, next);
+        }).chain(function(next, res, err) {
+          if (err) return done(err);
+          expect(res.message).to.not.equal("notvalidput");
           done();
         });
       });
