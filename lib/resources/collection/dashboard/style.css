@@ -133,6 +133,9 @@
   bottom: 0;
   left: 0;
 }
+#table-container #margin-container #margin tr.load-space {
+  height: inherit;
+}
 #table-container #margin-container #margin tr {
   height: 38px;
 }
