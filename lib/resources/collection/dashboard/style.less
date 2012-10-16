@@ -114,13 +114,14 @@
   }
 
   table tr {
-    .transition-property(background-color);
+    .transition-property(opacity);
     .transition-duration(800ms);
   }
 
   table tr.new-row {
     .transition-duration(0ms);
-    background: rgba(255, 255, 247, 0.2);
+    opacity: 0;
+    // background: rgba(255, 255, 247, 0.2);
   }
 
   table .margin {
