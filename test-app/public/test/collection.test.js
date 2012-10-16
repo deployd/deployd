@@ -330,6 +330,28 @@ describe('Collection', function() {
       });
     });
 
+    describe('.put(id, {message: "notvalid"}, fn)', function() {
+      it('should cancel the update', function(done) {
+        var todoId;
+        chain(function(next) {
+          dpd.todos.post({title: "Some todo"}, next);
+        }).chain(function(next, res, err) {
+          if (err) return done(err);
+          todoId = res.id;
+          dpd.todos.put(todoId, {message: "notvalid"}, next);
+        }).chain(function(next, res, err) {
+          expect(err).to.exist;
+          expect(err.errors).to.exist;
+          expect(err.errors.message).to.equal("Message must not be notvalid");
+          dpd.todos.get(todoId, next);
+        }).chain(function(next, res, err) {
+          if (err) return done(err);
+          expect(res.message).to.not.equal("notvalid");
+          done();
+        });
+      });
+    });
+
     describe('.put(id, {message: "notvalidput"}, fn)', function() {
       it('should cancel the update', function(done) {
         var todoId;
