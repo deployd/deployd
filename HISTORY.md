@@ -2,6 +2,7 @@
 
 ## 0.6.7
  - Added new data editor
+ - Fixed major bug where calling error() would not always cancel the request
 
 ## 0.6.6
  
