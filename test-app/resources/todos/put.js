@@ -6,6 +6,5 @@ if (this.title === "$PUT_TEST") {
 }
 
 if (this.message == "notvalidput") {
-    console.log("Put erroring");
     error('message', "message should not be notvalidput");
 }
