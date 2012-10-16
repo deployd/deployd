@@ -280,6 +280,25 @@ describe('Collection', function() {
       });
     });
 
+    describe('.put(id, {title: "todo 2"}, {done: true},  fn)', function() {
+      it('should throw an error if the filter does not apply', function(done) {
+        var todoId;
+        chain(function(next) {
+          dpd.todos.post({title: 'todo 1'}, next);
+        }).chain(function(next, res, err) {
+          if (err) return done(err);
+          todoId = res.id;
+          dpd.todos.put(todoId, {title: "todo 2"}, {done: true}, next);
+        }).chain(function(next, res, err) {
+          expect(err).to.exist;
+          dpd.todos.get(todoId, next);
+        }).chain(function(next, res, err) {
+          expect(res.done).to.be['false'];
+          done();
+        });
+      });
+    });
+
     describe('.put(id, {done: true}, fn)', function() {
       it('should add properties', function(done) {
         chain(function(next) {
