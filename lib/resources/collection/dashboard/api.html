@@ -6,12 +6,12 @@
   <h3>API</h3>
 
   <ul class="nav nav-tabs" id="event-nav">
-    <li class="active"><a href="#rest-examples" data-toggle='tab'>REST</a></li>
+    <li class="active"><a href="#http-examples" data-toggle='tab'>HTTP</a></li>
     <li><a href="#js-examples" data-toggle='tab'>JavaScript</a></li>
   </ul>
 
   <div class="tab-content tab-content-styled">
-    <div id="rest-examples" class="tab-pane active">
+    <div id="http-examples" class="tab-pane active">
       <p>Access the <code><%= '/' + resourceData.id %></code> collection over http.</p>
 
       <table class="table table-bordered table-striped">
@@ -147,15 +147,7 @@ dpd<%= ns('/' + resourceData.id) %>.get(query, function (result) {
 
     <p>Get a single object in the <code><%= '/' + resourceData.id %></code> collection by id:</p>
     <pre class="code prettyprint">
-dpd<%= ns('/' + resourceData.id) %>.first("000000000000000000000000", function (result) {
-  console.log(result);
-});</pre>
-
-    <p>Get a single object in the <code><%= '/' + resourceData.id %></code> collection that matches a <a href="http://www.deployd.com/docs/resources/collection.html#docs-querying-data">query</a>:</p>
-    <pre class="code prettyprint">
-var query = <%= getObj() %>;
-
-dpd<%= ns('/' + resourceData.id) %>.first(query, function (result) {
+dpd<%= ns('/' + resourceData.id) %>.get("000000000000000000000000", function (result) {
   console.log(result);
 });</pre>
 
