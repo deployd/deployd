@@ -61,7 +61,7 @@ If a callback is provided the script will be run in **async mode**. The callback
 
 * fn(err, script)
 
-Load a new `script` at the given file `path`. Callback with an error if one occured or a new `Script` loaded from the contents of the file.    
+Load a new `script` at the given file `path`. Callback with an error if one occured or a new `Script` loaded from the contents of the file.
     
 ## Default Domain
 
@@ -70,8 +70,6 @@ Scripts are executed with a default sandbox and set of domain functions. These a
 ### cancel(msg, status)
 
 Throws an error that immediately stops the execution of a context and calls the callback passed to `script.run()` passing the error as the first argument. 
-
-`cancel()` does not have an effect if the current `Context.isRoot` or `Context.internal` is true.
 
 ### emit([collection], [query], event, data)
 
@@ -85,5 +83,7 @@ The default sandbox or global object in a `Script` comes with several other prop
 
  - `me` - the current user if one exists on the `Context`
  - `this` - an empty object if not overridden by the `domain`
+ - `internal` - a boolean property, true if this request has been initiated by another script
+ - `isRoot` - a boolean property, true if this request is authenticated as root (from the dashboard or a custom script)
  - `query` - the current `Context`'s query
  - `console` - support for `console.log()` and other `console` methods
