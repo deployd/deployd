@@ -6,8 +6,8 @@ The `internal-client` module is responsible for building a server-side version o
 
 ## internalClient.build(server, [session], [stack])
 
-    var internalClient = require('deployd/lib/internalClient');
-    var dpd = internalClient.build(server, req.session, req.stack);
+    var internalClient = require('deployd/lib/internal-client');
+    var dpd = internalClient.build(server);
 
     dpd.todos.get(function(data, err) {
       // Do something...
