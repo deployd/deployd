@@ -1,3 +1,4 @@
+/*global _dpd:false */
 describe('Collection', function() {
   describe('dpd.todos', function() {
     it('should exist', function() {
@@ -67,6 +68,18 @@ describe('Collection', function() {
           done();
         });
       });
+      it('should create a todo that exists in the store', function(done) {
+        dpd.todos.post({title: 'faux'}, function (todo, err) {
+          expect(todo.id.length).to.equal(16);
+          expect(todo.title).to.equal('faux');
+          expect(err).to.not.exist;
+          dpd.todos.get(todo.id, function(res, err) {
+            if (err) return done(err);
+            expect(res.title).to.equal('faux');
+            done();
+          });          
+        });
+      });
     });
 
     describe('.post({title: "notvalid"}, fn)', function() {
@@ -98,6 +111,21 @@ describe('Collection', function() {
           expect(err.errors.message).to.equal("Message must not be notvalid");
           done();
         });
+      });
+
+      it('should not post the message', function(done) {
+        chain(function(next) {
+          dpd.todos.post({title: "$POSTERROR"}, next);
+        }).chain(function(next, res, err) {
+          expect(err).to.exist;
+          expect(err.errors).to.exist;
+          expect(err.errors.title).to.equal("POST error");
+          dpd.todos.get(next);
+        }).chain(function(next, res) {
+          expect(res.length).to.equal(0);
+          done();
+        });
+        
       });
     });
 
@@ -280,6 +308,25 @@ describe('Collection', function() {
       });
     });
 
+    describe('.put(id, {title: "todo 2"}, {done: true},  fn)', function() {
+      it('should throw an error if the filter does not apply', function(done) {
+        var todoId;
+        chain(function(next) {
+          dpd.todos.post({title: 'todo 1'}, next);
+        }).chain(function(next, res, err) {
+          if (err) return done(err);
+          todoId = res.id;
+          dpd.todos.put(todoId, {title: "todo 2"}, {done: true}, next);
+        }).chain(function(next, res, err) {
+          expect(err).to.exist;
+          dpd.todos.get(todoId, next);
+        }).chain(function(next, res, err) {
+          expect(res.done).to.be['false'];
+          done();
+        });
+      });
+    });
+
     describe('.put(id, {done: true}, fn)', function() {
       it('should add properties', function(done) {
         chain(function(next) {
@@ -310,6 +357,50 @@ describe('Collection', function() {
         }).chain(function(next, result) {
           expect(result.message).to.equal("xx");
           expect(result.done).to.equal(true);
+          done();
+        });
+      });
+    });
+
+    describe('.put(id, {message: "notvalid"}, fn)', function() {
+      it('should cancel the update', function(done) {
+        var todoId;
+        chain(function(next) {
+          dpd.todos.post({title: "Some todo"}, next);
+        }).chain(function(next, res, err) {
+          if (err) return done(err);
+          todoId = res.id;
+          dpd.todos.put(todoId, {message: "notvalid"}, next);
+        }).chain(function(next, res, err) {
+          expect(err).to.exist;
+          expect(err.errors).to.exist;
+          expect(err.errors.message).to.equal("Message must not be notvalid");
+          dpd.todos.get(todoId, next);
+        }).chain(function(next, res, err) {
+          if (err) return done(err);
+          expect(res.message).to.not.equal("notvalid");
+          done();
+        });
+      });
+    });
+
+    describe('.put(id, {message: "notvalidput"}, fn)', function() {
+      it('should cancel the update', function(done) {
+        var todoId;
+        chain(function(next) {
+          dpd.todos.post({title: "Some todo"}, next);
+        }).chain(function(next, res, err) {
+          if (err) return done(err);
+          todoId = res.id;
+          dpd.todos.put(todoId, {message: "notvalidput"}, next);
+        }).chain(function(next, res, err) {
+          expect(err).to.exist;
+          expect(err.errors).to.exist;
+          expect(err.errors.message).to.equal("message should not be notvalidput");
+          dpd.todos.get(todoId, next);
+        }).chain(function(next, res, err) {
+          if (err) return done(err);
+          expect(res.message).to.not.equal("notvalidput");
           done();
         });
       });
@@ -511,6 +602,77 @@ describe('Collection', function() {
       this.timeout(10000);
       cleanCollection(dpd.todos, done);
     });
+  });
+
+  describe('root', function() {
+    afterEach(function(done) {
+      _dpd.ajax.headers = {};
+      cleanCollection(dpd.todos, done);
+    });
+
+    describe('dpd-ssh-key', function() {
+      beforeEach(function() {
+        _dpd.ajax.headers = {
+          'dpd-ssh-key': true
+        };
+      });
+
+      it('should detect root', function(done) {
+        chain(function(next) {
+          dpd.todos.post({title: 'valid'}, next);
+        }).chain(function(next, res, err) {
+          if (err) return done(err);
+          expect(res.isRoot).to.equal(true);
+          done();
+        });
+      });
+
+      it('should allow skipping events', function(done) {
+        chain(function(next) {
+          dpd.todos.post({title: 'notvalid', $skipEvents: true}, next);
+        }).chain(function(next, res, err) {
+          if (err) return done(err);
+          expect(res.title).to.equal('notvalid');
+          done();
+        });
+      });
+
+      it('should allow skipping events on get', function(done) {
+        var id;
+        chain(function(next) {
+          dpd.todos.post({title: '$GET_CANCEL'}, next);
+        }).chain(function(next, res, err) {
+          if (err) return done(err);
+          id = res.id;
+          dpd.todos.get(id, {$skipEvents: true}, next);
+        }).chain(function(next, res, err) {
+          if (err) return done(err);
+          expect(res.title).to.equal("$GET_CANCEL");
+          done();
+        });
+      });
+    });
+
+    it('should not allow skipping events', function(done) {
+      chain(function(next) {
+        dpd.todos.post({title: 'notvalid', $skipEvents: true}, next);
+      }).chain(function(next, res, err) {
+        expect(err).to.exist;
+        expect(err.errors).to.exist;
+        done();
+      });
+    });
+
+    it('should not detect root', function(done) {
+      chain(function(next) {
+        dpd.todos.post({title: 'valid'}, next);
+      }).chain(function(next, res, err) {
+        if (err) return done(err);
+        expect(res.isRoot).to.not.exist;
+        done();
+      });
+    });
+
   });
 
   describe('dpd.recursive', function() {

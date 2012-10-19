@@ -110,6 +110,17 @@
 
   table tr td.highlight {
     background: rgba(255, 255, 247, 0.1);
+    .transition-duration(0ms);
+  }
+
+  table tr {
+    .transition-property(background-color);
+    .transition-duration(800ms);
+  }
+
+  table tr.new-row {
+    .transition-duration(0ms);
+    background: rgba(255, 255, 247, 0.2);
   }
 
   table .margin {
@@ -150,6 +161,10 @@
       top: 0;
       bottom: 0;
       left: 0;
+
+      tr.load-space {
+        height: inherit;
+      }
 
       tr {
         height: @cellHeight;

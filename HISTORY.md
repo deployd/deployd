@@ -2,6 +2,9 @@
 
 ## 0.6.7
  - Added new data editor
+ - Fixed major bug where calling error() would not always cancel the request
+ - Fixed bug where PUT would fail without an error if you provided a query
+ - Changed root behavior - no longer ignores cancel() in events
 
 ## 0.6.6
  
