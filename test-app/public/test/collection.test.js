@@ -224,6 +224,29 @@ describe('Collection', function() {
         });
       });
     });
+    
+    describe('GET /full?boolean=true', function () {
+      it('should filter boolean properties by query string', function(done) {
+        dpd.full.post({boolean: true}, function (full) {
+          dpd.full.post({boolean: false}, function(full){
+            $.ajax({
+              type: "GET",
+              url: "/full?boolean=true",
+              success: function (res) {
+                expect(res.length).to.be.greaterThan(0);
+                res.forEach(function(obj){
+                  expect(obj.boolean).to.equal(true);  
+                });
+                done();
+              },
+              error: function (e) {
+                done(e);
+              }
+            });
+          });
+        });
+      });
+    });
 
     describe('.get({id: "non existent"}, fn)', function() {
       it('should return a 404', function(done) {        
