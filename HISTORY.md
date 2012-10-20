@@ -5,6 +5,7 @@
  - Fixed major bug where calling error() would not always cancel the request
  - Fixed bug where PUT would fail without an error if you provided a query
  - Changed root behavior - no longer ignores cancel() in events
+ - Fixed bugs preventing events from being `emit()`ed to users in certain connection states
 
 ## 0.6.6
  
