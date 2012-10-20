@@ -794,5 +794,23 @@ describe('Collection', function() {
     });
   });
 
+  describe('changed()', function(){
+    it('should detect when a value has changed', function(done) {
+      dpd.changed.post({name: 'original'}, function (c) {
+        dpd.changed.put(c.id, {name: 'first name change'}, function (c) {
+          if(c.name !== 'saw first name changed previous original') {
+            throw Error('missed name change');
+          }
+          done();
+        });
+      });
+    });
+    
+    afterEach(function (done) {
+      this.timeout(10000);
+      cleanCollection(dpd.changed, done);
+    });
+  });
+
   
 });
