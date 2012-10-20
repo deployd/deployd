@@ -6,6 +6,10 @@
  - Fixed bug where PUT would fail without an error if you provided a query
  - Changed root behavior - no longer ignores cancel() in events
  - Fixed bugs preventing events from being `emit()`ed to users in certain connection states
+ - Fixed bug where boolean query values (?bool=true) were not treated as booleans
+ - Fixed unnecessary error when parsing JSON body
+ - Added more intelegent body parsing
+   
 
 ## 0.6.6
  
