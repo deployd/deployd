@@ -96,6 +96,28 @@ Prevents a property from being updated.
     // Example: On Put
     // Protect a property
     protect('createdDate');
+    
+
+### changed()
+
+    changed(property)
+
+Returns whether a property has been updated.
+
+    // Example: On Put
+    // Validate the title when it changes
+    if(changed('title') && this.title.length < 5) {
+      error('title', 'must be over 5 characters');
+    }
+    
+### previous
+
+An `Object` containing the previous values of the item to be updated.
+
+    // Example: On Put
+    if(this.votes < previous.votes) {
+      emit('votes have decreased');
+    }
 
 ### emit()
 
