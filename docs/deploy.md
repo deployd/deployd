@@ -26,7 +26,7 @@ To provide additional collaborators access to push new versions and access the d
 
 You can also deploy your app on your server, or on a cloud hosting service such as EC2 or Heroku. The server must support [Node.js](http://nodejs.org/). 
 
-Deployd also requires a [MongoDB] (http://www.mongodb.org/) database, which can be hosted on the same server or externally. 
+Deployd also requires a [MongoDB](http://www.mongodb.org/) database, which can be hosted on the same server or externally. 
 
 If you have root shell access on the deployment server, you can install Deployd on it using the command `npm install -g deployd`. 
 Otherwise, you will need to install Deployd as a dependency of your app itself using `npm install deployd` in the root directory of your app.
