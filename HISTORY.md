@@ -4,9 +4,16 @@
  - Added new data editor
  - Fixed major bug where calling error() would not always cancel the request
  - Fixed bug where PUT would fail without an error if you provided a query
+ - Changed root behavior - no longer ignores cancel() in events
+ - Fixed bugs preventing events from being `emit()`ed to users in certain connection states
+ - Fixed bug where boolean query values (?bool=true) were not treated as booleans
+ - Fixed unnecessary error when parsing JSON body
+ - Added more intelegent body parsing
+   
 
 ## 0.6.6
  
+ - Added CORS support
  - Exposed the server object to modules as `process.server`
  - Fixed a rare bug where the first request after a login would not be authenticated
  - Fixed minor bug when loading only node modules
