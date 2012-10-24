@@ -1,6 +1,7 @@
 # History
 
 ## 0.6.7
+
  - Added new data editor
  - Fixed major bug where calling error() would not always cancel the request
  - Fixed bug where PUT would fail without an error if you provided a query
@@ -9,7 +10,9 @@
  - Fixed bug where boolean query values (?bool=true) were not treated as booleans
  - Fixed unnecessary error when parsing JSON body
  - Added more intelegent body parsing
-   
+ - Added `changed()` method in collection events
+ - Added `previous` object in collection events
+ - Fixed `dpd showkey` prompt for missing keys.json
 
 ## 0.6.6
  
