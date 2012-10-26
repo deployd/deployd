@@ -1,5 +1,9 @@
 # History
 
+## 0.6.8
+
+ - Fixed CORS incorrectly requiring a referer header
+
 ## 0.6.7
 
  - Added new data editor
