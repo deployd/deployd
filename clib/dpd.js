@@ -288,8 +288,17 @@
     }
   };
 
+  var isConnected = false;
+  window.dpd.once('connect', function() {
+    isConnected = true;
+  });
+
   window.dpd.onConnect = function(fn) {
-    window.dpd.once('connect', fn);
+    if (isConnected) {
+      setTimeout(fn, 0);
+    } else {
+      window.dpd.once('connect', fn);
+    }
   };
 
   window.dpd.socket = socket;
