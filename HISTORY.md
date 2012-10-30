@@ -7,6 +7,8 @@
  - Added `dpd.off(name, [fn])` function to remove a realtime handler
  - Added `dpd.socketReady(fn)` function to listen for the built-in `connect` event
  - Added `dpd.socket` property to provide direct access to socket.io.
+ - Fixed bug where username and password could be updated by an unauthenticated put.
+  - Usernames and passwords can be updated only by that user's session, a root session, or an internal request.
 
 ## 0.6.7
 

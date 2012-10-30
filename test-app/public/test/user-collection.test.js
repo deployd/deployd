@@ -140,9 +140,59 @@ describe('User Collection', function() {
         chain(function(next) {
           dpd.users.post({username: 'foo', password: 'bar'}, next);
         }).chain(function(next, res, err) {
-          dpd.users.put(res.id, {username: 'test'}, next);
+          dpd.users.put(res.id, {reputation: 10}, next);
         }).chain(function(next, res, err) {
+          if(err) return done(err);
+          expect(res.reputation).to.equal(10);
           done(err);
+        });
+      });
+
+      it('should not allow unauthenticated changes to username or password', function(done) {
+        chain(function(next) {
+          dpd.users.post({username: 'foo', password: 'bar'}, next);
+        }).chain(function(next, res, err) {
+          dpd.users.put(res.id, {username: 'changed', password: 'changed'}, next);
+        }).chain(function(next, res, err) {
+          expect(res.username).to.equal('foo');
+          dpd.users.login({username: 'changed', password: 'changed'}, next);
+        }).chain(function(next, res, err) {
+          expect(err).to.exist;
+          done();
+        });
+      });
+
+      it('should allow authenticated changes to username or password', function(done) {
+        var id;
+        chain(function(next) {
+          dpd.users.post({username: 'foo', password: 'bar'}, next);
+        }).chain(function(next, res, err) {
+          id = res.id;
+          dpd.users.login({username: 'foo', password: 'bar'}, next);
+        }).chain(function(next) {
+          dpd.users.put(id, {username: 'changed', password: 'changed'}, next);
+        }).chain(function(next, res, err) {
+          if(err) return done(err);
+          expect(res.username).to.equal('changed');
+          dpd.users.login({username: 'changed', password: 'changed'}, next);
+        }).chain(function(next, res, err) {
+          if(err) return done(err);
+          done();
+        });
+      });
+
+      it('should allow changes to username and password via events', function(done) {
+        chain(function(next) {
+          dpd.users.post({username: 'foo', password: 'bar'}, next);
+        }).chain(function(next, res, err) {
+          if(err) return done(err);
+          dpd.users.put(res.id, {displayName: "$CHANGEPASSWORD"}, next);
+        }).chain(function(next, res, err) {
+          if(err) return done(err);
+          dpd.users.login({username: 'foo', password: 'changed'}, next);
+        }).chain(function(next, res, err) {
+          if(err) return done(err);
+          done();
         });
       });
     });
