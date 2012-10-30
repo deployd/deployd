@@ -288,13 +288,13 @@
     }
   };
 
-  var isConnected = false;
+  var isSocketReady = false;
   window.dpd.once('connect', function() {
-    isConnected = true;
+    isSocketReady = true;
   });
 
-  window.dpd.onConnect = function(fn) {
-    if (isConnected) {
+  window.dpd.socketReady = function(fn) {
+    if (isSocketReady) {
       setTimeout(fn, 0);
     } else {
       window.dpd.once('connect', fn);
