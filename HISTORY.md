@@ -5,7 +5,7 @@
  - Fixed CORS incorrectly requiring a referer header
  - Added `dpd.once(name, fn)` function to execute a realtime handler exactly once
  - Added `dpd.off(name, [fn])` function to remove a realtime handler
- - Added `dpd.onConnect(fn)` function to listen for the built-in `connect` event. (Sugar for `dpd.once('connect', fn)`)
+ - Added `dpd.onConnect(fn)` function to listen for the built-in `connect` event
  - Added `dpd.socket` property to provide direct access to socket.io.
 
 ## 0.6.7
