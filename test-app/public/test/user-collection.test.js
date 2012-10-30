@@ -107,30 +107,36 @@ describe('User Collection', function() {
 		});
 		describe('dpd.users.on("changed", fn)', function() {
       it('should respond to the built-in changed event on post', function(done) {
-        dpd.users.once('changed', function() {
-          done();
-        });
+        dpd.socketReady(function() {
+          dpd.users.once('changed', function() {
+            done();
+          });
 
-        dpd.users.post({username: 'foo@bar.com', password: '123456'});
+          dpd.users.post({username: 'foo@bar.com', password: '123456'});
+        });
       });
       
       it('should respond to the built-in changed event on put', function(done) {
         dpd.users.post({username: 'foo2@bar.com', password: '123456'}, function(item) {
-          dpd.users.once('changed', function() {
-            done();
+          dpd.socketReady(function() {
+            dpd.users.once('changed', function() {
+              done();
+            });
+            
+            dpd.users.put(item.id, {username: 'foo3@bar.com'});
           });
-          
-          dpd.users.put(item.id, {username: 'foo3@bar.com'});
         });
       });
       
       it('should respond to the built-in changed event on del', function(done) {
         dpd.users.post({username: 'foo2@bar.com', password: '123456'}, function(item) {
-          dpd.users.once('changed', function() {
-            done();
+          dpd.socketReady(function() {
+            dpd.users.once('changed', function() {
+              done();
+            });
+            
+            dpd.users.del(item.id);
           });
-          
-          dpd.users.del(item.id);
         });
       });
     });

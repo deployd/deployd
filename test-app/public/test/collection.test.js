@@ -8,53 +8,63 @@ describe('Collection', function() {
     describe('dpd.on("createTodo", fn)', function() {
       it('should respond to a realtime event', function(done) {
         this.timeout(1500);
-        dpd.once('createTodo', function(todo) {
-          expect(todo).to.exist;
-          expect(todo.title).to.equal('$REALTIME');
-          done();
-        });
+        dpd.socketReady(function() {
+          dpd.once('createTodo', function(todo) {
+            expect(todo).to.exist;
+            expect(todo.title).to.equal('$REALTIME');
+            done();
+          });
 
-        dpd.todos.post({title: '$REALTIME'});
+          dpd.todos.post({title: '$REALTIME'});
+        });
       });
     });
 
     describe('dpd.on("createTodo2", fn)', function() {
       it('should respond to a realtime event without a parameter', function(done) {
-        dpd.once('createTodo2', function(todo) {
-          expect(todo).to.not.exist;
-          done();
-        });
+        dpd.socketReady(function() {
+          dpd.once('createTodo2', function(todo) {
+            expect(todo).to.not.exist;
+            done();
+          });
 
-        dpd.todos.post({title: '$REALTIME2'});
+          dpd.todos.post({title: '$REALTIME2'});
+        });
       });
     });
     
     describe('dpd.todos.on("changed", fn)', function() {
       it('should respond to the built-in changed event on post', function(done) {
-        dpd.todos.once('changed', function() {
-          done();
-        });
+        dpd.socketReady(function() {
+          dpd.todos.once('changed', function() {
+            done();
+          });
 
-        dpd.todos.post({title: 'changed - create'});
+          dpd.todos.post({title: 'changed - create'});
+        });
       });
       
       it('should respond to the built-in changed event on put', function(done) {
         dpd.todos.post({title: 'changed - create'}, function(item) {
-          dpd.todos.once('changed', function() {
-            done();
+          dpd.socketReady(function() {
+            dpd.todos.once('changed', function() {
+              done();
+            });
+            
+            dpd.todos.put(item.id, {title: 'changed - updated'});
           });
-          
-          dpd.todos.put(item.id, {title: 'changed - updated'});
         });
       });
       
       it('should respond to the built-in changed event on del', function(done) {
         dpd.todos.post({title: 'changed - create'}, function(item) {
-          dpd.todos.once('changed', function() {
-            done();
+          dpd.socketReady(function() {
+            dpd.todos.once('changed', function() {
+              done();
+            });
+            
+            dpd.todos.del(item.id);
           });
-          
-          dpd.todos.del(item.id);
         });
       });
     });
