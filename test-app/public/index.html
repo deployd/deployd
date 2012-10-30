@@ -19,7 +19,7 @@
   <div id="mocha"></div>
   <script>
     expect = chai.expect;
-    dpd.onConnect(function() {
+    dpd.socketReady(function() {
       mocha.run();
     });
   </script>
