@@ -19,8 +19,9 @@
   <div id="mocha"></div>
   <script>
     expect = chai.expect;
-    
-    mocha.run();
+    dpd.onConnect(function() {
+      mocha.run();
+    });
   </script>
 </body>
 </html>

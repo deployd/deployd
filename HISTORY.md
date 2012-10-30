@@ -3,6 +3,10 @@
 ## 0.6.8
 
  - Fixed CORS incorrectly requiring a referer header
+ - Added `dpd.once(name, fn)` function to execute a realtime handler exactly once
+ - Added `dpd.off(name, [fn])` function to remove a realtime handler
+ - Added `dpd.onConnect(fn)` function to listen for the built-in `connect` event. (Sugar for `dpd.once('connect', fn)`)
+ - Added `dpd.socket` property to provide direct access to socket.io.
 
 ## 0.6.7
 
@@ -13,7 +17,7 @@
  - Fixed bugs preventing events from being `emit()`ed to users in certain connection states
  - Fixed bug where boolean query values (?bool=true) were not treated as booleans
  - Fixed unnecessary error when parsing JSON body
- - Added more intelegent body parsing
+ - Added more intelligent body parsing
  - Added `changed()` method in collection events
  - Added `previous` object in collection events
  - Fixed `dpd showkey` prompt for missing keys.json

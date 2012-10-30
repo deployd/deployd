@@ -272,5 +272,27 @@
     socket.on.apply(socket, arguments);
   };
 
+  window.dpd.once = function(name, fn) {
+    var _fn = function() {
+      socket.removeListener(name, _fn);
+      fn.apply(this, arguments);
+    };
+    socket.on(name, _fn);
+  };
+
+  window.dpd.off = function(name, fn) {
+    if (fn == null) {
+      socket.removeAllListeners(name);
+    } else {
+      socket.removeListener(name, fn);
+    }
+  };
+
+  window.dpd.onConnect = function(fn) {
+    window.dpd.once('connect', fn);
+  };
+
+  window.dpd.socket = socket;
+
 
 })();

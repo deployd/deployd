@@ -107,7 +107,7 @@ describe('User Collection', function() {
 		});
 		describe('dpd.users.on("changed", fn)', function() {
       it('should respond to the built-in changed event on post', function(done) {
-        dpd.users.on('changed', function() {
+        dpd.users.once('changed', function() {
           done();
         });
 
@@ -116,7 +116,7 @@ describe('User Collection', function() {
       
       it('should respond to the built-in changed event on put', function(done) {
         dpd.users.post({username: 'foo2@bar.com', password: '123456'}, function(item) {
-          dpd.users.on('changed', function() {
+          dpd.users.once('changed', function() {
             done();
           });
           
@@ -126,7 +126,7 @@ describe('User Collection', function() {
       
       it('should respond to the built-in changed event on del', function(done) {
         dpd.users.post({username: 'foo2@bar.com', password: '123456'}, function(item) {
-          dpd.users.on('changed', function() {
+          dpd.users.once('changed', function() {
             done();
           });
           

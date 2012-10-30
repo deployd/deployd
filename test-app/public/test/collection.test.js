@@ -8,7 +8,7 @@ describe('Collection', function() {
     describe('dpd.on("createTodo", fn)', function() {
       it('should respond to a realtime event', function(done) {
         this.timeout(1500);
-        dpd.on('createTodo', function(todo) {
+        dpd.once('createTodo', function(todo) {
           expect(todo).to.exist;
           expect(todo.title).to.equal('$REALTIME');
           done();
@@ -20,7 +20,7 @@ describe('Collection', function() {
 
     describe('dpd.on("createTodo2", fn)', function() {
       it('should respond to a realtime event without a parameter', function(done) {
-        dpd.on('createTodo2', function(todo) {
+        dpd.once('createTodo2', function(todo) {
           expect(todo).to.not.exist;
           done();
         });
@@ -31,7 +31,7 @@ describe('Collection', function() {
     
     describe('dpd.todos.on("changed", fn)', function() {
       it('should respond to the built-in changed event on post', function(done) {
-        dpd.todos.on('changed', function() {
+        dpd.todos.once('changed', function() {
           done();
         });
 
@@ -40,7 +40,7 @@ describe('Collection', function() {
       
       it('should respond to the built-in changed event on put', function(done) {
         dpd.todos.post({title: 'changed - create'}, function(item) {
-          dpd.todos.on('changed', function() {
+          dpd.todos.once('changed', function() {
             done();
           });
           
@@ -50,7 +50,7 @@ describe('Collection', function() {
       
       it('should respond to the built-in changed event on del', function(done) {
         dpd.todos.post({title: 'changed - create'}, function(item) {
-          dpd.todos.on('changed', function() {
+          dpd.todos.once('changed', function() {
             done();
           });
           
