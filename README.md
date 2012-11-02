@@ -1,4 +1,4 @@
-# deployd v0.6.5
+# deployd v0.6.8
 
 [![Build Status](https://secure.travis-ci.org/deployd/deployd.png)](http://travis-ci.org/deployd/deployd)
 

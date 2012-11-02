@@ -83,6 +83,17 @@ describe('.parseBody()', function() {
     req.emit('data', value);
     req.emit('end');
   });
+  
+  it('should interpret an empty body as an empty object', function(done) {
+    var req = new Stream();
+
+    http.parseBody(req, this.res, 'application/json', function(err) {
+      expect(err).to.not.exist;
+      expect(req.body).to.eql({});
+      done();
+    });
+    req.emit('end');
+  });
 });
 });
 

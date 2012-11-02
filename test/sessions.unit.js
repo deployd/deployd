@@ -47,19 +47,6 @@ describe('Session', function() {
 		});
 	}
 
-
-	it('should make the socket available from the session', function(done) {
-		var sockets = new EventEmitter()
-			,	store = new SessionStore('sessions', db.create(TEST_DB), sockets);
-
-		store.createSession(function (err, session) {
-			var fauxSocket = {handshake: { headers: {cookie: 'name=value; name2=value2; sid=' + session.sid} } };
-			sockets.emit('connection', fauxSocket);
-			expect(session.socket._socket).to.equal(fauxSocket);
-			done(err);
-		});
-	});
-
 	it('should make sockets available even before they exist', function(done) {
 		this.timeout(100);
 

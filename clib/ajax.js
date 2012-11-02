@@ -29,13 +29,16 @@ function sendRequest(url,options) {
   var data = options.data;
   var method = options.method || "GET";
   req.open(method,url,true);
+  req.withCredentials = true;
   // req.setRequestHeader('User-Agent','XMLHTTP/1.0');
   if (data)
     req.setRequestHeader('Content-type', options.contentType || 'application/json');
   if (typeof sendRequest.headers === 'object') {
-    Object.keys(sendRequest.headers).forEach(function(k) {
-      req.setRequestHeader(k, sendRequest.headers[k]);
-    });
+    for (var k in sendRequest.headers) {
+      if (sendRequest.headers.hasOwnProperty(k)) {
+        req.setRequestHeader(k, sendRequest.headers[k]);  
+      }
+    }
   }
   req.onreadystatechange = function () {
     if (req.readyState != 4) return;
@@ -55,7 +58,8 @@ var XMLHttpFactories = [
   function () {return new XMLHttpRequest()},
   function () {return new ActiveXObject("Msxml2.XMLHTTP")},
   function () {return new ActiveXObject("Msxml3.XMLHTTP")},
-  function () {return new ActiveXObject("Microsoft.XMLHTTP")}
+  function () {return new ActiveXObject("Microsoft.XMLHTTP")},
+  function () {return new XDomainRequest()}
 ];
 
 function createXMLHTTPObject() {

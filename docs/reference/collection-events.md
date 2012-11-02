@@ -96,6 +96,28 @@ Prevents a property from being updated.
     // Example: On Put
     // Protect a property
     protect('createdDate');
+    
+
+### changed()
+
+    changed(property)
+
+Returns whether a property has been updated.
+
+    // Example: On Put
+    // Validate the title when it changes
+    if(changed('title') && this.title.length < 5) {
+      error('title', 'must be over 5 characters');
+    }
+    
+### previous
+
+An `Object` containing the previous values of the item to be updated.
+
+    // Example: On Put
+    if(this.votes < previous.votes) {
+      emit('votes have decreased');
+    }
 
 ### emit()
 
@@ -160,6 +182,29 @@ Dpd.js will prevent recursive queries. This works by returning `null` from a `dp
             }
         ]
     }
+
+
+### internal
+
+Equal to true if this request has been sent by another script.
+
+    // Example: On GET /posts
+    // Posts with a parent are invisible, but are counted by their parent
+    if (this.parentId && !internal) cancel();
+
+    dpd.posts.get({parentId: this.id}, function(posts) {
+        this.childPosts = posts.length;
+    });
+
+### isRoot
+
+Equal to true if this request has been authenticated as root (has the `dpd-ssh-key` header with the appropriate key)
+
+    // Example: On PUT /users
+    // Protect reputation property - should only be calculated by a custom script.
+
+    if (!isRoot) protect('reputation');
+
 
 ### console.log()
 

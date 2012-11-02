@@ -6,100 +6,12 @@
   <h3>API</h3>
 
   <ul class="nav nav-tabs" id="event-nav">
-    <li class="active"><a href="#js-examples" data-toggle='tab'>JavaScript</a></li>
-    <li><a href="#rest-examples" data-toggle='tab'>REST</a></li>
+    <li class="active"><a href="#http-examples" data-toggle='tab'>HTTP</a></li>
+    <li><a href="#js-examples" data-toggle='tab'>JavaScript</a></li>
   </ul>
 
   <div class="tab-content tab-content-styled">
-    <div id="js-examples" class="tab-pane active">
-    <p>Deployd generates a browser JavaScript api for easily accessing data from the <code><%= '/' + resourceData.id %></code> collection. To use it you first need to include the generated script.</p>
-
-    <pre class="prettyprint code">&lt;script src="dpd.js"&gt;&lt;/script&gt;</pre>
-
-    <% if (resourceData.type === 'UserCollection') { %>
-    <p>Register a new user in the <code><%= '/' + resourceData.id %></code> collection:</p>
-    <pre class="code prettyprint">
-dpd<%= ns('/' + resourceData.id) %>.post({"username": "foo@bar.com", "password": "mypassword"}, function(user, err) {
-  if(err) return console.log(err);
-  console.log(user);
-});</pre>
-
-    <p>Login an existing user in the <code><%= '/' + resourceData.id %></code> collection:</p>
-    <pre class="code prettyprint">
-dpd<%= ns('/' + resourceData.id) %>.login({"username": "foo@bar.com", "password": "mypassword"}, function(user, err) {
-  if(err) return console.log(err);
-  console.log(user);
-});</pre>
-
-    <p>Get the current user in the <code><%= '/' + resourceData.id %></code> collection:</p>
-    <pre class="code prettyprint">
-dpd<%= ns('/' + resourceData.id) %>.me(function(me) {
-  console.log(me);
-});</pre>
-
-    <p>Logout the current user in the <code><%= '/' + resourceData.id %></code> collection:</p>
-    <pre class="code prettyprint">
-dpd<%= ns('/' + resourceData.id) %>.logout(function(err) {
-  if(err) console.log(err);
-});</pre>
-      
-    <% } else { %> 
-
-    <p>Insert data into the <code><%= '/' + resourceData.id %></code> collection:</p>
-    <pre class="code prettyprint">
-dpd<%= ns('/' + resourceData.id) %>.post(<%= getObj() %>, function(result, err) {
-  if(err) return console.log(err);
-  console.log(result, result.id);
-});</pre>
-
-    <% } %>
-
-    <p>Get all the objects in the <code><%= '/' + resourceData.id %></code> collection:</p>
-    <pre class="code prettyprint">
-dpd<%= ns('/' + resourceData.id) %>.get(function (result, err) {
-  if(err) return console.log(err);
-  console.log(result);
-});</pre>
-
-    <p>Get all the objects in the <code><%= '/' + resourceData.id %></code> collection that match a <a href="http://www.deployd.com/docs/resources/collection.html#docs-querying-data">query</a>:</p>
-    <pre class="code prettyprint">
-var query = <%= getObj() %>;
-
-dpd<%= ns('/' + resourceData.id) %>.get(query, function (result) {
-  console.log(result);
-});</pre>
-
-    <p>Get a single object in the <code><%= '/' + resourceData.id %></code> collection by id:</p>
-    <pre class="code prettyprint">
-dpd<%= ns('/' + resourceData.id) %>.first("000000000000000000000000", function (result) {
-  console.log(result);
-});</pre>
-
-    <p>Get a single object in the <code><%= '/' + resourceData.id %></code> collection that matches a <a href="http://www.deployd.com/docs/resources/collection.html#docs-querying-data">query</a>:</p>
-    <pre class="code prettyprint">
-var query = <%= getObj() %>;
-
-dpd<%= ns('/' + resourceData.id) %>.first(query, function (result) {
-  console.log(result);
-});</pre>
-
-    <p>Update an object in the <code><%= '/' + resourceData.id %></code> collection:</p>
-    <pre class="code prettyprint">
-dpd<%= ns('/' + resourceData.id) %>.put("000000000000000000000000", <%= getObj() %>, function(result, err) {
-  if(err) return console.log(err);
-  console.log(result, result.id);
-});</pre>
-
-    <p>Remove a single object from the <code><%= '/' + resourceData.id %></code> collection:</p>
-    <pre class="code prettyprint">
-dpd<%= ns('/' + resourceData.id) %>.del("000000000000000000000000", function (err) {
-  if(err) console.log(err);
-});</pre>
-
-    </div>
-
-
-    <div id="rest-examples" class="tab-pane">
+    <div id="http-examples" class="tab-pane active">
       <p>Access the <code><%= '/' + resourceData.id %></code> collection over http.</p>
 
       <table class="table table-bordered table-striped">
@@ -174,5 +86,87 @@ dpd<%= ns('/' + resourceData.id) %>.del("000000000000000000000000", function (er
         </thead>
       </table>
     </div>
+
+    <div id="js-examples" class="tab-pane">
+    <p>Deployd generates a browser JavaScript api for easily accessing data from the <code><%= '/' + resourceData.id %></code> collection. To use it you first need to include the generated script.</p>
+
+    <pre class="prettyprint code">&lt;script src="dpd.js"&gt;&lt;/script&gt;</pre>
+
+    <% if (resourceData.type === 'UserCollection') { %>
+    <p>Register a new user in the <code><%= '/' + resourceData.id %></code> collection:</p>
+    <pre class="code prettyprint">
+dpd<%= ns('/' + resourceData.id) %>.post({"username": "foo@bar.com", "password": "mypassword"}, function(user, err) {
+  if(err) return console.log(err);
+  console.log(user);
+});</pre>
+
+    <p>Login an existing user in the <code><%= '/' + resourceData.id %></code> collection:</p>
+    <pre class="code prettyprint">
+dpd<%= ns('/' + resourceData.id) %>.login({"username": "foo@bar.com", "password": "mypassword"}, function(user, err) {
+  if(err) return console.log(err);
+  console.log(user);
+});</pre>
+
+    <p>Get the current user in the <code><%= '/' + resourceData.id %></code> collection:</p>
+    <pre class="code prettyprint">
+dpd<%= ns('/' + resourceData.id) %>.me(function(me) {
+  console.log(me);
+});</pre>
+
+    <p>Logout the current user in the <code><%= '/' + resourceData.id %></code> collection:</p>
+    <pre class="code prettyprint">
+dpd<%= ns('/' + resourceData.id) %>.logout(function(err) {
+  if(err) console.log(err);
+});</pre>
+      
+    <% } else { %> 
+
+    <p>Insert data into the <code><%= '/' + resourceData.id %></code> collection:</p>
+    <pre class="code prettyprint">
+dpd<%= ns('/' + resourceData.id) %>.post(<%= getObj() %>, function(result, err) {
+  if(err) return console.log(err);
+  console.log(result, result.id);
+});</pre>
+
+    <% } %>
+
+    <p>Get all the objects in the <code><%= '/' + resourceData.id %></code> collection:</p>
+    <pre class="code prettyprint">
+dpd<%= ns('/' + resourceData.id) %>.get(function (result, err) {
+  if(err) return console.log(err);
+  console.log(result);
+});</pre>
+
+    <p>Get all the objects in the <code><%= '/' + resourceData.id %></code> collection that match a <a href="http://www.deployd.com/docs/resources/collection.html#docs-querying-data">query</a>:</p>
+    <pre class="code prettyprint">
+var query = <%= getObj() %>;
+
+dpd<%= ns('/' + resourceData.id) %>.get(query, function (result) {
+  console.log(result);
+});</pre>
+
+    <p>Get a single object in the <code><%= '/' + resourceData.id %></code> collection by id:</p>
+    <pre class="code prettyprint">
+dpd<%= ns('/' + resourceData.id) %>.get("000000000000000000000000", function (result) {
+  console.log(result);
+});</pre>
+
+    <p>Update an object in the <code><%= '/' + resourceData.id %></code> collection:</p>
+    <pre class="code prettyprint">
+dpd<%= ns('/' + resourceData.id) %>.put("000000000000000000000000", <%= getObj() %>, function(result, err) {
+  if(err) return console.log(err);
+  console.log(result, result.id);
+});</pre>
+
+    <p>Remove a single object from the <code><%= '/' + resourceData.id %></code> collection:</p>
+    <pre class="code prettyprint">
+dpd<%= ns('/' + resourceData.id) %>.del("000000000000000000000000", function (err) {
+  if(err) console.log(err);
+});</pre>
+
+    </div>
+
+
+    
   </div>
 </script>

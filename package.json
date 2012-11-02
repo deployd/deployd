@@ -1,7 +1,7 @@
 {
   "author": "Ritchie Martori",
   "name": "deployd",
-  "version": "0.6.5",
+  "version": "0.6.8",
   "description": "the simplest way to build realtime APIs for web and mobile apps",
   "repository": {
     "url": "git://github.com/deployd/deployd.git"
@@ -36,6 +36,9 @@
     "forever-monitor": "1.1.x",
     "keypress": "~0.1.0",
     "q": "~0.8.9"
+    "opener": "~1.3.0",
+    "corser": "~1.1.1",
+    "semver": "1.1.x"
   },
   "devDependencies": {
     "mocha": "*",

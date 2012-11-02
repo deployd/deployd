@@ -1,3 +1,11 @@
+if (this.title == "$REQUIRE_AUTH") {
+    if (!me) cancel("You are not authorized", 401);
+}
+
+if (this.title === "$POSTERROR") {
+    error('title', "POST error");
+}
+
 if (this.title === "$FAIL") {
     var x = null;
     x.fail();
@@ -27,4 +35,8 @@ if (this.title === "$CANCEL_TEST") {
 
 if (this.title === "$INTERNAL_CANCEL_TEST") {
   if (!internal) cancel('internal cancel');
+}
+
+if (isRoot) {
+    this.isRoot = true;
 }

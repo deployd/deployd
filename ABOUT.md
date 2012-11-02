@@ -31,13 +31,6 @@ realtime resource server
 
 Consult the [documentation](http://deployd.github.com/deployd) or contact `ritchie at deployd com`.
 
-## changelog
-
-### 0.5
-
-  - removed `property.optional` in favor of `property.required`
-  - changed `object._id` to `object.id` on all stored objects
-
 ## license
 
 Copyright 2012 deployd, llc

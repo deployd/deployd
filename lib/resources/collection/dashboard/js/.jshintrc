@@ -5,13 +5,20 @@
   "lastsemic": true,
   "laxbreak": true,
   "strict": false,
-  "eqnull": true,
 
   "undef": true,
   "browser": true,
-  "devel": true,
   "predef": {
-      "io": true
+      "dpd": true
     , "_dpd": true
+    , "$": false
+    , "_": false
+    , "ui": false
+    , "ace": false
+    , "Context": false
+
+    , "ko": false
+    , "prettyPrint": false
+    , "CollectionUtil": false
   }
 }

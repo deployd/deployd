@@ -1,0 +1,246 @@
+@import '../../dashboard/stylesheets/mixins.less';
+
+
+@background: url('../../img/outlets.png');
+@backgroundLight: url('../../img/outlets-light.png');
+@cellHeight: 38px;
+
+.unloaded-content {
+  display: none !important;
+}
+
+#editor-modal {
+
+  .modal-body {
+    height: 300px;
+  }
+
+  .editor {
+    display: block;
+    height: 300px;
+    width: 530px;
+  }
+}
+
+#inline-editor {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 100;
+
+  #inline-editor-table-overlay {
+    position: fixed;
+  }
+
+  .mini-edit {
+    padding: 8px;
+    position: absolute;
+    background: @backgroundLight;
+    .box-sizing(border-box);
+    white-space: nowrap;
+
+    a {
+      display: inline-block;
+      vertical-align: middle;
+      margin-left: 2px;
+    }
+
+    input {
+      margin: 0;
+    }
+
+    input[type=text] {
+      min-width: 200px;
+      max-width: 300px;
+    }
+
+    label {
+      min-width: 200px;
+      input[type=checkbox] {
+        display: inline-block;
+        vertical-align: middle;
+        margin-right: 8px;
+      }  
+    }
+    
+  }
+}
+
+#data {
+  visibility: hidden;
+  .display-box();
+  .box-orient(vertical);
+}
+
+#table-container {
+  position: relative;
+  .box-flex(1);
+  height: 0px;
+  
+  overflow: scroll;
+  // width: 600px;
+  // max-width: 100%;
+
+  table { 
+    width: auto;
+    table-layout: fixed;
+  }
+
+  table tr:hover td, table tr:hover td {
+    background-color: inherit;
+  }
+
+  table td, table th {
+    max-width: 200px;
+    min-width: 200px;
+    height: @cellHeight - 16px;
+   
+    .value {
+      max-height: @cellHeight - 16px;
+      height: @cellHeight - 16px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+  }
+
+  table tr td.highlight {
+    background: rgba(255, 255, 247, 0.1);
+    .transition-duration(0ms);
+  }
+
+  table tr {
+    .transition-property(background-color);
+    .transition-duration(800ms);
+  }
+
+  table tr.new-row {
+    .transition-duration(0ms);
+    background: rgba(255, 255, 247, 0.2);
+  }
+
+  table .margin {
+    max-width: 20px;
+    min-width: 20px;
+  }
+
+  .load-space td {
+    height: 0;
+    padding: 0;
+    margin: 0;
+  }
+  
+
+  #margin-container {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: @cellHeight;
+    height: 0px;
+    overflow: hidden;
+    z-index: 10;
+
+    &:before {
+      content: '';
+      z-index: 11;
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: @cellHeight;
+      background: @background;
+      border: #363535 1px solid;
+    }
+
+    #margin {
+      background: @background;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+
+      tr.load-space {
+        height: inherit;
+      }
+
+      tr {
+        height: @cellHeight;
+      }
+
+      .delete-btn {
+        opacity: 0.4;
+
+        &:hover {
+          opacity: 1;
+        }
+      }
+    }
+
+    #margin-footer {
+      z-index: 11;
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: @cellHeight + 2;
+      background: @background;
+      border: #363535 1px solid;
+      .box-sizing(border-box);
+      padding: 8px;
+    }
+  }
+
+  #headers-container {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    height: @cellHeight + 2;
+    overflow: hidden;
+
+    #headers {
+      background: @background;
+      position: absolute;
+      top: 0px;
+      left: 0px;
+    }
+  }
+
+  #new-row-container {  
+    position: fixed;
+    height: @cellHeight + 2;
+    overflow: hidden;
+
+    #new-row {
+      background: @background;
+      position: absolute;
+      bottom: 0;
+      left: 0; 
+      margin: 0;
+
+      .id-cell {
+        font-style: italic;
+      }
+
+      .hint {
+        opacity: 0.5;
+      }
+    }
+  }
+  
+  #body-table-container { //wtf - fixes a bug in firefox
+    float: left;
+    width: 1px;
+    overflow: visible;
+  }
+
+  #body-table {
+    background: @background;
+    margin: 0;
+  }
+
+  
+}
+

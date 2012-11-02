@@ -107,30 +107,36 @@ describe('User Collection', function() {
 		});
 		describe('dpd.users.on("changed", fn)', function() {
       it('should respond to the built-in changed event on post', function(done) {
-        dpd.users.on('changed', function() {
-          done();
-        });
+        dpd.socketReady(function() {
+          dpd.users.once('changed', function() {
+            done();
+          });
 
-        dpd.users.post({username: 'foo@bar.com', password: '123456'});
+          dpd.users.post({username: 'foo@bar.com', password: '123456'});
+        });
       });
       
       it('should respond to the built-in changed event on put', function(done) {
         dpd.users.post({username: 'foo2@bar.com', password: '123456'}, function(item) {
-          dpd.users.on('changed', function() {
-            done();
+          dpd.socketReady(function() {
+            dpd.users.once('changed', function() {
+              done();
+            });
+            
+            dpd.users.put(item.id, {username: 'foo3@bar.com'});
           });
-          
-          dpd.users.put(item.id, {username: 'foo3@bar.com'});
         });
       });
       
       it('should respond to the built-in changed event on del', function(done) {
         dpd.users.post({username: 'foo2@bar.com', password: '123456'}, function(item) {
-          dpd.users.on('changed', function() {
-            done();
+          dpd.socketReady(function() {
+            dpd.users.once('changed', function() {
+              done();
+            });
+            
+            dpd.users.del(item.id);
           });
-          
-          dpd.users.del(item.id);
         });
       });
     });
@@ -140,9 +146,59 @@ describe('User Collection', function() {
         chain(function(next) {
           dpd.users.post({username: 'foo', password: 'bar'}, next);
         }).chain(function(next, res, err) {
-          dpd.users.put(res.id, {username: 'test'}, next);
+          dpd.users.put(res.id, {reputation: 10}, next);
         }).chain(function(next, res, err) {
+          if(err) return done(err);
+          expect(res.reputation).to.equal(10);
           done(err);
+        });
+      });
+
+      it('should not allow unauthenticated changes to username or password', function(done) {
+        chain(function(next) {
+          dpd.users.post({username: 'foo', password: 'bar'}, next);
+        }).chain(function(next, res, err) {
+          dpd.users.put(res.id, {username: 'changed', password: 'changed'}, next);
+        }).chain(function(next, res, err) {
+          expect(res.username).to.equal('foo');
+          dpd.users.login({username: 'changed', password: 'changed'}, next);
+        }).chain(function(next, res, err) {
+          expect(err).to.exist;
+          done();
+        });
+      });
+
+      it('should allow authenticated changes to username or password', function(done) {
+        var id;
+        chain(function(next) {
+          dpd.users.post({username: 'foo', password: 'bar'}, next);
+        }).chain(function(next, res, err) {
+          id = res.id;
+          dpd.users.login({username: 'foo', password: 'bar'}, next);
+        }).chain(function(next) {
+          dpd.users.put(id, {username: 'changed', password: 'changed'}, next);
+        }).chain(function(next, res, err) {
+          if(err) return done(err);
+          expect(res.username).to.equal('changed');
+          dpd.users.login({username: 'changed', password: 'changed'}, next);
+        }).chain(function(next, res, err) {
+          if(err) return done(err);
+          done();
+        });
+      });
+
+      it('should allow changes to username and password via events', function(done) {
+        chain(function(next) {
+          dpd.users.post({username: 'foo', password: 'bar'}, next);
+        }).chain(function(next, res, err) {
+          if(err) return done(err);
+          dpd.users.put(res.id, {displayName: "$CHANGEPASSWORD"}, next);
+        }).chain(function(next, res, err) {
+          if(err) return done(err);
+          dpd.users.login({username: 'foo', password: 'changed'}, next);
+        }).chain(function(next, res, err) {
+          if(err) return done(err);
+          done();
         });
       });
     });

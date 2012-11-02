@@ -33,7 +33,7 @@ var chain = function(fn) {
 };
 
 var cleanCollection = function(collection, done) {
-	collection.get(function (items) {
+	collection.get({clean: true}, function (items) {
 		var total = items.length;
 		if(total === 0) return done();
 		items.forEach(function(item) {
