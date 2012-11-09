@@ -9,6 +9,11 @@
  - Added `dpd.socket` property to provide direct access to socket.io.
  - Fixed bug where username and password could be updated by an unauthenticated put.
   - Usernames and passwords can be updated only by that user's session, a root session, or an internal request.
+ - Made `data` folder smaller by default in `development` environment
+ - Added `cancelIf()`, `cancelUnless()`, `errorIf()`, and `errorUnless()` functions to event API for more declarative events
+ - Added `hasErrors()` function to event API
+ - Added `isMe()` function to event API
+
 
 ## 0.6.7
 

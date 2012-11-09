@@ -1,4 +1,4 @@
-/*global _dpd:false */
+/*global _dpd:false, $:false */
 describe('Collection', function() {
   describe('dpd.todos', function() {
     it('should exist', function() {
@@ -634,6 +634,61 @@ describe('Collection', function() {
     afterEach(function (done) {
       this.timeout(10000);
       cleanCollection(dpd.todos, done);
+    });
+  });
+
+  describe('events', function() {
+    describe('cancelIf()', function() {
+      it('should cancel', function(done) {
+        dpd.todos.post({title: "$CANCEL_IF_TEST"}, function(todo, err) {
+          expect(err).to.exist;
+          expect(err.message).to.equal("Cancel if");
+          done();
+        });
+      });
+    });
+
+    describe('cancelUnless()', function() {
+      it('should cancel', function(done) {
+        dpd.todos.post({title: "$CANCEL_UNLESS_TEST"}, function(todo, err) {
+          expect(err).to.exist;
+          expect(err.message).to.equal("Cancel unless");
+          done();
+        });
+      });
+    });
+
+    describe('hasErrors()', function() {
+      it('should cancel', function(done) {
+        dpd.todos.post({title: "$HAS_ERRORS_TEST"}, function(todo, err) {
+          expect(err).to.exist;
+          expect(err.errors.hasErrors).to.equal("Yep");
+          expect(err.errors.otherError).to.exist;
+          done();
+        });
+      });
+    });
+
+    describe('errorIf()', function() {
+      it('should error', function(done) {
+        dpd.todos.post({title: "$ERROR_IF_TEST"}, function(todo, err) {
+          expect(err).to.exist;
+          expect(err.errors).to.exist;
+          expect(err.errors.errorIf).to.equal("Yep");
+          done();
+        });
+      });
+    });
+
+    describe('errorUnless()', function() {
+      it('should error', function(done) {
+        dpd.todos.post({title: "$ERROR_UNLESS_TEST"}, function(todo, err) {
+          expect(err).to.exist;
+          expect(err.errors).to.exist;
+          expect(err.errors.errorUnless).to.equal("Yep");
+          done();
+        });
+      });
     });
   });
 

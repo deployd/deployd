@@ -201,6 +201,36 @@ describe('User Collection', function() {
           done();
         });
       });
+
+      it('should return true for isMe()', function(done) {
+        var id;
+        chain(function(next) {
+          dpd.users.post({username: 'foo', password: 'bar'}, next);
+        }).chain(function(next, res, err) {
+          id = res.id;
+          dpd.users.login({username: 'foo', password: 'bar'}, next);
+        }).chain(function(next, res, err) {
+          dpd.users.put(id, {displayName: "Foo Bar!"}, next);
+        }).chain(function(next, res, err) {
+          if(err) return done(err);
+          expect(res.isMe).to.equal(true);
+          done(err);
+        });
+      });
+
+      it('should return false for isMe()', function(done) {
+        var id;
+        chain(function(next) {
+          dpd.users.post({username: 'foo', password: 'bar'}, next);
+        }).chain(function(next, res, err) {
+          id = res.id;
+          dpd.users.put(id, {displayName: "Foo Bar!"}, next);
+        }).chain(function(next, res, err) {
+          if(err) return done(err);
+          expect(res.isMe).to.equal(false);
+          done(err);
+        });
+      });
     });
 
     afterEach(function (done) {
