@@ -3,6 +3,17 @@
 ## 0.6.8
 
  - Fixed CORS incorrectly requiring a referer header
+ - Added `dpd.once(name, fn)` function to execute a realtime handler exactly once
+ - Added `dpd.off(name, [fn])` function to remove a realtime handler
+ - Added `dpd.socketReady(fn)` function to listen for the built-in `connect` event
+ - Added `dpd.socket` property to provide direct access to socket.io.
+ - Fixed bug where username and password could be updated by an unauthenticated put.
+  - Usernames and passwords can be updated only by that user's session, a root session, or an internal request.
+ - Made `data` folder smaller by default in `development` environment
+ - Added `cancelIf()`, `cancelUnless()`, `errorIf()`, and `errorUnless()` functions to event API for more declarative events
+ - Added `hasErrors()` function to event API
+ - Added `isMe()` function to event API
+
 
 ## 0.6.7
 
@@ -13,7 +24,7 @@
  - Fixed bugs preventing events from being `emit()`ed to users in certain connection states
  - Fixed bug where boolean query values (?bool=true) were not treated as booleans
  - Fixed unnecessary error when parsing JSON body
- - Added more intelegent body parsing
+ - Added more intelligent body parsing
  - Added `changed()` method in collection events
  - Added `previous` object in collection events
  - Fixed `dpd showkey` prompt for missing keys.json
