@@ -1,4 +1,4 @@
-# deployd v0.6.8
+# deployd v0.6.9
 
 [![Build Status](https://secure.travis-ci.org/deployd/deployd.png)](http://travis-ci.org/deployd/deployd)
 
@@ -27,6 +27,7 @@ Deployd is the simplest way to build realtime APIs for web and mobile apps. Read
  - [Docs](http://docs.deployd.com/)
  - [Getting Started Guide](http://docs.deployd.com/docs/getting-started/what-is-deployd.md)
  - [Hello World Tutorial](http://docs.deployd.com/docs/getting-started/your-first-api.md)
+ - [API Docs](http://docs.deployd.com/api)
  - [Community Discussion Page](http://deployd.com/community.html)
  - [Example Apps](http://docs.deployd.com/examples/)
 
