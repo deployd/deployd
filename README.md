@@ -24,11 +24,11 @@ Deployd is the simplest way to build realtime APIs for web and mobile apps. Read
 	
 ## helpful resources
 
- - [Docs](http://deployd.com/docs/)
- - [Getting Started Guide](http://deployd.com/docs/)
- - [Hello World Tutorial](http://deployd.com/docs/tutorials/hello-world.html)
+ - [Docs](http://docs.deployd.com/)
+ - [Getting Started Guide](http://docs.deployd.com/docs/getting-started/what-is-deployd.md)
+ - [Hello World Tutorial](http://docs.deployd.com/docs/getting-started/your-first-api.md)
  - [Community Discussion Page](http://deployd.com/community.html)
- - [Example Apps](http://deployd.com/docs/examples.html)
+ - [Example Apps](http://docs.deployd.com/examples/)
 
 ## install from npm
 
