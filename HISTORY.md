@@ -13,7 +13,8 @@
  - Added `cancelIf()`, `cancelUnless()`, `errorIf()`, and `errorUnless()` functions to event API for more declarative events
  - Added `hasErrors()` function to event API
  - Added `isMe()` function to event API
- - Fixed external prototype bug cuasing custom external prototypes to fail
+ - Fixed external prototype bug causing custom external prototypes to fail
+ - Removed docs from repository. They are now available at http://docs.deployd.com or https://github.com/deployd/docs.
 
 
 ## 0.6.7
