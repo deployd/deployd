@@ -13,6 +13,7 @@
  - Added `cancelIf()`, `cancelUnless()`, `errorIf()`, and `errorUnless()` functions to event API for more declarative events
  - Added `hasErrors()` function to event API
  - Added `isMe()` function to event API
+ - Fixed external prototype bug cuasing custom external prototypes to fail
 
 
 ## 0.6.7
