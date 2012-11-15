@@ -876,6 +876,21 @@ describe('Collection', function() {
       cleanCollection(dpd.changed, done);
     });
   });
+  
+  describe('.emit("custom", {foo: "bar"})', function(){
+    it('should send a custom message', function(done) {
+      var input = {foo: 'bar'};
+      dpd.todos.emit('custom', input, function (data, err) {
+        expect(data).to.eql({foo: 'bar', baz: 'baz'});
+        done(err);
+      });
+    });
+    
+    afterEach(function (done) {
+      this.timeout(10000);
+      cleanCollection(dpd.changed, done);
+    });
+  });
 
   
 });

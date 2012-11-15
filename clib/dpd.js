@@ -240,7 +240,7 @@
       }
     };
 
-    r.exec = function(func, path, body, fn) {
+    r.exec = r.emit = function(func, path, body, fn) {
       var settings = {}
         , i = 0;
 
