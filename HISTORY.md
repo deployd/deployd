@@ -1,5 +1,9 @@
 # History
 
+## 0.6.9 
+
+- Fixed bug where `internal-client` was not accessible from modules
+
 ## 0.6.8
 
  - Fixed CORS incorrectly requiring a referer header
