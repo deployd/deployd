@@ -4960,7 +4960,7 @@ td {
   vertical-align: middle !important;
 }
 #resource-sidebar,
-#module-sidebar #pre-resource-sidebar {
+#module-sidebar {
   min-width: 150px;
   margin-bottom: 0;
   -webkit-border-radius: 10px 10px 10px 10px;
@@ -4968,12 +4968,12 @@ td {
   border-radius: 10px 10px 10px 10px;
 }
 #resource-sidebar i,
-#module-sidebar #pre-resource-sidebar i {
+#module-sidebar i {
   position: relative;
   top: -2px;
 }
 #resource-sidebar li,
-#module-sidebar #pre-resource-sidebar li {
+#module-sidebar li {
   position: relative;
   padding: 10px;
   -webkit-box-shadow: inset 3px 3px 40px rgba(0, 0, 0, 0.37);
@@ -4986,7 +4986,7 @@ td {
   border-right: solid 1px #030202;
 }
 #resource-sidebar li .options,
-#module-sidebar #pre-resource-sidebar li .options {
+#module-sidebar li .options {
   visibility: hidden;
   position: absolute;
   right: 8px;
@@ -4994,20 +4994,20 @@ td {
   padding: 8px;
 }
 #resource-sidebar li .options:hover .caret,
-#module-sidebar #pre-resource-sidebar li .options:hover .caret {
+#module-sidebar li .options:hover .caret {
   border-top-color: #ffffff;
 }
 #resource-sidebar li .options .caret,
-#module-sidebar #pre-resource-sidebar li .options .caret {
+#module-sidebar li .options .caret {
   border-top-color: #838181;
   opacity: 1;
 }
 #resource-sidebar li:hover .options,
-#module-sidebar #pre-resource-sidebar li:hover .options {
+#module-sidebar li:hover .options {
   visibility: visible;
 }
 #resource-sidebar li li,
-#module-sidebar #pre-resource-sidebar li li {
+#module-sidebar li li {
   padding: 5px;
   -webkit-box-shadow: none;
   -moz-box-shadow: none;
@@ -5017,12 +5017,12 @@ td {
   margin-right: 14px;
 }
 #resource-sidebar li li i,
-#module-sidebar #pre-resource-sidebar li li i {
+#module-sidebar li li i {
   position: relative;
   top: -1px;
 }
 #resource-sidebar a,
-#module-sidebar #pre-resource-sidebar a {
+#module-sidebar a {
   font-weight: bold;
   font-size: 10px;
   text-transform: uppercase;
@@ -5030,35 +5030,35 @@ td {
   color: #838181;
 }
 #resource-sidebar a i,
-#module-sidebar #pre-resource-sidebar a i {
+#module-sidebar a i {
   opacity: 0.5;
 }
 #resource-sidebar a:hover,
-#module-sidebar #pre-resource-sidebar a:hover {
+#module-sidebar a:hover {
   background: none !important;
 }
 #resource-sidebar li.active,
-#module-sidebar #pre-resource-sidebar li.active {
+#module-sidebar li.active {
   background: rgba(255, 255, 255, 0.05);
 }
 #resource-sidebar li.active > a,
-#module-sidebar #pre-resource-sidebar li.active > a {
+#module-sidebar li.active > a {
   color: #ffffff;
 }
 #resource-sidebar li.active > a i,
-#module-sidebar #pre-resource-sidebar li.active > a i {
+#module-sidebar li.active > a i {
   opacity: 1;
 }
 #resource-sidebar > li.active > a,
-#module-sidebar #pre-resource-sidebar > li.active > a {
+#module-sidebar > li.active > a {
   display: block;
 }
 #resource-sidebar ul,
-#module-sidebar #pre-resource-sidebar ul {
+#module-sidebar ul {
   margin-top: 10px;
 }
 #resource-sidebar .nav,
-#module-sidebar #pre-resource-sidebar .nav {
+#module-sidebar .nav {
   margin-bottom: 0;
 }
 #sidebar-well {
