@@ -886,6 +886,14 @@ describe('Collection', function() {
       });
     });
     
+    it('should respond with something beside the body sent', function(done) {
+      var input = {$TEST_RESPOND: true};
+      dpd.todos.emit('custom', input, function (data, err) {
+        expect(data).to.equal('foo bar bat baz');
+        done(err);
+      });
+    });
+    
     afterEach(function (done) {
       this.timeout(10000);
       cleanCollection(dpd.changed, done);
