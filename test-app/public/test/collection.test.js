@@ -896,9 +896,118 @@ describe('Collection', function() {
     
     afterEach(function (done) {
       this.timeout(10000);
-      cleanCollection(dpd.changed, done);
+      cleanCollection(dpd.todos, done);
     });
   });
-
   
+  describe('batch PUTs', function(){
+    it('should be available to internal requests', function(done) {
+      chain(function(next) {
+        dpd.todos.post({title: 'foo'}, next);
+      }).chain(function(next) {
+        dpd.todos.post({title: 'bar'}, next);
+      }).chain(function(next) {
+        dpd.todos.post({title: 'bat'}, next);
+      }).chain(function(next, res, err) {
+        dpd.todos.emit('custom', {$BATCH_PUT: 'foo bar'}, next);
+      }).chain(function (next, res, err) {
+        dpd.todos.get(function (todos) {
+          todos.forEach(function (todo) {
+            expect(todo.title).to.equal('foo bar');
+          });
+          
+          done(err);
+        });
+      });
+    });
+    
+    afterEach(function (done) {
+      this.timeout(10000);
+      cleanCollection(dpd.todos, done);
+    });
+  });
+  
+  describe('custom permissions', function(){
+    describe('allow("updating multiple objects")', function(){
+      it('should allow batch put', function(done) {
+        chain(function(next) {
+          dpd.todos.post({title: 'foo'}, next);
+        }).chain(function(next) {
+          dpd.todos.post({title: 'bar'}, next);
+        }).chain(function(next) {
+          dpd.todos.post({title: 'bat'}, next);
+        }).chain(function (next, res, err) {
+          dpd.todos.put({}, {title: '$CUSTOM_PERMISSIONS_PUT'}, function (todos) {
+            dpd.todos.get(function (todos) {
+              todos.forEach(function (todo) {
+                expect(todo.title).to.equal('$CUSTOM_PERMISSIONS_PUT');
+              });
+          
+              done(err);
+            })
+          });
+        });
+      });
+    });
+    
+    describe('allow("deleting multiple objects")', function(){
+      it('should allow batch delete', function(done) {
+        chain(function(next) {
+          dpd.todos.post({title: 'foo'}, next);
+        }).chain(function(next) {
+          dpd.todos.post({title: 'bar'}, next);
+        }).chain(function(next) {
+          dpd.todos.post({title: 'bat'}, next);
+        }).chain(function (next, res, err) {
+          dpd.todos.del({test: '$CUSTOM_PERMISSIONS_DELETE'}, function (todos) {
+            dpd.todos.get(function (todos) {
+              expect(todos.length).to.equal(0);
+              done(err);
+            })
+          });
+        });
+      });
+    });
+    
+    describe('prevent("*")', function(){
+      it('should not allow get', function(done) {
+        dpd.perms.get({$PREVENT_ALL: true}, function (things, err) {
+          expect(err).to.exist;
+          done();
+        });
+      });
+      
+      it('should not allow post', function(done) {
+        dpd.perms.post({title: 'foo'}, function (things, err) {
+          expect(err).to.exist;
+          done();
+        });
+      });
+      
+      it('should not allow put', function(done) {
+        dpd.perms.post({title: '$ALLOW'}, function (thing, err) {
+          dpd.perms.put(thing.id, {title: 'bar'}, function (thing, err) {
+            expect(err).to.exist;
+            done();
+          });
+        });
+      });
+      
+      it('should not allow delete', function(done) {
+        dpd.perms.post({title: '$ALLOW'}, function (thing, err) {
+          dpd.perms.del(thing.id, {title: 'bar'}, function (thing, err) {
+            expect(err).to.exist;
+            done();
+          });
+        });
+      });
+    });
+    
+    afterEach(function (done) {
+      this.timeout(10000);
+      cleanCollection(dpd.perms, function () {
+        cleanCollection(dpd.perms, done);
+      });
+    });
+  });
 });

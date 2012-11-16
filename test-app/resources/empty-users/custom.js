@@ -9,7 +9,7 @@ if(this.$TEST_RESPOND) {
 }
 
 if(this.$BATCH_PUT) {
-  dpd.todos.put({}, {title: this.$BATCH_PUT}, function () {
+  dpd.users.put({}, {username: this.$BATCH_PUT}, function () {
     // wait
   });
 }

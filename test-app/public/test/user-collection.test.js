@@ -279,5 +279,74 @@ describe('User Collection', function() {
       });
     });
   });
+  
+  describe('.emit("custom", {foo: "bar"})', function(){
+    it('should send a custom message', function(done) {
+      var input = {foo: 'bar'};
+      dpd.emptyusers.emit('custom', input, function (data, err) {
+        expect(data).to.eql({foo: 'bar', baz: 'baz'});
+        done(err);
+      });
+    });
+    
+    it('should respond with something beside the body sent', function(done) {
+      var input = {$TEST_RESPOND: true};
+      dpd.emptyusers.emit('custom', input, function (data, err) {
+        expect(data).to.equal('foo bar bat baz');
+        done(err);
+      });
+    });
+    
+
+    afterEach(function (done) {
+      this.timeout(10000);
+      cleanCollection(dpd.users, done);
+    });
+  });
+  
+  describe('custom permissions', function(){
+    it('should allow batch put', function(done) {
+      chain(function(next) {
+        dpd.users.post({username: 'foo', password: 'foo'}, next);
+      }).chain(function(next) {
+        dpd.users.post({username: 'bar', password: 'foo'}, next);
+      }).chain(function(next) {
+        dpd.users.post({username: 'bat', password: 'foo'}, next);
+      }).chain(function (next, res, err) {
+        dpd.users.put({test: '$CUSTOM_PERMISSIONS_PUT'}, {reputation: 22}, function (todos) {
+          dpd.users.get(function (users) {
+            users.forEach(function (user) {
+              expect(user.reputation).to.equal(22);
+            });
+          
+            done(err);
+          })
+        });
+      });
+    });
+    
+    it('should allow batch delete', function(done) {
+      chain(function(next) {
+        dpd.users.post({username: 'foo', password: 'foo'}, next);
+      }).chain(function(next) {
+        dpd.users.post({username: 'bar', password: 'foo'}, next);
+      }).chain(function(next) {
+        dpd.users.post({username: 'bat', password: 'foo'}, next);
+      }).chain(function (next, res, err) {
+        dpd.users.del({test: '$CUSTOM_PERMISSIONS_DELETE'}, function (todos) {
+          dpd.users.get(function (todos) {
+            expect(todos.length).to.equal(0);
+            done(err);
+          })
+        });
+      });
+    });
+
+    afterEach(function (done) {
+      this.timeout(10000);
+      cleanCollection(dpd.users, done);
+    });
+  //   
+  });
 });
 
