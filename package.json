@@ -14,7 +14,7 @@
     "validation": "*",
     "mongodb": "1.0.2",
     "request": "2.x.x",
-    "commander": "1.0.x",
+    "commander": "1.1.x",
     "cookies": ">= 0.3.0",
     "socket.io": "0.9.x",
     "filed": ">= 0.0.6",
