@@ -10,6 +10,7 @@ describe('Server', function() {
 			sh.cd('./test/support/proj');
 			sh.rm('-rf', 'resources');
 			sh.mkdir('resources');
+			'{}'.to('app.dpd'); 
 		});
 
 		it('should start a new deployd server', function(done) {

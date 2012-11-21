@@ -41,6 +41,10 @@ describe('resource', function(){
   describe('.handle(ctx, next)', function(){
     it('should respond with 200 OK', function(done) {
       var r = new Resource({path: '/foo'});
+
+      r.get = function(ctx, next) {
+        ctx.done();
+      };
       
       freq('/foo', null, function (req, res) {
         r.handle(new Context(r, req, res, {}));

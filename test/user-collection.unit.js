@@ -1,4 +1,4 @@
-var UserCollection = require('../lib/resources/user-collection')
+var UserCollection = require('../lib/modules/user-collection')
 	,	db = require('../lib/db');
 
 describe('UserCollection', function() {
