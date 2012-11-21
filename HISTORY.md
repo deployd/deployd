@@ -13,6 +13,7 @@
 
 ### Breaking Changes
 - All configuration properties on the `Resource` class have been moved to the prototype: `external`, `events`, `label`, `defaultPath`, `basicDashboard`, and `dashboard`.
+- The configuration option `Resource.events` has been renamed `Resource.eventNames`.
 
 
 ### Major Bugfixes
