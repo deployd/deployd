@@ -17,6 +17,7 @@ describe('config-loader', function() {
       sh.rm('-rf', basepath);
     }
     sh.mkdir('-p', basepath);
+    ('{}').to(path.join(basepath, 'app.dpd'));
     this.server = new Server();
   });
 
@@ -31,8 +32,9 @@ describe('config-loader', function() {
       JSON.stringify({type: "Collection", val: 1}).to(path.join(basepath, 'resources/foo/config.json'));
       JSON.stringify({type: "Collection", val: 2}).to(path.join(basepath, 'resources/bar/config.json'));
 
-      configLoader.loadConfig(basepath, this.server, function(err, resources) {
+      configLoader.loadConfig(basepath, this.server, function(err, result) {
         if (err) return done(err);
+        var resources = result.resources;
         expect(resources).to.have.length(6);
         expect(resources.filter(function(r) { return r.name == 'foo';})).to.have.length(1);
         expect(resources.filter(function(r) { return r.name == 'bar';})).to.have.length(1);
@@ -44,7 +46,10 @@ describe('config-loader', function() {
       sh.mkdir('-p', path.join(basepath, 'resources/foo'));
       JSON.stringify({type: "Collection", properties: {}}).to(path.join(basepath, 'resources/foo/config.json'));
 
-      configLoader.loadConfig(basepath, {db: db}, function(err, resourceList) {
+      configLoader.loadConfig(basepath, {db: db}, function(err, result) {
+
+        var resourceList = result.resources;
+
         expect(resourceList).to.have.length(5);
 
         expect(resourceList[0].config.properties).to.be.a('object');
@@ -57,8 +62,11 @@ describe('config-loader', function() {
     it('should add internal resources', function(done) {
       sh.mkdir('-p', path.join(basepath, 'resources'));
 
-      configLoader.loadConfig(basepath, {}, function(err, resourceList) {
+      configLoader.loadConfig(basepath, {}, function(err, result) {
         if (err) return done(err);
+
+        var resourceList = result.resources;
+
         expect(resourceList).to.have.length(4);
 
         expect(resourceList[0] instanceof Files).to.equal(true);

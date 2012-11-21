@@ -2,8 +2,6 @@
 
 ## 0.7.0
 
-### Breaking Changes
-
 ### New Features
 - New utilities for extending Resource Types.
   - Added `Resource.extend("ResourceName", { /* members */ })` syntax for extending Resources. The `init()` function is used as a constructor. The old `util.inherits()` syntax will continue to work.
@@ -12,5 +10,9 @@
 - New `Module` type in extension API
   - Modules can define multiple Resource Types with `this.addResourceType()`
   - [TODO] Modules can register their own dashboards.
+
+### Breaking Changes
+- All configuration properties on the `Resource` class have been moved to the prototype: `external`, `events`, `label`, `defaultPath`, `basicDashboard`, and `dashboard`.
+
 
 ### Major Bugfixes
