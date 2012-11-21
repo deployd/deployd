@@ -5,6 +5,7 @@
   "lastsemic": true,
   "laxbreak": true,
   "strict": false,
+  "asi": true
 
   "undef": true,
   "node": true

@@ -17,3 +17,6 @@ module.exports = function (config) {
  */
 
 module.exports.createMonitor = Monitor.createMonitor;
+
+module.exports.Resource = require('./lib/resource');
+module.exports.Module = require('./lib/module');

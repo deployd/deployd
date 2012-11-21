@@ -4,11 +4,12 @@ var configLoader = require('../lib/config-loader')
   , fs = require('fs')
   , db = require('../lib/db').create({name: 'test-db', host: 'localhost', port: 27017})
   , Server = require('../lib/server')
-  , Collection = require('../lib/resources/collection')
-  , Files = require('../lib/resources/files')
-  , ClientLib = require('../lib/resources/client-lib')
-  , InternalResources = require('../lib/resources/internal-resources')
-  , Dashboard = require('../lib/resources/dashboard')
+  , Collection = require('../lib/modules/collection')
+  , Files = require('../lib/internal-resources/files')
+  , ClientLib = require('../lib/internal-resources/client-lib')
+  , InternalResources = require('../lib/internal-resources/internal-resources')
+  , InternalModules = require('../lib/internal-resources/internal-modules')
+  , Dashboard = require('../lib/internal-resources/dashboard')
   , basepath = './test/support/proj';
 
 describe('config-loader', function() {
@@ -17,6 +18,7 @@ describe('config-loader', function() {
       sh.rm('-rf', basepath);
     }
     sh.mkdir('-p', basepath);
+    ('{}').to(path.join(basepath, 'app.dpd'));
     this.server = new Server();
   });
 
@@ -31,9 +33,10 @@ describe('config-loader', function() {
       JSON.stringify({type: "Collection", val: 1}).to(path.join(basepath, 'resources/foo/config.json'));
       JSON.stringify({type: "Collection", val: 2}).to(path.join(basepath, 'resources/bar/config.json'));
 
-      configLoader.loadConfig(basepath, this.server, function(err, resources) {
+      configLoader.loadConfig(basepath, this.server, function(err, result) {
         if (err) return done(err);
-        expect(resources).to.have.length(6);
+        var resources = result.resources;
+        expect(resources).to.have.length(7);
         expect(resources.filter(function(r) { return r.name == 'foo';})).to.have.length(1);
         expect(resources.filter(function(r) { return r.name == 'bar';})).to.have.length(1);
         done();  
@@ -44,8 +47,11 @@ describe('config-loader', function() {
       sh.mkdir('-p', path.join(basepath, 'resources/foo'));
       JSON.stringify({type: "Collection", properties: {}}).to(path.join(basepath, 'resources/foo/config.json'));
 
-      configLoader.loadConfig(basepath, {db: db}, function(err, resourceList) {
-        expect(resourceList).to.have.length(5);
+      configLoader.loadConfig(basepath, {db: db}, function(err, result) {
+
+        var resourceList = result.resources;
+
+        expect(resourceList).to.have.length(6);
 
         expect(resourceList[0].config.properties).to.be.a('object');
         expect(resourceList[0] instanceof Collection).to.equal(true);
@@ -57,14 +63,18 @@ describe('config-loader', function() {
     it('should add internal resources', function(done) {
       sh.mkdir('-p', path.join(basepath, 'resources'));
 
-      configLoader.loadConfig(basepath, {}, function(err, resourceList) {
+      configLoader.loadConfig(basepath, {}, function(err, result) {
         if (err) return done(err);
-        expect(resourceList).to.have.length(4);
+
+        var resourceList = result.resources;
+
+        expect(resourceList).to.have.length(5);
 
         expect(resourceList[0] instanceof Files).to.equal(true);
         expect(resourceList[1] instanceof ClientLib).to.equal(true);
         expect(resourceList[2] instanceof InternalResources).to.equal(true);
-        expect(resourceList[3] instanceof Dashboard).to.equal(true);      
+        expect(resourceList[3] instanceof InternalModules).to.equal(true);
+        expect(resourceList[4] instanceof Dashboard).to.equal(true);      
 
         done(err);  
       });

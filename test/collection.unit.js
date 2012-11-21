@@ -1,4 +1,4 @@
-var Collection = require('../lib/resources/collection')
+var Collection = require('../lib/modules/collection')
   , db = require('../lib/db');
 
 describe('collection', function(){

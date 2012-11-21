@@ -1,14 +1,14 @@
-var InternalResources = require('../lib/resources/internal-resources')
-  , Files = require('../lib/resources/files')
+var InternalResources = require('../lib/internal-resources/internal-resources')
+  , Files = require('../lib/internal-resources/files')
   , config = require('../lib/config-loader')
   , sh = require('shelljs')
   , fs = require('fs')
   , path = require('path')
   , testCollection = {type: 'Collection', path: '/my-objects', properties: {title: {type: 'string'}}}
-  , Collection = require('../lib/resources/collection')
-  , ClientLib = require('../lib/resources/client-lib')
+  , Collection = require('../lib/modules/collection')
+  , ClientLib = require('../lib/internal-resources/client-lib')
   , configPath = './test/support/proj'
-  , Dashboard = require('../lib/resources/dashboard');
+  , Dashboard = require('../lib/internal-resources/dashboard');
   
 describe('InternalResources', function() {
   describe('.handle(ctx)', function() {
