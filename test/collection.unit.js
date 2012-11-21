@@ -171,7 +171,7 @@ describe('collection', function(){
     it('should save the provided data', function(done) {
       var c = new Collection('counts', {db: db.create(TEST_DB), config: { properties: {count: {type: 'number'}}}});
 
-      c.save({session: {}, body: {count: 1}, query: {}, dpd: {}}, function (err, item) {
+      c.save({session: {}, body: {count: 1}, query: {}, dpd: {}, req: {}, res: {}, done: done, method: 'POST'}, function (err, item) {
         expect(item.id).to.exist;
         expect(err).to.not.exist;
         done();
@@ -181,10 +181,10 @@ describe('collection', function(){
     it('should pass commands like $inc', function(done) {
       var c = new Collection('counts', {db: db.create(TEST_DB), config: { properties: {count: {type: 'number'}}}});
 
-      c.save({body: {count: 1}}, function (err, item) {
+      c.save({body: {count: 1}, req: {}, res: {}, method: 'POST', query: {}}, function (err, item) {
         expect(item.id).to.exist;
         expect(err).to.not.exist;
-        c.save({body: {count: {$inc: 100}}, query: {id: item.id}}, function (err, updated) {
+        c.save({body: {count: {$inc: 100}}, query: {id: item.id}, req: {}, res: {}, done: done, method: 'PUT'}, function (err, updated) {
           expect(err).to.not.exist;
           expect(updated).to.exist;
           expect(updated.count).to.equal(101);
@@ -209,8 +209,8 @@ describe('collection', function(){
     it('should return the provided data', function(done) {
       var c = new Collection('foo', {db: db.create(TEST_DB), config: { properties: {count: {type: 'number'}}}});
 
-      c.save({body: {count: 1}}, function (err, item) {
-        c.find({}, function (err, items) {
+      c.save({body: {count: 1}, query: {}, req: {}, res: {}, done: done, method: 'POST'}, function (err, item) {
+        c.find({query: {}, req: {}, res: {}, done: done, method: 'GET'}, function (err, items) {
           expect(items.length).to.equal(1);
           done(err);
         });
@@ -220,10 +220,10 @@ describe('collection', function(){
     it('should return the provided data in sorted order', function(done) {
       var c = new Collection('sort', { db: db.create(TEST_DB), config: { properties: {count: {type: 'number'}}}});
 
-      c.save({body: {count: 1}}, function (err, item) {
-        c.save({body: {count: 3}}, function (err, item) {
-          c.save({body: {count: 2}}, function (err, item) {
-            c.find({query: {$sort: {count: 1}}}, function (err, items) {
+      c.save({body: {count: 1}, query: {}, req: {}, res: {}, done: done, method: 'POST'}, function (err, item) {
+        c.save({body: {count: 3}, query: {}, req: {}, res: {}, done: done, method: 'POST'}, function (err, item) {
+          c.save({body: {count: 2}, query: {}, req: {}, res: {}, done: done, method: 'POST'}, function (err, item) {
+            c.find({query: {$sort: {count: 1}}, req: {}, res: {}, done: done, method: 'GET'}, function (err, items) {
               expect(items.length).to.equal(3);
               for(var i = 0; i < 3; i++) {
                 delete items[i].id;
