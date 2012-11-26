@@ -1,6 +1,5 @@
 @import "../bootstrap/less/bootstrap.less";
 
-
 // editor
 @import "layout.less";
 @import "editor.less";
@@ -12,6 +11,11 @@
 
 body {
   background: url(../img/outlets.png) #030202;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  text-transform: none;
+  font-weight: normal;
 }
 
 .label {vertical-align: inherit !important;} // fixes bootstrap
@@ -104,7 +108,7 @@ td {vertical-align: middle !important;}
 
 // END DARK
 
-#resource-sidebar, #pre-resource-sidebar {
+.nav-sidebar {
   min-width: 150px;
   i {position: relative; top: -2px;}
   margin-bottom: 0;
