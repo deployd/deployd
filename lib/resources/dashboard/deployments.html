@@ -2,30 +2,13 @@
   <div class="well">
     <h3 class="clearfix">
       Deployments
-      <a class="pull-right header-link" href="http://deploydapp.com">Manage</a>
+      <a class="pull-right header-link" href="http://deploydapp.com/apps">Manage</a>
     </h3>
 
+    <div id="deployments-empty" class="empty hide">
+      You do not have any deployments. Add one now:
+    </div>
     <ul class="component-list" id="deployment-list">
-      <li class="component-item">
-        <div class="component-item-header">
-          <span class="code deploymentname">my-awesome-app-production</span>
-          <div class="pull-right actions">
-            <a href="#">Deploy</a>
-            <a href="#">Manage</a>
-            <a href="#">Remove</a>
-          </div>
-        </div>
-      </li>
-      <li class="component-item">
-        <div class="component-item-header">
-          <span class="code deploymentname">my-awesome-app-staging</span>
-          <div class="pull-right actions">
-            <a href="#">Deploy</a>
-            <a href="#">Manage</a>
-            <a href="#">Remove</a>
-          </div>
-        </div>
-      </li>
     </ul>
 
     <hr />
@@ -49,3 +32,16 @@
     </form>
   </div>
 </div>
+
+<script type="text/html" id="deployment-template">
+  <li class="component-item" data-index="<%= index %>">
+    <div class="component-item-header">
+      <span class="code deploymentname"><%= deployment.name %></span>
+      <div class="pull-right actions">
+        <a href="#" class="deploy-btn">Deploy</a>
+        <a href="http://deploydapp.com/apps/<%= deployment.name %>" class="manage-btn">Manage</a>
+        <a href="#" class="remove-btn">Remove</a>
+      </div>
+    </div>
+  </li>
+</script>
