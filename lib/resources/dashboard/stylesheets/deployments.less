@@ -1,0 +1,53 @@
+#deployments {
+  width: 585px;
+  max-width: 585px;
+
+  hr {
+    border-bottom: none;
+    border-width: 1px;
+    border-top-color: #555 
+  }
+
+  .component-item-header {
+    .actions {
+      visibility: hidden;
+
+      a {
+        display: inline-block;
+
+        &:first-child:before {
+          content: '';
+          margin-right: 0;
+        }
+
+        &:before {
+          margin-left: 4px;
+          margin-right: 8px;
+          display: inline-block;
+          color: white;
+          text-decoration: none;
+          content: '|';
+        }
+      }
+    }
+
+    &:hover .actions {
+
+      visibility: visible;
+    }
+  }
+
+  #existing-deployment-dropdown {
+    margin-top: 10px;
+    color: #999;
+
+    option {
+      &:first-child {
+        color: #999;
+      }
+
+      color: white;
+    }
+  }
+
+}

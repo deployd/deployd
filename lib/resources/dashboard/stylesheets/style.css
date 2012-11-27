@@ -4070,7 +4070,8 @@ body {
 }
 #header .dpd-logo {
   vertical-align: middle;
-  margin-right: 10px;
+  margin-right: 8px;
+  margin-top: -2px;
 }
 #header .seperator {
   box-flex: 1;
@@ -4081,7 +4082,6 @@ body {
 }
 #header h1,
 #header h2 {
-  padding-left: 20px;
   white-space: nowrap;
   color: #ffffff;
   display: inline-block;
@@ -4206,6 +4206,46 @@ body {
 .two-column-container .sidebar-column {
   margin-left: 10px;
   width: 250px;
+}
+#deployments {
+  width: 585px;
+  max-width: 585px;
+}
+#deployments hr {
+  border-bottom: none;
+  border-width: 1px;
+  border-top-color: #555555;
+}
+#deployments .component-item-header .actions {
+  visibility: hidden;
+}
+#deployments .component-item-header .actions a {
+  display: inline-block;
+}
+#deployments .component-item-header .actions a:first-child:before {
+  content: '';
+  margin-right: 0;
+}
+#deployments .component-item-header .actions a:before {
+  margin-left: 4px;
+  margin-right: 8px;
+  display: inline-block;
+  color: white;
+  text-decoration: none;
+  content: '|';
+}
+#deployments .component-item-header:hover .actions {
+  visibility: visible;
+}
+#deployments #existing-deployment-dropdown {
+  margin-top: 10px;
+  color: #999;
+}
+#deployments #existing-deployment-dropdown option {
+  color: white;
+}
+#deployments #existing-deployment-dropdown option:first-child {
+  color: #999;
 }
 .ace-deployd .ace_editor {
   border: 2px solid #9f9f9f;
@@ -4967,7 +5007,8 @@ th {
   background: inherit !important;
 }
 input,
-textarea {
+textarea,
+select {
   background: #1c1c1c;
   color: #ffffff;
   border: solid 1px #363535;

@@ -1,0 +1,51 @@
+<div id="deployments">
+  <div class="well">
+    <h3 class="clearfix">
+      Deployments
+      <a class="pull-right header-link" href="http://deploydapp.com">Manage</a>
+    </h3>
+
+    <ul class="component-list" id="deployment-list">
+      <li class="component-item">
+        <div class="component-item-header">
+          <span class="code deploymentname">my-awesome-app-production</span>
+          <div class="pull-right actions">
+            <a href="#">Deploy</a>
+            <a href="#">Manage</a>
+            <a href="#">Remove</a>
+          </div>
+        </div>
+      </li>
+      <li class="component-item">
+        <div class="component-item-header">
+          <span class="code deploymentname">my-awesome-app-staging</span>
+          <div class="pull-right actions">
+            <a href="#">Deploy</a>
+            <a href="#">Manage</a>
+            <a href="#">Remove</a>
+          </div>
+        </div>
+      </li>
+    </ul>
+
+    <hr />
+
+    <form class="form-inline">
+      <input type="text" class="input-large" placeholder="my-new-deployment" />
+      <span class="help-inline">.deploydapp.com</span>
+
+      <button class="pull-right btn btn-success">
+        <i class="icon-plus icon-white"></i>
+        Add and Deploy
+      </button>
+      <br />
+
+      <select id="existing-deployment-dropdown" class="empty">
+        <option>or add an existing deployment...</option>
+        <option>my-awesome-app-demo</option>
+        <option>diamond-shovel</option>
+        <option>ostream</option>
+      </select>
+    </form>
+  </div>
+</div>
