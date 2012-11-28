@@ -4216,6 +4216,10 @@ body {
   border-width: 1px;
   border-top-color: #555555;
 }
+#deployments .empty {
+  margin-top: 20px;
+  font-style: italic;
+}
 #deployments .component-item-header .actions {
   visibility: hidden;
 }
@@ -4246,6 +4250,17 @@ body {
 }
 #deployments #existing-deployment-dropdown option:first-child {
   color: #999;
+}
+#deployAuthModal .form-horizontal {
+  margin-top: 20px;
+}
+#deployAuthModal .form-horizontal label {
+  color: #666666 !important;
+}
+#deployAuthModal .cancel-btn {
+  display: inline-block;
+  margin-left: 8px;
+  vertical-align: middle;
 }
 .ace-deployd .ace_editor {
   border: 2px solid #9f9f9f;

@@ -1,4 +1,4 @@
-<div id="deployments">
+<div id="deployments" class="hide">
   <div class="well">
     <h3 class="clearfix">
       Deployments
@@ -30,6 +30,33 @@
         <option>ostream</option>
       </select>
     </form>
+  </div>
+</div>
+
+<div class="modal hide" id="deployAuthModal">
+  <div class="modal-header">
+    <h3>Log into Deployd.com</h3>
+  </div>
+  <div class="modal-body">
+    <p>Log in to your <a href="http://deployapp.com">deploydapp.com</a> account or <a href="http://deploy.deployapp.com/">register</a> if you don't already have one.</p>
+    <form class="form-horizontal">
+      <div class="control-group">
+        <label class="control-label" for="inputEmail">Email</label>
+        <div class="controls">
+          <input type="text" id="inputEmail">
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="inputPassword">Password</label>
+        <div class="controls">
+          <input type="password" id="inputPassword">
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <a href="#" class="btn btn-primary login-btn">Log in</a>
+    <a href="/dashboard" class="cancel-btn">cancel</a>
   </div>
 </div>
 
