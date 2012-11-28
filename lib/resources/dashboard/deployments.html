@@ -23,7 +23,7 @@
       </button>
       <br />
 
-      <select id="existing-deployment-dropdown" class="empty">
+      <select id="existing-deployment-dropdown" class="empty hide">
         <option>or add an existing deployment...</option>
         <option>my-awesome-app-demo</option>
         <option>diamond-shovel</option>
@@ -38,7 +38,8 @@
     <h3>Log into Deployd.com</h3>
   </div>
   <div class="modal-body">
-    <p>Log in to your <a href="http://deployapp.com">deploydapp.com</a> account or <a href="http://deploy.deployapp.com/">register</a> if you don't already have one.</p>
+    <div class="alert alert-error hide" id="auth-error">Invalid email or password</div>
+    <p>Log in to your <a href="http://deploydapp.com">deploydapp.com</a> account or <a href="http://deploydapp.com/">register</a> if you don't already have one.</p>
     <form class="form-horizontal">
       <div class="control-group">
         <label class="control-label" for="inputEmail">Email</label>
