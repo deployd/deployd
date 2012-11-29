@@ -5,16 +5,24 @@
       <a class="pull-right header-link" href="http://deploydapp.com/apps">Manage</a>
     </h3>
 
-    <div id="deployments-empty" class="empty hide">
-      You do not have any deployments. Add one now:
+    <div id="deployments-empty" class="hide">
+      <div class="well">
+        <p>A <strong>Deployment</strong> is an instance of your app hosted on <a href="http://deploydapp.com">deploydapp.com</a>.</p>
+      </div>
+      <div class="alert alert-info">
+        You do not have any deployments. Add one now:
+      </div>
     </div>
-    <ul class="component-list" id="deployment-list">
-    </ul>
 
-    <hr />
+    <div id="deployment-list-container">
+      <ul class="component-list" id="deployment-list">
+      </ul>
 
-    <form class="form-inline">
-      <input type="text" class="input-large" placeholder="my-new-deployment" />
+      <hr />
+    </div>
+
+    <form class="form-inline" id="deploy-new-form">
+      <input type="text" class="input-large deployment-name" />
       <span class="help-inline">.deploydapp.com</span>
 
       <button class="pull-right btn btn-success">
@@ -39,37 +47,52 @@
   </div>
   <div class="modal-body">
     <div class="alert alert-error hide" id="auth-error">Invalid email or password</div>
-    <p>Log in to your <a href="http://deploydapp.com">deploydapp.com</a> account or <a href="http://deploydapp.com/">register</a> if you don't already have one.</p>
-    <form class="form-horizontal">
-      <div class="control-group">
-        <label class="control-label" for="inputEmail">Email</label>
-        <div class="controls">
-          <input type="text" id="inputEmail">
-        </div>
+    <p>To deploy your app from the Dashboard, log in with a <a href="http://deploydapp.com">deploydapp.com</a> account.</p>
+    <div class="row">
+      <div class="span4 login-column">
+        <form class="form-vertical">
+          <div class="control-group">
+            <!-- <label class="control-label" for="inputEmail">Email</label> -->
+            <div class="controls">
+              <input type="text" id="inputEmail" class="input-xlarge" placeholder="Email">
+            </div>
+          </div>
+          <div class="control-group">
+            <!-- <label class="control-label" for="inputPassword">Password</label> -->
+            <div class="controls">
+              <input type="password" class="input-xlarge" id="inputPassword" placeholder="*******">
+            </div>
+          </div>
+           <a href="#" class="btn btn-primary login-btn">Log in</a>
+        </form>
       </div>
-      <div class="control-group">
-        <label class="control-label" for="inputPassword">Password</label>
-        <div class="controls">
-          <input type="password" id="inputPassword">
-        </div>
+      <div class="span2 register-column">
+        <p>Or create a free account if you haven't already.</p>
+        <a href="http://deploydapp.com" class="btn">Register</a>
       </div>
-    </form>
+    </div>
+    
   </div>
   <div class="modal-footer">
-    <a href="#" class="btn btn-primary login-btn">Log in</a>
     <a href="/dashboard" class="cancel-btn">cancel</a>
   </div>
 </div>
 
 <script type="text/html" id="deployment-template">
-  <li class="component-item" data-index="<%= index %>">
+  <li class="component-item <%= deployment.deploying ? 'deploying' : '' %>" data-index="<%= index %>">
     <div class="component-item-header">
       <span class="code deploymentname"><%= deployment.name %></span>
+      <% if (deployment.deploying) { %>
+        <div class="pull-right deploy-status">
+          <span class="deploy-status-text">Deploying...</span>
+        </div>
+      <% } else { %>
       <div class="pull-right actions">
         <a href="#" class="deploy-btn">Deploy</a>
-        <a href="http://deploydapp.com/apps/<%= deployment.name %>" class="manage-btn">Manage</a>
+        <a href="http://deploydapp.com/apps/<%= deployment.appId %>" class="manage-btn">Manage</a>
         <a href="#" class="remove-btn">Remove</a>
       </div>
+      <% } %>
     </div>
   </li>
 </script>

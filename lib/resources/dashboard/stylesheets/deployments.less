@@ -1,3 +1,16 @@
+@keyframes deploying {.deploying-animation();}
+@-webkit-keyframes deploying {.deploying-animation();}
+@-moz-keyframes deploying {.deploying-animation();}
+
+.deploying-animation() {
+  from {
+      box-shadow: inset 0 0 10px 0px @linkColor;
+  } 
+  to {
+      box-shadow: inset 0 0 20px 0px @linkColor;
+  }
+}
+
 #deployments {
   width: 585px;
   max-width: 585px;
@@ -13,7 +26,17 @@
     font-style: italic;
   }
 
+  .component-item.deploying .component-item-header {
+    box-shadow: inset 0 0 10px 0px @linkColor;
+    .animation(deploying 0.5s infinite alternate);
+  }
+
   .component-item-header {
+
+    .deploy-status {
+      font-style: italic;
+    }
+
     .actions {
       visibility: hidden;
 
@@ -58,8 +81,25 @@
 
 #deployAuthModal {
 
-  .form-horizontal {
+  .row {
     margin-top: 20px;
+  }
+
+  .login-column {
+    
+  }
+
+  .register-column {
+    border-left: 1px #ccc solid;
+    padding-left: 20px;
+    text-align: center;
+    width: 160px;
+    padding-right: 20px;
+    height: 105px;
+    padding-top: 25px;
+  }
+
+  .form-vertical {
 
     label {
       color: @textColor !important;

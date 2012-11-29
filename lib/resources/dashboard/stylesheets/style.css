@@ -4207,6 +4207,30 @@ body {
   margin-left: 10px;
   width: 250px;
 }
+@keyframes deploying {
+  from {
+    box-shadow: inset 0 0 10px 0px #429e96;
+  }
+  to {
+    box-shadow: inset 0 0 20px 0px #429e96;
+  }
+}
+@-webkit-keyframes deploying {
+  from {
+    box-shadow: inset 0 0 10px 0px #429e96;
+  }
+  to {
+    box-shadow: inset 0 0 20px 0px #429e96;
+  }
+}
+@-moz-keyframes deploying {
+  from {
+    box-shadow: inset 0 0 10px 0px #429e96;
+  }
+  to {
+    box-shadow: inset 0 0 20px 0px #429e96;
+  }
+}
 #deployments {
   width: 585px;
   max-width: 585px;
@@ -4218,6 +4242,15 @@ body {
 }
 #deployments .empty {
   margin-top: 20px;
+  font-style: italic;
+}
+#deployments .component-item.deploying .component-item-header {
+  box-shadow: inset 0 0 10px 0px #429e96;
+  animation: deploying 0.5s infinite alternate;
+  -webkit-animation: deploying 0.5s infinite alternate;
+  -moz-animation: deploying 0.5s infinite alternate;
+}
+#deployments .component-item-header .deploy-status {
   font-style: italic;
 }
 #deployments .component-item-header .actions {
@@ -4251,10 +4284,19 @@ body {
 #deployments #existing-deployment-dropdown option:first-child {
   color: #999;
 }
-#deployAuthModal .form-horizontal {
+#deployAuthModal .row {
   margin-top: 20px;
 }
-#deployAuthModal .form-horizontal label {
+#deployAuthModal .register-column {
+  border-left: 1px #ccc solid;
+  padding-left: 20px;
+  text-align: center;
+  width: 160px;
+  padding-right: 20px;
+  height: 105px;
+  padding-top: 25px;
+}
+#deployAuthModal .form-vertical label {
   color: #666666 !important;
 }
 #deployAuthModal .cancel-btn {
