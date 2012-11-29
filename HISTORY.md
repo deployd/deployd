@@ -2,7 +2,8 @@
 
 ## 0.6.9 
 
-- Fixed bug where `internal-client` was not accessible from modules
+ - Fixed bug where `internal-client` was not accessible from modules
+ - Fixed restarts caused by 404s of unexpected http verbs
 
 ## 0.6.8
 
