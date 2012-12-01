@@ -10,6 +10,7 @@
 - New `Module` type in extension API
   - Modules can define multiple Resource Types with `this.addResourceType()`
   - [TODO] Modules can register their own dashboards.
+- Added `dir` to server options - for booting in other directories than `process.cwd()`.
 
 ### Breaking Changes
 - Most configuration properties on the `Resource` class have been moved to the prototype: `external`, `events`, `basicDashboard`, and `dashboard`.
