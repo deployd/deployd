@@ -4231,6 +4231,12 @@ body {
     box-shadow: inset 0 0 20px 0px #429e96;
   }
 }
+#dialog.deploying {
+  box-shadow: inset 0 0 10px 0px #429e96;
+  animation: deploying 0.5s infinite alternate;
+  -webkit-animation: deploying 0.5s infinite alternate;
+  -moz-animation: deploying 0.5s infinite alternate;
+}
 #deployments {
   width: 585px;
   max-width: 585px;
@@ -4240,9 +4246,9 @@ body {
   border-width: 1px;
   border-top-color: #555555;
 }
-#deployments .empty {
-  margin-top: 20px;
-  font-style: italic;
+#deployments #deployments-empty .well {
+  padding: 20px;
+  color: #fff;
 }
 #deployments .component-item.deploying .component-item-header {
   box-shadow: inset 0 0 10px 0px #429e96;
@@ -4535,12 +4541,13 @@ li.L9 {
   top: 150px;
   max-width: 600px;
   min-width: 250px;
-  border: 1px solid #eee;
-  background: white;
+  border: solid 1px rgba(0, 0, 0, 0.5);
   z-index: 1000;
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
   border-radius: 5px;
+  background: rgba(50, 50, 50, 0.97);
+  color: white;
 }
 #dialog .content {
   padding: 15px 20px;
@@ -4548,6 +4555,7 @@ li.L9 {
 #dialog h1 {
   margin: 0 0 5px 0;
   font-size: 20px;
+  color: white;
   padding-left: 0;
   padding-top: 0;
 }

@@ -11,6 +11,11 @@
   }
 }
 
+#dialog.deploying {
+  box-shadow: inset 0 0 10px 0px @linkColor;
+  .animation(deploying 0.5s infinite alternate);
+}
+
 #deployments {
   width: 585px;
   max-width: 585px;
@@ -21,9 +26,13 @@
     border-top-color: #555 
   }
 
-  .empty {
-    margin-top: 20px;
-    font-style: italic;
+  #deployments-empty {
+
+    .well {
+      padding: 20px;
+      color: #fff;
+    }
+
   }
 
   .component-item.deploying .component-item-header {
