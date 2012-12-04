@@ -5,6 +5,7 @@
   "lastsemic": true,
   "laxbreak": true,
   "strict": false,
+  "eqnull": true,
 
   "undef": true,
   "browser": true,

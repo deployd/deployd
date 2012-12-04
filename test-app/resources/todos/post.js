@@ -40,3 +40,13 @@ if (this.title === "$INTERNAL_CANCEL_TEST") {
 if (isRoot) {
     this.isRoot = true;
 }
+
+cancelIf(this.title === "$CANCEL_IF_TEST", "Cancel if");
+cancelUnless(this.title !== "$CANCEL_UNLESS_TEST", "Cancel unless");
+
+if (this.title === "$HAS_ERRORS_TEST") {
+  error('hasErrors', "Yep");
+  if (hasErrors()) {
+      error('otherError', "Yep");
+  }
+}

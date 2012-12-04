@@ -29,7 +29,7 @@ realtime resource server
 
 ## questions
 
-Consult the [documentation](http://deployd.github.com/deployd) or contact `ritchie at deployd com`.
+Consult the [documentation](http://docs.deployd.com/) or contact `ritchie at deployd com`.
 
 ## license
 

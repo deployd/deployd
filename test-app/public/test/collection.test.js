@@ -1,4 +1,4 @@
-/*global _dpd:false */
+/*global _dpd:false, $:false */
 describe('Collection', function() {
   describe('dpd.todos', function() {
     it('should exist', function() {
@@ -8,53 +8,63 @@ describe('Collection', function() {
     describe('dpd.on("createTodo", fn)', function() {
       it('should respond to a realtime event', function(done) {
         this.timeout(1500);
-        dpd.on('createTodo', function(todo) {
-          expect(todo).to.exist;
-          expect(todo.title).to.equal('$REALTIME');
-          done();
-        });
+        dpd.socketReady(function() {
+          dpd.once('createTodo', function(todo) {
+            expect(todo).to.exist;
+            expect(todo.title).to.equal('$REALTIME');
+            done();
+          });
 
-        dpd.todos.post({title: '$REALTIME'});
+          dpd.todos.post({title: '$REALTIME'});
+        });
       });
     });
 
     describe('dpd.on("createTodo2", fn)', function() {
       it('should respond to a realtime event without a parameter', function(done) {
-        dpd.on('createTodo2', function(todo) {
-          expect(todo).to.not.exist;
-          done();
-        });
+        dpd.socketReady(function() {
+          dpd.once('createTodo2', function(todo) {
+            expect(todo).to.not.exist;
+            done();
+          });
 
-        dpd.todos.post({title: '$REALTIME2'});
+          dpd.todos.post({title: '$REALTIME2'});
+        });
       });
     });
     
     describe('dpd.todos.on("changed", fn)', function() {
       it('should respond to the built-in changed event on post', function(done) {
-        dpd.todos.on('changed', function() {
-          done();
-        });
+        dpd.socketReady(function() {
+          dpd.todos.once('changed', function() {
+            done();
+          });
 
-        dpd.todos.post({title: 'changed - create'});
+          dpd.todos.post({title: 'changed - create'});
+        });
       });
       
       it('should respond to the built-in changed event on put', function(done) {
         dpd.todos.post({title: 'changed - create'}, function(item) {
-          dpd.todos.on('changed', function() {
-            done();
+          dpd.socketReady(function() {
+            dpd.todos.once('changed', function() {
+              done();
+            });
+            
+            dpd.todos.put(item.id, {title: 'changed - updated'});
           });
-          
-          dpd.todos.put(item.id, {title: 'changed - updated'});
         });
       });
       
       it('should respond to the built-in changed event on del', function(done) {
         dpd.todos.post({title: 'changed - create'}, function(item) {
-          dpd.todos.on('changed', function() {
-            done();
+          dpd.socketReady(function() {
+            dpd.todos.once('changed', function() {
+              done();
+            });
+            
+            dpd.todos.del(item.id);
           });
-          
-          dpd.todos.del(item.id);
         });
       });
     });
@@ -627,6 +637,61 @@ describe('Collection', function() {
     });
   });
 
+  describe('events', function() {
+    describe('cancelIf()', function() {
+      it('should cancel', function(done) {
+        dpd.todos.post({title: "$CANCEL_IF_TEST"}, function(todo, err) {
+          expect(err).to.exist;
+          expect(err.message).to.equal("Cancel if");
+          done();
+        });
+      });
+    });
+
+    describe('cancelUnless()', function() {
+      it('should cancel', function(done) {
+        dpd.todos.post({title: "$CANCEL_UNLESS_TEST"}, function(todo, err) {
+          expect(err).to.exist;
+          expect(err.message).to.equal("Cancel unless");
+          done();
+        });
+      });
+    });
+
+    describe('hasErrors()', function() {
+      it('should cancel', function(done) {
+        dpd.todos.post({title: "$HAS_ERRORS_TEST"}, function(todo, err) {
+          expect(err).to.exist;
+          expect(err.errors.hasErrors).to.equal("Yep");
+          expect(err.errors.otherError).to.exist;
+          done();
+        });
+      });
+    });
+
+    describe('errorIf()', function() {
+      it('should error', function(done) {
+        dpd.todos.post({title: "$ERROR_IF_TEST"}, function(todo, err) {
+          expect(err).to.exist;
+          expect(err.errors).to.exist;
+          expect(err.errors.errorIf).to.equal("Yep");
+          done();
+        });
+      });
+    });
+
+    describe('errorUnless()', function() {
+      it('should error', function(done) {
+        dpd.todos.post({title: "$ERROR_UNLESS_TEST"}, function(todo, err) {
+          expect(err).to.exist;
+          expect(err.errors).to.exist;
+          expect(err.errors.errorUnless).to.equal("Yep");
+          done();
+        });
+      });
+    });
+  });
+
   describe('root', function() {
     afterEach(function(done) {
       _dpd.ajax.headers = {};
@@ -791,6 +856,35 @@ describe('Collection', function() {
     afterEach(function (done) {
       this.timeout(10000);
       cleanCollection(dpd.empty, done);
+    });
+  });
+
+  describe('changed()', function(){
+    it('should detect when a value has changed', function(done) {
+      dpd.changed.post({name: 'original'}, function (c) {
+        dpd.changed.put(c.id, {name: 'first name change'}, function (c) {
+          if(c.name !== 'saw first name changed previous original') {
+            throw Error('missed name change');
+          }
+          done();
+        });
+      });
+    });
+    
+    it('should not return true when a value has not changed', function(done) {
+      dpd.changed.post({name: '$NO_CHANGE'}, function (c) {
+        dpd.changed.put(c.id, {name: '$NO_CHANGE'}, function (c) {
+          if(c.name != '$NO_CHANGE') {
+            throw new Error('incorrect name change');
+          }
+          done();
+        });
+      });
+    });
+    
+    afterEach(function (done) {
+      this.timeout(10000);
+      cleanCollection(dpd.changed, done);
     });
   });
 

@@ -1,6 +1,34 @@
 # History
 
+## 0.6.10
+
+ - Fixed bug where `changed()` was returning true for values that had not changed.
+ - Fixed certain errors returned as HTML rather than JSON.
+
+## 0.6.9 
+
+ - Fixed bug where `internal-client` was not accessible from modules
+ - Fixed restarts caused by 404s of unexpected http verbs
+
+## 0.6.8
+
+ - Fixed CORS incorrectly requiring a referer header
+ - Added `dpd.once(name, fn)` function to execute a realtime handler exactly once
+ - Added `dpd.off(name, [fn])` function to remove a realtime handler
+ - Added `dpd.socketReady(fn)` function to listen for the built-in `connect` event
+ - Added `dpd.socket` property to provide direct access to socket.io.
+ - Fixed bug where username and password could be updated by an unauthenticated put.
+  - Usernames and passwords can be updated only by that user's session, a root session, or an internal request.
+ - Made `data` folder smaller by default in `development` environment
+ - Added `cancelIf()`, `cancelUnless()`, `errorIf()`, and `errorUnless()` functions to event API for more declarative events
+ - Added `hasErrors()` function to event API
+ - Added `isMe()` function to event API
+ - Fixed external prototype bug causing custom external prototypes to fail
+ - Removed docs from repository. They are now available at http://docs.deployd.com or https://github.com/deployd/docs.
+
+
 ## 0.6.7
+
  - Added new data editor
  - Fixed major bug where calling error() would not always cancel the request
  - Fixed bug where PUT would fail without an error if you provided a query
@@ -8,8 +36,10 @@
  - Fixed bugs preventing events from being `emit()`ed to users in certain connection states
  - Fixed bug where boolean query values (?bool=true) were not treated as booleans
  - Fixed unnecessary error when parsing JSON body
- - Added more intelegent body parsing
-   
+ - Added more intelligent body parsing
+ - Added `changed()` method in collection events
+ - Added `previous` object in collection events
+ - Fixed `dpd showkey` prompt for missing keys.json
 
 ## 0.6.6
  
