@@ -3,7 +3,7 @@
 ## 0.6.10
 
  - Fixed bug where `changed()` was returning true for values that had not changed.
- - Fixed certain error's returned as HTML rather than JSON.
+ - Fixed certain errors returned as HTML rather than JSON.
 
 ## 0.6.9 
 
