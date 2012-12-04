@@ -125,7 +125,10 @@ textarea {
 
   /* Makes inputs behave like true block-level elements */
 
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
   -ms-box-sizing: border-box;
+  box-sizing: border-box;
   box-sizing: border-box;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
@@ -1992,7 +1995,7 @@ table .span24 {
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#e6e6e6', GradientType=0);
   border-color: #e6e6e6 #e6e6e6 #bfbfbf;
   border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-  filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+  filter: progid:dximagetransform.microsoft.gradient(enabled=false);
   border: 1px solid #cccccc;
   border-bottom-color: #b3b3b3;
   -webkit-border-radius: 4px;
@@ -2105,7 +2108,7 @@ table .span24 {
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#429e96', endColorstr='#428f9e', GradientType=0);
   border-color: #428f9e #428f9e #2b5e68;
   border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-  filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+  filter: progid:dximagetransform.microsoft.gradient(enabled=false);
 }
 .btn-primary:hover,
 .btn-primary:active,
@@ -2130,7 +2133,7 @@ table .span24 {
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fe7f1c', endColorstr='#cc5a01', GradientType=0);
   border-color: #cc5a01 #cc5a01 #803801;
   border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-  filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+  filter: progid:dximagetransform.microsoft.gradient(enabled=false);
 }
 .btn-warning:hover,
 .btn-warning:active,
@@ -2155,7 +2158,7 @@ table .span24 {
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#8b0e0c', endColorstr='#8b0e0c', GradientType=0);
   border-color: #8b0e0c #8b0e0c #450706;
   border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-  filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+  filter: progid:dximagetransform.microsoft.gradient(enabled=false);
 }
 .btn-danger:hover,
 .btn-danger:active,
@@ -2180,7 +2183,7 @@ table .span24 {
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#668731', endColorstr='#82ac3f', GradientType=0);
   border-color: #82ac3f #82ac3f #58742a;
   border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-  filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+  filter: progid:dximagetransform.microsoft.gradient(enabled=false);
 }
 .btn-success:hover,
 .btn-success:active,
@@ -2205,7 +2208,7 @@ table .span24 {
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#429e96', endColorstr='#59bab1', GradientType=0);
   border-color: #59bab1 #59bab1 #3a8c85;
   border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-  filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+  filter: progid:dximagetransform.microsoft.gradient(enabled=false);
 }
 .btn-info:hover,
 .btn-info:active,
@@ -2230,7 +2233,7 @@ table .span24 {
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#555555', endColorstr='#222222', GradientType=0);
   border-color: #222222 #222222 #000000;
   border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-  filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+  filter: progid:dximagetransform.microsoft.gradient(enabled=false);
 }
 .btn-inverse:hover,
 .btn-inverse:active,
@@ -2846,7 +2849,7 @@ input[type="submit"].btn.btn-mini {
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#363535', endColorstr='#363535', GradientType=0);
   border-color: #363535 #363535 #0f0f0f;
   border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-  filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+  filter: progid:dximagetransform.microsoft.gradient(enabled=false);
   -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 1px 0 rgba(255, 255, 255, 0.075);
   -moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 1px 0 rgba(255, 255, 255, 0.075);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 1px 0 rgba(255, 255, 255, 0.075);
@@ -3761,7 +3764,10 @@ a.thumbnail:hover {
   -webkit-box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.15);
   -moz-box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.15);
   box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
   -ms-box-sizing: border-box;
+  box-sizing: border-box;
   box-sizing: border-box;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
@@ -4062,8 +4068,11 @@ body {
   -ms-box-align: center;
   -o-box-align: center;
 }
+#header .header-link.header-logo {
+  margin-right: -4px;
+}
 #header .header-link {
-  padding: 0px 8px;
+  padding: 0px 12px;
   border-left: #222222 1px solid;
   color: white;
   display: inline-block;
@@ -4074,6 +4083,10 @@ body {
 #header .header-link:hover {
   background: rgba(255, 255, 255, 0.1);
   text-decoration: none;
+}
+#header .header-link .caret {
+  border-top-color: white;
+  margin-top: 18px;
 }
 #header .dpd-logo {
   vertical-align: middle;
@@ -4099,7 +4112,10 @@ body {
   min-height: 100%;
   width: 100%;
   min-width: 1000px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
   -ms-box-sizing: border-box;
+  box-sizing: border-box;
   box-sizing: border-box;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
@@ -4191,7 +4207,10 @@ body {
   display: -ms-box;
   display: -o-box;
   width: 100%;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
   -ms-box-sizing: border-box;
+  box-sizing: border-box;
   box-sizing: border-box;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
@@ -4664,7 +4683,7 @@ li.L9 {
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#e6e6e6', GradientType=0);
   border-color: #e6e6e6 #e6e6e6 #bfbfbf;
   border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-  filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+  filter: progid:dximagetransform.microsoft.gradient(enabled=false);
   border: 1px solid #cccccc;
   border-bottom-color: #b3b3b3;
   -webkit-border-radius: 4px;
@@ -4711,8 +4730,11 @@ li.L9 {
   background-image: -webkit-linear-gradient(top, #ffffff, #e6e6e6);
   background-image: -o-linear-gradient(top, #ffffff, #e6e6e6);
   background-image: linear-gradient(top, #ffffff, #e6e6e6);
+  background-repeat: repeat-x;
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#e6e6e6', GradientType=0);
   border-color: #e6e6e6 #e6e6e6 #bfbfbf;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+  filter: progid:dximagetransform.microsoft.gradient(enabled=false);
   border: 1px solid #cccccc;
   border-bottom-color: #b3b3b3;
   -webkit-border-radius: 4px;
@@ -4736,7 +4758,7 @@ li.L9 {
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#429e96', endColorstr='#428f9e', GradientType=0);
   border-color: #428f9e #428f9e #2b5e68;
   border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-  filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+  filter: progid:dximagetransform.microsoft.gradient(enabled=false);
 }
 .confirmation .actions button.ok:hover,
 .confirmation .actions button.ok:active,
@@ -4963,12 +4985,12 @@ li.L9 {
   -moz-backface-visibility: hidden;
 }
 .card .back {
-  -webkit-transform: rotateY(180deg);
-  -moz-transform: rotateY(180deg);
+  -webkit-transform: rotatey(180deg);
+  -moz-transform: rotatey(180deg);
 }
 .card.flipped .wrapper {
-  -webkit-transform: rotateY(180deg);
-  -moz-transform: rotateY(180deg);
+  -webkit-transform: rotatey(180deg);
+  -moz-transform: rotatey(180deg);
 }
 /* sideflip effect */
 .card.sideflip .wrapper {
@@ -4976,8 +4998,8 @@ li.L9 {
   -moz-transform-origin: right center;
 }
 .card.sideflip.flipped .wrapper {
-  -webkit-transform: translateX(-100%) rotateY(180deg);
-  -moz-transform: translateX(-100%) rotateY(180deg);
+  -webkit-transform: translatex(-100%) rotatey(180deg);
+  -moz-transform: translatex(-100%) rotatey(180deg);
 }
 body {
   background: url(../img/outlets.png) #030202;

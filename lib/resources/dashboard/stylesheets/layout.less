@@ -24,8 +24,12 @@ body {
   .box-orient(horizontal);
   .box-align(center);
 
+  .header-link.header-logo {
+    margin-right: -4px;
+  }
+
   .header-link {
-    padding: 0px 8px;
+    padding: 0px 12px;
     border-left: @grayDarker 1px solid;
     color: white;
     display: inline-block;
@@ -36,6 +40,11 @@ body {
     &:hover {
       background: rgba(255,255,255, 0.1);
       text-decoration: none;
+    }
+
+    .caret {
+      border-top-color: white;
+      margin-top: 18px;
     }
   }
 
