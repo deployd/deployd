@@ -2,7 +2,7 @@
   <div class="well">
     <h3 class="clearfix">
       Deployments
-      <a class="pull-right header-link" href="http://deploydapp.com/apps">Manage</a>
+      <a class=" header-link" href="http://deploydapp.com/apps" target="_blank">Manage</a>
     </h3>
 
     <div id="deployments-empty" class="hide">
@@ -22,7 +22,7 @@
     </div>
 
     <form class="form-inline" id="deploy-new-form">
-      <input type="text" class="input-large deployment-name" />
+      <input type="text" class="input-large deployment-name" placeholder="new-deployment" />
       <span class="help-inline">.deploydapp.com</span>
 
       <button class="pull-right btn btn-success">
@@ -75,9 +75,9 @@
 </div>
 
 <script type="text/html" id="deployment-template">
-  <li class="component-item <%= deployment.deploying ? 'deploying' : '' %>" data-index="<%= index %>">
+  <li id="deployment-<%= deployment.appId %>" class="component-item <%= deployment.deploying ? 'deploying' : '' %>" data-index="<%= index %>">
     <div class="component-item-header">
-      <span class="code deploymentname"><%= deployment.name %></span>
+      <span class="code deploymentname"><%= deployment.name %> <i class="icon-white icon-external-link open-icon"></i></span>
       <% if (deployment.deploying) { %>
         <div class="pull-right deploy-status">
           <span class="deploy-status-text">Deploying...</span>
@@ -85,7 +85,7 @@
       <% } else { %>
       <div class="pull-right actions">
         <a href="#" class="deploy-btn">Deploy</a>
-        <a href="http://deploydapp.com/apps/<%= deployment.appId %>" class="manage-btn">Manage</a>
+        <a href="http://deploydapp.com/apps/<%= deployment.appId %>" target="_blank" class="manage-btn">Manage</a>
         <a href="#" class="remove-btn">Remove</a>
       </div>
       <% } %>

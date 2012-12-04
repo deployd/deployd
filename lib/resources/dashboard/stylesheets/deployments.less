@@ -11,6 +11,23 @@
   }
 }
 
+#dialog.deployment {
+  border: solid 1px rgba(0,0,0,.5);
+  background: rgba(50, 50, 50, 0.97);
+  color: white;
+
+  h1 {
+    color: white;
+  }
+
+  .close {
+    color: white;
+    opacity: 1;
+    text-shadow: 0 1px 0 #555;
+
+  }
+}
+
 #dialog.deploying {
   box-shadow: inset 0 0 10px 0px @linkColor;
   .animation(deploying 0.5s infinite alternate);
@@ -46,6 +63,10 @@
       font-style: italic;
     }
 
+    .open-icon {
+      visibility: hidden;
+    }
+
     .actions {
       visibility: hidden;
 
@@ -68,8 +89,14 @@
       }
     }
 
+
+
     &:hover .actions {
 
+      visibility: visible;
+    }
+
+    &:hover .open-icon {
       visibility: visible;
     }
   }

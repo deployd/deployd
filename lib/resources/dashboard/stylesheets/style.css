@@ -4080,7 +4080,8 @@ body {
   font-size: 11pt;
   line-height: 38px;
 }
-#header .header-link:hover {
+#header .header-link:hover,
+#header .header-link.active {
   background: rgba(255, 255, 255, 0.1);
   text-decoration: none;
 }
@@ -4250,6 +4251,19 @@ body {
     box-shadow: inset 0 0 20px 0px #429e96;
   }
 }
+#dialog.deployment {
+  border: solid 1px rgba(0, 0, 0, 0.5);
+  background: rgba(50, 50, 50, 0.97);
+  color: white;
+}
+#dialog.deployment h1 {
+  color: white;
+}
+#dialog.deployment .close {
+  color: white;
+  opacity: 1;
+  text-shadow: 0 1px 0 #555;
+}
 #dialog.deploying {
   box-shadow: inset 0 0 10px 0px #429e96;
   animation: deploying 0.5s infinite alternate;
@@ -4278,6 +4292,9 @@ body {
 #deployments .component-item-header .deploy-status {
   font-style: italic;
 }
+#deployments .component-item-header .open-icon {
+  visibility: hidden;
+}
 #deployments .component-item-header .actions {
   visibility: hidden;
 }
@@ -4297,6 +4314,9 @@ body {
   content: '|';
 }
 #deployments .component-item-header:hover .actions {
+  visibility: visible;
+}
+#deployments .component-item-header:hover .open-icon {
   visibility: visible;
 }
 #deployments #existing-deployment-dropdown {
@@ -4560,13 +4580,12 @@ li.L9 {
   top: 150px;
   max-width: 600px;
   min-width: 250px;
-  border: solid 1px rgba(0, 0, 0, 0.5);
   z-index: 1000;
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
   border-radius: 5px;
-  background: rgba(50, 50, 50, 0.97);
-  color: white;
+  border: 1px solid #eee;
+  background: white;
 }
 #dialog .content {
   padding: 15px 20px;
@@ -4574,7 +4593,6 @@ li.L9 {
 #dialog h1 {
   margin: 0 0 5px 0;
   font-size: 20px;
-  color: white;
   padding-left: 0;
   padding-top: 0;
 }
@@ -5315,6 +5333,9 @@ textarea.full-width {
 .ide-container .component-type-sidebar .component-type-list li.component-type-item:hover {
   background: #429e96;
   color: #ffffff;
+}
+.icon-external-link {
+  background-position: -93px -168px;
 }
 i.icon-custom {
   background-position: -456px -96px;
