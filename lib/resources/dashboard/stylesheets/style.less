@@ -33,6 +33,10 @@ h3 {
     font-family: @baseFontFamily;
     text-transform: none;
     font-weight: normal;
+
+    i {
+      // margin-top: 2px;
+    }
   }
   line-height: 15px;
   margin: 2px 0 22px 0;
@@ -100,6 +104,13 @@ input, textarea, select {background: darken(@black, 10%); color: @white; border:
     background-color: #ffffff;
     color: @textColor; 
   }
+}
+
+select:disabled {
+  background: darken(@black, 10%);
+  color: @white;
+  border: solid 1px @black;
+  opacity: 0.6;
 }
 
 

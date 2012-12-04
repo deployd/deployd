@@ -24,9 +24,23 @@ body {
   .box-orient(horizontal);
   .box-align(center);
 
+  .header-link {
+    padding: 0px 8px;
+    border-left: @grayDarker 1px solid;
+    color: white;
+    display: inline-block;
+    margin: 0;
+    font-size: 11pt;
+    line-height: 38px;
+
+    &:hover {
+      background: rgba(255,255,255, 0.1);
+      text-decoration: none;
+    }
+  }
+
   .dpd-logo {
     vertical-align: middle;
-    margin-right: 8px;
     margin-top: -2px;
   }
 
