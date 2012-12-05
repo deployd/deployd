@@ -11,18 +11,18 @@ target.all = function() {
 target.dashboard = function() {
   cd(__dirname);
 
-  var lessSource = cat('lib/resources/dashboard/stylesheets/style.less');
+  var lessSource = cat('lib/internal-resources/dashboard/stylesheets/style.less');
 
   if (lessSource) {
     var parser = new(less.Parser)({
-      paths: ['lib/resources/dashboard/stylesheets'], // Specify search paths for @import directives
+      paths: ['lib/internal-resources/dashboard/stylesheets'], // Specify search paths for @import directives
       filename: 'style.less' // Specify a filename, for better error messages
     });
 
     parser.parse(lessSource, function (e, tree) {
       if (e) return console.error(e.message);  
       try {
-        tree.toCSS().to('lib/resources/dashboard/stylesheets/style.css');  
+        tree.toCSS().to('lib/internal-resources/dashboard/stylesheets/style.css');  
       } catch (ex) {
         console.error(path.basename(ex.filename) + ":" + ex.line + " - " + ex.message);
         ex.extract.forEach(function(line) {
@@ -72,9 +72,9 @@ target.jshintCli = function() {
 };
 
 target.jshintDashboard = function() {
-  hint('lib/resources/dashboard/js');
+  hint('lib/internal-resources/dashboard/js');
 };
 
 target.jshintCollectionDashboard = function() {
-  hint('lib/resources/collection/dashboard/js');
+  hint('lib/modules/collection/dashboard/js');
 };

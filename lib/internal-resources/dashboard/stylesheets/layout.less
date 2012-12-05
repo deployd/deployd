@@ -24,12 +24,41 @@ body {
   .box-orient(horizontal);
   .box-align(center);
 
+  .header-link.header-logo {
+    margin-right: -4px;
+  }
+
+  .header-link {
+    padding: 0px 12px;
+    border-left: @grayDarker 1px solid;
+    color: white;
+    display: inline-block;
+    margin: 0;
+    font-size: 11pt;
+    line-height: 38px;
+
+    &:hover, &.active {
+      background: rgba(255,255,255, 0.1);
+      text-decoration: none;
+    }
+
+    .caret {
+      border-top-color: white;
+      margin-top: 18px;
+    }
+  }
+
+  .dpd-logo {
+    vertical-align: middle;
+    margin-top: -2px;
+  }
+
+
   .seperator {
     .box-flex(1);
   }
   
   h1, h2 {
-    padding-left: 20px;
     white-space: nowrap;
     color: @white;
     display: inline-block;
@@ -53,7 +82,7 @@ body {
   margin-right: 10px;
 
   .well {
-    margin-bottom: 20px;
+    margin-bottom: 10px;
   }
 }
 
@@ -94,6 +123,12 @@ body {
   text-align: center;
   font-style: italic;
   margin-bottom: 0px;
+}
+
+#resources-empty {
+  // margin-bottom: 0;
+  text-align: center;
+  font-style: italic;
 }
 
 .two-column-container {

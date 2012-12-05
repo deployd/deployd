@@ -1,0 +1,150 @@
+@keyframes deploying {.deploying-animation();}
+@-webkit-keyframes deploying {.deploying-animation();}
+@-moz-keyframes deploying {.deploying-animation();}
+
+.deploying-animation() {
+  from {
+      box-shadow: inset 0 0 10px 0px @linkColor;
+  } 
+  to {
+      box-shadow: inset 0 0 20px 0px @linkColor;
+  }
+}
+
+#dialog.deployment {
+  border: solid 1px rgba(0,0,0,.5);
+  background: rgba(50, 50, 50, 0.97);
+  color: white;
+
+  h1 {
+    color: white;
+  }
+
+  .close {
+    color: white;
+    opacity: 1;
+    text-shadow: 0 1px 0 #555;
+
+  }
+}
+
+#dialog.deploying {
+  box-shadow: inset 0 0 10px 0px @linkColor;
+  .animation(deploying 0.5s infinite alternate);
+}
+
+#deployments {
+  width: 585px;
+  max-width: 585px;
+
+  hr {
+    border-bottom: none;
+    border-width: 1px;
+    border-top-color: #555 
+  }
+
+  #deployments-empty {
+
+    .well {
+      padding: 20px;
+      color: #fff;
+    }
+
+  }
+
+  .component-item.deploying .component-item-header {
+    box-shadow: inset 0 0 10px 0px @linkColor;
+    .animation(deploying 0.5s infinite alternate);
+  }
+
+  .component-item-header {
+
+    .deploy-status {
+      font-style: italic;
+    }
+
+    .open-icon {
+      visibility: hidden;
+    }
+
+    .actions {
+      visibility: hidden;
+
+      a {
+        display: inline-block;
+
+        &:first-child:before {
+          content: '';
+          margin-right: 0;
+        }
+
+        &:before {
+          margin-left: 4px;
+          margin-right: 8px;
+          display: inline-block;
+          color: white;
+          text-decoration: none;
+          content: '|';
+        }
+      }
+    }
+
+
+
+    &:hover .actions {
+
+      visibility: visible;
+    }
+
+    &:hover .open-icon {
+      visibility: visible;
+    }
+  }
+
+  #existing-deployment-dropdown {
+    margin-top: 10px;
+    color: #999;
+
+    option {
+      &:first-child {
+        color: #999;
+      }
+
+      color: white;
+    }
+  }
+}
+
+#deployAuthModal {
+
+  .row {
+    margin-top: 20px;
+  }
+
+  .login-column {
+    
+  }
+
+  .register-column {
+    border-left: 1px #ccc solid;
+    padding-left: 20px;
+    text-align: center;
+    width: 160px;
+    padding-right: 20px;
+    height: 105px;
+    padding-top: 25px;
+  }
+
+  .form-vertical {
+
+    label {
+      color: @textColor !important;
+    }
+  }
+
+  .cancel-btn {
+    display: inline-block;
+    margin-left: 8px;
+    vertical-align: middle;
+  }
+}
