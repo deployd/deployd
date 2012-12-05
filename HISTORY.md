@@ -1,5 +1,8 @@
 # History
 
+## 0.6.10
+- Fixed bug where changing a property type from "number" to "string" made existing properties uneditable.
+
 ## 0.6.9 
 
 - Fixed bug where `internal-client` was not accessible from modules
