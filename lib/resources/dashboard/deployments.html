@@ -2,14 +2,14 @@
   <div class="well hide" id="deployments-connection-error">
     <h3>Deployments</h3>
     <div class="">
-      <p>Could not connect to <a target="_blank" href="http://deploydapp.com">deploydapp.com</a></p>
+      <p>Could not connect to <a target="_blank" href="http://cloud.deployd.com">cloud.deployd.com</a></p>
       <a href="">Refresh</a>
     </div>
   </div>
   <div class="well hide" id="inner-deployments">
     <h3 class="clearfix">
       Deployments
-      <div class="pull-right header-link"><span class="username">USERNAME</span> | <a href="http://deploydapp.com/apps" target="_blank">Manage</a> | <a href="#" class="logout-btn">Log out</a> </div>
+      <div class="pull-right header-link"><span class="username">USERNAME</span> | <a href="http://cloud.deployd.com/apps" target="_blank">Manage</a> | <a href="#" class="logout-btn">Log out</a> </div>
       
     </h3>
 
@@ -22,11 +22,7 @@
 
       <hr />
       
-      <p>Create your first Deployment to host your app on <a href="http://deploydapp.com">deploydapp.com</a>:</p>
-      <!-- <p>
-        A <strong>Deployment</strong> is an instance of your app hosted on <a href="http://deploydapp.com">deploydapp.com</a>.
-      </p>
-      <hr /> -->
+      <p>Create your first Deployment to host your app on <a href="http://cloud.deployd.com">cloud.deployd.com</a>:</p>
     </div>
 
     <div id="deployment-list-container">
@@ -59,7 +55,7 @@
   </div>
   <div class="modal-body">
     <div class="alert alert-error hide" id="auth-error">Invalid email or password</div>
-    <p>To deploy your app from the Dashboard, log in with a <a href="http://deploydapp.com">deploydapp.com</a> account.</p>
+    <p>To deploy your app from the Dashboard, log in with a <a href="http://cloud.deployd.com">cloud.deployd.com</a> account.</p>
     <div class="row">
       <div class="span4 login-column">
         <form class="form-vertical">
@@ -80,7 +76,7 @@
       </div>
       <div class="span2 register-column">
         <p>Or create a free account if you haven't already.</p>
-        <a href="http://deploydapp.com" target="_blank" class="btn">Register</a>
+        <a href="http://cloud.deployd.com" target="_blank" class="btn">Register</a>
       </div>
     </div>
     
@@ -101,7 +97,7 @@
       <% } else { %>
       <div class="pull-right actions">
         <a href="#" class="deploy-btn">Deploy</a>
-        <a href="http://deploydapp.com/apps/<%= deployment.appId %>" target="_blank" class="manage-btn">Manage</a>
+        <a href="http://cloud.deployd.com/apps/<%= deployment.appId %>" target="_blank" class="manage-btn">Manage</a>
         <a href="#" class="remove-btn">Remove</a>
       </div>
       <% } %>
