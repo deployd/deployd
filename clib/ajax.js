@@ -31,8 +31,11 @@ function sendRequest(url,options) {
   req.open(method,url,true);
   req.withCredentials = true;
   // req.setRequestHeader('User-Agent','XMLHTTP/1.0');
-  if (data)
-    req.setRequestHeader('Content-type', options.contentType || 'application/json');
+  if (data) {
+    req.setRequestHeader('Content-Type', options.contentType || 'application/json');
+  }
+  req.setRequestHeader('Accept', 'application/json');
+    
   if (typeof sendRequest.headers === 'object') {
     for (var k in sendRequest.headers) {
       if (sendRequest.headers.hasOwnProperty(k)) {

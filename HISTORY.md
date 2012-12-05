@@ -1,8 +1,14 @@
 # History
 
+## 0.6.10
+
+ - Fixed bug where `changed()` was returning true for values that had not changed.
+ - Fixed certain errors returned as HTML rather than JSON.
+
 ## 0.6.9 
 
-- Fixed bug where `internal-client` was not accessible from modules
+ - Fixed bug where `internal-client` was not accessible from modules
+ - Fixed restarts caused by 404s of unexpected http verbs
 
 ## 0.6.8
 
