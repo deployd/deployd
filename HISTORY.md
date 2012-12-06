@@ -11,6 +11,9 @@
   - Modules can define multiple Resource Types with `this.addResourceType()`
   - [TODO] Modules can register their own dashboards.
 - Added `dir` to server options - for booting in other directories than `process.cwd()`.
+- Resources now support custom events by default
+- New collection permission api
+
 
 ### Breaking Changes
 - Most configuration properties on the `Resource` class have been moved to the prototype: `external`, `events`, `basicDashboard`, and `dashboard`.
@@ -18,7 +21,5 @@
 - The configuration option `Resource.events` has been renamed `Resource.eventNames`.
 
 
-- resources now support custom events by default
-- new collection permission api
 
 ### Major Bugfixes

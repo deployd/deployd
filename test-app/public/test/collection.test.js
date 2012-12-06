@@ -871,6 +871,17 @@ describe('Collection', function() {
       });
     });
     
+    it('should not return true when a value has not changed', function(done) {
+      dpd.changed.post({name: '$NO_CHANGE'}, function (c) {
+        dpd.changed.put(c.id, {name: '$NO_CHANGE'}, function (c) {
+          if(c.name != '$NO_CHANGE') {
+            throw new Error('incorrect name change');
+          }
+          done();
+        });
+      });
+    });
+    
     afterEach(function (done) {
       this.timeout(10000);
       cleanCollection(dpd.changed, done);
