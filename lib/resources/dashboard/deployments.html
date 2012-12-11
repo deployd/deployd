@@ -106,8 +106,20 @@
   </button>
   <br />
 
-  <select id="existing-deployment-dropdown" class="empty hide">
-  </select>
+  <div id="existing-deployment-dropdown-btn" class="hide btn-group pull-right" style="margin-top: 10px">
+    <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+      <i class="icon-plus"></i>
+      Add Existing Deployment
+      <span class="caret"></span>
+    </a>
+    <ul class="dropdown-menu" id="existing-deployment-dropdown">
+      
+    </ul>
+  </div>
+  <div class="clearfix"></div>
+
+  <!-- <select id="existing-deployment-dropdown" class="empty hide">
+  </select> -->
 </form>
 
 <script type="text/html" id="deployment-template">

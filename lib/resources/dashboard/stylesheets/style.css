@@ -4265,15 +4265,40 @@ body {
 #deployments {
   width: 585px;
   max-width: 585px;
+  /*#existing-deployment-dropdown {
+    margin-top: 10px;
+    color: #999;
+
+  }
+
+  #deployments-empty #existing-deployment-dropdown {
+    option {
+      color: @black;
+    }
+
+  }
+
+  #inner-deployments #existing-deployment-dropdown {
+    option {
+      color: white;
+
+    }
+  }*/
+
+}
+#deployments #deploy-new-form {
+  margin-bottom: 0;
 }
 #deployments hr {
   border-bottom: none;
   border-width: 1px;
   border-top-color: #555555;
 }
-#deployments #deployments-empty .well {
-  padding: 20px;
-  color: #fff;
+#deployments #deployments-empty {
+  overflow: visible;
+}
+#deployments #deployments-empty .modal-body {
+  overflow-y: visible;
 }
 #deployments #deployments-empty hr {
   border-top-color: #ccc;
@@ -4313,16 +4338,6 @@ body {
 }
 #deployments .component-item-header:hover .open-icon {
   visibility: visible;
-}
-#deployments #existing-deployment-dropdown {
-  margin-top: 10px;
-  color: #999;
-}
-#deployments #deployments-empty #existing-deployment-dropdown option {
-  color: #363535;
-}
-#deployments #inner-deployments #existing-deployment-dropdown option {
-  color: white;
 }
 #deployAuthModal .row {
   margin-top: 20px;
