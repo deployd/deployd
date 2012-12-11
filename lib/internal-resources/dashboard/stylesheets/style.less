@@ -1,8 +1,8 @@
 @import "../bootstrap/less/bootstrap.less";
 
-
 // editor
 @import "layout.less";
+@import "deployments.less";
 @import "editor.less";
 @import "prettify.less";
 @import "mixins.less";
@@ -12,6 +12,11 @@
 
 body {
   background: url(../img/outlets.png) #030202;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  text-transform: none;
+  font-weight: normal;
 }
 
 .label {vertical-align: inherit !important;} // fixes bootstrap
@@ -28,6 +33,10 @@ h3 {
     font-family: @baseFontFamily;
     text-transform: none;
     font-weight: normal;
+
+    i {
+      // margin-top: 2px;
+    }
   }
   line-height: 15px;
   margin: 2px 0 22px 0;
@@ -89,12 +98,19 @@ background-color: darken(@black, 10%);
   background: inherit !important;
 }
 
-input, textarea {background: darken(@black, 10%); color: @white; border: solid 1px @black;}
+input, textarea, select {background: darken(@black, 10%); color: @white; border: solid 1px @black;}
 #dialog, .modal {
   input, textarea {
     background-color: #ffffff;
     color: @textColor; 
   }
+}
+
+select:disabled {
+  background: darken(@black, 10%);
+  color: @white;
+  border: solid 1px @black;
+  opacity: 0.6;
 }
 
 
@@ -104,7 +120,7 @@ td {vertical-align: middle !important;}
 
 // END DARK
 
-#resource-sidebar, #module-sidebar {
+.nav-sidebar {
   min-width: 150px;
   i {position: relative; top: -2px;}
   margin-bottom: 0;
@@ -310,6 +326,7 @@ textarea.full-width {
   }
 }
 
+.icon-external-link  { background-position: -93px -168px; }
 
 i.icon-custom {
   .icon-asterisk;

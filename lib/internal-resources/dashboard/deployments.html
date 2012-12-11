@@ -1,0 +1,106 @@
+<div id="deployments">
+  <div class="well hide" id="deployments-connection-error">
+    <h3>Deployments</h3>
+    <div class="">
+      <p>Could not connect to <a target="_blank" href="http://cloud.deployd.com">cloud.deployd.com</a></p>
+      <a href="">Refresh</a>
+    </div>
+  </div>
+  <div class="well hide" id="inner-deployments">
+    <h3 class="clearfix">
+      Deployments
+      <div class="pull-right header-link"><span class="username">USERNAME</span> | <a href="http://cloud.deployd.com/apps" target="_blank">Manage</a> | <a href="#" class="logout-btn">Log out</a> </div>
+      
+    </h3>
+
+    
+    <div class="clearfix"></div>
+
+    
+
+    <div id="deployments-empty" class="hide">
+
+      <hr />
+      
+      <p>Create your first Deployment to host your app on <a href="http://cloud.deployd.com">cloud.deployd.com</a>:</p>
+    </div>
+
+    <div id="deployment-list-container">
+
+      <ul class="component-list" id="deployment-list">
+      </ul>
+
+      <hr />
+    </div>
+
+    <form class="form-inline" id="deploy-new-form">
+      <input type="text" class="input-large deployment-name" placeholder="new-deployment" />
+      <span class="help-inline">.deploydapp.com</span>
+
+      <button class="pull-right btn btn-success">
+        <i class="icon-plus icon-white"></i>
+        Add and Deploy
+      </button>
+      <br />
+
+      <select id="existing-deployment-dropdown" class="empty hide">
+      </select>
+    </form>
+  </div>
+</div>
+
+<div class="modal hide" id="deployAuthModal">
+  <div class="modal-header">
+    <h3>Log into Deployd.com</h3>
+  </div>
+  <div class="modal-body">
+    <div class="alert alert-error hide" id="auth-error">Invalid email or password</div>
+    <p>To deploy your app from the Dashboard, log in with a <a href="http://cloud.deployd.com">cloud.deployd.com</a> account.</p>
+    <div class="row">
+      <div class="span4 login-column">
+        <form class="form-vertical">
+          <div class="control-group">
+            <!-- <label class="control-label" for="inputEmail">Email</label> -->
+            <div class="controls">
+              <input type="text" id="inputEmail" class="input-xlarge" placeholder="Email">
+            </div>
+          </div>
+          <div class="control-group">
+            <!-- <label class="control-label" for="inputPassword">Password</label> -->
+            <div class="controls">
+              <input type="password" class="input-xlarge" id="inputPassword" placeholder="*******">
+            </div>
+          </div>
+           <a href="#" class="btn btn-primary login-btn">Log in</a>
+        </form>
+      </div>
+      <div class="span2 register-column">
+        <p>Or create a free account if you haven't already.</p>
+        <a href="http://cloud.deployd.com" target="_blank" class="btn">Register</a>
+      </div>
+    </div>
+    
+  </div>
+  <div class="modal-footer">
+    <a href="/dashboard" class="cancel-btn">cancel</a>
+  </div>
+</div>
+
+<script type="text/html" id="deployment-template">
+  <li id="deployment-<%= deployment.appId %>" class="component-item <%= deployment.deploying ? 'deploying' : '' %>" data-index="<%= index %>">
+    <div class="component-item-header">
+      <span class="code deploymentname"><%= deployment.name %> <i class="icon-white icon-external-link open-icon"></i></span>
+      <% if (deployment.deploying) { %>
+        <div class="pull-right deploy-status">
+          <span class="deploy-status-text">Deploying...</span>
+        </div>
+      <% } else { %>
+      <div class="pull-right actions">
+        <a href="#" class="deploy-btn">Deploy</a>
+        <a href="http://cloud.deployd.com/apps/<%= deployment.appId %>" target="_blank" class="manage-btn">Manage</a>
+        <a href="#" class="remove-btn">Remove</a>
+      </div>
+      <% } %>
+    </div>
+  </li>
+</script>
