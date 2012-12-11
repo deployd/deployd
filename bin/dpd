@@ -329,7 +329,13 @@ program
             if(err) return console.error(err);
             console.log('pushing...');
             d.publish('http://cloud.deployd.com', tar, key, function (err) {
-              if(err) return console.error('failed to push:', err.message || 'could not push app to ' + DPDAPP_URL);
+              if(err) {
+                if (err.statusCode === 401) {
+                  d.setConfig('sid', undefined);
+                  d.setConfig('user', undefined);
+                }
+                return console.error('failed to push:', err.message || 'could not push app to ' + DPDAPP_URL);
+              } 
               console.log('deployd app to http://' + d.subdomain + '.deploydapp.com!');
             });
           });

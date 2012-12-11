@@ -89,7 +89,7 @@
 <script type="text/html" id="deployment-template">
   <li id="deployment-<%= deployment.appId %>" class="component-item <%= deployment.deploying ? 'deploying' : '' %>" data-index="<%= index %>">
     <div class="component-item-header">
-      <span class="code deploymentname"><%= deployment.name %> <i class="icon-white icon-external-link open-icon"></i></span>
+      <span class="code deploymentname"><%= deployment.name %> <% if (!deployment.deploying) { %><i class="icon-white icon-external-link open-icon"></i><% } %></span>
       <% if (deployment.deploying) { %>
         <div class="pull-right deploy-status">
           <span class="deploy-status-text">Deploying...</span>
