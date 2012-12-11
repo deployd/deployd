@@ -100,7 +100,7 @@ background-color: darken(@black, 10%);
 
 input, textarea, select {background: darken(@black, 10%); color: @white; border: solid 1px @black;}
 #dialog, .modal {
-  input, textarea {
+  input, textarea, select {
     background-color: #ffffff;
     color: @textColor; 
   }
@@ -787,7 +787,11 @@ table input {
 }
 
 .modal-header {
-  h3 {color: @black;}
+  h3 {
+    color: @black;
+    line-height: 22px;
+    margin: 2px 0 2px 0;
+  }
 }
 
 #api {

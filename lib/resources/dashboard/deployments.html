@@ -1,9 +1,15 @@
 <div id="deployments">
-  <div class="well hide" id="deployments-connection-error">
-    <h3>Deployments</h3>
-    <div class="">
-      <p>Could not connect to <a target="_blank" href="http://cloud.deployd.com">cloud.deployd.com</a></p>
-      <a href="">Refresh</a>
+  <div class="modal hide" id="deployments-connection-error">
+    <div class="modal-header">
+      <h3>Deployments</h3>
+    </div>
+    <div class="modal-body">
+      <p>Could not connect to <a target="_blank" href="http://cloud.deployd.com">cloud.deployd.com</a>.</p>
+      
+    </div>
+    <div class="modal-footer">
+      <a href="" class="btn">Refresh</a>
+      <a href="/dashboard" class="cancel-btn">cancel</a>
     </div>
   </div>
   <div class="well hide" id="inner-deployments">
@@ -16,36 +22,40 @@
     
     <div class="clearfix"></div>
 
-    
-
-    <div id="deployments-empty" class="hide">
-
-      <hr />
-      
-      <p>Create your first Deployment to host your app on <a href="http://cloud.deployd.com">cloud.deployd.com</a>:</p>
-    </div>
-
     <div id="deployment-list-container">
 
       <ul class="component-list" id="deployment-list">
       </ul>
 
       <hr />
+
+      <div class="form-placeholder">
+      </div>
     </div>
 
-    <form class="form-inline" id="deploy-new-form">
-      <input type="text" class="input-large deployment-name" placeholder="new-deployment" />
-      <span class="help-inline">.deploydapp.com</span>
+  </div>
 
-      <button class="pull-right btn btn-success">
-        <i class="icon-plus icon-white"></i>
-        Add and Deploy
-      </button>
-      <br />
+  <div id="deployments-empty" class="modal hide">
+    <div class="modal-header clearfix">
+      <h3>
+        Create a Deployment 
+        <div class="header-link pull-right">
+          <span class="username">USERNAME</span>
+          | <a href="#" class="logout-btn">log out</a>
+        </div>
+      </h3>
 
-      <select id="existing-deployment-dropdown" class="empty hide">
-      </select>
-    </form>
+    </div>
+    <div class="modal-body">
+      <p>Create your first Deployment to host your app on <a href="http://cloud.deployd.com">cloud.deployd.com</a>:</p>
+      <hr />
+      <div class="form-placeholder">
+      </div>
+    </div>
+   <!--  <div class="modal-footer">
+      <a href="#" class="cancel-btn logout-btn">log out</a>
+      <a href="/dashboard" class="cancel-btn">cancel</a>
+    </div> -->
   </div>
 </div>
 
@@ -85,6 +95,20 @@
     <a href="/dashboard" class="cancel-btn">cancel</a>
   </div>
 </div>
+
+<form class="form-inline hide" id="deploy-new-form">
+  <input type="text" class="input-large deployment-name" placeholder="new-deployment" />
+  <span class="help-inline">.deploydapp.com</span>
+
+  <button class="pull-right btn btn-success">
+    <i class="icon-plus icon-white"></i>
+    Add and Deploy
+  </button>
+  <br />
+
+  <select id="existing-deployment-dropdown" class="empty hide">
+  </select>
+</form>
 
 <script type="text/html" id="deployment-template">
   <li id="deployment-<%= deployment.appId %>" class="component-item <%= deployment.deploying ? 'deploying' : '' %>" data-index="<%= index %>">

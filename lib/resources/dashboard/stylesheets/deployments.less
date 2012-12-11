@@ -50,6 +50,10 @@
       color: #fff;
     }
 
+    hr {
+      border-top-color: #ccc; 
+    }
+
   }
 
   .component-item.deploying .component-item-header {
@@ -101,16 +105,25 @@
     }
   }
 
+
+
   #existing-deployment-dropdown {
     margin-top: 10px;
     color: #999;
 
-    option {
-      &:first-child {
-        color: #999;
-      }
+  }
 
+  #deployments-empty #existing-deployment-dropdown {
+    option {
+      color: @black;
+    }
+
+  }
+
+  #inner-deployments #existing-deployment-dropdown {
+    option {
       color: white;
+
     }
   }
 }
@@ -141,7 +154,9 @@
       color: @textColor !important;
     }
   }
+}
 
+.modal {
   .cancel-btn {
     display: inline-block;
     margin-left: 8px;
