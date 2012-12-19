@@ -37,8 +37,8 @@ describe('config-loader', function() {
         if (err) return done(err);
         var resources = result.resources;
         expect(resources).to.have.length(7);
-        expect(resources.filter(function(r) { return r.name == 'foo';})).to.have.length(1);
-        expect(resources.filter(function(r) { return r.name == 'bar';})).to.have.length(1);
+        expect(resources.filter(function(r) { return r.name == 'foo'; })).to.have.length(1);
+        expect(resources.filter(function(r) { return r.name == 'bar'; })).to.have.length(1);
         done();  
       });
     });
