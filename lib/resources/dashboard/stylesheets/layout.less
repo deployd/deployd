@@ -34,8 +34,12 @@ body {
     color: white;
     display: inline-block;
     margin: 0;
-    font-size: 11pt;
+    font-size: 16px;
     line-height: 38px;
+
+    > i {
+      margin-top: 2px;
+    }
 
     &:hover, &.active {
       background: rgba(255,255,255, 0.1);
@@ -43,6 +47,7 @@ body {
     }
 
     .caret {
+      opacity: 1;
       border-top-color: white;
       margin-top: 18px;
     }
