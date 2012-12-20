@@ -15,7 +15,7 @@
   bottom: 0;
   right: 0;
   left: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0);
   z-index: 100;
 }
 #inline-editor #inline-editor-table-overlay {
@@ -65,11 +65,6 @@
 }
 #table-container {
   position: relative;
-  box-flex: 1;
-  -moz-box-flex: 1;
-  -webkit-box-flex: 1;
-  -ms-box-flex: 1;
-  -o-box-flex: 1;
   height: 0px;
   overflow: scroll;
 }

@@ -2,8 +2,14 @@
 
 ## 0.6.10
 
- - Fixed bug where `changed()` was returning true for values that had not changed.
  - Fixed certain errors returned as HTML rather than JSON.
+ - Fixed bug where changing a property type from "number" to "string" made existing properties uneditable.
+ - Fixed bug where `changed()` was returning true for values that had not changed.
+ - Fixed certain error's returned as HTML rather than JSON.
+ - Data editor
+   - Fixed bug where data editor would expand as the page scrolls
+   - Fixed bug where the cursor would randomly move around while editing text
+   - Removed overlay for inline editing
 
 ## 0.6.9 
 
