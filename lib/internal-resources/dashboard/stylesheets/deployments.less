@@ -37,6 +37,10 @@
   width: 585px;
   max-width: 585px;
 
+  #deploy-new-form {
+    margin-bottom: 0;
+  }
+
   hr {
     border-bottom: none;
     border-width: 1px;
@@ -45,9 +49,16 @@
 
   #deployments-empty {
 
-    .well {
-      padding: 20px;
-      color: #fff;
+    overflow: visible;
+
+    .modal-body {
+      overflow-y: visible;
+    }
+
+    
+
+    hr {
+      border-top-color: #ccc; 
     }
 
   }
@@ -101,18 +112,27 @@
     }
   }
 
-  #existing-deployment-dropdown {
+
+
+  /*#existing-deployment-dropdown {
     margin-top: 10px;
     color: #999;
 
-    option {
-      &:first-child {
-        color: #999;
-      }
-
-      color: white;
-    }
   }
+
+  #deployments-empty #existing-deployment-dropdown {
+    option {
+      color: @black;
+    }
+
+  }
+
+  #inner-deployments #existing-deployment-dropdown {
+    option {
+      color: white;
+
+    }
+  }*/
 }
 
 #deployAuthModal {
@@ -141,7 +161,9 @@
       color: @textColor !important;
     }
   }
+}
 
+.modal {
   .cancel-btn {
     display: inline-block;
     margin-left: 8px;
