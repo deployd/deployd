@@ -10,11 +10,14 @@
    - Added `get(ctx, next)`, `post(ctx, next)`, `put(ctx, next)`, and `del(ctx, next)` utility functions on `Resource`. You can now override those instead of `handle()`. 
  - New `Module` type in extension API
    - Modules can define multiple Resource Types with `this.addResourceType()`
-   - [TODO] Modules can register their own dashboards.
+   - Modules can register their own dashboards.
+   - Modules can define middleware with `this.addMiddleware()`.
+ - The `basicDashboard` object for both Modules and Resources has been extended with new properties: `friendlyName`, `author`, `url`, `description`, and `image` for creating a more customized page
  - Added `dir` to server options - for booting in other directories than `process.cwd()`.
  - Added `errorTemplate` to server options - for overriding the default error template.
  - Resources now support custom events by default
  - New collection permission api
+ - When loading modules, `require('deployd')` will always point to the installation of Deployd that the current app is using.
 
 
 ### Breaking Changes
