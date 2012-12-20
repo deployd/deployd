@@ -85,6 +85,12 @@ p a {
   padding: 10px 20px 20px;
 }
 
+.well hr {
+  border-bottom: none;
+  border-width: 1px;
+  border-top-color: #333;
+}
+
 h3 {color: @bodyBackground}
 
 table, th, tr, td, {border-color: @black !important;}
@@ -860,6 +866,22 @@ pre {
 
 #basic-dashboard {
   width: 485px;
+
+  .dashboard-img {
+    float: left;
+    margin-right: 10px;
+    margin-bottom: 10px;
+  }
+
+  .author {
+    margin-top: -10px;
+    margin-bottom: 10px;
+    font-style: italic;
+  }
+
+  hr {
+    clear: both;
+  }
 
   #settings-form {
     margin-bottom: 0;
