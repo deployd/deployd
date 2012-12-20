@@ -1,5 +1,5 @@
 <div data-bind="scrollbarWidth: view.scrollWidth"></div>
-<div id="data" class="well full-page">
+<div id="data" class="well">
   <h3>Data</h3>
 
   <div id="no-property-warning" class="alert alert-info hide">
@@ -7,7 +7,7 @@
     <a href="../properties">Add some now</a> before editing data.
   </div>
 
-  <div id="table-container" data-bind="scrollY: view.scrollY, scrollX: view.scrollX, screenDimensions: view.dimensions, reflow: view.init">      
+  <div id="table-container" data-bind="scrollY: view.scrollY, scrollX: view.scrollX, screenDimensions: view.dimensions, reflow: view.init, style: {height: view.dimensions().height + 'px'}">      
 
     <div id="editor-modal" class="modal hide" data-bind="if: propertiesLoaded, bootstrapModal: edit.editingModal">
       <div class="modal-header">
@@ -29,7 +29,7 @@
         <div class="mini-edit" data-bind="style: {top: view.selectedCellPos().top + 'px', left: view.selectedCellPos().left + 'px'}, if: edit.editingInline, click: view.noOp, clickBubble: false">
           <!-- ko if: selectedProp().type === 'string' -->
             <a href="#" title="Edit in modal" data-bind="click: edit.openModal"><i class="icon-edit icon-white"></i></a>
-            <input type="text" data-bind="hasfocus: edit.focusInput, select: 'selectEditor', value: edit.editValue, valueUpdate: 'afterkeydown', typeahead: edit.typeahead" />
+            <input type="text" class="inline-editor-input" data-bind="hasfocus: edit.focusInput, select: 'selectEditor', customValue: edit.editValue, valueUpdate: 'afterkeydown', typeahead: edit.typeahead" />
           <!-- /ko -->
           <!-- ko if: selectedProp().type === 'number' -->
             <input type="text" class="number" data-bind="hasfocus: edit.focusInput, select: 'selectEditor', numberValue: edit.editValue, valueUpdate: 'afterkeydown'" />
