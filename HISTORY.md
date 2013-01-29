@@ -2,6 +2,7 @@
 
 ## 0.6.10
 
+ - Fixed bug where query strings were not properly parsed. 
  - Fixed certain errors returned as HTML rather than JSON.
  - Fixed bug where changing a property type from "number" to "string" made existing properties uneditable.
  - Fixed bug where `changed()` was returning true for values that had not changed.
