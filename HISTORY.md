@@ -1,5 +1,9 @@
 # History
 
+## 0.6.11
+
+ - Fixed bug where missing content-type header when updating a user threw an error.
+
 ## 0.6.10
 
  - Fixed bug where query strings were not properly parsed. 
