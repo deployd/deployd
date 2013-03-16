@@ -2,7 +2,10 @@
 
   if (!window._dpd) window._dpd = {};
 
-  var root = window.location.origin;
+  var root = window.location.protocol + '//' + window.location.hostname;
+  if (window.location.port !== '') {
+    root += ':' + window.location.port;
+  }
 
   var consoleLog = (typeof console !== 'undefined') && console.log;
 
