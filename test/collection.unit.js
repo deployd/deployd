@@ -170,7 +170,6 @@ describe('collection', function(){
   describe('.save()', function() {
     it('should save the provided data', function(done) {
       var c = new Collection('counts', {db: db.create(TEST_DB), config: { properties: {count: {type: 'number'}}}});
-
       c.save({session: {}, body: {count: 1}, query: {}, dpd: {}}, function (err, item) {
         expect(item.id).to.exist;
         expect(err).to.not.exist;
