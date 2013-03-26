@@ -178,6 +178,16 @@ describe('collection', function(){
       });
     });
 
+    it('should save boolean value as the proper value', function (done) {
+      var c = new Collection('truths', {db: db.create(TEST_DB), config: { properties: {on: {type: 'boolean'}}}});
+      c.save({session: {}, body: {on: true}, query: {}, dpd: {}}, function (err, item) {
+        expect(item.id).to.exist;
+        expect(err).to.not.exist;
+        expect(item.on).to.be.true;
+        done();
+      });
+    });
+
     it('should pass commands like $inc', function(done) {
       var c = new Collection('counts', {db: db.create(TEST_DB), config: { properties: {count: {type: 'number'}}}});
 
