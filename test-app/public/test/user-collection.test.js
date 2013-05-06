@@ -92,6 +92,38 @@ describe('User Collection', function() {
 				});
 			});
 		});
+		describe('dpd.session', function(){
+		  it('should save login body info on session', function(done){
+				dpd.users.post(credentials, function (user, err) {
+					expect(user.id.length).to.equal(16);
+					var body = {role:'owner'}
+					Object.keys(credentials).forEach(function(key){
+						body[key] = credentials[key]
+					})
+					dpd.users.login(body, function (session, err) {
+						expect(session.id.length).to.equal(128);
+						expect(session.uid.length).to.equal(16);
+						expect(session).to.have.property('role', 'owner')
+						done(err);
+					});
+				})		    
+		  })
+			
+			it('should modify session data', function(done){
+				dpd.users.post(credentials, function (user, err) {
+					expect(user.id.length).to.equal(16);
+					dpd.users.login(credentials, function (session, err) {
+						dpd.users.get(function(result, err){
+			        dpd.todos.post({title: 'faux'}, function (todo, err) {
+								console.log('session2:', todo)
+								expect(todo.tags).to.contain(2)
+								done(err)
+			        });
+						})
+					});
+				})		    
+			})
+		})
 		describe('.del({id: \'...\'}, fn)', function() {
 			it('should remove a user', function(done) {
 				dpd.users.post(credentials, function (user, err) {
