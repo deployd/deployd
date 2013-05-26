@@ -1,5 +1,5 @@
 {
-  "author": "Ritchie Martori", 
+  "author": "Ritchie Martori",
   "name": "deployd",
   "version": "0.6.11",
   "description": "the simplest way to build realtime APIs for web and mobile apps",
@@ -46,7 +46,9 @@
     "node-markdown": "*",
     "dox": "*",
     "less": "*",
-    "jshint": "*"
+    "jshint": "*",
+    "grunt": "~0.4.1",
+    "grunt-contrib-less": "~0.5.2"
   },
   "bin": {
     "dpd": "./bin/dpd"
