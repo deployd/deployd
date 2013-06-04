@@ -48,7 +48,8 @@
     "less": "*",
     "jshint": "*",
     "grunt": "~0.4.1",
-    "grunt-contrib-less": "~0.5.2"
+    "grunt-contrib-less": "~0.5.2",
+    "grunt-contrib-jshint": "~0.6.0"
   },
   "bin": {
     "dpd": "./bin/dpd"
