@@ -1,3 +1,11 @@
+if(session && session.uid) {
+    console.log('TODOS:', session);
+    session.count = session.count || 0;
+    session.count++;
+    this.tags = this.tags||[];
+    this.tags.push(session.count);
+}
+
 if (this.title == "$REQUIRE_AUTH") {
     if (!me) cancel("You are not authorized", 401);
 }
