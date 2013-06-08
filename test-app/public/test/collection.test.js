@@ -560,6 +560,74 @@ describe('Collection', function() {
       });
     });
 
+    describe('dpd.todos method override', function() {
+      it('should method overriden by _method property from body', function(done){
+        var todoId;
+        chain(function(next) {
+          dpd.todos.post({title: "Some todo"}, next);
+        }).chain(function(next, res, err) {
+          if (err) return done(err);
+            todoId = res.id;
+          expect(res).to.exist;
+          $.ajax({
+            type: "POST",
+            url : "/todos/"+ todoId,
+            data: { _method:"DELETE" },
+            success: function(res) {
+              dpd.todos.get(todoId, function(result){
+                  expect(result).to.not.exist;
+                  done();
+              });
+            },
+            error: function (e) {
+                if (e) return done(e);
+              done();
+            }
+          });
+        });
+      });
+      it('should method overriden by _method property from url', function(done){
+        var todoId;
+        chain(function(next) {
+          dpd.todos.post({title: "Some todo"}, next);
+        }).chain(function(next, res, err) {
+          if (err) return done(err);
+            todoId = res.id;
+          expect(res).to.exist;
+          $.ajax({
+            type: "POST",
+            url : "/todos/"+ todoId + "?_method=delete",
+            success: function(res) {
+              dpd.todos.get(todoId, function(result){
+                  expect(result).to.not.exist;
+                  done();
+              });
+            },
+            error: function (e) {
+                if (e) return done(e);
+              done();
+            }
+          });
+        });
+      });
+	  
+      it('should not deleted by executed commands it like dpd.collecion.cmd ', function(done){
+        var todoId;
+        chain(function(next) {
+          dpd.todos.post({title: "Some todo"}, next);
+        }).chain(function(next, res, err) {
+          if (err) return done(err);
+            todoId = res.id;
+          expect(res).to.exist;
+          dpd.todos.post({ _method:"delete"}, next);
+        }).chain(function(next, res, err){
+          dpd.todos.get({ id:todoId }, next);
+        }).chain(function(next, res, err){
+          expect(res).to.exist;
+        });
+      });
+    });
+
     afterEach(function (done) {
       this.timeout(10000);
       cleanCollection(dpd.todos, done);
