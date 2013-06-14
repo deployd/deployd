@@ -96,14 +96,17 @@ describe('User Collection', function() {
 		  it('should save login body info on session', function(done){
 				dpd.users.post(credentials, function (user, err) {
 					expect(user.id.length).to.equal(16);
-					var body = {role:'owner'}
+					var body = {'role':'owner', 'loginTime': '1', 'role2':'owner', 'name': {}};
 					Object.keys(credentials).forEach(function(key){
 						body[key] = credentials[key]
 					})
 					dpd.users.login(body, function (session, err) {
 						expect(session.id.length).to.equal(128);
 						expect(session.uid.length).to.equal(16);
-						expect(session).to.have.property('role', 'owner')
+						expect(session).to.have.property('role', 'owner');
+						expect(session).to.have.property('loginTime', 1);
+						expect(session['role2']).to.not.exist;
+						expect(session['name']).to.not.exist;
 						done(err);
 					});
 				})		    
