@@ -4,12 +4,12 @@ var Deployment = require('../lib/client/deploy').Deployment
   , fs = require('fs');
 
 try {
-  fs.unlink(__dirname + '/../test-app/.dpd/deployments.json');
+  fs.unlink(__dirname + '/../test-app/.dpd/deployments.json', function () {});
 } catch(e) {}
 
 after(function () {
   try {
-    fs.unlink(__dirname + '/../test-app/.dpd/deployments.json');
+    fs.unlink(__dirname + '/../test-app/.dpd/deployments.json', function () {});
   } catch(e) {}
 });
 
