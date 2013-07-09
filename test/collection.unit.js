@@ -257,6 +257,16 @@ describe('collection', function(){
       expect(item.count).to.equal(7);
     });
 
+    it('$inc - should handle strings', function() {
+      var c = new Collection()
+        , item = {count: 7};
+
+      c.execCommands('update', item, {count: {$inc: '8'}});
+      expect(item.count).to.equal(15);
+      c.execCommands('update', item, {count: {$inc: '-9'}});
+      expect(item.count).to.equal(6);
+    });
+
     it('$push - should add an object to an array', function() {
       var c = new Collection()
         , item = {names: ['joe', 'bob']};
