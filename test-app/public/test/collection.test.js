@@ -32,7 +32,7 @@ describe('Collection', function() {
         });
       });
     });
-    
+
     describe('dpd.todos.on("changed", fn)', function() {
       it('should respond to the built-in changed event on post', function(done) {
         dpd.socketReady(function() {
@@ -43,26 +43,26 @@ describe('Collection', function() {
           dpd.todos.post({title: 'changed - create'});
         });
       });
-      
+
       it('should respond to the built-in changed event on put', function(done) {
         dpd.todos.post({title: 'changed - create'}, function(item) {
           dpd.socketReady(function() {
             dpd.todos.once('changed', function() {
               done();
             });
-            
+
             dpd.todos.put(item.id, {title: 'changed - updated'});
           });
         });
       });
-      
+
       it('should respond to the built-in changed event on del', function(done) {
         dpd.todos.post({title: 'changed - create'}, function(item) {
           dpd.socketReady(function() {
             dpd.todos.once('changed', function() {
               done();
             });
-            
+
             dpd.todos.del(item.id);
           });
         });
@@ -87,7 +87,7 @@ describe('Collection', function() {
             if (err) return done(err);
             expect(res.title).to.equal('faux');
             done();
-          });          
+          });
         });
       });
     });
@@ -135,7 +135,7 @@ describe('Collection', function() {
           expect(res.length).to.equal(0);
           done();
         });
-        
+
       });
     });
 
@@ -214,7 +214,7 @@ describe('Collection', function() {
     });
 
     describe('.get({id: {$ne: "..."}}, fn)', function() {
-      it('should return all results that do not match the given id', function(done) {       
+      it('should return all results that do not match the given id', function(done) {
         var titleA = Math.random().toString()
           , titleB = Math.random().toString();
 
@@ -234,7 +234,7 @@ describe('Collection', function() {
         });
       });
     });
-    
+
     describe('GET /full?boolean=true', function () {
       it('should filter boolean properties by query string', function(done) {
         dpd.full.post({boolean: true}, function (full) {
@@ -245,7 +245,7 @@ describe('Collection', function() {
               success: function (res) {
                 expect(res.length).to.be.greaterThan(0);
                 res.forEach(function(obj){
-                  expect(obj.boolean).to.equal(true);  
+                  expect(obj.boolean).to.equal(true);
                 });
                 done();
               },
@@ -259,7 +259,7 @@ describe('Collection', function() {
     });
 
     describe('.get({id: "non existent"}, fn)', function() {
-      it('should return a 404', function(done) {        
+      it('should return a 404', function(done) {
         var titleA = Math.random().toString()
           , titleB = Math.random().toString();
 
@@ -319,7 +319,7 @@ describe('Collection', function() {
           });
         });
       });
-      
+
       it('should run events when an id is included', function(done) {
         dpd.todos.post({title: 'foobar'}, function (todo) {
           dpd.todos.get({arbitrary: true, id: todo.id}, function (t) {
@@ -337,8 +337,40 @@ describe('Collection', function() {
             expect(t.custom).to.equal('custom');
             done();
           });
-        });        
+        });
       });
+    });
+
+    describe('.get({"people.info.name": "Tom"}, fn)', function() {
+      it('should create a todo', function(done) {
+        dpd.todos.post({people: {
+          info: {
+            name: 'Tom',
+            age: 13
+          }
+        }}, function (todo) {
+          expect(todo.people.info.name).to.equal('Tom');
+          done();
+        });
+      });
+      it('should create a todo', function(done) {
+        dpd.todos.post({people: {
+          info: {
+            name: 'June',
+            age: 27
+          }
+        }}, function (todo) {
+          expect(todo.people.info.name).to.equal('Tom');
+          done();
+        });
+      });
+      it('should get Tom', function(done) {
+        dpd.todos.get({'people.info.name': 'Tom'}, function (todos) {
+          expect(todos.length).to.equal(1);
+          expect(todos[0].people.info.name).to.equal('Tom');
+          done();
+        })
+      })
     });
 
     describe('.put(id, {title: "todo 2"}, {done: true},  fn)', function() {
@@ -544,7 +576,7 @@ describe('Collection', function() {
         });
       });
     });
-    
+
     describe('.put({done: true})', function(){
       it('should not update multiple items', function(done) {
         chain(function(next) {
@@ -610,7 +642,7 @@ describe('Collection', function() {
           });
         });
       });
-	  
+
       it('should not deleted by executed commands it like dpd.collecion.cmd ', function(done){
         var todoId;
         chain(function(next) {
@@ -681,7 +713,7 @@ describe('Collection', function() {
       dpd.users.logout(function() {
         cleanCollection(dpd.users, function() {
           cleanCollection(dpd.todos, done);
-        });  
+        });
       });
     });
   });
@@ -698,7 +730,7 @@ describe('Collection', function() {
     });
 
 
-    
+
     afterEach(function (done) {
       this.timeout(10000);
       cleanCollection(dpd.todos, done);
@@ -910,7 +942,7 @@ describe('Collection', function() {
         });
       });
     });
-    
+
     describe('cancel()', function(){
       it('should cancel when POSTing', function(done) {
         dpd.empty.post({}, function (item, err) {
@@ -920,7 +952,7 @@ describe('Collection', function() {
         });
       });
     });
-    
+
     afterEach(function (done) {
       this.timeout(10000);
       cleanCollection(dpd.empty, done);
@@ -938,7 +970,7 @@ describe('Collection', function() {
         });
       });
     });
-    
+
     it('should not return true when a value has not changed', function(done) {
       dpd.changed.post({name: '$NO_CHANGE'}, function (c) {
         dpd.changed.put(c.id, {name: '$NO_CHANGE'}, function (c) {
@@ -949,12 +981,12 @@ describe('Collection', function() {
         });
       });
     });
-    
+
     afterEach(function (done) {
       this.timeout(10000);
       cleanCollection(dpd.changed, done);
     });
   });
 
-  
+
 });
