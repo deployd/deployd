@@ -69,6 +69,69 @@ describe('UserCollection', function() {
 
 			this.uc.handle(this.ctx);
 		});
+
+    it('should perform GET with including $fields', function(done) {
+      this.ctx.url = '/';
+      this.ctx.query = {$fields: {username: 1, email: 1}};
+      this.ctx.req.url = '/users';
+      this.ctx.req.method = 'GET';
+      function test(e, r) {
+        expect(e).to.not.exist;
+        this.uc.handle(this.ctx);
+      }
+      this.complete = function(err, res) {
+        expect(err).to.not.exist;
+        expect(res[0]).to.have.keys(['id','username', 'email']);
+        expect(res[0].username).to.eql('foo');
+        expect(res[0].email).to.eql('foo@bar.com');
+        this.uc.store.remove(function (err) {
+          done(err);
+        });
+      };
+      var testData = {username: 'foo', password: 'abcd', email:'foo@bar.com', name: 'foo'};
+      this.uc.store.insert(testData, test.bind(this));
+    });
+
+    it('should perform GET with excluding $fields', function(done) {
+      this.ctx.url = '/';
+      this.ctx.query = {$fields: {username: 0, email: 0}};
+      this.ctx.req.url = '/users';
+      this.ctx.req.method = 'GET';
+      function test(e, r) {
+        expect(e).to.not.exist;
+        this.uc.handle(this.ctx);
+      }
+      this.complete = function(err, res) {
+        expect(err).to.not.exist;
+        expect(res[0]).to.have.keys(['id','name']);
+        expect(res[0].name).to.eql('foo');
+        this.uc.store.remove(function (err) {
+          done(err);
+        });
+      };
+      var testData = {username: 'foo', password: 'abcd', email:'foo@bar.com', name: 'foo'};
+      this.uc.store.insert(testData, test.bind(this));
+    });
+
+    it('should hide password when $fields{password: 1}', function(done) {
+      this.ctx.url = '/';
+      this.ctx.query = {$fields: {password: 1}};
+      this.ctx.req.url = '/users';
+      this.ctx.req.method = 'GET';
+      function test(e, r) {
+        expect(e).to.not.exist;
+        this.uc.handle(this.ctx);
+      }
+      this.complete = function(err, res) {
+        expect(err).to.not.exist;
+        expect(res[0]).to.have.keys(['id','name', 'email', 'username']);
+        this.uc.store.remove(function (err) {
+          done(err);
+        });
+      };
+      var testData = {username: 'foo', password: 'abcd', email:'foo@bar.com', name: 'foo'};
+      this.uc.store.insert(testData, test.bind(this));
+    });
 	});
 
 	describe('.handleSession(ctx)', function() {
