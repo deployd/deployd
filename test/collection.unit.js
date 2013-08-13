@@ -202,6 +202,36 @@ describe('collection', function(){
       });
     });
 
+    it('should pass $addUnique command', function(done) {
+      var c = new Collection('counts', {db: db.create(TEST_DB), config: { properties: {names: {type: 'array'}}}});
+
+      c.save({body: {names: ['jim','sam']}}, function (err, item) {
+        expect(item.id).to.exist;
+        expect(err).to.not.exist;
+        c.save({body: {names: {$addUnique: 'joe'}}, query: {id: item.id}}, function (err, updated) {
+          expect(err).to.not.exist;
+          expect(updated).to.exist;
+          expect(updated.names).to.eql(['jim', 'sam', 'joe']);
+          done(err);
+        });
+      });
+    });
+
+    it('should not add duplicate element on $addUnique', function(done) {
+      var c = new Collection('counts', {db: db.create(TEST_DB), config: { properties: {names: {type: 'array'}}}});
+
+      c.save({body: {names: ['jim','sam', 'joe']}}, function (err, item) {
+        expect(item.id).to.exist;
+        expect(err).to.not.exist;
+        c.save({body: {names: {$addUnique: 'joe'}}, query: {id: item.id}}, function (err, updated) {
+          expect(err).to.not.exist;
+          expect(updated).to.exist;
+          expect(updated.names).to.eql(['jim', 'sam', 'joe']);
+          done(err);
+        });
+      });
+    });
+
     // it('should pass commands to the validation listener', function(done) {
     //   var c = new Collection({
     //     onValidate: 'if(typeof this.count != "object") throw "didnt pass command to listener"',
@@ -281,6 +311,22 @@ describe('collection', function(){
 
       c.execCommands('update', item, {names: {$pushAll: ['jim', 'sam']}});
       expect(item.names).to.eql(['joe', 'bob', 'jim', 'sam']);
+    });
+
+    it('$addUnique - should add an object to a set', function () {
+      var c = new Collection()
+        , item = {names: ['joe', 'bob']};
+
+      c.execCommands('update', item, {names: {$addUnique: 'sam'}});
+      expect(item.names).to.eql(['joe', 'bob', 'sam']);
+    });
+
+    it('$addUnique - should add only an object that is unique to the set', function () {
+      var c = new Collection()
+        , item = {names: ['joe', 'bob']};
+
+      c.execCommands('update', item, {names: {$addUnique: 'joe'}});
+      expect(item.names).to.eql(['joe', 'bob']);
     });
 
     it('should not throw', function() {
