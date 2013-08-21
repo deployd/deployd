@@ -203,7 +203,7 @@ describe('collection', function(){
     });
 
     it('should pass $addUnique command', function(done) {
-      var c = new Collection('counts', {db: db.create(TEST_DB), config: { properties: {names: {type: 'array'}}}});
+      var c = new Collection('persons', {db: db.create(TEST_DB), config: { properties: {names: {type: 'array'}}}});
 
       c.save({body: {names: ['jim','sam']}}, function (err, item) {
         expect(item.id).to.exist;
@@ -218,7 +218,7 @@ describe('collection', function(){
     });
 
     it('should not add duplicate element on $addUnique', function(done) {
-      var c = new Collection('counts', {db: db.create(TEST_DB), config: { properties: {names: {type: 'array'}}}});
+      var c = new Collection('persons', {db: db.create(TEST_DB), config: { properties: {names: {type: 'array'}}}});
 
       c.save({body: {names: ['jim','sam', 'joe']}}, function (err, item) {
         expect(item.id).to.exist;
@@ -227,6 +227,21 @@ describe('collection', function(){
           expect(err).to.not.exist;
           expect(updated).to.exist;
           expect(updated.names).to.eql(['jim', 'sam', 'joe']);
+          done(err);
+        });
+      });
+    });
+
+    it('should not add duplicate elements and add unique elements on $addUnique', function(done) {
+      var c = new Collection('persons', {db: db.create(TEST_DB), config: { properties: {names: {type: 'array'}}}});
+
+      c.save({body: {names: ['jim','sam', 'joe']}}, function (err, item) {
+        expect(item.id).to.exist;
+        expect(err).to.not.exist;
+        c.save({body: {names: {$addUnique: ['carmen', 'jim', 'keith', 'paulus', 'sam', 'joe']}}, query: {id: item.id}}, function (err, updated) {
+          expect(err).to.not.exist;
+          expect(updated).to.exist;
+          expect(updated.names).to.eql(['jim', 'sam', 'joe', 'carmen', 'keith', 'paulus']);
           done(err);
         });
       });
