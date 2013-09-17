@@ -26,6 +26,26 @@
 			"order": 2
 		}
 	},
+  "sessions": {
+    "role": {
+      "type": "string",
+      "typeLable": "string",
+      "id": "role",
+      "name": "role"
+    },
+    "name": {
+      "type": "string",
+      "typeLable": "string",
+      "id": "name",
+      "name": "name"
+    },
+    "loginTime": {
+      "type": "number",
+      "typeLable": "number",
+      "id": "loginTime",
+      "name": "loginTime"
+    }
+  },
 	"typeLabel": "Users Collection",
 	"type": "UserCollection",
 	"onGet": "dpd.users.get({id: {$in: this.friends}}, function(friends) {\r\n    if (friends) this.friends = friends;\r\n});"
