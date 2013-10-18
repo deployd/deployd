@@ -81,8 +81,32 @@ describe('collection', function(){
       var sanitized = r.sanitize({age: '22'});
       expect(sanitized.age).to.equal(22);
     });
+
+    it('should convert number to strings', function() {
+      var r = createCollection({
+        token: {
+          type: 'string'
+        }
+      });
+      
+      var sanitized = r.sanitize({token: 123456});
+      expect(sanitized.token).to.equal('123456');
+    });    
   });
   
+  describe('.sanitizeQuery(query)', function(){
+    it('should convert number to strings', function() {
+      var r = createCollection({
+        token: {
+          type: 'string'
+        }
+      });
+      
+      var sanitized = r.sanitizeQuery({token: 123456});
+      expect(sanitized.token).to.equal('123456');
+    });       
+  });
+
   describe('.handle(ctx)', function(){
     it('should have a store', function() {
       var c = new Collection('foo', { db: db.create(TEST_DB) });
