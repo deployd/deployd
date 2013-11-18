@@ -361,33 +361,23 @@ describe('Collection', function() {
 
     describe('.get({"people.info.name": "Tom"}, fn)', function() {
       it('should create a todo', function(done) {
-        dpd.todos.post({title: 'Tom',
-          people:
-          {
-            info:
-            {
-              name: 'Tom',
-              age: 13
-            }
-        }}, function (todo) {
+        var tom = {name: 'Tom', age: 13};
+        var june = {name: 'June', age: 27};
+        var post1 = {title: 'Some post', people: {info: tom}};
+        var post2 = {title: 'Another post', people: {info: june}};
+
+        dpd.todos.post(post1, function (todo, result) {
           expect(todo.people.info.name).to.equal('Tom');
-          done();
-        });
-      });
-      it('should get Tom', function(done) {
-    	  dpd.todos.post({title: 'Tom',
-              people:
-              {
-                info:
-                {
-                  name: 'Tom',
-                  age: 13
-                }
-            }});
-        dpd.todos.get({'people.info.name': 'Tom'}, function (todos) {
-          expect(todos.length).to.equal(1);
-          expect(todos[0].people.info.name).to.equal('Tom');
-          done();
+          dpd.todos.post(post2, function (todo) {
+            dpd.todos.get(function (todos) {
+              expect(todos.length).to.equal(2);
+            });
+            dpd.todos.get({'people.info.name': 'Tom'}, function (todos) {
+              expect(todos.length).to.equal(1);
+              expect(todos[0].people.info.name).to.equal('Tom');
+              done();
+            })
+          });
         });
       });
     });
