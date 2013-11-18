@@ -135,8 +135,8 @@ describe('Collection', function() {
           expect(res.length).to.equal(0);
           done();
         });
-
       });
+
     });
 
     describe('.post({title: "foo", owner: 7}, fn)', function() {
@@ -183,7 +183,7 @@ describe('Collection', function() {
 
         dpd.todos.post({title: title}, function () {
           dpd.todos.post({title: "Some other"}, function() {
-            dpd.todos.get({title: title}, function (todos, err) {
+            dpd.todos.get({title: "Some other"}, function (todos, err) {
               expect(todos.length).to.equal(1);
               done(err);
             });
@@ -343,34 +343,35 @@ describe('Collection', function() {
 
     describe('.get({"people.info.name": "Tom"}, fn)', function() {
       it('should create a todo', function(done) {
-        dpd.todos.post({people: {
-          info: {
-            name: 'Tom',
-            age: 13
-          }
-        }}, function (todo) {
-          expect(todo.people.info.name).to.equal('Tom');
-          done();
-        });
-      });
-      it('should create a todo', function(done) {
-        dpd.todos.post({people: {
-          info: {
-            name: 'June',
-            age: 27
-          }
+        dpd.todos.post({title: 'Tom',
+          people:
+          {
+            info:
+            {
+              name: 'Tom',
+              age: 13
+            }
         }}, function (todo) {
           expect(todo.people.info.name).to.equal('Tom');
           done();
         });
       });
       it('should get Tom', function(done) {
+    	  dpd.todos.post({title: 'Tom',
+              people:
+              {
+                info:
+                {
+                  name: 'Tom',
+                  age: 13
+                }
+            }});    	  
         dpd.todos.get({'people.info.name': 'Tom'}, function (todos) {
           expect(todos.length).to.equal(1);
           expect(todos[0].people.info.name).to.equal('Tom');
           done();
-        })
-      })
+        });
+      });
     });
 
     describe('.put(id, {title: "todo 2"}, {done: true},  fn)', function() {
@@ -643,19 +644,20 @@ describe('Collection', function() {
         });
       });
 
-      it('should not deleted by executed commands it like dpd.collecion.cmd ', function(done){
+      it('should not deleted by executed commands it like dpd.collection.cmd ', function(done){
         var todoId;
         chain(function(next) {
           dpd.todos.post({title: "Some todo"}, next);
         }).chain(function(next, res, err) {
-          if (err) return done(err);
-            todoId = res.id;
+          if (err) { return done(err); }
+          todoId = res.id;
           expect(res).to.exist;
           dpd.todos.post({ _method:"delete"}, next);
         }).chain(function(next, res, err){
           dpd.todos.get({ id:todoId }, next);
         }).chain(function(next, res, err){
           expect(res).to.exist;
+          done();
         });
       });
     });
