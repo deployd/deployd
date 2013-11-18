@@ -647,6 +647,7 @@ describe('Collection', function() {
           dpd.todos.get({ id:todoId }, next);
         }).chain(function(next, res, err){
           expect(res).to.exist;
+          done();
         });
       });
     });
