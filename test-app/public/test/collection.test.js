@@ -140,10 +140,10 @@ describe('Collection', function() {
     });
 
     describe('.post({title: "foo", owner: 7}, fn)', function() {
-      it('should sanitize the owner due to incorrect type', function(done) {
+      it('should coerce numbers to strings when querying string properties', function(done) {
         dpd.todos.post({title: "foo", owner: 7}, function (todo, err) {
           delete todo.id;
-          expect(todo).to.eql({title: "foo", done: false});
+          expect(todo).to.eql({title: "foo", done: false, owner: '7'});
           done();
         });
       });
