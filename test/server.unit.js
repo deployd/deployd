@@ -2,7 +2,8 @@ var Server = require('../lib/server')
 	,	Db = require('../lib/db').Db
 	,	Store = require('../lib/db').Store
 	, Router = require('../lib/router')
-	, sh = require('shelljs');
+	, sh = require('shelljs')
+	,	sinon = require('sinon');
 
 describe('Server', function() {
 	describe('.listen()', function() {
@@ -23,7 +24,7 @@ describe('Server', function() {
 					}
 			};
 			var server = new Server(opts);
-			
+
 			server.listen();
 
 			expect(server.db instanceof	Db).to.equal(true);
@@ -49,4 +50,52 @@ describe('Server', function() {
 		});
 	});
 
+
+	describe('.route()', function () {
+		it('should be on the prototype', function () {
+			var server = new Server();
+			expect(typeof server.route).to.equal('function');
+			expect(server.route.toString()).to.contain('req, res');
+		});
+
+
+		it('should call config.loadConfig', function () {
+			var server = new Server();
+			var req = {url: 'foo'};
+			var res = {body: 'bar'};
+			var config = require('../lib/config-loader');
+			config.loadConfig = sinon.spy();
+
+			server.route(req, res);
+
+			expect(config.loadConfig.callCount).to.equal(1);
+		});
+
+
+		it('should set a resources array on the server', function () {
+			var server = new Server();
+			var req = {url: 'foo', headers: {accept: '*'}};
+			var res = {body: 'bar', on: function () {}};
+
+			var configLoader = require('../lib/config-loader');
+			configLoader.loadConfig = function (path, server, callback) {
+				callback.call(server, null, ['foo']);
+			};
+
+			expect(Array.isArray(server.resources)).to.equal(false);
+
+			server.route(req, res);
+
+			expect(Array.isArray(server.resources)).to.equal(true);
+		});
+	});
+
+
+	describe('.handleRequest()', function () {
+		it('should be on the prototype', function () {
+			var server = new Server();
+			expect(typeof server.handleRequest).to.equal('function');
+			expect(server.handleRequest.toString()).to.contain('req, res');
+		});
+	});
 });
