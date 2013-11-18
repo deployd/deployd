@@ -50,7 +50,7 @@ Deployd is the simplest way to build realtime APIs for web and mobile apps. Read
 ## integration tests
 	
 	cd test-app
-	dpd -o
+	../bin/dpd -o
 
 ## license
 
