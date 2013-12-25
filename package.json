@@ -51,7 +51,8 @@
     "grunt": "~0.4.1",
     "grunt-contrib-less": "~0.5.2",
     "grunt-contrib-jshint": "~0.6.0",
-    "sinon": "~1.7.3"
+    "sinon": "~1.7.3",
+    "rewire": "~2.0.0"
   },
   "bin": {
     "dpd": "./bin/dpd"
