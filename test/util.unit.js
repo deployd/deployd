@@ -27,6 +27,11 @@ describe('http', function() {
 			var q = http.parseQuery('/foo/bar?{"foo":"bar"}');
 			expect(q).to.eql({foo:'bar'});
 		});
+    
+    it('should parse a query string include json', function(){
+      var q = http.parseQuery('/foo/bar?$limit=10&$sort=%7B%22foo%22:-1%7D');
+      expect(q).to.eql({$limit:10, $sort:{foo:-1} });
+    });
 	});
 
 
