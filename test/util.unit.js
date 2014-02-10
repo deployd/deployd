@@ -29,8 +29,8 @@ describe('http', function() {
 		});
     
     it('should parse a query string include json', function(){
-      var q = http.parseQuery('/foo/bar?$limit=10&$sort=%7B%22foo%22:-1%7D');
-      expect(q).to.eql({$limit:10, $sort:{foo:-1} });
+      var q = http.parseQuery('/foo/bar?$limit=10&$sort=%7B%22foo%22:-1%7D&$or=%5B%7B%22foo%22:%22bar%22%7D%5D');
+      expect(q).to.eql({$limit:10, $sort:{foo:-1}, $or:[{foo:'bar'}]});
     });
 	});
 
