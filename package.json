@@ -13,7 +13,7 @@
   "dependencies": {
     "async": "0.1.x",
     "commander": "^2.2.0",
-    "cookies": "^0.3.0",
+    "cookies": "^0.4.0",
     "corser": "^2.0.0",
     "debug": "^2.1.0",
     "doh": "^0.0.4",
