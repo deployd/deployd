@@ -38,11 +38,11 @@ module.exports = function (grunt) {
       	'lib/resources/*.js',
       	'lib/util/*.js',
       	'lib/*.js'
-      ]	
+      ]
 		}
 
 	});
-	
+
 	grunt.loadNpmTasks('grunt-contrib-less');
 	grunt.loadNpmTasks('grunt-contrib-jshint');
 
