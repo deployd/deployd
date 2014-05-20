@@ -5,7 +5,6 @@
  */
 
 var program = require('commander')
-  , deployd = require('../').createMonitor
   , repl = require('../lib/client/repl')
   , shelljs = require('shelljs/global')
   , mongod = require('../lib/util/mongod')
@@ -19,7 +18,9 @@ var program = require('commander')
   , Deployment = require('../lib/client/deploy').Deployment
   , Step = require('step')
   , open = require('../lib/util/open')
-  , semver = require('semver');
+  , semver = require('semver')
+  , Server = require('../lib/server')
+  , upgrade = require('doh').upgrade;
 
 /**
  * Get the version number from the package.json
@@ -84,7 +85,7 @@ function start(file) {
     port = 2403;
     retries = env === 'development' && 5;
   }
-  
+
   if (program.mongoPort) {
       mongoPort = Number(program.mongoPort);
   }
@@ -101,94 +102,42 @@ function start(file) {
       if (latest && semver.gt(latest, packageInfo.version)) {
         console.log("deployd v" + latest + " is available." + (canUpdate ? " Update with dpd-update": ""));
         console.log();
-      }  
+      }
     }
     checkForUpdates();
-    
+
     if (!test('-d', './.dpd')) mkdir('-p', './.dpd');
     if (!test('-d', './.dpd/pids')) mkdir('-p', './.dpd/pids');
     if (!test('-d', './data')) mkdir('-p', './data');
 
-    function startup (err) {
-      if (err) { 
-        console.log("Failed to start MongoDB");
-        return stop(1);
-      }
-
-      var options = {port: port, env: 'development', db: {host: host, port: mongoPort, name: dbname}};
-
-      options.env = program.environment || process.env.DPD_ENV || options.env;
-      if(options.env !== 'development') console.log('starting in %s mode', options.env);
-
-      if(credentials !== undefined) options.db.credentials = credentials;
-      var dpd = deployd(options);
-      dpd.listen();
-
-      var onListening = function () {
-
-        console.info('listening on port', options.port);
-        var commands = repl(dpd);
-        if (program.dashboard) {
-          commands.dashboard();
-        } else if (program.open) {
-          commands.open();
-        }
-      };
-
-      var onError = function(err) {
-        if (err.code === "EADDRINUSE") {
-          console.error();
-          console.error("ERROR: port " + options.port + " is already in use");
-          if (retries > 0) {
-            options.port++;
-            console.log("Trying again on port " + options.port + "...");
-            console.log();
-            retries--;
-            dpd = deployd(options);
-            dpd.listen();
-            dpd.on('listening', onListening);
-            dpd.on('error', onError);
-          } else {
-            process.exit();  
-          }          
-        } else {
-          console.error(err);
-          process.exit();  
-        }
-      };
-
-      dpd.on('listening', onListening);
-      dpd.on('error', onError);
-    }
-    
     if (program.auth && program.host === undefined) {
         console.error("Authentication requires the '-h' host flag... exiting.");
         process.exit();
     }
-    
+
     if (program.host) {
         if (program.auth) {
             Step(function () {
                     var next = this;
                     credentials = {};
                     program.prompt('username: ', function(username){
-                        if (username && username != '') {
+                        if (username && username !== '') {
                             credentials.username = username;
                             next();
                         } else {
-                            console.error('Username cannot be blank.')
+                            console.error('Username cannot be blank.');
                             process.exit();
                         }
                     });
-                }, 
+                },
                 function () {
                     var next = this;
                     program.password('Password: ', function(pass){
-                        if (pass && pass != '') {
+                        if (pass && pass !== '') {
                             credentials.password = pass;
                             next();
                         } else {
-                            console.error('Password cannot be blank.')
+                            console.error('Password cannot be blank.');
                             process.exit();
                         }
                     });
@@ -201,13 +150,63 @@ function start(file) {
     } else {
         mongod.restart(program.mongod || 'mongod', env, mongoPort, startup);
     }
-    
+
   } else {
     console.log("This directory does not contain a Deployd app!");
     console.log("Use \"dpd create <appname>\" to create a new app");
     console.log("or use \"dpd path/to/app.dpd\" to start an app in another directory");
     stop(1);
   }
+
+  function startup (err) {
+      if (err) {
+        console.log("Failed to start MongoDB");
+        return stop(1);
+      }
+
+      var options = {port: port, env: 'development', db: {host: host, port: mongoPort, name: dbname}};
+
+      options.env = program.environment || process.env.DPD_ENV || options.env;
+      if(options.env !== 'development') console.log('starting in %s mode', options.env);
+
+      if(credentials !== undefined) options.db.credentials = credentials;
+      var dpd = createServer(options);
+      dpd.on('listening', onListening);
+      dpd.on('error', onError);
+      dpd.listen();
+
+      function onListening () {
+        console.info('listening on port', options.port);
+        var commands = repl(dpd);
+        if (program.dashboard) {
+          commands.dashboard();
+        } else if (program.open) {
+          commands.open();
+        }
+      }
+
+      function onError (err) {
+        if (err.code === "EADDRINUSE") {
+          console.error();
+          console.error("ERROR: port " + options.port + " is already in use");
+          if (retries > 0) {
+            options.port++;
+            console.log("Trying again on port " + options.port + "...");
+            console.log();
+            retries--;
+            dpd = createServer(options);
+            dpd.on('listening', onListening);
+            dpd.on('error', onError);
+            dpd.listen();
+          } else {
+            process.exit();
+          }
+        } else {
+          console.error(err);
+          process.exit();
+        }
+      }
+    }
 }
 
 
@@ -245,7 +244,7 @@ program
       console.log(key);
       console.log();
     });
-  });  
+  });
 
 program
   .command('remote')
@@ -262,7 +261,7 @@ program
       open('http://' + host + '/dashboard/');
     } else {
       console.log("This app has not yet been deployed");
-    }    
+    }
   });
 
 program
@@ -289,20 +288,20 @@ program
           });
         }
       });
-
-      function deploy(key) {
-        console.log('packaging...');
-        d.package(tar, function (err) {
-          if(err) return console.error(err);
-          console.log('pushing...');
-          d.publish(DPDAPP_URL, tar, key, function (err) {
-            if(err) return console.error('failed to push:', err.message || 'could not push app to ' + DPDAPP_URL);
-            console.log('deployd app to http://' + d.subdomain + '.deploydapp.com!');
-          });
-        });
-      }
     } catch (ex) {
       console.log(ex.message);
+    }
+
+    function deploy(key) {
+      console.log('packaging...');
+      d.package(tar, function (err) {
+        if(err) return console.error(err);
+        console.log('pushing...');
+        d.publish(DPDAPP_URL, tar, key, function (err) {
+          if(err) return console.error('failed to push:', err.message || 'could not push app to ' + DPDAPP_URL);
+          console.log('deployd app to http://' + d.subdomain + '.deploydapp.com!');
+        });
+      });
     }
   });
 
@@ -352,7 +351,7 @@ function checkForUpdates() {
     if (!err) {
       var json;
       try {
-        json = JSON.parse(body);  
+        json = JSON.parse(body);
       } catch (ex) {}
 
       if (json && json['dist-tags'] && json['dist-tags'].latest) {
@@ -361,4 +360,12 @@ function checkForUpdates() {
       }
     }
   });
+}
+
+function createServer(config) {
+  var server = new Server(config);
+  server.options = config;
+  upgrade(server);
+
+  return server;
 }
