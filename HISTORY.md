@@ -1,12 +1,28 @@
 # History
 
+## 0.7.0
+
+ - Add ability to query by subproperty within GET event
+ - Add X-Requested-With header for AngularJS support
+ - Add auto https support to dpd.js client lib
+ - Removed Forever Monitor support from CLI
+ - Fix bug with repl causing typed characters to be printed twice and not executed correctly
+ - Fix bug where dashboard would not load if a config had not yet been created
+ - Fix issue where number query params for string type properties were not being converted to strings on server
+ - Fix MongoDB startup and settings
+ - Add check for $inc operands to ensure numbers before attempting to increment
+ - Add more core tests, and features to make mocking
+ easier within tests
+
+
+
 ## 0.6.11
 
  - Fixed bug where missing content-type header when updating a user threw an error.
 
 ## 0.6.10
 
- - Fixed bug where query strings were not properly parsed. 
+ - Fixed bug where query strings were not properly parsed.
  - Fixed certain errors returned as HTML rather than JSON.
  - Fixed bug where changing a property type from "number" to "string" made existing properties uneditable.
  - Fixed bug where `changed()` was returning true for values that had not changed.
@@ -16,7 +32,7 @@
    - Fixed bug where the cursor would randomly move around while editing text
    - Removed overlay for inline editing
 
-## 0.6.9 
+## 0.6.9
 
  - Fixed bug where `internal-client` was not accessible from modules
  - Fixed restarts caused by 404s of unexpected http verbs
@@ -53,14 +69,14 @@
  - Fixed `dpd showkey` prompt for missing keys.json
 
 ## 0.6.6
- 
+
  - Added CORS support
  - Exposed the server object to modules as `process.server`
  - Fixed a rare bug where the first request after a login would not be authenticated
  - Fixed minor bug when loading only node modules
 
 ## 0.6.5
- 
+
  - Fixed `process.send` bug
  - Remote DB Authentication
 

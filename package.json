@@ -1,13 +1,13 @@
 {
   "author": "Ritchie Martori",
   "name": "deployd",
-  "version": "0.6.11",
+  "version": "0.7.0",
   "description": "the simplest way to build realtime APIs for web and mobile apps",
   "repository": {
     "url": "git://github.com/deployd/deployd.git"
   },
   "engines": {
-    "node": ">= 0.8.0"
+    "node": ">= 0.10.0"
   },
   "main": "index",
   "dependencies": {
