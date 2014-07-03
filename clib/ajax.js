@@ -22,6 +22,7 @@ function parseBody(req) {
 
 function sendRequest(url,options) {
   var req = createXMLHTTPObject();
+  var deferred = ayepromise.defer();
   if (!req) return Error("AJAX is somehow not supported");
 
   if (options.query) url += '?' + options.query;
@@ -47,12 +48,15 @@ function sendRequest(url,options) {
     if (req.readyState != 4) return;
     if (req.status != 200 && req.status != 204 && req.status != 304) {
       if (typeof options.error === 'function') options.error(parseBody(req));
+      deferred.reject(parseBody(req));
       return;
     }
     if (typeof options.success === 'function') options.success(parseBody(req));
+    deferred.resolve(parseBody(req));
   };
   if (req.readyState == 4) return;
   req.send(data);
+  return deferred.promise;
 }
 
 sendRequest.headers = {};
