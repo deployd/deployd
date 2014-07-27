@@ -1,0 +1,14 @@
+{
+	"path": "/recursive",
+	"order": 5,
+	"properties": {
+		"name": {
+			"required": false,
+			"type": "string",
+			"typeLabel": "string",
+			"id": "name"
+		}
+	},
+	"typeLabel": "Collection",
+	"type": "Collection"
+}

@@ -1,0 +1,16 @@
+{
+	"path": "/empty",
+	"order": 3,
+	"typeLabel": "Collection",
+	"type": "Collection",
+	"properties": {
+		"name": {
+			"name": "name",
+			"type": "string",
+			"typeLabel": "string",
+			"required": false,
+			"id": "name",
+			"order": 0
+		}
+	}
+}

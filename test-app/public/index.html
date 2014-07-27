@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Mocha Tests</title>
+  <link rel="stylesheet" href="mocha.css" />
+  <script src="/dpd.js"></script>
+  <script src="jquery.js"></script>
+  <script src="chai.js"></script>
+  <script src="mocha.js"></script>
+  <script src="util.js"></script>
+  <script>mocha.setup('bdd')</script>
+  <!-- -- tests -- -->
+  <script src="test/util.test.js"></script>
+  <script src="test/misc.test.js"></script>
+  <script src="test/collection.test.js"></script>
+  <script src="test/user-collection.test.js"></script>
+</head>
+<body>
+  <div id="mocha"></div>
+  <script>
+    expect = chai.expect;
+    mocha.run();
+  </script>
+</body>
+</html>

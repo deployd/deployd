@@ -1,0 +1,6 @@
+{
+	"path": "/proxy",
+	"order": 7,
+	"remote": "http://www.yahoo.com",
+	"type": "Proxy"
+}

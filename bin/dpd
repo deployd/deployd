@@ -1,0 +1,371 @@
+#!/usr/bin/env node
+
+/**
+ * Dependencies
+ */
+
+var program = require('commander')
+  , repl = require('../lib/client/repl')
+  , shelljs = require('shelljs/global')
+  , mongod = require('../lib/util/mongod')
+  , path = require('path')
+  , fs = require('fs')
+  , tty = require('tty')
+  , remote = require('../lib/client/remote')
+  , request = require('request')
+  , packageInfo = require('../package')
+  , latestversionFile = path.join(__dirname, '../.latestversion')
+  , Deployment = require('../lib/client/deploy').Deployment
+  , Step = require('step')
+  , open = require('../lib/util/open')
+  , semver = require('semver')
+  , Server = require('../lib/server')
+  , upgrade = require('doh').upgrade;
+
+/**
+ * Get the version number from the package.json
+ */
+
+program
+  .version(require('../package').version)
+  .option('-m, --mongod [path]', 'path to mongod executable (defaults to `mongod`)')
+  .option('-p, --port [port]', 'port to host server (defaults to 2403)')
+  .option('-w, --wait', 'wait for input before exiting')
+  .option('-d, --dashboard', 'start the dashboard immediately')
+  .option('-o, --open', 'open in a browser')
+  .option('-e, --environment [env]', 'defaults to development')
+  .option('-H, --host [host]', 'specify host for mongo server')
+  .option('-P, --mongoPort [mongoPort]', 'mongodb port to connect to')
+  .option('-n, --dbname [dbname]', 'name of the mongo database')
+  .option('-a, --auth', 'prompts for mongo server credentials')
+  ;
+
+/**
+ * Commands
+ */
+
+program
+  .command('create [project-name]')
+  .description('\tcreate a project in a new directory\n\teg. `dpd create my-app`')
+  .action(function(name) {
+    name = name || 'my-deployd-app';
+    if (test('-d',  name)) {
+      return console.info(name + " already exists in this directory");
+    }
+
+    mkdir('-p', name);
+    cp('-Rf', path.join(__dirname, '/createtemplate/*'), name);
+    mkdir('-p', name + '/.dpd');
+    mkdir('-p', name + '/.dpd/pids');
+    ('').to(name + '/.dpd/pids/mongod');
+    rm(ls('-R', name).filter(function(p) {
+      return path.basename(p) === 'PLACEHOLDER';
+    }).map(function(p) { return name + '/' + p}));
+
+    if (program.dashboard || program.open) {
+      start(name + '/app.dpd');
+    } else {
+      console.info('to start your app:');
+      console.info('\t$ cd', name);
+      console.info('\t$ dpd');
+    }
+  });
+
+function start(file) {
+  var port = program.port
+    , host = program.host || '127.0.0.1'
+    , dbname = program.dbname || '-deployd'
+    , mongoPort = generatePort()
+    , env = program.environment || process.env.DPD_ENV || 'development'
+    , retries = 0
+    , credentials
+    ;
+
+  if (!port) {
+    port = 2403;
+    retries = env === 'development' && 5;
+  }
+
+  if (program.mongoPort) {
+      mongoPort = Number(program.mongoPort);
+  }
+
+  if (file) {
+    process.chdir(path.dirname(file));
+  }
+  if (test('-f', 'app.dpd')) {
+    console.log("starting deployd v" + packageInfo.version + "...");
+
+    if (fs.existsSync(latestversionFile)) {
+      var latest = fs.readFileSync(latestversionFile, 'utf-8');
+      var canUpdate = which('dpd-update');
+      if (latest && semver.gt(latest, packageInfo.version)) {
+        console.log("deployd v" + latest + " is available." + (canUpdate ? " Update with dpd-update": ""));
+        console.log();
+      }
+    }
+    checkForUpdates();
+
+    if (!test('-d', './.dpd')) mkdir('-p', './.dpd');
+    if (!test('-d', './.dpd/pids')) mkdir('-p', './.dpd/pids');
+    if (!test('-d', './data')) mkdir('-p', './data');
+
+    if (program.auth && program.host === undefined) {
+        console.error("Authentication requires the '-h' host flag... exiting.");
+        process.exit();
+    }
+
+    if (program.host) {
+        if (program.auth) {
+            Step(function () {
+                    var next = this;
+                    credentials = {};
+                    program.prompt('username: ', function(username){
+                        if (username && username !== '') {
+                            credentials.username = username;
+                            next();
+                        } else {
+                            console.error('Username cannot be blank.');
+                            process.exit();
+                        }
+                    });
+                },
+                function () {
+                    var next = this;
+                    program.password('Password: ', function(pass){
+                        if (pass && pass !== '') {
+                            credentials.password = pass;
+                            next();
+                        } else {
+                            console.error('Password cannot be blank.');
+                            process.exit();
+                        }
+                    });
+                },
+                startup
+            );
+        } else {
+            startup();
+        }
+    } else {
+        mongod.restart(program.mongod || 'mongod', env, mongoPort, startup);
+    }
+
+  } else {
+    console.log("This directory does not contain a Deployd app!");
+    console.log("Use \"dpd create <appname>\" to create a new app");
+    console.log("or use \"dpd path/to/app.dpd\" to start an app in another directory");
+    stop(1);
+  }
+
+  function startup (err) {
+      if (err) {
+        console.log("Failed to start MongoDB");
+        return stop(1);
+      }
+
+      var options = {port: port, env: 'development', db: {host: host, port: mongoPort, name: dbname}};
+
+      options.env = program.environment || process.env.DPD_ENV || options.env;
+      if(options.env !== 'development') console.log('starting in %s mode', options.env);
+
+      if(credentials !== undefined) options.db.credentials = credentials;
+      var dpd = createServer(options);
+      dpd.on('listening', onListening);
+      dpd.on('error', onError);
+      dpd.listen();
+
+      function onListening () {
+        console.info('listening on port', options.port);
+        var commands = repl(dpd);
+        if (program.dashboard) {
+          commands.dashboard();
+        } else if (program.open) {
+          commands.open();
+        }
+      }
+
+      function onError (err) {
+        if (err.code === "EADDRINUSE") {
+          console.error();
+          console.error("ERROR: port " + options.port + " is already in use");
+          if (retries > 0) {
+            options.port++;
+            console.log("Trying again on port " + options.port + "...");
+            console.log();
+            retries--;
+            dpd = createServer(options);
+            dpd.on('listening', onListening);
+            dpd.on('error', onError);
+            dpd.listen();
+          } else {
+            process.exit();
+          }
+        } else {
+          console.error(err);
+          process.exit();
+        }
+      }
+    }
+}
+
+
+program
+  .command('keygen')
+  .description('\tgenerate a key for remote access (./.dpd/keys.json)')
+  .action(function() {
+    var Keys = require('../lib/keys')
+      , keys = new Keys();
+
+    keys.create(function(err, key) {
+      if(err) return console.error(err);
+      console.log('created key', key.substr(0, 16) + '...');
+    });
+  });
+
+program
+  .command('showkey')
+  .description('\tshows current key for connecting to remote dashboard (./.dpd/keys.json)')
+  .action(function() {
+    var Keys = require('../lib/keys')
+      , keys = new Keys();
+
+    keys.getLocal(function(err, key) {
+      if(err) return console.error(err);
+      if(!key) {
+        console.log('No key file found. Run the following to create one:');
+        console.log();
+        console.log('dpd keygen');
+        console.log();
+        return;
+      }
+      console.log("Copy this key for use in remote dashboard");
+      console.log();
+      console.log(key);
+      console.log();
+    });
+  });
+
+program
+  .command('remote')
+  .description('\topen the remote dashboard in your browser')
+  .action(function() {
+    var d = new Deployment('.');
+    var host = '';
+
+    var config = d.getConfig();
+    console.log(config);
+    host = Object.keys(config)[0];
+
+    if (host) {
+      open('http://' + host + '/dashboard/');
+    } else {
+      console.log("This app has not yet been deployed");
+    }
+  });
+
+program
+  .command('deploy [subdomain]')
+  .description('\tdeploy a testing instance on deploydapp.com')
+  .action(function (subdomain) {
+    try {
+      var d = new Deployment('.', null, subdomain)
+        , tar = './.dpd/package.tgz'
+        , DPDAPP_URL = 'http://deploydapp.com'
+        , Keys = require('../lib/keys')
+        , keys = new Keys();
+
+      if (process.env.DPDAPP_PORT) DPDAPP_URL += ':' + process.env.DPDAPP_PORT;
+
+      keys.getLocal(function (err, key) {
+        if(err) return console.error(err);
+        if(key) {
+          deploy(key);
+        } else {
+          keys.create(function(err, key) {
+            if(err) return console.error(err);
+            deploy(key);
+          });
+        }
+      });
+    } catch (ex) {
+      console.log(ex.message);
+    }
+
+    function deploy(key) {
+      console.log('packaging...');
+      d.package(tar, function (err) {
+        if(err) return console.error(err);
+        console.log('pushing...');
+        d.publish(DPDAPP_URL, tar, key, function (err) {
+          if(err) return console.error('failed to push:', err.message || 'could not push app to ' + DPDAPP_URL);
+          console.log('deployd app to http://' + d.subdomain + '.deploydapp.com!');
+        });
+      });
+    }
+  });
+
+program
+  .command('*')
+  .description('\t[default] start the server in the current project in development mode\n' +
+               '\twith an interactive shell/repl for interacting with the running server\n' +
+               '\te.g. dpd (starts server in current directory),\n' +
+               '\t     dpd my-app/app.dpd (starts app from file)')
+  .action(start);
+
+
+function stop(code) {
+  var fn = function() {
+    exit(code);
+  };
+
+  if (program.wait) {
+    process.stdin.resume();
+    process.stdin.setRawMode(true);
+    process.stdout.write('\nPress any key to continue...\n');
+    process.stdin.on('keypress', fn);
+  } else {
+    fn();
+  }
+}
+
+/**
+ * Parse the arguments
+ */
+
+program.parse(process.argv);
+
+if(program.args.length === 0) start();
+
+/**
+ * Port generation
+ */
+
+function generatePort() {
+  var portRange = [ 3000, 9000 ];
+  return Math.floor(Math.random() * (portRange[1] - portRange[0])) + portRange[0];
+}
+
+function checkForUpdates() {
+  request('http://registry.npmjs.org/deployd', function(err, res, body) {
+    if (!err) {
+      var json;
+      try {
+        json = JSON.parse(body);
+      } catch (ex) {}
+
+      if (json && json['dist-tags'] && json['dist-tags'].latest) {
+        var latest = json['dist-tags'].latest;
+        fs.writeFile(latestversionFile, latest);
+      }
+    }
+  });
+}
+
+function createServer(config) {
+  var server = new Server(config);
+  server.options = config;
+  upgrade(server);
+
+  return server;
+}

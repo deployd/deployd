@@ -1,0 +1,56 @@
+{
+	"path": "/full",
+	"order": 4,
+	"properties": {
+		"array": {
+			"required": false,
+			"type": "array",
+			"typeLabel": "array",
+			"id": "array",
+			"name": "array",
+			"order": 0
+		},
+		"object": {
+			"required": false,
+			"type": "object",
+			"typeLabel": "object",
+			"id": "object",
+			"name": "object",
+			"order": 1
+		},
+		"date": {
+			"required": false,
+			"type": "date",
+			"typeLabel": "date",
+			"id": "date",
+			"name": "date",
+			"order": 2
+		},
+		"boolean": {
+			"required": false,
+			"type": "boolean",
+			"typeLabel": "boolean",
+			"id": "boolean",
+			"name": "boolean",
+			"order": 3
+		},
+		"number": {
+			"required": false,
+			"type": "number",
+			"typeLabel": "number",
+			"id": "number",
+			"name": "number",
+			"order": 4
+		},
+		"string": {
+			"required": false,
+			"type": "string",
+			"typeLabel": "string",
+			"id": "string",
+			"name": "string",
+			"order": 5
+		}
+	},
+	"typeLabel": "Collection",
+	"type": "Collection"
+}

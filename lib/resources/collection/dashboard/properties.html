@@ -1,0 +1,99 @@
+<div id="properties" class="hide">
+  <div class="panel well">
+    <h3>
+      Properties
+    </h3>
+    <div id="property-list">
+      <ul class="component-list" data-bind="sortable: properties">
+        <li class="component-item locked"><div class="component-item-header">
+          <i class="icon-white icon-custom string" data-bind="tooltip: {placement: 'left', title: 'string'}"></i>
+          <span class="code name">id</span>
+          <div class="pull-right">
+            <i class="icon-white icon-lock" title="Locked"></i>
+          </div>
+        </div></li>
+        <!-- ko if: isUsers -->
+        <li class="component-item locked">
+          <div class="component-item-header">
+            <i class="icon-white icon-custom string" data-bind="tooltip: {placement: 'left', title: 'string'}"></i>
+            <span class="code name">username</span>
+            <div class="pull-right">
+              <i class="icon-white icon-lock" title="Locked"></i>
+            </div>
+          </div>
+        </li>
+        <li class="component-item"><div class="component-item-header">
+          <i class="icon-white icon-custom string" data-bind="tooltip: {placement: 'left', title: 'string'}"></i>
+          <span class="code name">password</span>
+          <div class="pull-right">
+            <i class="icon-white icon-lock" title="Locked"></i>
+          </div>
+        </li>
+        <!-- /ko -->
+
+        <!-- ko foreach: properties -->
+          <li class="component-item" data-bind="css: {active: editing}"><div class="component-item-header clearfix" data-bind="click: onClickHeader">
+            <div class="component-item-edit" data-bind="template: 'property-single-template', visible: editing"></div>
+            <div data-bind="visible: !editing()">
+              <i class="icon-white icon-custom" data-bind="tooltip: {placement: 'left', title: typeLabel}, cssNamed: type"></i>
+              <span class="code name" data-bind="text: name, click: toggleEditing"></span>
+              <span class="label" data-bind="visible: required">required</span>
+              <div class="pull-right">
+                <i class="icon-white icon-resize-vertical handle"></i>
+                <a href="#" data-bind="click: $root.removeProperty"><i class="icon-white icon-remove"></i></a>
+              </div>
+            </div>
+          </div></li>
+        <!-- /ko -->
+        <div class="placeholder new-item component-item-header">
+          <div data-bind="visible: !properties().length">
+            <div class="get-started" style="margin-top: 0;">
+              <!-- ko if: isUsers -->
+                <p>
+                  <strong><i class="icon-user icon-white"></i> Users</strong> - Add properties unique to the users you want to store in this collection. Users have username and password properties by default. These are required to login a user.
+                </p>
+              <!-- /ko -->
+              <!-- ko if: !isUsers -->
+                <p>
+                  <strong><i class="icon-list icon-white"></i> Properties</strong> - Describe the JSON objects you want to store in your collection by adding properties and setting their type.
+                </p>
+              <!-- /ko -->
+              <p>
+                <strong><i class="icon-ban-circle icon-white"></i> Validation</strong> - By describing the data you expect in your collection you enable deployd to automatically validate new objects.
+              </p>
+            </div>
+            <div class="alert alert-info">
+              <strong>Get started</strong> by adding properties to describe the <strong data-bind="text: isUsers ? 'users' : 'data'"></strong> you want to store in this collection.
+            </div>
+          </div>
+          <div class="component-item-edit" data-bind="template: {name: 'property-single-template', data: newProperty}"></div>
+        </div>
+      </ul>
+    </div>
+  </div>
+
+  <div id="property-now-what" class="alert alert-info hide" data-bind="visible: properties().length && !otherItems()">
+    When you're done adding properties, you should <a data-bind="attr: {href: '/dashboard/' + Context.resourceId + '/data'}" class="cta-link">add some data</a> to this collection.
+  </div>
+</div>
+
+<script type="text/html" id="property-single-template">
+  <div class="btn-group pull-left type-selector">
+    <a class="btn dropdown-toggle" href="#" data-bind="tooltip: {placement: 'left', title: typeLabel()}, tooltipEvent: tooltipEvent" data-toggle="dropdown">
+      <i class="icon-custom" data-bind="cssNamed: type()"></i>
+      <span class="caret"></span>
+    </a>
+    <ul class="dropdown-menu" data-bind="foreach: $root.propertyTypes">
+      <li data-bind="css: {active: $parent.type() == id}, popover: {placement: 'right', title: label, content: tooltip}">
+        <a href="#" data-bind="click: $parent.setType">
+          <i class="icon-custom" data-bind="cssNamed: id"></i>&nbsp;
+          <span data-bind="text:label"></span></a>
+      </li>
+    </ul>
+  </div>
+  <input type="text" placeholder="myPropertyName" data-bind="value: editingName, valueUpdate: 'afterkeydown', hasfocus: nameFocus, event: { keypress: onNameKeypress, keydown: onNameKeyDown }" />
+  <button class="btn" data-bind="click: commitName, clickBubble: false, visible: !isNew">done</button>
+  <label class="checkbox"><input type="checkbox" data-bind="checked: required" />Required</label>
+  <a href="#" class="delete-btn" data-bind="click: $root.removeProperty, visible: !isNew"><i class="icon-white icon-remove"></i></a>
+  <button class="btn btn-success" data-bind="click: $root.addProperty, visible: isNew"><i class="icon-white icon-plus"></i>&nbsp;Add</button>
+</script>

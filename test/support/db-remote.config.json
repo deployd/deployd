@@ -1,0 +1,9 @@
+{
+    "host": "127.0.0.1",
+    "port": 27017,
+    "name": "dpd-faux-remote",
+    "credentials": {
+        "username": "foo",
+        "password": "secret"
+    }
+}

@@ -1,0 +1,17 @@
+{
+  "laxcomma": true,
+  "expr": true,
+  "proto": true,
+  "lastsemic": true,
+  "laxbreak": true,
+  "strict": false,
+  "eqnull": true,
+
+  "undef": true,
+  "browser": true,
+  "devel": true,
+  "predef": {
+      "io": true
+    , "_dpd": true
+  }
+}

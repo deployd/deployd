@@ -1,0 +1,32 @@
+{
+	"path": "/users",
+	"properties": {
+		"friends": {
+			"required": false,
+			"type": "array",
+			"typeLabel": "array",
+			"id": "friends",
+			"name": "friends",
+			"order": 0
+		},
+		"reputation": {
+			"name": "reputation",
+			"type": "number",
+			"typeLabel": "number",
+			"required": false,
+			"id": "reputation",
+			"order": 1
+		},
+		"displayName": {
+			"name": "displayName",
+			"type": "string",
+			"typeLabel": "string",
+			"required": false,
+			"id": "displayName",
+			"order": 2
+		}
+	},
+	"typeLabel": "Users Collection",
+	"type": "UserCollection",
+	"onGet": "dpd.users.get({id: {$in: this.friends}}, function(friends) {\r\n    if (friends) this.friends = friends;\r\n});"
+}

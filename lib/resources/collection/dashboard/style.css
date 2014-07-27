@@ -1,0 +1,217 @@
+.unloaded-content {
+  display: none !important;
+}
+#editor-modal .modal-body {
+  height: 300px;
+}
+#editor-modal .editor {
+  display: block;
+  height: 300px;
+  width: 530px;
+}
+#inline-editor {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0);
+  z-index: 100;
+}
+#inline-editor #inline-editor-table-overlay {
+  position: fixed;
+}
+#inline-editor .mini-edit {
+  padding: 8px;
+  position: absolute;
+  background: url('../../img/outlets-light.png');
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  white-space: nowrap;
+}
+#inline-editor .mini-edit a {
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 2px;
+}
+#inline-editor .mini-edit input {
+  margin: 0;
+}
+#inline-editor .mini-edit input[type=text] {
+  min-width: 200px;
+  max-width: 300px;
+}
+#inline-editor .mini-edit label {
+  min-width: 200px;
+}
+#inline-editor .mini-edit label input[type=checkbox] {
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 8px;
+}
+#data {
+  visibility: hidden;
+  display: box;
+  display: -moz-box;
+  display: -webkit-box;
+  display: -ms-box;
+  display: -o-box;
+  box-orient: vertical;
+  -moz-box-orient: vertical;
+  -webkit-box-orient: vertical;
+  -ms-box-orient: vertical;
+  -o-box-orient: vertical;
+}
+#table-container {
+  position: relative;
+  height: 0px;
+  overflow: scroll;
+}
+#table-container table {
+  width: auto;
+  table-layout: fixed;
+}
+#table-container table tr:hover td,
+#table-container table tr:hover td {
+  background-color: inherit;
+}
+#table-container table td,
+#table-container table th {
+  max-width: 200px;
+  min-width: 200px;
+  height: 22px;
+}
+#table-container table td .value,
+#table-container table th .value {
+  max-height: 22px;
+  height: 22px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+#table-container table tr td.highlight {
+  background: rgba(255, 255, 247, 0.1);
+  transition-duration: 0ms;
+  -moz-transition-duration: 0ms;
+  -webkit-transition-duration: 0ms;
+  -o-transition-duration: 0ms;
+}
+#table-container table tr {
+  transition-property: background-color;
+  -moz-transition-property: background-color;
+  -webkit-transition-property: background-color;
+  -o-transition-property: background-color;
+  transition-duration: 800ms;
+  -moz-transition-duration: 800ms;
+  -webkit-transition-duration: 800ms;
+  -o-transition-duration: 800ms;
+}
+#table-container table tr.new-row {
+  transition-duration: 0ms;
+  -moz-transition-duration: 0ms;
+  -webkit-transition-duration: 0ms;
+  -o-transition-duration: 0ms;
+  background: rgba(255, 255, 247, 0.2);
+}
+#table-container table .margin {
+  max-width: 20px;
+  min-width: 20px;
+}
+#table-container .load-space td {
+  height: 0;
+  padding: 0;
+  margin: 0;
+}
+#table-container #margin-container {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  width: 38px;
+  height: 0px;
+  overflow: hidden;
+  z-index: 10;
+}
+#table-container #margin-container:before {
+  content: '';
+  z-index: 11;
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 38px;
+  background: url('../../img/outlets.png');
+  border: #363535 1px solid;
+}
+#table-container #margin-container #margin {
+  background: url('../../img/outlets.png');
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+}
+#table-container #margin-container #margin tr.load-space {
+  height: inherit;
+}
+#table-container #margin-container #margin tr {
+  height: 38px;
+}
+#table-container #margin-container #margin .delete-btn {
+  opacity: 0.4;
+}
+#table-container #margin-container #margin .delete-btn:hover {
+  opacity: 1;
+}
+#table-container #margin-container #margin-footer {
+  z-index: 11;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 40px;
+  background: url('../../img/outlets.png');
+  border: #363535 1px solid;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  padding: 8px;
+}
+#table-container #headers-container {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  height: 40px;
+  overflow: hidden;
+}
+#table-container #headers-container #headers {
+  background: url('../../img/outlets.png');
+  position: absolute;
+  top: 0px;
+  left: 0px;
+}
+#table-container #new-row-container {
+  position: fixed;
+  height: 40px;
+  overflow: hidden;
+}
+#table-container #new-row-container #new-row {
+  background: url('../../img/outlets.png');
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  margin: 0;
+}
+#table-container #new-row-container #new-row .id-cell {
+  font-style: italic;
+}
+#table-container #new-row-container #new-row .hint {
+  opacity: 0.5;
+}
+#table-container #body-table-container {
+  float: left;
+  width: 1px;
+  overflow: visible;
+}
+#table-container #body-table {
+  background: url('../../img/outlets.png');
+  margin: 0;
+}

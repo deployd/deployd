@@ -1,0 +1,88 @@
+<div id="events" class="tab-pane">
+  <div class="two-column-container">
+    <div class="main-column">
+      <div id="events-panel" class="well stacked">
+        <h3 class="clearfix">
+          Events 
+          <a class="pull-right header-link" target="_blank" href="http://docs.deployd.com/docs/collections/adding-logic.md">Documentation</a> 
+        </h3>
+        
+        <div id="event-editor" class="default-editor">
+
+        </div>
+        <!-- <ul class="nav nav-tabs" id="event-nav">
+          <li><a href="#get-panel" data-toggle='tab' data-editor="onGet">On GET</a></li>
+          <li class="active"><a href="#validate-panel" data-toggle='tab' data-editor="onValidate">On Validate</a></li>
+          <li><a href="#post-panel" data-toggle='tab' data-editor="onPost">On POST</a></li>
+          <li><a href="#put-panel" data-toggle='tab' data-editor="onPut">On PUT</a></li>
+          <li><a href="#delete-panel" data-toggle='tab' data-editor="onDelete">On DELETE</a></li>
+        </ul>
+        <div class="tab-content tab-content-styled">
+          <div class="tab-pane" id="get-panel">
+            <div class="editor-container">
+              <div id="onGet"></div>
+            </div>
+          </div>
+          <div class="tab-pane active" id="validate-panel">
+            <div class="editor-container">
+              <div id="onValidate"></div>
+            </div>
+          </div>
+          <div class="tab-pane" id="post-panel">
+            <div class="editor-container">
+              <div id="onPost"></div>
+            </div>
+          </div>
+          <div class="tab-pane" id="put-panel">
+            <div class="editor-container">
+              <div id="onPut"></div>
+            </div>
+          </div>
+          <div class="tab-pane" id="delete-panel">
+            <div class="editor-container">
+              <div id="onDelete"></div>
+            </div>
+          </div>
+        </div> -->
+      </div>
+    </div>
+    <div class="sidebar-column">
+      <div id="property-reference" class="well">
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/html" id="property-reference-template">
+  <h3>Properties</h3>
+  <ul class="component-list">
+    <li class="component-item locked">
+      <div class="component-item-header">
+        <i class="icon-white icon-custom string" title="string"></i>&nbsp;
+        <span class="code">id</span>
+      </div>
+    </li>
+    <% if (Context.resourceType === 'UserCollection') { %>
+    <li class="component-item locked">
+      <div class="component-item-header">
+        <i class="icon-white icon-custom string" title="string"></i>&nbsp;
+        <span class="code">username</span>
+      </div>
+    </li>
+    <li class="component-item locked">
+      <div class="component-item-header">
+        <i class="icon-white icon-custom string" title="string"></i>&nbsp;
+        <span class="code">password</span>
+      </div>
+    </li>
+    <% } %>
+    <% properties.forEach(function(prop) { %>
+      <li class="component-item locked">
+        <div class="component-item-header">
+          <i class="icon-white icon-custom <%- prop.type %>" title="<%- prop.typeLabel %>"></i>&nbsp;
+          <span class="code"><%- prop.id %></span>
+        </div>
+      </li>
+    <% }) %>
+  </ul>
+</script>

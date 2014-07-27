@@ -1,0 +1,67 @@
+{
+	"properties": {
+		"title": {
+			"required": true,
+			"type": "string",
+			"typeLabel": "string",
+			"id": "title",
+			"name": "title",
+			"order": 0,
+			"$renameFrom": "titlesss"
+		},
+		"message": {
+			"required": false,
+			"type": "string",
+			"typeLabel": "string",
+			"id": "message",
+			"name": "message",
+			"order": 1,
+			"$renameFrom": "messages"
+		},
+		"tags": {
+			"required": false,
+			"type": "array",
+			"typeLabel": "array",
+			"id": "tags",
+			"name": "tags",
+			"order": 2
+		},
+		"people": {
+			"required": false,
+			"type": "object",
+			"typeLabel": "object",
+			"id": "people",
+			"name": "people",
+			"order": 3
+		},
+		"owner": {
+			"required": false,
+			"type": "string",
+			"typeLabel": "string",
+			"id": "owner",
+			"name": "owner",
+			"order": 4,
+			"$renameFrom": "ownerssss"
+		},
+		"order": {
+			"required": false,
+			"type": "number",
+			"typeLabel": "number",
+			"id": "order",
+			"name": "order",
+			"order": 5
+		},
+		"done": {
+			"required": false,
+			"type": "boolean",
+			"typeLabel": "string",
+			"id": "done",
+			"name": "done",
+			"order": 6
+		}
+	},
+	"path": "/todos",
+	"order": 1,
+	"typeLabel": "Collection",
+	"type": "Collection"
+}

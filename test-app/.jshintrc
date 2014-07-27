@@ -1,0 +1,25 @@
+{
+  "laxcomma": true,
+  "expr": true,
+  "proto": true,
+  "lastsemic": true,
+  "laxbreak": true,
+  "strict": false,
+
+  "undef": true,
+  "browser": true,
+  "predef": {
+
+      "describe": true
+    , "it": true
+    , "afterEach": true
+    , "beforeEach": true
+    
+    , "expect": true    
+
+    , "dpd": true
+
+    , "chain": true
+    , "cleanCollection": true
+  }
+}

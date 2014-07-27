@@ -1,0 +1,24 @@
+{
+  "laxcomma": true,
+  "expr": true,
+  "proto": true,
+  "lastsemic": true,
+  "laxbreak": true,
+  "strict": false,
+
+  "undef": true,
+  "browser": true,
+  "predef": {
+      "dpd": true
+    , "_dpd": true
+    , "$": false
+    , "_": false
+    , "ui": false
+    , "ace": false
+    , "Context": false
+
+    , "ko": false
+    , "prettyPrint": false
+    , "CollectionUtil": false
+  }
+}

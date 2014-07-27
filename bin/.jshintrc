@@ -1,0 +1,8 @@
+{
+  "laxcomma": true,
+  "expr": true,
+  "proto": true,
+  "lastsemic": true,
+  "laxbreak": true,
+  "strict": false
+}
