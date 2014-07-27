@@ -1,7 +1,5 @@
 {
-  "author": {
-    "name": "Ritchie Martori"
-  },
+  "author": "Ritchie Martori",
   "name": "deployd",
   "version": "0.7.0",
   "description": "the simplest way to build realtime APIs for web and mobile apps",
@@ -59,15 +57,5 @@
   "scripts": {
     "test": "mocha",
     "docs": "node docs/src/build.js"
-  },
-  "readme": "# deployd v0.6.11\n\n[![Build Status](https://secure.travis-ci.org/deployd/deployd.png)](http://travis-ci.org/deployd/deployd)\n\n## overview\n\nDeployd is the simplest way to build realtime APIs for web and mobile apps. Ready-made, configurable Resources add common functionality to a Deployd backend, which can be further customized with JavaScript Events.\n\n[Read more about deployd](http://deployd.com)\n\n## install osx\n\n[Download](http://deployd.com/download.html) the installer.\n\n## install win\n\n[Download](http://deployd.com/download.html) the installer.\n\n## quick start\n\n\t$ dpd create hello\n\t$ cd hello\n\t$ dpd -d\n\t\n## helpful resources\n\n - [Docs](http://docs.deployd.com/)\n - [Getting Started Guide](http://docs.deployd.com/docs/getting-started/what-is-deployd.md)\n - [Hello World Tutorial](http://docs.deployd.com/docs/getting-started/your-first-api.md)\n - [API Docs](http://docs.deployd.com/api)\n - [Community Discussion Page](http://deployd.com/community.html)\n - [Example Apps](http://docs.deployd.com/examples/)\n\n## install from npm\n\n\tnpm install deployd -g\n\n## install from source\n\n\tgit clone https://github.com/deployd/deployd.git\n\tnpm install\n\tnpm link\n\n## unit tests\n\n\tcd deployd\n\tmongod &\n\tnpm test\n\n## integration tests\n\t\n\tcd test-app\n\t../bin/dpd -o\n\n## license\n\n    Licensed under the Apache License, Version 2.0 (the \"License\");\n    you may not use this file except in compliance with the License.\n    You may obtain a copy of the License at\n\n        http://www.apache.org/licenses/LICENSE-2.0\n\n    Unless required by applicable law or agreed to in writing, software\n    distributed under the License is distributed on an \"AS IS\" BASIS,\n    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n    See the License for the specific language governing permissions and\n    limitations under the License.\n\n    Copyright 2012 deployd llc\n",
-  "readmeFilename": "README.md",
-  "bugs": {
-    "url": "https://github.com/deployd/deployd/issues"
-  },
-  "homepage": "https://github.com/deployd/deployd",
-  "_id": "deployd@0.7.0",
-  "_shasum": "ac61156dfa640397bfe41eed7a42b6c96d16cf53",
-  "_from": "deployd@",
-  "_resolved": "https://registry.npmjs.org/deployd/-/deployd-0.7.0.tgz"
+  }
 }
