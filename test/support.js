@@ -44,7 +44,7 @@ freq = function(url, options, fn, callback) {
 };
 
 before(function (done) {
-  var mdb = new mongodb.Db(TEST_DB.name, new mongodb.Server(TEST_DB.host, TEST_DB.port));
+  var mdb = new mongodb.Db(TEST_DB.name, new mongodb.Server(TEST_DB.host, TEST_DB.port), {safe:false});
   mdb.open(function (err) {
     if(err) {
       done(err);

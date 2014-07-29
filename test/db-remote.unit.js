@@ -6,7 +6,7 @@ var fs = require('fs')
   , assert = require('assert')
   , mongodb = require('mongodb');
 
-var mdb = new mongodb.Db(config.name, new mongodb.Server(config.host, config.port));
+var mdb = new mongodb.Db(config.name, new mongodb.Server(config.host, config.port), {safe:false});
 
 before(function(done){
   mdb.open(function (err) {
