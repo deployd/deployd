@@ -32,6 +32,7 @@ var UpdateCommand = exports.UpdateCommand = function(db, collectionName, spec, d
   this.document = document;
   this.db = db;
   this.serializeFunctions = false;
+  this.checkKeys = typeof options.checkKeys != 'boolean' ? false : options.checkKeys;
 
   // Generate correct flags
   var db_upsert = 0;
@@ -61,10 +62,24 @@ struct {
     BSON      document;           // the document data to update with or insert
 }
 */
-UpdateCommand.prototype.toBinary = function() {
+UpdateCommand.prototype.toBinary = function(bsonSettings) {
+  // Validate that we are not passing 0x00 in the colletion name
+  if(!!~this.collectionName.indexOf("\x00")) {
+    throw new Error("namespace cannot contain a null character");
+  }
+
   // Calculate total length of the document
   var totalLengthOfCommand = 4 + Buffer.byteLength(this.collectionName) + 1 + 4 + this.db.bson.calculateObjectSize(this.spec, false, true) +
       this.db.bson.calculateObjectSize(this.document, this.serializeFunctions, true) + (4 * 4);
+
+  // Enforce maximum bson size
+  if(!bsonSettings.disableDriverBSONSizeCheck 
+    && totalLengthOfCommand > bsonSettings.maxBsonSize) 
+    throw new Error("Document exceeds maximum allowed bson size of " + bsonSettings.maxBsonSize + " bytes");
+
+  if(bsonSettings.disableDriverBSONSizeCheck 
+    && totalLengthOfCommand > bsonSettings.maxMessageSizeBytes) 
+    throw new Error("Command exceeds maximum message size of " + bsonSettings.maxMessageSizeBytes + " bytes");
 
   // Let's build the single pass buffer command
   var _index = 0;
@@ -153,7 +168,7 @@ UpdateCommand.prototype.toBinary = function() {
     // Copy the data into the current buffer
     object.copy(_command, _index);
   } else {    
-    documentLength = this.db.bson.serializeWithBufferAndIndex(object, this.checkKeys, _command, _index, this.serializeFunctions) - _index + 1;
+    documentLength = this.db.bson.serializeWithBufferAndIndex(object, false, _command, _index, this.serializeFunctions) - _index + 1;
   }
 
   // Write the length to the document

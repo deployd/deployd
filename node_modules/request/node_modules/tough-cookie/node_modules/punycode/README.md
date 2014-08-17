@@ -100,7 +100,7 @@ punycode.toUnicode('xn----dqo34k.com');
 // → '☃-⌘.com'
 
 // decode email addresses
-punycode.toUnicode('xn--80ahgue5b@xn--p-8sbkgc5ag7bhce.xn--ba-lmcq');
+punycode.toUnicode('джумла@xn--p-8sbkgc5ag7bhce.xn--ba-lmcq');
 // → 'джумла@джpумлатест.bрфa'
 ```
 
@@ -117,7 +117,7 @@ punycode.toASCII('☃-⌘.com');
 
 // encode email addresses
 punycode.toASCII('джумла@джpумлатест.bрфa');
-// → 'xn--80ahgue5b@xn--p-8sbkgc5ag7bhce.xn--ba-lmcq'
+// → 'джумла@xn--p-8sbkgc5ag7bhce.xn--ba-lmcq'
 ```
 
 ### `punycode.ucs2`

@@ -34,6 +34,7 @@ exports.charset = function (type) {
   // special cases
   switch (type) {
     case 'application/json': return 'UTF-8'
+    case 'application/javascript': return 'UTF-8'
   }
 
   // default text/* to utf-8
