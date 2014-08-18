@@ -8,9 +8,6 @@ Deployd is the simplest way to build realtime APIs for web and mobile apps. Read
 
 [Read more about deployd](http://deployd.com)
 
-## install osx
-
-[Download](http://deployd.com/download.html) the installer.
 
 ## install win
 
