@@ -1,0 +1,88 @@
+{
+  "name": "socket.io-client",
+  "version": "1.0.6",
+  "keywords": [
+    "realtime",
+    "framework",
+    "websocket",
+    "tcp",
+    "events",
+    "client"
+  ],
+  "dependencies": {
+    "debug": "0.7.4",
+    "engine.io-client": "1.3.1",
+    "component-bind": "1.0.0",
+    "component-emitter": "1.1.2",
+    "object-component": "0.0.3",
+    "socket.io-parser": "2.2.0",
+    "has-binary-data": "0.1.1",
+    "indexof": "0.0.1",
+    "parseuri": "0.0.2",
+    "to-array": "0.1.3"
+  },
+  "devDependencies": {
+    "socket.io": "1.0.6",
+    "mocha": "1.16.2",
+    "zuul": "1.6.3",
+    "istanbul": "0.2.1",
+    "expect.js": "0.2.0",
+    "uglify-js": "2.4.8",
+    "browserify": "2.35.1",
+    "base64-arraybuffer": "0.1.0",
+    "text-blob-builder": "0.0.1",
+    "has-cors": "1.0.3"
+  },
+  "scripts": {
+    "test": "make test"
+  },
+  "contributors": [
+    {
+      "name": "Guillermo Rauch",
+      "email": "rauchg@gmail.com"
+    },
+    {
+      "name": "Arnout Kazemier",
+      "email": "info@3rd-eden.com"
+    },
+    {
+      "name": "Vladimir Dronnikov",
+      "email": "dronnikov@gmail.com"
+    },
+    {
+      "name": "Einar Otto Stangvik",
+      "email": "einaros@gmail.com"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/LearnBoost/socket.io-client.git"
+  },
+  "license": "MIT",
+  "gitHead": "191b342e552eaeb0c117c7aa932f180e46253922",
+  "description": "[![Build Status](https://secure.travis-ci.org/Automattic/socket.io-client.png)](http://travis-ci.org/Automattic/socket.io-client) [![NPM version](https://badge.fury.io/js/socket.io-client.png)](http://badge.fury.io/js/socket.io-client)",
+  "bugs": {
+    "url": "https://github.com/LearnBoost/socket.io-client/issues"
+  },
+  "homepage": "https://github.com/LearnBoost/socket.io-client",
+  "_id": "socket.io-client@1.0.6",
+  "_shasum": "c86cb3e507ab2f96da4500bd34fcf46a1e9dfe5e",
+  "_from": "socket.io-client@1.0.6",
+  "_npmVersion": "1.4.14",
+  "_npmUser": {
+    "name": "rauchg",
+    "email": "rauchg@gmail.com"
+  },
+  "maintainers": [
+    {
+      "name": "rauchg",
+      "email": "rauchg@gmail.com"
+    }
+  ],
+  "dist": {
+    "shasum": "c86cb3e507ab2f96da4500bd34fcf46a1e9dfe5e",
+    "tarball": "http://registry.npmjs.org/socket.io-client/-/socket.io-client-1.0.6.tgz"
+  },
+  "directories": {},
+  "_resolved": "https://registry.npmjs.org/socket.io-client/-/socket.io-client-1.0.6.tgz"
+}
