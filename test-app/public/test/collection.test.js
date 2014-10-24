@@ -161,7 +161,7 @@ describe('Collection', function() {
       it('should sanitize the owner due to incorrect type', function(done) {
         dpd.todos.post({title: "foo", owner: 7}, function (todo, err) {
           delete todo.id;
-          expect(todo).to.eql({title: "foo", done: false});
+          expect(todo).to.eql({title: "foo", owner: '7', done: false});
           done();
         });
       });
@@ -383,7 +383,7 @@ describe('Collection', function() {
                   name: 'Tom',
                   age: 13
                 }
-            }});    	  
+            }});
         dpd.todos.get({'people.info.name': 'Tom'}, function (todos) {
           expect(todos.length).to.equal(1);
           expect(todos[0].people.info.name).to.equal('Tom');
