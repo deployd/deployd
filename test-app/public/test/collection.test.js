@@ -90,6 +90,13 @@ describe('Collection', function() {
           });
         });
       });
+      it('should return a promise that is fulfilled', function(done) {
+        dpd.todos.post({title: 'faux'}).then(function(todo) {
+          expect(todo.id.length).to.equal(16);
+          expect(todo.title).to.equal('faux');
+          done();
+        });
+      });
     });
 
     describe('.post({title: "notvalid"}, fn)', function() {
@@ -116,6 +123,17 @@ describe('Collection', function() {
     describe('.post({message: "notvalid"}, fn)', function() {
       it('should properly return an error', function(done) {
         dpd.todos.post({message: "notvalid"}, function(result, err) {
+          expect(err).to.exist;
+          expect(err.errors).to.exist;
+          expect(err.errors.message).to.equal("Message must not be notvalid");
+          done();
+        });
+      });
+
+      it('should return a promise that is rejected', function(done) {
+        dpd.todos.post({message: "notvalid"}).then(function(todo) {
+          done('promise should not be fulfilled');
+        }, function(err) {
           expect(err).to.exist;
           expect(err.errors).to.exist;
           expect(err.errors.message).to.equal("Message must not be notvalid");

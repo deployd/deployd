@@ -1,10 +1,9 @@
 language: node_js
 services: mongodb
 node_js:
-  - 0.8
   - 0.10
 
 branches:
   only:
     - master
-    
+
