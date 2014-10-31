@@ -22,6 +22,7 @@
     "fstream": "0.1.x",
     "fstream-ignore": "0.0.x",
     "http-proxy": "0.8.1",
+    "lodash": "^2.4.1",
     "mkdirp": "*",
     "mongodb": "1.0.2",
     "opener": "~1.3.0",
