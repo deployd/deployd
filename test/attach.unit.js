@@ -4,12 +4,15 @@ var rewire = require('rewire')
 ,	Store = require('../lib/db').Store
 ,	Router = require('../lib/router')
 ,	sh = require('shelljs')
-,	sinon = require('sinon');
+,	sinon = require('sinon')
+,	fs = require('fs')
+,   configLoader = require('../lib/config-loader')
+,   basepath = './test/support/proj';
+
 
 function MockServer () {}
 MockServer.prototype.listen = function () {};
 MockServer.prototype.on = function () {};
-
 
 attach.__set__('process', {});
 attach.__set__('http', {
@@ -17,6 +20,22 @@ attach.__set__('http', {
 });
 
 describe('attach', function() {
+    var old_loadConfig = null;
+    beforeEach(function() {
+        if (fs.existsSync(basepath)) {
+            sh.rm('-rf', basepath);
+        }
+        sh.mkdir('-p', basepath);
+        old_loadConfig = configLoader.loadConfig;
+    });
+    afterEach(function() {
+        if (fs.existsSync(basepath)) {
+            sh.rm('-rf', basepath);
+        }
+        configLoader.loadConfig = old_loadConfig;
+        delete process.server;
+    });
+
     var fakeHttpServer = new MockServer();
     var fakeSocketIo = {sockets:{on:function(){}}}
     var PORT;
@@ -24,7 +43,7 @@ describe('attach', function() {
 
     describe('overall', function() {
         beforeEach(function() {
-            sh.cd('./test/support/proj');
+            sh.cd(basepath);
             sh.rm('-rf', 'resources');
             sh.mkdir('resources');
 
@@ -68,12 +87,11 @@ describe('attach', function() {
             var server = attach(fakeHttpServer, opts);
             var req = {url: 'foo'};
             var res = {body: 'bar'};
-            var config = require('../lib/config-loader');
-            config.loadConfig = sinon.spy();
 
+            configLoader.loadConfig = sinon.spy();
             server.route(req, res);
 
-            expect(config.loadConfig.callCount).to.equal(1);
+            expect(configLoader.loadConfig.callCount).to.equal(1);
         });
 
 
@@ -82,7 +100,6 @@ describe('attach', function() {
             var req = {url: 'foo', headers: {accept: '*'}};
             var res = {body: 'bar', on: function () {}};
 
-            var configLoader = require('../lib/config-loader');
             configLoader.loadConfig = function (path, server, callback) {
                 callback.call(server, null, ['foo']);
             };
