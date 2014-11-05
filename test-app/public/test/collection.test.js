@@ -596,6 +596,86 @@ describe('Collection', function() {
       });
     });
 
+    describe('.put(id, {tags: {$addUnique: "red"}}, fn)', function() {
+      it('should update a set', function(done) {
+        chain(function(next) {
+          dpd.todos.post({title: 'foobar', tags: ['blue', 'green']}, next);
+        }).chain(function(next, result) {
+          dpd.todos.put(result.id, {tags: {$addUnique: "red"}}, next);
+        }).chain(function(next, result) {
+          expect(result.tags.length).to.equal(3);
+          expect(result.tags).to.include("red").and.include("blue").and.include("green");
+          done();
+        });
+      });
+
+      it('should update an empty array', function(done) {
+        chain(function(next) {
+          dpd.todos.post({title: 'foobar'}, next);
+        }).chain(function(next, result) {
+          dpd.todos.put(result.id, {tags: {$addUnique: "red"}}, next);
+        }).chain(function(next, result) {
+          expect(result.tags.length).to.equal(1);
+          expect(result.tags).to.include("red");
+          done();
+        });
+      });
+
+      it('should not update a set if element already exists', function(done) {
+        chain(function(next) {
+          dpd.todos.post({title: 'foobar', tags: ['red', 'green']}, next);
+        }).chain(function(next, result) {
+          dpd.todos.put(result.id, {tags: {$addUnique: "red"}}, next);
+        }).chain(function(next, result) {
+          expect(result.tags.length).to.equal(2);
+          expect(result.tags).to.include("red").and.include("green");
+          done();
+        });
+      });
+
+    });
+
+    describe('.put(id, {tags: {$addUnique: ["yellow", "magenta", "violet"]}}, fn)', function() {
+      it('should update a set', function(done) {
+        chain(function(next) {
+          dpd.todos.post({title: 'foobar', tags: ['red', 'blue', 'green']}, next);
+        }).chain(function(next, result) {
+          dpd.todos.put(result.id, {tags: {$addUnique: ["yellow", "magenta", "violet"]}}, next);
+        }).chain(function(next, result) {
+          expect(result.tags.length).to.equal(6);
+          expect(result.tags).to.include("red").and.include("blue").and.include("green")
+            .and.include("yellow").and.include("magenta").and.include("violet");
+          done();
+        });
+      });
+
+      it('should update an empty array', function(done) {
+        chain(function(next) {
+          dpd.todos.post({title: 'foobar'}, next);
+        }).chain(function(next, result) {
+          dpd.todos.put(result.id, {tags: {$addUnique: ["yellow", "magenta", "violet"]}}, next);
+        }).chain(function(next, result) {
+          expect(result.tags.length).to.equal(3);
+          expect(result.tags).to.include("yellow").and.include("magenta").and.include("violet");
+          done();
+        });
+      });
+
+      it('should not update a set if element already exists', function(done) {
+        chain(function(next) {
+          dpd.todos.post({title: 'foobar', tags: ['red', 'blue', 'green', 'yellow', 'magenta']}, next);
+        }).chain(function(next, result) {
+          dpd.todos.put(result.id, {tags: {$addUnique: ["yellow", "magenta", "violet"]}}, next);
+        }).chain(function(next, result) {
+          expect(result.tags.length).to.equal(6);
+          expect(result.tags).to.include("red").and.include("blue").and.include("green")
+            .and.include("yellow").and.include("magenta").and.include("violet");
+          done();
+        });
+      });
+
+    });
+
     describe('.put({done: true})', function(){
       it('should not update multiple items', function(done) {
         chain(function(next) {
