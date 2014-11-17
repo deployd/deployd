@@ -89,5 +89,42 @@ describe('config-loader', function() {
         done();
       });
     });
+
+    it('should use public_dir option if available', function(done) {
+      sh.mkdir('-p', path.join(basepath, 'resources'));
+      configLoader.loadConfig(basepath, {}, function(err, resourceList) {
+          if (err) return done(err);
+          expect(resourceList[0].config.public).to.equal('./public');
+      });
+
+      var opts = {};
+      opts.options = {};
+      opts.options.public_dir = 'test';
+
+      configLoader.loadConfig(basepath, opts, function(err, resourceList) {
+          if (err) return done(err);
+          expect(resourceList[0].config.public).to.equal('test');
+      });
+      done();
+    });
+
+    it('should use env options path if exists', function(done) {
+      sh.mkdir('-p', path.join(basepath, 'resources'));
+
+      var public_dir = basepath + '/test';
+
+      var opts = {};
+      opts.options = {};
+      opts.options.public_dir = public_dir;
+      opts.options.env = 'dev';
+
+      sh.mkdir('-p', public_dir + '-dev');
+
+      configLoader.loadConfig(basepath, opts, function(err, resourceList) {
+          if (err) return done(err);
+          expect(resourceList[0].config.public).to.equal(public_dir + '-dev');
+          done();
+      });
+    });
   });
 });
