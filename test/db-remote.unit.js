@@ -6,13 +6,15 @@ var fs = require('fs')
   , assert = require('assert')
   , mongodb = require('mongodb');
 
-var mdb = new mongodb.Db(config.name, new mongodb.Server(config.host, config.port));
+var mdc = new mongodb.MongoClient(new mongodb.Server(config.host, config.port), {w:'majority'});
+var mdb;
 
 before(function(done){
-  mdb.open(function (err) {
+  mdc.open(function (err) {
     if(err) {
       done(err);
     } else {
+      mdb = mdc.db(config.name);
       mdb.removeUser(config.credentials.username, function (err) {
         if(err) return done(err);
         mdb.addUser(config.credentials.username, config.credentials.password, done)
@@ -23,7 +25,7 @@ before(function(done){
 
 after(function(done){
   mdb.removeUser(config.credentials.username, function (err) {
-    mdb.close();
+    mdc.close();
     done(err);
   });
 });

@@ -44,14 +44,15 @@ freq = function(url, options, fn, callback) {
 };
 
 before(function (done) {
-  var mdb = new mongodb.Db(TEST_DB.name, new mongodb.Server(TEST_DB.host, TEST_DB.port));
-  mdb.open(function (err) {
+  var mdc = new mongodb.MongoClient(new mongodb.Server(TEST_DB.host, TEST_DB.port));
+  mdc.open(function (err) {
+    var mdb = mdc.db(TEST_DB.name);
     if(err) {
       done(err);
     } else {
       mdb.dropDatabase(function (err) {
         done(err);
-        mdb.close();
+        mdc.close();
       });
     }
   });
