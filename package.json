@@ -31,7 +31,7 @@
     "scrubber": "*",
     "semver": "~4.1.0",
     "send": "0.0.2",
-    "shelljs": "https://github.com/dallonf/shelljs/tarball/master",
+    "shelljs": "^0.3.0",
     "socket.io": "0.9.x",
     "step": ">=0.0.5",
     "underscore": "1.x.x",
