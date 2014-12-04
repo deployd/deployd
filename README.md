@@ -1,6 +1,7 @@
-# deployd v0.7.0
+# deployd
 
-[![Build Status](https://secure.travis-ci.org/deployd/deployd.png)](http://travis-ci.org/deployd/deployd)
+[![Current Version](https://img.shields.io/npm/v/deployd.svg?style=flat-square)](https://www.npmjs.org/package/deployd)  
+[![Build Status](https://img.shields.io/travis/deployd/deployd.svg?style=flat-square)](http://travis-ci.org/deployd/deployd)
 
 ## overview
 
@@ -21,7 +22,7 @@ Deployd is the simplest way to build realtime APIs for web and mobile apps. Read
 	
 ## helpful resources
 
- - [Docs](http://docs.deployd.com/) ([Temporary mirror](http://ericfong.github.io/deployd-docs/))
+ - [Docs](http://docs.deployd.com/)
  - [Getting Started Guide](http://docs.deployd.com/docs/getting-started/what-is-deployd.md)
  - [Hello World Tutorial](http://docs.deployd.com/docs/getting-started/your-first-api.md)
  - [API Docs](http://docs.deployd.com/api)
