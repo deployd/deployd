@@ -1,3 +1,27 @@
+# Modification
+
+In my current project I am using Deployd as server of test (like a mock of the remote server). I communicate remote with the Deployd server through HTTP, but to have more control about the data I decided include the dpd.js. So, to include the script I must reference the script in my html like:
+
+```HTML
+<script src="http://localhost:2403/dpd.js"></script>
+```
+
+The problem if that if my server run on another port the dpd script try to recover data from the port of my app instead of the port where it run, in this case 2403. 
+
+To Improve the script I add a function that let you configure the BaseUrl, the default behavior is keep it and you can change it calling this function at the begin of your application like this:
+
+```
+dpd.setupBaseUrl(protocol, hostname, port)
+```
+
+If you omit protocol will be used ```window.location.protocol```, if you omit hostname will be used ```window.location.hostname``` and port = ```window.location.port```
+
+In my real case I change it like this:
+
+```
+dpd.setupBaseUrl(null, null, 2403)
+```
+
 # deployd
 
 [![Current Version](https://img.shields.io/npm/v/deployd.svg?style=flat-square)](https://www.npmjs.org/package/deployd)  
