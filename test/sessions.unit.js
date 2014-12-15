@@ -35,6 +35,33 @@ describe('SessionStore', function() {
 			});
 		});
 	});
+
+	describe('.getSession(uid)', function() {
+		it('should get back the created session', function(done) {
+			var store = new SessionStore('sessions', db.create(TEST_DB));
+
+			store.createSession(function (err, session) {
+				expect(session.sid).to.have.length(128);
+
+				// set the session uid
+				session.set({uid: 'my-uid'}).save(function(err, data){
+
+					// create again from store
+					store.createSession(session.sid, function (err, session2) {
+						
+						// get back the session
+						var s = store.getSession('my-uid');
+						console.log(s);
+						expect(s.sid).to.equal(session.sid);
+						
+						done(err);
+						
+					})
+					
+				});
+			});
+		});
+	});
 });
 
 describe('Session', function() {
@@ -57,7 +84,7 @@ describe('Session', function() {
 		store.createSession(function (err, session) {
 			// generate faux headers
 			fauxSocket.handshake = { headers: {cookie: 'name=value; name2=value2; sid=' + session.sid} };
-			
+
 			// bind to an event even before a connection has been made
 			session.socket.on('test', function (data) {
 				expect(data).to.equal(123);
