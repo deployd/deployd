@@ -19,8 +19,6 @@
     "doh": "^0.0.4",
     "ejs": "^1.0.0",
     "filed": "^0.0.6",
-    "fstream": "^1.0.3",
-    "fstream-ignore": "^1.0.2",
     "http-proxy": "0.8.1",
     "mkdirp": "*",
     "mongodb": "1.0.2",
