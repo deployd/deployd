@@ -51,7 +51,6 @@ describe('SessionStore', function() {
 						
 						// get back the session
 						var s = store.getSession('my-uid');
-						console.log(s);
 						expect(s.sid).to.equal(session.sid);
 						
 						done(err);
