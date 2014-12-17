@@ -219,47 +219,67 @@ git branch -D my-fix-branch
 git pull --ff upstream master
 ```
 
-## Maintainers Guidelines
+## Maintainers Rebase Guide
 
 To keep a flat and readable code history and revert easier, we rebase pull requests instead of merging them. It means that we can't use the github merge feature.
-1. Make a fork of deployd (or use the one you probably already have and make sure it's even with Deployd)
-2. Set the main Deployd repo as upstream remote 
-````shell
-git remote add upstream git@github.com:deployd/deployd.git
-````
+
+1. Make a [fork of deployd](https://github.com/deployd/deployd/fork) (or use the one you probably already have and make sure it's even with Deployd)
+
+2. Set the main Deployd repo as upstream remote
+
+  ````shell
+  git remote add upstream git@github.com:deployd/deployd.git
+  ````
 
 3. Fetch the pull request you want to rebase
-````shell
-git fetch upstream pull/$PR/head:$BRANCH
-````
-$PR is the number ID of the PR and $branch is the name of the temporary branch you'll use for that (ie. pr_432))
+
+  ````shell
+  git fetch upstream pull/${PR}/head:${BRANCH}
+  ````
+  $PR is the ID of the PR and $branch is the name of the temporary branch you'll use for that (ie. ```git fetch upstream pull/440/head:pr-440```)
 
 4. Checkout this new branch
-````shell
-git checkout $BRANCH
-````
+
+  ````shell
+  git checkout ${BRANCH}
+  ````
 
 5. Do the rebase
-````shell
-git rebase origin/master
-````
 
-6. Verify that the commit message follows the guidelines, if not, amend it
-````shell
-git commit --amend -m "New commit message"
-````
+  ````shell
+  git fetch upstream master
+  git rebase upstream/master
+  ````
 
-7. Run the tests
-````shell
-npm test && cd test-app && ../bin/dpd -o
-````
+6. If the PR contains multiple commits, squash them
 
-8. Push to upstream
-````shell
-git push upstream $BRANCH:master
-````
+  ````shell
+  git rebase -i HEAD~${COMMIT_NUMBER}
+  ````
+  ${COMMIT_NUMBER} being the number of commits you want to squash (ex: ```git rebase -i HEAD~2``` to squash 2 commits)
 
-9. Close the PR with the message
-````shell
-landed as $COMMIT_SHA
-````
+7. Verify that the commit message follows the guidelines, if not, amend it
+
+  ````shell
+  git commit --amend -m "Fix(collection): add check for id"
+  ````
+
+8. Run the tests
+
+  ````shell
+  npm test && cd test-app && ../bin/dpd -o
+  ````
+
+9. Push to upstream
+
+  ````shell
+  git push upstream ${BRANCH}:master
+  ````
+  ie: ```git push upstream pr-440:master```
+
+10. Close the PR with the message
+
+  ````shell
+  landed as ${COMMIT_SHA}
+  Thanks for your contribution!
+  ````
