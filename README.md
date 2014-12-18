@@ -1,6 +1,9 @@
-# deployd v0.6.11
+# deployd
 
-[![Build Status](https://secure.travis-ci.org/deployd/deployd.png)](http://travis-ci.org/deployd/deployd)
+[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/deployd/deployd?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
+[![Current Version](https://img.shields.io/npm/v/deployd.svg?style=flat-square)](https://www.npmjs.org/package/deployd)  
+[![Build Status](https://img.shields.io/travis/deployd/deployd.svg?style=flat-square)](http://travis-ci.org/deployd/deployd)
 
 ## overview
 
@@ -8,13 +11,10 @@ Deployd is the simplest way to build realtime APIs for web and mobile apps. Read
 
 [Read more about deployd](http://deployd.com)
 
-## install osx
-
-[Download](http://deployd.com/download.html) the installer.
 
 ## install win
 
-[Download](http://deployd.com/download.html) the installer.
+[Download](http://deployd.com) the installer.
 
 ## quick start
 
@@ -25,8 +25,8 @@ Deployd is the simplest way to build realtime APIs for web and mobile apps. Read
 ## helpful resources
 
  - [Docs](http://docs.deployd.com/)
- - [Getting Started Guide](http://docs.deployd.com/docs/getting-started/what-is-deployd.md)
- - [Hello World Tutorial](http://docs.deployd.com/docs/getting-started/your-first-api.md)
+ - [Getting Started Guide](http://docs.deployd.com/docs/getting-started/what-is-deployd.html)
+ - [Hello World Tutorial](http://docs.deployd.com/docs/getting-started/your-first-api.html)
  - [API Docs](http://docs.deployd.com/api)
  - [Community Discussion Page](http://deployd.com/community.html)
  - [Example Apps](http://docs.deployd.com/examples/)

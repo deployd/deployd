@@ -90,6 +90,13 @@ describe('Collection', function() {
           });
         });
       });
+      it('should return a promise that is fulfilled', function(done) {
+        dpd.todos.post({title: 'faux'}).then(function(todo) {
+          expect(todo.id.length).to.equal(16);
+          expect(todo.title).to.equal('faux');
+          done();
+        });
+      });
     });
 
     describe('.post({title: "notvalid"}, fn)', function() {
@@ -123,6 +130,17 @@ describe('Collection', function() {
         });
       });
 
+      it('should return a promise that is rejected', function(done) {
+        dpd.todos.post({message: "notvalid"}).then(function(todo) {
+          done('promise should not be fulfilled');
+        }, function(err) {
+          expect(err).to.exist;
+          expect(err.errors).to.exist;
+          expect(err.errors.message).to.equal("Message must not be notvalid");
+          done();
+        });
+      });
+
       it('should not post the message', function(done) {
         chain(function(next) {
           dpd.todos.post({title: "$POSTERROR"}, next);
@@ -140,10 +158,10 @@ describe('Collection', function() {
     });
 
     describe('.post({title: "foo", owner: 7}, fn)', function() {
-      it('should sanitize the owner due to incorrect type', function(done) {
+      it('should coerce numbers to strings when querying string properties', function(done) {
         dpd.todos.post({title: "foo", owner: 7}, function (todo, err) {
           delete todo.id;
-          expect(todo).to.eql({title: "foo", done: false});
+          expect(todo).to.eql({title: "foo", done: false, owner: '7'});
           done();
         });
       });
@@ -343,33 +361,23 @@ describe('Collection', function() {
 
     describe('.get({"people.info.name": "Tom"}, fn)', function() {
       it('should create a todo', function(done) {
-        dpd.todos.post({title: 'Tom',
-          people:
-          {
-            info:
-            {
-              name: 'Tom',
-              age: 13
-            }
-        }}, function (todo) {
+        var tom = {name: 'Tom', age: 13};
+        var june = {name: 'June', age: 27};
+        var post1 = {title: 'Some post', people: {info: tom}};
+        var post2 = {title: 'Another post', people: {info: june}};
+
+        dpd.todos.post(post1, function (todo, result) {
           expect(todo.people.info.name).to.equal('Tom');
-          done();
-        });
-      });
-      it('should get Tom', function(done) {
-    	  dpd.todos.post({title: 'Tom',
-              people:
-              {
-                info:
-                {
-                  name: 'Tom',
-                  age: 13
-                }
-            }});    	  
-        dpd.todos.get({'people.info.name': 'Tom'}, function (todos) {
-          expect(todos.length).to.equal(1);
-          expect(todos[0].people.info.name).to.equal('Tom');
-          done();
+          dpd.todos.post(post2, function (todo) {
+            dpd.todos.get(function (todos) {
+              expect(todos.length).to.equal(2);
+            });
+            dpd.todos.get({'people.info.name': 'Tom'}, function (todos) {
+              expect(todos.length).to.equal(1);
+              expect(todos[0].people.info.name).to.equal('Tom');
+              done();
+            })
+          });
         });
       });
     });
@@ -576,6 +584,86 @@ describe('Collection', function() {
           done();
         });
       });
+    });
+
+    describe('.put(id, {tags: {$addUnique: "red"}}, fn)', function() {
+      it('should update a set', function(done) {
+        chain(function(next) {
+          dpd.todos.post({title: 'foobar', tags: ['blue', 'green']}, next);
+        }).chain(function(next, result) {
+          dpd.todos.put(result.id, {tags: {$addUnique: "red"}}, next);
+        }).chain(function(next, result) {
+          expect(result.tags.length).to.equal(3);
+          expect(result.tags).to.include("red").and.include("blue").and.include("green");
+          done();
+        });
+      });
+
+      it('should update an empty array', function(done) {
+        chain(function(next) {
+          dpd.todos.post({title: 'foobar'}, next);
+        }).chain(function(next, result) {
+          dpd.todos.put(result.id, {tags: {$addUnique: "red"}}, next);
+        }).chain(function(next, result) {
+          expect(result.tags.length).to.equal(1);
+          expect(result.tags).to.include("red");
+          done();
+        });
+      });
+
+      it('should not update a set if element already exists', function(done) {
+        chain(function(next) {
+          dpd.todos.post({title: 'foobar', tags: ['red', 'green']}, next);
+        }).chain(function(next, result) {
+          dpd.todos.put(result.id, {tags: {$addUnique: "red"}}, next);
+        }).chain(function(next, result) {
+          expect(result.tags.length).to.equal(2);
+          expect(result.tags).to.include("red").and.include("green");
+          done();
+        });
+      });
+
+    });
+
+    describe('.put(id, {tags: {$addUnique: ["yellow", "magenta", "violet"]}}, fn)', function() {
+      it('should update a set', function(done) {
+        chain(function(next) {
+          dpd.todos.post({title: 'foobar', tags: ['red', 'blue', 'green']}, next);
+        }).chain(function(next, result) {
+          dpd.todos.put(result.id, {tags: {$addUnique: ["yellow", "magenta", "violet"]}}, next);
+        }).chain(function(next, result) {
+          expect(result.tags.length).to.equal(6);
+          expect(result.tags).to.include("red").and.include("blue").and.include("green")
+            .and.include("yellow").and.include("magenta").and.include("violet");
+          done();
+        });
+      });
+
+      it('should update an empty array', function(done) {
+        chain(function(next) {
+          dpd.todos.post({title: 'foobar'}, next);
+        }).chain(function(next, result) {
+          dpd.todos.put(result.id, {tags: {$addUnique: ["yellow", "magenta", "violet"]}}, next);
+        }).chain(function(next, result) {
+          expect(result.tags.length).to.equal(3);
+          expect(result.tags).to.include("yellow").and.include("magenta").and.include("violet");
+          done();
+        });
+      });
+
+      it('should not update a set if element already exists', function(done) {
+        chain(function(next) {
+          dpd.todos.post({title: 'foobar', tags: ['red', 'blue', 'green', 'yellow', 'magenta']}, next);
+        }).chain(function(next, result) {
+          dpd.todos.put(result.id, {tags: {$addUnique: ["yellow", "magenta", "violet"]}}, next);
+        }).chain(function(next, result) {
+          expect(result.tags.length).to.equal(6);
+          expect(result.tags).to.include("red").and.include("blue").and.include("green")
+            .and.include("yellow").and.include("magenta").and.include("violet");
+          done();
+        });
+      });
+
     });
 
     describe('.put({done: true})', function(){

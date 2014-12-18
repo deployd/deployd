@@ -11,11 +11,9 @@ var program = require('commander')
   , path = require('path')
   , fs = require('fs')
   , tty = require('tty')
-  , remote = require('../lib/client/remote')
   , request = require('request')
   , packageInfo = require('../package')
   , latestversionFile = path.join(__dirname, '../.latestversion')
-  , Deployment = require('../lib/client/deploy').Deployment
   , Step = require('step')
   , open = require('../lib/util/open')
   , semver = require('semver')
@@ -246,64 +244,6 @@ program
     });
   });
 
-program
-  .command('remote')
-  .description('\topen the remote dashboard in your browser')
-  .action(function() {
-    var d = new Deployment('.');
-    var host = '';
-
-    var config = d.getConfig();
-    console.log(config);
-    host = Object.keys(config)[0];
-
-    if (host) {
-      open('http://' + host + '/dashboard/');
-    } else {
-      console.log("This app has not yet been deployed");
-    }
-  });
-
-program
-  .command('deploy [subdomain]')
-  .description('\tdeploy a testing instance on deploydapp.com')
-  .action(function (subdomain) {
-    try {
-      var d = new Deployment('.', null, subdomain)
-        , tar = './.dpd/package.tgz'
-        , DPDAPP_URL = 'http://deploydapp.com'
-        , Keys = require('../lib/keys')
-        , keys = new Keys();
-
-      if (process.env.DPDAPP_PORT) DPDAPP_URL += ':' + process.env.DPDAPP_PORT;
-
-      keys.getLocal(function (err, key) {
-        if(err) return console.error(err);
-        if(key) {
-          deploy(key);
-        } else {
-          keys.create(function(err, key) {
-            if(err) return console.error(err);
-            deploy(key);
-          });
-        }
-      });
-    } catch (ex) {
-      console.log(ex.message);
-    }
-
-    function deploy(key) {
-      console.log('packaging...');
-      d.package(tar, function (err) {
-        if(err) return console.error(err);
-        console.log('pushing...');
-        d.publish(DPDAPP_URL, tar, key, function (err) {
-          if(err) return console.error('failed to push:', err.message || 'could not push app to ' + DPDAPP_URL);
-          console.log('deployd app to http://' + d.subdomain + '.deploydapp.com!');
-        });
-      });
-    }
-  });
 
 program
   .command('*')

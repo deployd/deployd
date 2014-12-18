@@ -10,3 +10,7 @@ module.exports = function (config) {
   upgrade(server);
   return server;
 };
+
+
+
+module.exports.attach = require('./lib/attach');
