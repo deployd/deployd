@@ -77,6 +77,37 @@ describe('User Collection', function() {
           done();
         });
       });
+	  
+			it('should call login event', function(done) {
+				dpd.users.post(credentials, function (user, err) {
+					expect(user.id.length).to.equal(16);
+					
+					dpd.socketReady(function() {
+					  dpd.users.once('customLoginEvent', function() {
+						done();
+					  });
+
+					  dpd.users.login(credentials, function (session, err) {
+						expect(session.id.length).to.equal(128);
+						expect(session.uid.length).to.equal(16);
+						done(err);
+					  });
+					});
+					
+					
+				});
+			});
+			
+			it('should allow canceling login from login event', function(done) {
+				dpd.users.post({username: 'foo@bar.com', password: '123456'}, function (user, err) {
+					expect(user.id.length).to.equal(16);
+					  dpd.users.login({username: 'foo@bar.com', password: '123456', authtoken: 'notright'}, function (session, err) {
+						expect(err).to.exist;
+						expect(err.message).to.equal('bad auth');
+						done();
+					  });
+				});
+			});
 		});
 		describe('.me(fn)', function() {
 			it('should return the current user', function(done) {
