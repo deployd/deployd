@@ -11,7 +11,7 @@
   },
   "main": "index",
   "dependencies": {
-    "async": "0.1.x",
+    "async": "0.9.0",
     "commander": "^2.2.0",
     "cookies": ">= 0.3.0",
     "corser": "^2.0.0",
