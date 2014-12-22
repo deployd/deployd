@@ -16,7 +16,7 @@ before(function(done){
       mdb.removeUser(config.credentials.username, function (err) {
         // commented out because removing a non-existing user returns an error which we can safely ignore
         //if(err) return done(err);
-        mdb.addUser(config.credentials.username, config.credentials.password, done)
+        mdb.addUser(config.credentials.username, config.credentials.password, done);
       });
     }
   });
