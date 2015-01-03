@@ -29,7 +29,7 @@
     "semver": "^4.1.0",
     "shelljs": "^0.3.0",
     "send": "^0.10.1",
-    "socket.io": "0.9.x",
+    "socket.io": "1.2.1",
     "step": "^0.0.5",
     "underscore": "^1.7.0",
     "validation": "*",
