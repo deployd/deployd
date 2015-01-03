@@ -42,7 +42,7 @@
     "grunt-contrib-less": "^0.12.0",
     "less": "*",
     "mocha": "*",
-    "rewire": "~2.0.0",
+    "rewire": "~2.1.3",
     "sinon": "~1.12.1"
   },
   "bin": {
