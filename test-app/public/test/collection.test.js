@@ -1049,6 +1049,24 @@ describe('Collection', function() {
     });
   });
 
+     describe('previous()', function() {
+     it('should work with $pull and $push', function(done) {
+      dpd.previous.post({ sharedWith: [ 456 ], unsharedWith: [ 234 ] }, function(p) {
+                
+        dpd.previous.once("was", function (w) {
+          expect(w.sharedWith).to.include.members([456]);
+          expect(w.sharedWith).to.not.include.members([123]);    
+          done();
+        });
+
+        dpd.previous.put(p.id, { sharedWith: { '$push': 123 }, unsharedWith: { '$pull': 123 } }, function (p) {
+          expect(p.sharedWith[1]).to.equal(123);
+          expect(p.unsharedWith[1]).to.not.exist;
+        });
+      });
+     });
+   });
+  
   describe('changed()', function(){
     it('should detect when a value has changed', function(done) {
       dpd.changed.post({name: 'original'}, function (c) {

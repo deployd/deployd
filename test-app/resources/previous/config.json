@@ -1,0 +1,21 @@
+{
+	"type": "Collection",
+	"properties": {
+		"sharedWith": {
+			"name": "sharedWith",
+			"type": "array",
+			"typeLabel": "array",
+			"required": false,
+			"id": "sharedWith",
+			"order": 0
+		},
+		"unsharedWith": {
+			"name": "unsharedWith",
+			"type": "array",
+			"typeLabel": "array",
+			"required": false,
+			"id": "unsharedWith",
+			"order": 1
+		}
+	}
+}
