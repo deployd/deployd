@@ -47,6 +47,13 @@ Deployd is the simplest way to build realtime APIs for web and mobile apps. Read
 	mongod &
 	npm test
 
+Before running the tests, make sure that the ```dpd-faux-remote``` db contains the user foo:
+````shell
+$ mongo
+> use dpd-faux-remote
+> db.createUser({user:'foo', pwd:'secret',roles:['readWrite']})
+````
+
 ## integration tests
 	
 	cd test-app
