@@ -43,13 +43,15 @@
     "less": "*",
     "mocha": "*",
     "rewire": "~2.1.3",
-    "sinon": "~1.12.1"
+    "sinon": "~1.12.1",
+    "mocha-phantomjs": "3.5.2",
+    "phantomjs": "^1.9.13"
   },
   "bin": {
     "dpd": "./bin/dpd"
   },
   "scripts": {
-    "test": "mocha",
+    "test": "mocha && cd test-app && node ../bin/dpd -t \"node ../node_modules/mocha-phantomjs/bin/mocha-phantomjs http://localhost:2403\"",
     "docs": "node docs/src/build.js"
   }
 }

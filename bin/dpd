@@ -18,7 +18,8 @@ var program = require('commander')
   , open = require('../lib/util/open')
   , semver = require('semver')
   , Server = require('../lib/server')
-  , upgrade = require('doh').upgrade;
+  , upgrade = require('doh').upgrade
+  , sh = require('shelljs');
 
 /**
  * Get the version number from the package.json
@@ -36,6 +37,7 @@ program
   .option('-P, --mongoPort [mongoPort]', 'mongodb port to connect to')
   .option('-n, --dbname [dbname]', 'name of the mongo database')
   .option('-a, --auth', 'prompts for mongo server credentials')
+  .option('-t, --test [testCmd]', 'run a specified command and exit')
   ;
 
 /**
@@ -77,6 +79,7 @@ function start(file) {
     , env = program.environment || process.env.DPD_ENV || 'development'
     , retries = 0
     , credentials
+    , testCmd = program.test
     ;
 
   if (!port) {
@@ -175,11 +178,18 @@ function start(file) {
 
       function onListening () {
         console.info('listening on port', options.port);
-        var commands = repl(dpd);
-        if (program.dashboard) {
-          commands.dashboard();
-        } else if (program.open) {
-          commands.open();
+        if (program.test) {
+          console.log("Running command: " + program.test);
+          sh.exec(program.test, function (code, output){
+            process.exit(code); 
+          });
+        } else {
+          var commands = repl(dpd);
+          if (program.dashboard) {
+            commands.dashboard();
+          } else if (program.open) {
+            commands.open();
+          }  
         }
       }
 

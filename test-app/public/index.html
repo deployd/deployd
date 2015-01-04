@@ -20,7 +20,8 @@
   <div id="mocha"></div>
   <script>
     expect = chai.expect;
-    mocha.run();
+    if (window.mochaPhantomJS) { mochaPhantomJS.run(); }
+      else { mocha.run(); }
   </script>
 </body>
 </html>
