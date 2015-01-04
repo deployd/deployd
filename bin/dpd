@@ -158,7 +158,7 @@ function start(file) {
 
   function startup (err) {
       if (err) {
-        console.log("Failed to start MongoDB");
+        console.log("Failed to start MongoDB (Make sure your -m OR --mongod path is right OR env $PATH points to the mongod executable)");
         return stop(1);
       }
 
