@@ -181,7 +181,8 @@ function start(file) {
         if (program.test) {
           console.log("Running command: " + program.test);
           sh.exec(program.test, function (code, output){
-            process.exit(code); 
+		    console.log("Command exited with code: " + code);
+            stop(code); 
           });
         } else {
           var commands = repl(dpd);
