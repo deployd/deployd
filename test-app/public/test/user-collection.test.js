@@ -13,7 +13,7 @@ describe('User Collection', function() {
 					}
 					expect(user.id.length).to.equal(16);
 					delete user.id;
-					expect(user).to.eql({username: credentials.username});
+					expect(user).to.contain({username: credentials.username});
 					done(err);
 				});
 			});
@@ -78,37 +78,91 @@ describe('User Collection', function() {
         });
       });
 	  
-			it('should call login event', function(done) {
-				dpd.users.post(credentials, function (user, err) {
-					expect(user.id.length).to.equal(16);
-					
-					dpd.socketReady(function() {
-					  dpd.once('customLoginEvent', function() {
-						done();
-					  });
+      it('should call login event and provide access to user in event', function(done) {
+        dpd.users.post(credentials, function (user, err) {
+          expect(user.id.length).to.equal(16);
+          
+          dpd.socketReady(function() {
+            dpd.users.once('test_event', function(u) {
+              expect(u['this']).to.eql(user);
+              done();
+            });
 
-					  dpd.users.login(credentials, function (session, err) {
-						expect(session.id.length).to.equal(128);
-						expect(session.uid.length).to.equal(16);
-						expect(err).to.not.exist;
-					  });
-					});
-					
-					
-				});
-			});
-			
-			it('should allow canceling login from login event', function(done) {
-				dpd.users.post({username: 'foo@bar.com', password: '123456'}, function (user, err) {
-					expect(user.id.length).to.equal(16);
-					  dpd.users.login({username: 'foo@bar.com', password: '123456', authtoken: 'notright'}, function (session, err) {
-						expect(err).to.exist;
-						expect(err.message).to.equal('bad auth');
-						done();
-					  });
-				});
-			});
-		});
+            dpd.users.login(credentials, function (session, err) {
+              expect(session.id.length).to.equal(128);
+              expect(session.uid.length).to.equal(16);
+              expect(err).to.not.exist;
+            });
+          });
+        });
+      });
+      
+      // see the code in login.js in the users collection for more details about what these tests assume
+      it('should allow canceling login from login event', function (done) {
+        dpd.users.post({username: 'foo@bar.com', password: '123456'}, function (user, err) {
+          expect(user.id.length).to.equal(16);
+          dpd.users.login({username: 'foo@bar.com', password: '123456', authtoken: '$BAD_AUTH'}, function (session, err) {
+            expect(err).to.exist;
+            expect(err.message).to.equal('bad auth');
+            done();
+          });
+        });
+      });
+        
+      it('should allow updating the user from the login event', function (done) {
+        dpd.users.post({ username: 'foo2@bar.com', password: '123456' }, function (user, err) {
+          expect(user.id.length).to.equal(16);
+          expect(user.lastLoginTime).to.not.exist;
+          dpd.users.login({ username: 'foo2@bar.com', password: '123456' }, function (session, err) {
+            expect(session.id.length).to.equal(128);
+            expect(session.uid.length).to.equal(16);
+            expect(err).to.not.exist;
+            dpd.users.get(session.uid, function (user, err) {
+              expect(err).to.not.exist;
+              expect(user.lastLoginTime).to.be.above(0);
+              done();
+            });
+          });
+        });
+      });
+		    
+      it('should allow updating the user from the login event when login fails', function (done) {
+        dpd.users.post({ username: 'foo3@bar.com', password: '123456' }, function (user, err) {
+          expect(user.id.length).to.equal(16);
+          
+          // try 4 bad logins; the logic in the login event will ban the user after 3 failed attempts
+          chain(function (next) {
+            dpd.users.login({ username: 'foo3@bar.com', password: 'bad' }, next);
+          }).chain(function (next, session, err) {
+            expect(err).to.exist;
+            expect(err.message).to.equal('bad credentials');
+            expect(session).to.not.exist;
+            dpd.users.login({ username: 'foo3@bar.com', password: 'bad' }, next);
+          }).chain(function (next) {
+            dpd.users.login({ username: 'foo3@bar.com', password: 'bad' }, next);
+          }).chain(function (next) {
+            dpd.users.login({ username: 'foo3@bar.com', password: 'bad' }, next);
+          }).chain(function (next, session, err) {
+            // user should be banned
+            expect(err).to.exist;
+            expect(err.message).to.equal('banned');
+            expect(session).to.not.exist;
+            // remove ban
+            dpd.users.put(user.id, { banned: false }, next);
+          }).chain(function (next, user, err) {
+            expect(err).to.not.exist;
+            // try a proper login this time
+            dpd.users.login({ username: 'foo3@bar.com', password: '123456' }, next);
+          }).chain(function (next, session, err) {
+            expect(session.id.length).to.equal(128);
+            expect(session.uid.length).to.equal(16);
+            expect(err).to.not.exist;
+            done();
+          });                  
+        });
+      });     
+    });
+	    
 		describe('.me(fn)', function() {
 			it('should return the current user', function(done) {
 				dpd.users.post(credentials, function (user, err) {
