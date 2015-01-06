@@ -160,7 +160,16 @@ describe('User Collection', function() {
             done();
           });                  
         });
-      });     
+      });
+
+      it('should call login event even when user does not exist', function (done) {
+        dpd.users.login({ username: 'foo123456@bar.com', password: '123456' }, function (session, err) {
+          expect(err).to.exist;
+          expect(err.message).to.equal('no such user');
+          expect(session).to.not.exist;
+          done();
+        });
+		  });
     });
 	    
 		describe('.me(fn)', function() {
