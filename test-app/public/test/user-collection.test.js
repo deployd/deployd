@@ -169,7 +169,7 @@ describe('User Collection', function() {
           expect(session).to.not.exist;
           done();
         });
-		  });
+      });
     });
 	    
 		describe('.me(fn)', function() {
