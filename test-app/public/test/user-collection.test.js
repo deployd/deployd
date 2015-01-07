@@ -125,7 +125,7 @@ describe('User Collection', function() {
           });
         });
       });
-		    
+
       it('should allow updating the user from the login event when login fails', function (done) {
         dpd.users.post({ username: 'foo3@bar.com', password: '123456' }, function (user, err) {
           expect(user.id.length).to.equal(16);
@@ -168,6 +168,30 @@ describe('User Collection', function() {
           expect(err.message).to.equal('no such user');
           expect(session).to.not.exist;
           done();
+        });
+      });
+      
+      it('should not crash server when login is called repeatedly', function (done) {
+        this.timeout(10000);
+        dpd.users.post({ username: 'foo@bar.com', password: '123456' }, function (user, err) {
+          expect(user.id.length).to.equal(16);
+          var numDone = 0;
+          var numTries = 20;
+          function loginDone(session, err) {
+            numDone++;
+            expect(session).to.exist;
+            expect(err).to.not.exist;
+            if (numDone == numTries) {
+              done();
+            } else {
+              doLogin();
+            }
+          }
+          function doLogin() {
+            dpd.users.login({ username: 'foo@bar.com', password: '123456' }, loginDone);
+          }
+          
+          doLogin();
         });
       });
     });
