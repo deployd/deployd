@@ -37,7 +37,7 @@ program
   .option('-P, --mongoPort [mongoPort]', 'mongodb port to connect to')
   .option('-n, --dbname [dbname]', 'name of the mongo database')
   .option('-a, --auth', 'prompts for mongo server credentials')
-  .option('-t, --test [testCmd]', 'run a specified command and exit')
+  .option('-e, --execute [cmd]', 'executes a command after starting and exit')
   ;
 
 /**
@@ -79,7 +79,7 @@ function start(file) {
     , env = program.environment || process.env.DPD_ENV || 'development'
     , retries = 0
     , credentials
-    , testCmd = program.test
+    , executeCommand = program.execute
     ;
 
   if (!port) {
@@ -178,10 +178,10 @@ function start(file) {
 
       function onListening () {
         console.info('listening on port', options.port);
-        if (program.test) {
-          console.log("Running command: " + program.test);
-          sh.exec(program.test, function (code, output){
-		    console.log("Command exited with code: " + code);
+        if (executeCommand) {
+          console.log("Running command: " + executeCommand);
+          sh.exec(executeCommand, function (code, output){
+            console.log("Command exited with code: " + code);
             stop(code); 
           });
         } else {

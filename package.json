@@ -51,7 +51,7 @@
     "dpd": "./bin/dpd"
   },
   "scripts": {
-    "test": "mocha && cd test-app && node ../bin/dpd -t \"node ../node_modules/mocha-phantomjs/bin/mocha-phantomjs http://localhost:2403\"",
+    "test": "mocha && cd test-app && node ../bin/dpd --execute \"node ../node_modules/mocha-phantomjs/bin/mocha-phantomjs http://localhost:2403\"",
     "docs": "node docs/src/build.js"
   }
 }
