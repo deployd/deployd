@@ -953,6 +953,33 @@ describe('Collection', function() {
 
   });
 
+  describe('internal client', function () {
+    before(function(done) {
+      cleanCollection(dpd.internalclientmaster, done);
+    });
+    it("should work properly with normal callbacks and promises", function (done) {
+      var masterId;
+      var children = [];
+      dpd.internalclientmaster.post({ title: "hello" }).then(function (data) {
+        masterId = data.id;
+        return dpd.internalclientdetail.post({ masterId: masterId, data: "data 1" });
+      }).then(function (data) {
+        children.push(data);
+        return dpd.internalclientdetail.post({ masterId: masterId, data: "data 2" });
+      }).then(function (data) {
+        children.push(data);
+        return dpd.internalclientmaster.get(masterId).then(function (master) {
+          expect(master.children).to.eql(children);
+          expect(master.childrenPromise).to.eql(children);
+          done();
+        });
+      }).fail(function (err) {
+        done(err);
+      });
+    });
+  });
+ 
+    
   describe('dpd.recursive', function() {
     beforeEach(function(done) {
       dpd.recursive.post({name: "dataception"}, function(res) {

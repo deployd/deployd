@@ -22,7 +22,6 @@
     "mkdirp": "*",
     "mongodb": "2.0.9",
     "opener": "^1.4.0",
-    "q": "1.1.2",
     "qs": "^2.3.3",
     "request": "2.51.0",
     "scrubber": "*",
@@ -33,7 +32,9 @@
     "step": "^0.0.5",
     "underscore": "^1.7.0",
     "validation": "*",
-    "wrench": "^1.5.8"
+    "wrench": "^1.5.8",
+    "bluebird": "^2.6.2",
+    "bluebird-q": "^1.0.2"
   },
   "devDependencies": {
     "chai": "*",
