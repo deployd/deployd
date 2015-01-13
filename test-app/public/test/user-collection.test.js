@@ -161,6 +161,22 @@ describe('User Collection', function() {
           });                  
         });
       });
+      
+      it('should not call other events after update of user from login event', function (done) {
+        dpd.users.post({ username: '$SKIP_EVENTS_TEST', password: '123456' })
+        .then(function (user) {
+          expect(user.id.length).to.equal(16);
+          return dpd.users.login( { username: '$SKIP_EVENTS_TEST', password: '123456' });
+        })
+        .then(function(session) {
+          expect(session.id.length).to.equal(128);
+          expect(session.uid.length).to.equal(16);
+          done();
+        })
+        .fail(function(err) {
+          done(err.message);
+        });
+      });
 
       it('should call login event even when user does not exist', function (done) {
         dpd.users.login({ username: 'foo123456@bar.com', password: '123456' }, function (session, err) {
