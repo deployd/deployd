@@ -24,6 +24,30 @@
 			"required": false,
 			"id": "displayName",
 			"order": 2
+		},
+		"lastLoginTime": {
+			"name": "lastLoginTime",
+			"type": "number",
+			"typeLabel": "number",
+			"required": false,
+			"id": "lastLoginTime",
+			"order": 3
+		},
+		"loginFailures": {
+			"name": "loginFailures",
+			"type": "number",
+			"typeLabel": "number",
+			"required": false,
+			"id": "loginFailures",
+			"order": 4
+		},
+		"banned": {
+			"name": "banned",
+			"type": "boolean",
+			"typeLabel": "boolean",
+			"required": false,
+			"id": "banned",
+			"order": 5
 		}
 	},
 	"typeLabel": "Users Collection",

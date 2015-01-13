@@ -161,7 +161,7 @@ function start(file) {
 
   function startup (err) {
       if (err) {
-        console.log("Failed to start MongoDB");
+        console.log("Failed to start MongoDB (Make sure 'mongod' are in your $PATH or use dpd --mongod option. Ref: http://docs.deployd.com/docs/basics/cli.html)");
         return stop(1);
       }
 

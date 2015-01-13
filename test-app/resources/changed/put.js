@@ -3,3 +3,7 @@ if(this.name === '$NO_CHANGE') {
         this.name = 'saw name change';
     }
 }
+
+if (changed('data')) {
+    this.data.changed = true;
+}
