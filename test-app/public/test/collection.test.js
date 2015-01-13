@@ -1090,6 +1090,25 @@ describe('Collection', function() {
       });
     });
 
+    it('should not return true when a value of type object has not changed', function(done) {
+      dpd.changed.post({name: 'irrelevant', data: { 'key': '$NO_CHANGE'} }, function (c) {
+        dpd.changed.put(c.id, { data: { 'key': '$NO_CHANGE'} }, function (c) {
+          expect(c.data.changed).to.not.exist;
+          done();
+        });
+      });
+    });
+
+    it('should detect when a value of type object has changed', function(done) {
+      dpd.changed.post({name: 'irrelevant', data: { 'key': '$NO_CHANGE'} }, function (c) {
+        dpd.changed.put(c.id, { data: { 'key': '$CHANGED'} }, function (c) {
+          expect(c.data.key).to.equal("$CHANGED");
+          expect(c.data.changed).to.be.true;
+          done();
+        });
+      });
+    });
+
     afterEach(function (done) {
       this.timeout(10000);
       cleanCollection(dpd.changed, done);
