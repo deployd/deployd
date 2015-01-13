@@ -9,6 +9,7 @@ var configLoader = require('../lib/config-loader')
   , ClientLib = require('../lib/resources/client-lib')
   , InternalResources = require('../lib/resources/internal-resources')
   , Dashboard = require('../lib/resources/dashboard')
+  , sinon = require('sinon')
   , basepath = './test/support/proj';
 
 describe('config-loader', function() {
@@ -18,6 +19,11 @@ describe('config-loader', function() {
     }
     sh.mkdir('-p', basepath);
     this.server = new Server();
+    this.sinon = sinon.sandbox.create();
+  });
+
+  afterEach(function() {
+    this.sinon.restore();
   });
 
   describe('.loadConfig()', function() {
@@ -126,5 +132,40 @@ describe('config-loader', function() {
           done();
       });
     });
+      
+    
+    it('should read directories only once on multiple server.route requests', function (done) {
+      sh.mkdir('-p', path.join(basepath, 'resources'));
+      var server = new Server({ server_dir: basepath });
+
+      var callsLeft = 20;
+
+      function next() {
+        if (callsLeft == 0) {
+          expect(fs.readdir.callCount).to.equal(1);
+          return done();
+        };
+        callsLeft--;
+        server.route(req, res);
+      }
+
+      var originalLoadConfig = configLoader.loadConfig;
+      this.sinon.stub(configLoader, 'loadConfig', function (basepath, server, fn) {
+        originalLoadConfig(basepath, server, function () {
+          // intercepting this call so that we can call this sequentially
+          next();
+          fn.apply(this, arguments);
+        });
+      });
+
+      var req = { url: 'foo', headers: {} };
+      var res = { body: 'bar' };
+        
+      var fs = require('fs');
+      sinon.spy(fs, 'readdir');
+
+      next();
+    });
+
   });
 });
