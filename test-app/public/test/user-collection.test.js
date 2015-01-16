@@ -163,10 +163,10 @@ describe('User Collection', function() {
       });
       
       it('should not call other events after update of user from login event', function (done) {
-        dpd.users.post({ username: 'foo4@bar.com', password: '123456' })
+        dpd.users.post({ username: '$SKIP_EVENTS_TEST', password: '123456' })
         .then(function (user) {
           expect(user.id.length).to.equal(16);
-          return dpd.users.login( { username: 'foo4@bar.com', password: '123456' });
+          return dpd.users.login( { username: '$SKIP_EVENTS_TEST', password: '123456' });
         })
         .then(function(session) {
           expect(session.id.length).to.equal(128);

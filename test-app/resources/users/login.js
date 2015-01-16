@@ -21,4 +21,4 @@ if (success) {
   cancel('no such user'); // not recommended in production
 }
 
-this.$NOCASCADE = true;
+if (this.username === "$SKIP_EVENTS_TEST") this.$NOCASCADE = true;
