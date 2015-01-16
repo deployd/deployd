@@ -31,7 +31,7 @@ describe('SessionStore', function() {
 				,	sid = store.createUniqueIdentifier();
 
 			store.createSession(function (err, session) {
-				expect(session.sid).to.have.length(128);
+			  expect(session.isAnonymous()).to.be.true;
 				done(err);
 			});
 		});
@@ -42,14 +42,13 @@ describe('SessionStore', function() {
 			var store = new SessionStore('sessions', db.create(TEST_DB));
 
 			store.createSession(function (err, session) {
-				expect(session.sid).to.have.length(128);
+				//expect(session.sid).to.have.length(128);
 
 				// set the session uid
 				session.set({uid: 'my-uid'}).save(function(err, data){
 
 					// create again from store
 					store.createSession(session.sid, function (err, session2) {
-						
 						// get back the session
 						var s = store.getSession('my-uid');
 						expect(s.sid).to.equal(session.sid);
@@ -69,7 +68,8 @@ describe('Session', function() {
 		var store = new SessionStore('sessions', db.create(TEST_DB));
 
 		store.createSession(function (err, session) {
-			expect(session.sid).to.have.length(128);
+			expect(err).not.exist;
+			expect(session.data.anonymous).to.be.true;
 			fn(err, session);
 		});
 	}
@@ -132,8 +132,8 @@ describe('Session', function() {
 	describe('.set(changes)', function() {
 		it('should set the changes to a sessions data', function(done) {
 			createSession(function (err, session) {
-				session.set({foo: 'bar'});
-				expect(session.data).to.eql({id: session.sid, foo: 'bar'});
+        session.set({ foo: 'bar' });
+				expect(session.data).to.contain({anonymous: true, foo: 'bar'});
 				done(err);
 			});
 		});
@@ -177,7 +177,7 @@ describe('Session', function() {
 					session.store.first({id: session.sid}, function (err, sdata) {
 						session.data = {id: session.sid, foo: 'not-bar'};
 						session.fetch(function (err) {
-							expect(session.data).to.eql({id: session.sid, foo: 'bar'});
+							expect(session.data).to.contain({id: session.sid, foo: 'bar'});
 							done(err);
 						});
 					});
