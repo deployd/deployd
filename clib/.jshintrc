@@ -13,5 +13,7 @@
   "predef": {
       "io": true
     , "_dpd": true
+    , "define": true
+    , "module": true
   }
 }
