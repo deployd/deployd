@@ -146,7 +146,7 @@ describe('UserCollection', function() {
 			};
 			var found = false;
 			uc.store.find = function(query, fn) {
-				expect(query).to.eql({id: '123', $fields: {password: 0}});
+				expect(query).to.eql({id: '123'});
 				found = true;
 				fn();
 			};
