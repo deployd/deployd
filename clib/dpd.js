@@ -1,18 +1,68 @@
-(function (undefined) {
+(function(undefined) {
 
   if (!window._dpd) window._dpd = {};
 
-  var root = window.location.protocol + '//' + window.location.hostname;
-  if (window.location.port !== '') {
-    root += ':' + window.location.port;
-  }
+  var root = null;
+
+  setBaseUrl();
 
   var consoleLog = (typeof console !== 'undefined') && console.log;
 
-  // initial socket connection
-  var socket = io.connect(root);
+  var socket;
+
+  function checkAndConnectSocketIO() {
+    if (!socket) {
+      socket = io.connect(root);
+      window.dpd.once('connect', function() {
+        isSocketReady = true;
+      });
+    }
+  }
 
   var BASE_URL = '/';
+
+  function setBaseUrl(options) {
+    options = options || {};
+    if (typeof options === "string") {
+      // TODO: may need to parse the url to get the domain for socket
+      root = options;
+      return;
+    }
+    
+    if (options.hostname) {
+      root = (options.protocol||location.protocol) + '//' + options.hostname;
+      var port = options.port || location.port;
+      if (port) {
+        root += ':' + port;
+      }
+    } else {
+      
+      var element = document.currentScript;
+      if (!element) {
+        element = document.querySelector('script[src$="dpd.js"]');
+      }
+      if (element) {
+        var src = element.getAttribute('src') || '';
+        var m = /((\w+:)?\/\/(.+):?(\d+)?)\//.exec(src);
+        if (m) {
+          root = m[1];
+        }        
+      }
+
+    }
+    
+    if (!root && location.hostname) {
+      root = location.protocol + '//' + location.hostname;
+      if (location.port) {
+        root += ':' + location.port;
+      }
+    }
+
+  }
+  
+  function getBaseUrl(){
+    return root + BASE_URL;
+  }
 
   function normalizeArray(parts, allowAboveRoot) {
     // if the path tries to go above the root, `up` ends up > 0
@@ -76,7 +126,7 @@
     var parts = [];
     for (var k in query) {
       if (query.hasOwnProperty(k)) {
-        parts.push(encodeURIComponent(k) + "=" + encodeURIComponent(query[k]));  
+        parts.push(encodeURIComponent(k) + "=" + encodeURIComponent(query[k]));
       }
     }
     return parts.join('&');
@@ -109,7 +159,7 @@
       var query = encodeIfComplex(options.query);
 
       return _dpd.ajax(root + joinPath(BASE_URL, options.path), {
-          method: "GET"
+        method: "GET"
         , query: query
         , success: returnSuccess(fn)
         , error: returnError(fn)
@@ -119,7 +169,7 @@
       var query = encodeIfComplex(options.query);
 
       return _dpd.ajax(root + joinPath(BASE_URL, options.path), {
-          method: "DELETE"
+        method: "DELETE"
         , query: query
         , success: returnSuccess(fn)
         , error: returnError(fn)
@@ -131,7 +181,7 @@
       else query = '';
 
       return _dpd.ajax(root + joinPath(BASE_URL, options.path) + query, {
-          method: method
+        method: method
         , contentType: options.body && "application/json"
         , data: JSON.stringify(options.body || {}) || "{}"
         , success: returnSuccess(fn)
@@ -158,7 +208,7 @@
 
   function parseGetSignature(args) {
     var settings = {}
-      , i = 0;
+    , i = 0;
 
     // path/func
     if (isString(args[i]) || !args[i]) {
@@ -167,27 +217,27 @@
     }
 
     // join path to func
-    if (isString(args[i])  || !args[i]) {
+    if (isString(args[i]) || !args[i]) {
       settings.path = joinPath(settings.path, toString(args[i]));
       i++;
     }
 
     // query
-    if (args[i] !== consoleLog && typeof args[i] === 'object' || !args[i]) { // IE considers console.log to be an object. 
+    if (args[i] !== consoleLog && typeof args[i] === 'object' || !args[i]) { // IE considers console.log to be an object.
       settings.query = args[i];
       i++;
     }
 
     if (typeof args[i] === 'function' || args[i] === consoleLog) {
-      settings.fn = args[i];  
+      settings.fn = args[i];
     }
 
     return settings;
-}
+  }
 
   function parsePostSignature(args) {
     var settings = {}
-      , i = 0;
+    , i = 0;
 
     //path
     if (isString(args[i]) || !args[i]) {
@@ -209,7 +259,7 @@
     }
 
     if (typeof args[i] === 'function' || args[i] === consoleLog) {
-      settings.fn = args[i];  
+      settings.fn = args[i];
     }
 
     return settings;
@@ -245,7 +295,7 @@
 
     r.exec = function(func, path, body, fn) {
       var settings = {}
-        , i = 0;
+      , i = 0;
 
       settings.func = arguments[i];
       i++;
@@ -271,11 +321,16 @@
     return r;
   };
 
+  window.dpd.setBaseUrl = setBaseUrl;
+  window.dpd.getBaseUrl = getBaseUrl;
+
   window.dpd.on = function() {
+    checkAndConnectSocketIO();
     socket.on.apply(socket, arguments);
   };
 
   window.dpd.once = function(name, fn) {
+    checkAndConnectSocketIO();
     var _fn = function() {
       socket.removeListener(name, _fn);
       fn.apply(this, arguments);
@@ -284,6 +339,7 @@
   };
 
   window.dpd.off = function(name, fn) {
+    checkAndConnectSocketIO();
     if (fn == null) {
       socket.removeAllListeners(name);
     } else {
@@ -292,11 +348,9 @@
   };
 
   var isSocketReady = false;
-  window.dpd.once('connect', function() {
-    isSocketReady = true;
-  });
 
   window.dpd.socketReady = function(fn) {
+    checkAndConnectSocketIO();
     if (isSocketReady) {
       setTimeout(fn, 0);
     } else {
