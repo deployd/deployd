@@ -79,5 +79,25 @@ describe('script', function(){
       
       
     });
+    
+    it('should pair up and reset callbackCount to zero', function(done) {
+      var count = 0;
+      var domain = {
+        foo: function (fn) {
+          count++;
+          setTimeout(function () {
+            if (fn) fn();
+          }, 50);
+        }
+      };
+      
+      var s = new Script(' foo(); foo(function(){}); foo(); ');
+      
+      s.run({}, domain, function (e) {
+        expect(count).to.equal(3);
+        done();
+      });
+    });
+    
   });
 });
