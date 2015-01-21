@@ -84,8 +84,8 @@ describe('script', function(){
       var count = 0;
       var domain = {
         foo: function (fn) {
+          count++;
           setTimeout(function () {
-            count++;
             if (fn) fn();
           }, 50);
         }
