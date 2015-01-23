@@ -1,0 +1,21 @@
+{
+    "type": "Collection",
+    "properties": {
+        "masterId": {
+            "name": "masterId",
+            "type": "string",
+            "typeLabel": "string",
+            "required": true,
+            "id": "masterId",
+            "order": 0
+        },
+        "data": {
+            "name": "data",
+            "type": "string",
+            "typeLabel": "string",
+            "required": true,
+            "id": "data",
+            "order": 1
+        }
+    }
+}
