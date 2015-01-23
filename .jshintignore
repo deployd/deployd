@@ -1,0 +1,8 @@
+node_modules/**
+test-app/**
+clib/*.min.js
+clib/socket.io.js
+lib/resources/collection/dashboard/js/lib/**
+lib/resources/dashboard/js/lib/**
+lib/resources/dashboard/bootstrap/**
+test/**

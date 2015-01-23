@@ -3,3 +3,5 @@ if (changed('displayName') && this.displayName == "$CHANGEPASSWORD") {
 }
 
 this.isMe = isMe(this.id);
+
+if(ctx.body.$NOCASCADE) cancel("shouldn't be here");

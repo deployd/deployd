@@ -1,7 +1,7 @@
 /* Adapted from http://www.quirksmode.org/js/xmlhttp.html */
 
 /*jshint undef:true, browser: true*/
-/*global ActiveXObject:false, console:false */
+/*global ActiveXObject:false, console:false, ayepromise:true */
 
 (function() {
 
