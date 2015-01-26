@@ -170,6 +170,17 @@ describe('collection', function(){
       );
     });
     
+    it('should handle GET and not crash on invalid query', function (done) {
+      var testData = [];
+      example('GET', '/foo1', { test: { type: 'boolean' } }, null, { "$fields": "test" },
+        function (req, res, method, path, properties, body) {
+        expect(res.statusCode).to.equal(200);
+      },
+        done,
+        testData
+      );
+    });
+    
     it('should handle PUT', function(done) {
       var testData = [{test: true}, {test: false}];
       example('PUT', '/foo', {test: {type: 'boolean'}}, {test: false, id: 7}, null,
