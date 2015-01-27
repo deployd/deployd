@@ -43,6 +43,14 @@ describe('script', function(){
         });
       }
     });
+      
+    it('should callback with error on script syntax error', function (done) {
+      var s = new Script('if(!foo throw "foo not passed"');
+      s.run({ }, { foo: 123 }, function (err) {
+        expect(err.name).to.equal("SyntaxError");
+        done();
+      });
+    });
   });
   
   describe('async', function(){
