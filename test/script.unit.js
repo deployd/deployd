@@ -29,6 +29,20 @@ describe('script', function(){
       var s = new Script('if(!foo) throw "foo not passed"');
       s.run({}, {foo: 123}, done);
     });
+    
+    it('should not be slow and leak memory', function (done) {
+      var s = new Script('if(!foo) throw "foo not passed"');
+      var time = Date.now();
+      var numDone = 0;
+      for (var i = 0; i < 15000; i++) {
+        s.run({ }, { foo: 123 }, function() {
+          numDone++;
+          if (numDone >= 15000) {
+            done();
+          }
+        });
+      }
+    });
   });
   
   describe('async', function(){
