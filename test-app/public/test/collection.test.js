@@ -971,6 +971,7 @@ describe('Collection', function() {
         return dpd.internalclientmaster.get(masterId).then(function (master) {
           expect(master.children).to.eql(children);
           expect(master.childrenPromise).to.eql(children);
+          expect(master.seenFinally).to.be.true;
           done();
         });
       }).fail(function (err) {
