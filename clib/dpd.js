@@ -2,7 +2,19 @@
 
   if (!window._dpd) window._dpd = {};
 
-  var root = document.currentScript.getAttribute('src').replace(/\/dpd\.js$/, '');
+  var root = window.location.protocol + '//' + window.location.hostname;
+  if (window.location.port !== '') {
+    root += ':' + window.location.port;
+  }
+
+  var scriptTags = document.getElementsByTagName('script');
+  for (var i = 0; i < scriptTags.length; i++) {
+    var src = scriptTags[i].getAttribute('src');
+    if (src !== null && src.match(/.*\/dpd\.js$/)) {
+      root = src.replace(/\/dpd\.js$/, '');
+      break;
+    }
+  }
 
   var consoleLog = (typeof console !== 'undefined') && console.log;
 
