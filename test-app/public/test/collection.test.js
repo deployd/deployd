@@ -968,14 +968,46 @@ describe('Collection', function() {
         return dpd.internalclientdetail.post({ masterId: masterId, data: "data 2" });
       }).then(function (data) {
         children.push(data);
-        return dpd.internalclientmaster.get(masterId).then(function (master) {
-          expect(master.children).to.eql(children);
-          expect(master.childrenPromise).to.eql(children);
-          expect(master.seenFinally).to.be.true;
-          done();
-        });
+        return dpd.internalclientmaster.get({ id: masterId, callback: true });
+      }).then(function (master) {
+        expect(master.children).to.eql(children);
+        return dpd.internalclientmaster.get({ id: masterId, promise: true });
+      }).then(function (master) {
+        expect(master.childrenPromise).to.eql(children);
+        expect(master.seenFinally).to.be.true;
+        expect(master.seenError).to.equal('test');
+        expect(master.shouldNotBeSet).to.not.exist;
+        expect(master.shouldNotBeSet2).to.not.exist;
+        done();
       }).fail(function (err) {
         done(err);
+      });
+    });
+      
+    it("should properly report uncaught error in callback and promise", function (done) {
+      var masterId;
+      var children = [];
+      dpd.internalclientmaster.post({ title: "hello" }).then(function (data) {
+        masterId = data.id;
+        return dpd.internalclientdetail.post({ masterId: masterId, data: "data 1" });
+      }).then(function (data) {
+        children.push(data);
+        return dpd.internalclientdetail.post({ masterId: masterId, data: "data 2" });
+      }).then(function (data) {
+        children.push(data);
+        return dpd.internalclientmaster.get({ id: masterId, promise: true, testUncaughtError: true });
+      }).then(function () {
+        throw "an error should've been returned";
+      }, function (err) {
+        expect(err).to.exist;
+        expect(err.message).to.equal('fail');
+        return dpd.internalclientmaster.get({ id: masterId, promise: true, testUncaughtError: true });
+      }).then(function() {
+        throw "an error should've been returned"; 
+      }, function (err) {
+        expect(err).to.exist;
+        expect(err.message).to.equal('fail');
+        done();
       });
     });
   });
