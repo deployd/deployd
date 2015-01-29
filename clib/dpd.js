@@ -21,6 +21,7 @@
       for (var i = 0; i < scriptTags.length; i++) {
         if (scriptTags[i].hasAttribute('src') && scriptTags[i].getAttribute('src').match(/.*dpd\.js$/)) {
           element = scriptTags[i];
+          break;
         }
       }
     }
