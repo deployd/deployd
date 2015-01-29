@@ -2,18 +2,30 @@
 
   if (!window._dpd) window._dpd = {};
 
-  var root = window.location.protocol + '//' + window.location.hostname;
-  if (window.location.port !== '') {
-    root += ':' + window.location.port;
-  }
+  var root = currentScript().getAttribute('src')
+      .replace(/(.*)(\/.*\.js)$/, '$1')
+      .replace(/^[^\/]*.js$/, '');
 
-  var scriptTags = document.getElementsByTagName('script');
-  for (var i = 0; i < scriptTags.length; i++) {
-    var src = scriptTags[i].getAttribute('src');
-    if (src !== null && src.match(/.*\/dpd\.js$/)) {
-      root = src.replace(/\/dpd\.js$/, '');
-      break;
+  function currentScript() {
+    // Only works in modern non-IE browsers
+    var currentScript = document.currentScript;
+
+    if (!currentScript) {
+      // Allows script to have a name other than dpd.js by assigning id="dpd.js" to script tag
+      currentScript = document.getElementById('dpd.js');
     }
+
+    if (!currentScript || !currentScript.hasAttribute('src')) {
+      // As a last resort, loop through all script tags and find the src attribute ending in "dpd.js"
+      var scriptTags = document.getElementsByTagName('script');
+      for (var i = 0; i < scriptTags.length; i++) {
+        if (scriptTags[i].hasAttribute('src') && scriptTags[i].getAttribute('src').match(/.*dpd\.js$/)) {
+          currentScript = scriptTags[i];
+        }
+      }
+    }
+
+    return currentScript;
   }
 
   var consoleLog = (typeof console !== 'undefined') && console.log;
