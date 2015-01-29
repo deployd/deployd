@@ -230,7 +230,9 @@ describe('User Collection', function() {
 			it('should remove a user', function(done) {
 				dpd.users.post(credentials, function (user, err) {
 					expect(user.id.length).to.equal(16);
-					dpd.users.del({id: user.id}, function (session, err) {
+					dpd.users.del({id: user.id}, function (res, err) {
+						expect(err).to.not.exist;
+						expect(res.n).to.equal(1);
 						dpd.users.get({id: user.id}, function (user) {
 							expect(user).to.not.exist;
 							done(err);
