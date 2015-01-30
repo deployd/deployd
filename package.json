@@ -44,7 +44,8 @@
     "mocha": "*",
     "rewire": "~2.1.3",
     "sinon": "~1.12.1",
-    "mocha-phantomjs": "3.5.2"
+    "mocha-phantomjs": "3.5.2",
+    "mocha-jshint": "0.0.9"
   },
   "bin": {
     "dpd": "./bin/dpd"

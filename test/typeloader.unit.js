@@ -33,7 +33,7 @@ describe('type-loader', function(){
     }
  
  
-    it('should load the default resources', function() {
+    it('should load the default resources', function(done) {
       TypeLoader(basepath, function(resources, customResources) {
  
         expect(resources).to.not.be.empty;
@@ -45,16 +45,18 @@ describe('type-loader', function(){
         expect(resources).to.include.keys('UserCollection');
  
         expect(customResources).to.be.empty;
+        done();
       });
     });
  
  
-    it('should load the default resources and the customResources based on package.json', function() {
+    it('should load the default resources and the customResources based on package.json', function(done) {
       createPackageJson();
       TypeLoader(basepath, function(resources, customResources) {
 
         expect(customResources).to.not.be.empty;
         expect(customResources).to.include.keys('Fileupload');
+        done();
       });
     });
  
