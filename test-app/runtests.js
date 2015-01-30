@@ -39,7 +39,7 @@ function kill(e) {
 }
 
 proc.once('listening', function (port){
-  var mpjsProc = fork('../node_modules/mocha-phantomjs/bin/mocha-phantomjs', [ 'http://localhost:' + port ], {silent: true});
+  var mpjsProc = fork('../node_modules/mocha-phantomjs/bin/mocha-phantomjs', [ '--ignore-resource-errors', 'http://localhost:' + port ], {silent: true});
   mpjsProc.stdout.on('data', function(data) {
     process.stdout.write(data.toString());
   });
