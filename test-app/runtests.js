@@ -18,7 +18,6 @@ if (fs.existsSync('data')) {
 }
 var proc = fork("../bin/dpd", [], {silent: true})
   , buf = '';
-var hideOutput = true;
 
 proc.stdout.on('data', function(data) {
   buf += data.toString();
@@ -42,10 +41,6 @@ function kill(e) {
 proc.once('listening', function (port){
   var mpjsProc = fork('../node_modules/mocha-phantomjs/bin/mocha-phantomjs', [ 'http://localhost:' + port ], {silent: true});
   mpjsProc.stdout.on('data', function(data) {
-    // start displaying output from `dpd` now in case there's a stack trace from an error
-    hideOutput = false;
-    // ignore a warning in mocha-phantomjs, can be removed when mocha-phantomjs is updated to version 2.5.3
-    if (data && data.toString().match(/^Error loading resource/)) return;
     process.stdout.write(data.toString());
   });
   mpjsProc.on('exit', kill);
