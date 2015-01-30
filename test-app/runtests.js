@@ -19,6 +19,10 @@ if (fs.existsSync('data')) {
 var proc = fork("../bin/dpd", [], {silent: true})
   , buf = '';
 
+proc.on("error", function() {
+  process.exit(1);
+});
+
 proc.stdout.on('data', function(data) {
   buf += data.toString();
   var match = buf.match(/listening on port (\d+)/);
@@ -35,6 +39,7 @@ function kill(e) {
   if (e && e !== 0){
     process.stdout.write("Test run failed. dpd output was: \n\n" + buf);
   }
+  proc.kill();
   process.exit(e);
 }
 
