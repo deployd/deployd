@@ -100,7 +100,7 @@ describe('store', function(){
     it('should remove all the objects that match the query', function(done) {
       store.insert([{i:1},{i:2},{i:3}], function () {
         store.remove({i: {$lt: 3}}, function (err, result) {
-          expect(result.n).to.equal(2);
+          expect(result.count).to.equal(2);
           store.find(function (err, result) {
             expect(result).to.have.length(1);
             done(err);
@@ -112,7 +112,7 @@ describe('store', function(){
     it('should remove all the objects', function(done) {
       store.insert([{i:1},{i:2},{i:3}], function () {
         store.remove(function (err, result) {
-          expect(result.n).to.equal(3);
+          expect(result.count).to.equal(3);
           store.find(function (err, result) {
             expect(result).to.eql([]);
             done(err);
@@ -151,7 +151,7 @@ describe('store', function(){
         var query = {id: result.id};
         store.update(query, {foo: 'baz'}, function (err, updated) {
           expect(err).to.not.exist;
-          expect(updated.n).to.equal(1);
+          expect(updated.count).to.equal(1);
           store.first(query, function (err, result) {
             expect(result.foo).to.equal('baz');
             done(err);
@@ -165,7 +165,7 @@ describe('store', function(){
         if(err) throw err;
         store.update({}, {$rename: {foo: 'RENAMED'}}, function (err, updated) {
           if(err) throw err;
-          expect(updated.n).to.equal(3);
+          expect(updated.count).to.equal(3);
           store.find(function (err, all) {
             all.forEach(function (item) {
               expect(item.RENAMED).to.exist;
