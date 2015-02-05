@@ -254,7 +254,7 @@ To keep a flat and readable code history and revert easier, we rebase pull reque
 6. If the PR contains multiple commits, squash them
 
   ````shell
-  git rebase -i upstream/master
+  git rebase -i HEAD~${COMMIT_NUMBER}
   ````
   ${COMMIT_NUMBER} being the number of commits you want to squash (ex: ```git rebase -i HEAD~2``` to squash 2 commits)
 
