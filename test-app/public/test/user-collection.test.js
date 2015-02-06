@@ -161,6 +161,22 @@ describe('User Collection', function() {
           });                  
         });
       });
+      
+      it('should not call other events after update of user from login event', function (done) {
+        dpd.users.post({ username: '$SKIP_EVENTS_TEST', password: '123456' })
+        .then(function (user) {
+          expect(user.id.length).to.equal(16);
+          return dpd.users.login( { username: '$SKIP_EVENTS_TEST', password: '123456' });
+        })
+        .then(function(session) {
+          expect(session.id.length).to.equal(128);
+          expect(session.uid.length).to.equal(16);
+          done();
+        })
+        .fail(function(err) {
+          done(err.message);
+        });
+      });
 
       it('should call login event even when user does not exist', function (done) {
         dpd.users.login({ username: 'foo123456@bar.com', password: '123456' }, function (session, err) {
@@ -268,7 +284,9 @@ describe('User Collection', function() {
 			it('should remove a user', function(done) {
 				dpd.users.post(credentials, function (user, err) {
 					expect(user.id.length).to.equal(16);
-					dpd.users.del({id: user.id}, function (session, err) {
+					dpd.users.del({id: user.id}, function (res, err) {
+						expect(err).to.not.exist;
+						expect(res.count).to.equal(1);
 						dpd.users.get({id: user.id}, function (user) {
 							expect(user).to.not.exist;
 							done(err);

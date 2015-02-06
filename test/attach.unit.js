@@ -40,7 +40,7 @@ describe('attach', function() {
         beforeEach(function() {
             sh.cd(basepath);
             sh.rm('-rf', 'resources');
-            sh.mkdir('resources');
+            //sh.mkdir('resources');
 
             PORT = genPort();
             opts = {

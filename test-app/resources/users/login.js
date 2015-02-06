@@ -20,3 +20,5 @@ if (success) {
   // login failed and user was not found
   cancel('no such user'); // not recommended in production
 }
+
+if (this.username === "$SKIP_EVENTS_TEST") this.$NOCASCADE = true;
