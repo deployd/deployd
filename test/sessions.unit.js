@@ -70,16 +70,22 @@ describe('Session', function() {
 			expect(session.data.anonymous).to.be.true;
 			fn(err, session);
 		});
-	}
+  }
+  
+  beforeEach(function () {
+    this.sinon = sinon.sandbox.create();
+  });
+  
+  afterEach(function () {
+    this.sinon.restore();
+  });
   
   describe('.createSession()', function () {
     beforeEach(function () {
-      this.sinon = sinon.sandbox.create();
       clock = sinon.useFakeTimers(new Date(2015, 01, 01).getTime());
     });
     
     afterEach(function () {
-      this.sinon.restore();
       clock.restore();
     });
     
