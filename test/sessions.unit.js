@@ -42,8 +42,6 @@ describe('SessionStore', function() {
 			var store = new SessionStore('sessions', db.create(TEST_DB));
 
 			store.createSession(function (err, session) {
-				//expect(session.sid).to.have.length(128);
-
 				// set the session uid
 				session.set({uid: 'my-uid'}).save(function(err, data){
 
@@ -54,9 +52,7 @@ describe('SessionStore', function() {
 						expect(s.sid).to.equal(session.sid);
 						
 						done(err);
-						
-					})
-					
+					});
 				});
 			});
 		});
@@ -64,7 +60,9 @@ describe('SessionStore', function() {
 });
 
 describe('Session', function() {
-	function createSession(fn) {
+  var clock;
+    
+  function createSession(fn) {
 		var store = new SessionStore('sessions', db.create(TEST_DB));
 
 		store.createSession(function (err, session) {
@@ -73,14 +71,48 @@ describe('Session', function() {
 			fn(err, session);
 		});
 	}
-	
-	beforeEach(function () {
-		this.sinon = sinon.sandbox.create();
-	});
-	
-	afterEach(function () {
-		this.sinon.restore();
-	});
+  
+  describe('.createSession()', function () {
+    beforeEach(function () {
+      this.sinon = sinon.sandbox.create();
+      clock = sinon.useFakeTimers(new Date(2015, 01, 01).getTime());
+    });
+    
+    afterEach(function () {
+      this.sinon.restore();
+      clock.restore();
+    });
+    
+    it('should expire sessions after max age', function (done) {
+      var store = new SessionStore('sessions', db.create(TEST_DB), undefined, { maxAge: 100000 });
+      
+      store.createSession(function (err, session) {
+        session.set({ foo: 'bar' }).save(function (err, data) {
+          expect(err).to.not.exist;
+          store.createSession(session.sid, function (err, session2) {
+            expect(session.sid).to.equal(session2.sid);
+            // check that the session is still valid 1 tick before expiration
+            clock.tick(99999);
+            process.nextTick(function () {
+              store.createSession(session.sid, function (err, session3) {
+                expect(session.sid).to.equal(session3.sid);
+                clock.tick(100001); // pass the threshold
+                process.nextTick(function () {
+                  store.createSession(session.sid, function (err, session4) {
+                    expect(session4.data.anonymous).to.be.true;
+                    store.find({ id: session.sid }, function (err, s) {
+                      expect(s).to.not.exist;
+                      done();
+                    });
+                  });
+                });
+              });
+            });
+          });
+        });
+      });
+    });
+  });
 
 
 	it('should make sockets available even before they exist', function(done) {
