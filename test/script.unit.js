@@ -30,8 +30,13 @@ describe('script', function(){
       var s = new Script('if(!foo) throw "foo not passed"');
       s.run({}, {foo: 123}, done);
     });
+
+    it('should not change null to empty object', function (done) {
+      var s = new Script('if(previous.foo !== null) throw "foo was " + JSON.stringify(previous.foo)');
+      s.run({}, { previous: { foo: null } }, done);
+    });
   });
-  
+
   describe('async', function(){
     it('should return after all callbacks are complete', function(done) {
       this.timeout(200);
