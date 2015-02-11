@@ -19,8 +19,8 @@
 <body>
   <div id="mocha"></div>
   <script>
-  
-    dpd.setBaseUrl({hostname:'127.0.0.1'});
+    // TODO: this break root requests
+    //dpd.setBaseUrl({hostname:'127.0.0.1'});
   
     expect = chai.expect;
     if (window.mochaPhantomJS) { mochaPhantomJS.run(); }
