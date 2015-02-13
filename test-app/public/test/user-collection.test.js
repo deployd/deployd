@@ -77,14 +77,15 @@ describe('User Collection', function() {
           done();
         });
       });
-	  
+
       it('should call login event and provide access to user in event', function(done) {
         dpd.users.post(credentials, function (user, err) {
           expect(user.id.length).to.equal(16);
-          
+
           dpd.socketReady(function() {
             dpd.users.once('test_event', function(u) {
-              expect(u['this']).to.eql(user);
+              expect(u['this'].id).to.eql(user.id);
+              expect(u['this'].username).to.eql(user.username);
               done();
             });
 
@@ -96,7 +97,7 @@ describe('User Collection', function() {
           });
         });
       });
-      
+
       // see the code in login.js in the users collection for more details about what these tests assume
       it('should allow canceling login from login event', function (done) {
         dpd.users.post({username: 'foo@bar.com', password: '123456'}, function (user, err) {
@@ -108,7 +109,7 @@ describe('User Collection', function() {
           });
         });
       });
-        
+
       it('should allow updating the user from the login event', function (done) {
         dpd.users.post({ username: 'foo2@bar.com', password: '123456' }, function (user, err) {
           expect(user.id.length).to.equal(16);
@@ -129,7 +130,7 @@ describe('User Collection', function() {
       it('should allow updating the user from the login event when login fails', function (done) {
         dpd.users.post({ username: 'foo3@bar.com', password: '123456' }, function (user, err) {
           expect(user.id.length).to.equal(16);
-          
+
           // try 4 bad logins; the logic in the login event will ban the user after 3 failed attempts
           chain(function (next) {
             dpd.users.login({ username: 'foo3@bar.com', password: 'bad' }, next);
@@ -158,10 +159,10 @@ describe('User Collection', function() {
             expect(session.uid.length).to.equal(16);
             expect(err).to.not.exist;
             done();
-          });                  
+          });
         });
       });
-      
+
       it('should not call other events after update of user from login event', function (done) {
         dpd.users.post({ username: '$SKIP_EVENTS_TEST', password: '123456' })
         .then(function (user) {
@@ -186,7 +187,7 @@ describe('User Collection', function() {
           done();
         });
       });
-      
+
       it('should not crash server when login is called repeatedly', function (done) {
         this.timeout(10000);
         dpd.users.post({ username: 'foo@bar.com', password: '123456' }, function (user, err) {
@@ -206,12 +207,12 @@ describe('User Collection', function() {
           function doLogin() {
             dpd.users.login({ username: 'foo@bar.com', password: '123456' }, loginDone);
           }
-          
+
           doLogin();
         });
       });
     });
-	    
+
 		describe('.me(fn)', function() {
 			it('should return the current user', function(done) {
 				dpd.users.post(credentials, function (user, err) {
@@ -251,26 +252,26 @@ describe('User Collection', function() {
           dpd.users.post({username: 'foo@bar.com', password: '123456'});
         });
       });
-      
+
       it('should respond to the built-in changed event on put', function(done) {
         dpd.users.post({username: 'foo2@bar.com', password: '123456'}, function(item) {
           dpd.socketReady(function() {
             dpd.users.once('changed', function() {
               done();
             });
-            
+
             dpd.users.put(item.id, {username: 'foo3@bar.com'});
           });
         });
       });
-      
+
       it('should respond to the built-in changed event on del', function(done) {
         dpd.users.post({username: 'foo2@bar.com', password: '123456'}, function(item) {
           dpd.socketReady(function() {
             dpd.users.once('changed', function() {
               done();
             });
-            
+
             dpd.users.del(item.id);
           });
         });

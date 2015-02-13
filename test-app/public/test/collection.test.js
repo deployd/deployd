@@ -131,7 +131,7 @@ describe('Collection', function() {
 
     describe('.post a falsy boolean should return false', function() {
       it('should return a validation error', function(done) {
-        dpd.todos.post({title: 'false', done: false}, function(res, err)
+        dpd.todos.post({title: 'false', done: false}, function(todo, err) {
           expect(todo.done).to.be.false;
           done();
         });
@@ -179,7 +179,7 @@ describe('Collection', function() {
       it('should coerce numbers to strings when querying string properties', function(done) {
         dpd.todos.post({title: "foo", owner: 7}, function (todo, err) {
           delete todo.id;
-          expect(todo).to.eql({title: "foo", done: false, owner: '7'});
+          expect(todo).to.eql({title: "foo", owner: '7'});
           done();
         });
       });
@@ -413,7 +413,7 @@ describe('Collection', function() {
           expect(err).to.exist;
           dpd.todos.get(todoId, next);
         }).chain(function(next, res, err) {
-          expect(res.done).to.be['false'];
+          expect(res.done).to.be.null;
           done();
         });
       });
