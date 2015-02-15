@@ -1,7 +1,6 @@
 # deployd
 
-[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/deployd/deployd?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-
+[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/deployd/deployd?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)  
 [![Current Version](https://img.shields.io/npm/v/deployd.svg?style=flat-square)](https://www.npmjs.org/package/deployd)  
 [![Build Status](https://img.shields.io/travis/deployd/deployd.svg?style=flat-square)](http://travis-ci.org/deployd/deployd)
 
@@ -14,7 +13,7 @@ Deployd is the simplest way to build realtime APIs for web and mobile apps. Read
 
 ## install win
 
-[Download](http://deployd.com) the installer.
+[Download](https://bintray.com/artifact/download/deployd/dpd-win-installer/deployd-win-0.7.0.exe) the installer.
 
 ## quick start
 
