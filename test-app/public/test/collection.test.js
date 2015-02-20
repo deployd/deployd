@@ -171,6 +171,24 @@ describe('Collection', function () {
       });
     });
 
+    describe('.post a truthy boolean should return true', function() {
+      it('should return a validation error', function(done) {
+        dpd.todos.post({title: 'true', done: true}, function(todo, err) {
+          expect(todo.done).to.be.true;
+          done();
+        });
+      });
+    });
+
+    describe('.post a falsy boolean should return false', function() {
+      it('should return a validation error', function(done) {
+        dpd.todos.post({title: 'false', done: false}, function(todo, err) {
+          expect(todo.done).to.be.false;
+          done();
+        });
+      });
+    });
+
     describe('.post({message: "notvalid"}, fn)', function() {
       it('should properly return an error', function(done) {
         dpd.todos.post({message: "notvalid"}, function(result, err) {
@@ -212,7 +230,7 @@ describe('Collection', function () {
       it('should coerce numbers to strings when querying string properties', function(done) {
         dpd.todos.post({title: "foo", owner: 7}, function (todo, err) {
           delete todo.id;
-          expect(todo).to.eql({title: "foo", done: false, owner: '7'});
+          expect(todo).to.eql({title: "foo", owner: '7'});
           done();
         });
       });
@@ -446,7 +464,7 @@ describe('Collection', function () {
           expect(err).to.exist;
           dpd.todos.get(todoId, next);
         }).chain(function(next, res, err) {
-          expect(res.done).to.be['false'];
+          expect(res.done).to.be.null;
           done();
         });
       });
@@ -1008,7 +1026,7 @@ describe('Collection', function () {
     before(function(done) {
       cleanCollection(dpd.internalclientmaster, done);
     });
-    
+
     function populate(children) {
       var masterId;
       return dpd.internalclientmaster.post({ title: "hello" }).then(function (data) {
@@ -1022,7 +1040,7 @@ describe('Collection', function () {
         return masterId;
       });
     }
-    
+
     it("should work properly with callbacks", function (done) {
       var children = [];
       populate(children).then(function (masterId) {
@@ -1034,7 +1052,7 @@ describe('Collection', function () {
         done(err);
       });
     });
-      
+
     it("should work properly with promises", function (done) {
       var children = [];
       populate(children).then(function (masterId) {
@@ -1067,7 +1085,7 @@ describe('Collection', function () {
         done(err);
       });
     });
-      
+
     it("should properly report uncaught error in callback and promise", function (done) {
       var masterId;
       var children = [];
@@ -1081,7 +1099,7 @@ describe('Collection', function () {
         expect(err.message).to.equal('fail');
         return dpd.internalclientmaster.get({ id: masterId, callback: true, testUncaughtError: true });
       }).then(function() {
-        throw "an error should've been returned"; 
+        throw "an error should've been returned";
       }, function (err) {
         expect(err).to.exist;
         expect(err.message).to.equal('fail');
@@ -1189,10 +1207,10 @@ describe('Collection', function () {
      describe('previous()', function() {
      it('should work with $pull and $push', function(done) {
       dpd.previous.post({ sharedWith: [ 456 ], unsharedWith: [ 234 ] }, function(p) {
-                
+
         dpd.previous.once("was", function (w) {
           expect(w.sharedWith).to.include.members([456]);
-          expect(w.sharedWith).to.not.include.members([123]);    
+          expect(w.sharedWith).to.not.include.members([123]);
           done();
         });
 
@@ -1203,7 +1221,7 @@ describe('Collection', function () {
       });
      });
    });
-  
+
   describe('changed()', function(){
     it('should detect when a value has changed', function(done) {
       dpd.changed.post({name: 'original'}, function (c) {
