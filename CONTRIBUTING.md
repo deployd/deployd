@@ -267,7 +267,7 @@ To keep a flat and readable code history and revert easier, we rebase pull reque
 8. Run the tests
 
   ````shell
-  npm test && cd test-app && ../bin/dpd -o
+  npm test
   ````
 
 9. Push to upstream
@@ -280,6 +280,6 @@ To keep a flat and readable code history and revert easier, we rebase pull reque
 10. Close the PR with the message
 
   ````shell
-  landed as ${COMMIT_SHA}
   Thanks for your contribution!
+  Landed as ${COMMIT_SHA}
   ````

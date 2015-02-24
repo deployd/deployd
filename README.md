@@ -1,9 +1,7 @@
 # deployd
 
-[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/deployd/deployd?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-
-[![Current Version](https://img.shields.io/npm/v/deployd.svg?style=flat-square)](https://www.npmjs.org/package/deployd)  
-[![Build Status](https://img.shields.io/travis/deployd/deployd.svg?style=flat-square)](http://travis-ci.org/deployd/deployd)
+[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/deployd/deployd?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)  
+[![Current Version](https://img.shields.io/npm/v/deployd.svg?style=flat-square)](https://www.npmjs.org/package/deployd) [![Build Status](https://img.shields.io/travis/deployd/deployd.svg?style=flat-square)](http://travis-ci.org/deployd/deployd)
 
 ## overview
 
@@ -12,9 +10,13 @@ Deployd is the simplest way to build realtime APIs for web and mobile apps. Read
 [Read more about deployd](http://deployd.com)
 
 
-## install win
+## install on windows
 
-[Download](http://deployd.com) the installer.
+[Download](https://bintray.com/artifact/download/deployd/dpd-win-installer/deployd-win-0.7.0.exe) the installer.
+
+## install on macosx
+
+The macosx installer is deprecated. The recommended way is now npm (`npm install deployd -g`) and [install mongodb](http://docs.mongodb.org/manual/tutorial/install-mongodb-on-os-x/) separately.
 
 ## quick start
 
@@ -41,16 +43,11 @@ Deployd is the simplest way to build realtime APIs for web and mobile apps. Read
 	npm install
 	npm link
 
-## unit tests
+## unit & integration tests
 
 	cd deployd
 	mongod &
 	npm test
-
-## integration tests
-	
-	cd test-app
-	../bin/dpd -o
 
 ## license
 

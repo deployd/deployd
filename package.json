@@ -1,7 +1,8 @@
 {
   "author": "Ritchie Martori",
   "name": "deployd",
-  "version": "0.8.0-rc.2",
+  "version": "0.8.0",
+  "license": "Apache-2.0",
   "description": "the simplest way to build realtime APIs for web and mobile apps",
   "repository": {
     "url": "git://github.com/deployd/deployd.git"
@@ -23,7 +24,6 @@
     "mkdirp": "*",
     "mongodb": "2.0.9",
     "opener": "^1.4.0",
-    "q": "1.1.2",
     "qs": "^2.3.3",
     "request": "2.51.0",
     "scrubber": "*",

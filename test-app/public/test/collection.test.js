@@ -1,5 +1,56 @@
 /*global _dpd:false, $:false */
-describe('Collection', function() {
+describe('Collection', function () {
+  describe('dpd.delete', function () {
+    before(function (done) {
+      cleanCollection(dpd.delete, done);
+    });
+    it('should call delete event for every record when query matches more than one', function (done) {
+      var calls = 0;
+      dpd.socketReady(function () {
+        dpd.on('delete:called', function() {
+          calls++;
+          if (calls === 3) {
+            done();
+          }
+        });
+      });
+      dpd.delete.post({ data: '1' }).then(function() {
+        return dpd.delete.post({ data: '1' });
+      }).then(function() {
+        return dpd.delete.post({ data: '2' });
+      }).then(function() {
+        return dpd.delete.del({ id: { $ne: null } });
+      });
+    });
+      
+    it('should allow canceling deletion from script', function (done) {
+      dpd.delete.post({ data: '1' }).then(function() {
+        return dpd.delete.post({ data: '1' });
+      }).then(function() {
+        return dpd.delete.post({ data: '$DONTDELETE' });
+      }).then(function() {
+        return dpd.delete.del({ id: { $ne: null }, fromTest: true });
+      }).then(function() {
+        return dpd.delete.get();
+      }).then(function(result) {
+        expect(result.length).to.equal(1);
+        expect(result[0].data).to.equal('$DONTDELETE');
+        done();
+      }).fail(done);
+    });
+    
+    it('should return error if only one item to delete and an error occurs', function (done) {
+      dpd.delete.post({ data: '$DONTDELETE' }).then(function (d) {
+        return dpd.delete.del({ id: d.id, fromTest: true });
+      }).then(function() {
+        throw "An error should have been returned";
+      }, function (err) {
+        expect(err).to.exist;
+        expect(err.message).to.equal("Can't delete this one");
+        done();
+      });
+    });
+  });
   describe('dpd.todos', function() {
     it('should exist', function() {
       expect(dpd.todos).to.exist;
