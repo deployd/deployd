@@ -2,10 +2,9 @@
 
   if (!window._dpd) window._dpd = {};
 
-  var root = window.location.protocol + '//' + window.location.hostname;
-  if (window.location.port !== '') {
-    root += ':' + window.location.port;
-  }
+  var root = null;
+  
+  setupBaseUrl();
 
   var consoleLog = (typeof console !== 'undefined') && console.log;
 
@@ -13,6 +12,17 @@
   var socket = io.connect(root);
 
   var BASE_URL = '/';
+  
+  function setupBaseUrl(protocol, hostname, port){
+	  protocol = protocol || window.location.protocol;
+	  hostname = hostname || window.location.hostname;
+	  port = port || window.location.port;
+  
+	  root = protocol + '//' + hostname;
+	  if (port !== '') {
+		root += ':' + port;
+	  }
+  }
 
   function normalizeArray(parts, allowAboveRoot) {
     // if the path tries to go above the root, `up` ends up > 0
@@ -270,6 +280,8 @@
 
     return r;
   };
+  
+  window.dpd.setupBaseUrl = setupBaseUrl;
 
   window.dpd.on = function() {
     socket.on.apply(socket, arguments);
