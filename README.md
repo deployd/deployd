@@ -23,7 +23,7 @@ The macosx installer is deprecated. The recommended way is now npm (`npm install
 	$ dpd create hello
 	$ cd hello
 	$ dpd -d
-	
+
 ## helpful resources
 
  - [Docs](http://docs.deployd.com/)
