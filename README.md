@@ -16,7 +16,7 @@ Deployd is the simplest way to build realtime APIs for web and mobile apps. Read
 
 ## install on macosx
 
-The macosx installer is deprecated. The recommended way is now npm (`npm install deployd -g`) and [install mongodb](http://docs.mongodb.org/manual/tutorial/install-mongodb-on-os-x/) separately.
+The macosx installer is deprecated. The recommended way is now npm (`sudo npm install deployd -g`) and [install mongodb](http://docs.mongodb.org/manual/tutorial/install-mongodb-on-os-x/) separately.
 
 ## quick start
 
