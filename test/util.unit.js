@@ -29,6 +29,53 @@ describe('http', function() {
 		});
 	});
 
+describe('.getBody', function(){
+
+  it('should get body from stream', function(done){
+
+    var obj = JSON.stringify({foo: 'bar'})
+      , req = new Stream();
+
+    var res = this.res;
+
+    http.getBody(req, function(buffer) {
+      console.error('STREAM', buffer, typeof buffer);
+      expect(buffer).to.exist;
+      expect(buffer).to.eql(obj);
+      done();
+    });
+
+    req.emit('data', obj);
+    req.emit('end');
+
+  });
+
+  it('should get body from rawBody', function(done){
+
+    var obj = JSON.stringify({foo: 'bar'})
+      , req = new Stream();
+
+    req.rawBody = '';
+    req.on('data', function(chunk){
+      req.rawBody += chunk;
+    })
+
+    var res = this.res;
+
+    req.on('end', function(){
+      http.getBody(req, function(buffer) {
+        expect(buffer).to.exist;
+        expect(buffer).to.eql(obj);
+        done();
+      });
+    });
+
+    req.emit('data', obj);
+    req.emit('end');
+
+  });
+
+});
 
 describe('.parseBody()', function() {
   beforeEach(function () {
