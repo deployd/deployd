@@ -211,6 +211,7 @@ describe('User Collection', function() {
         });
       });
     });
+    
 	    
 		describe('.me(fn)', function() {
 			it('should return the current user', function(done) {
@@ -224,13 +225,68 @@ describe('User Collection', function() {
 						});
 					});
 				});
-			});
+      });
+      
+      it('should invalidate session if username or password is changed', function (done) {
+        dpd.users.post({ username: 'foo123@bar.com', password: '123456' }).then(function (user) {
+          expect(user.id.length).to.equal(16);
+          return dpd.users.login({ username: 'foo123@bar.com', password: '123456' });
+        })
+        .then(function (session) {
+          expect(session).to.exist;
+          expect(session.id.length).to.equal(128);
+          return dpd.users.me();
+        })
+        // test changing username:
+        .then(function (user) {
+          return dpd.users.put(user.id, { username: 'foo1234@bar.com' });
+        })
+        .then(function (user) {
+          expect(user).to.exist;
+          return dpd.users.me();
+        })
+        .then(function (user) {
+          expect(user).to.equal('');
+          return dpd.users.login({ username: 'foo1234@bar.com', password: '123456' }); 
+        })
+        .then(function (session) {
+          expect(session).to.exist;
+          expect(session.id.length).to.equal(128);
+          return dpd.users.me();
+        })
+        // test changing password:
+        .then(function (user) {
+          return dpd.users.put(user.id, { password: '1234567' });
+        })
+        .then(function (user) {
+          expect(user).to.exist;
+          return dpd.users.me();
+        })
+        .then(function (user) {
+          expect(user).to.equal('');
+          return dpd.users.login({ username: 'foo1234@bar.com', password: '1234567' });
+        })
+        .then(function (session) {
+          expect(session).to.exist;
+          expect(session.id.length).to.equal(128);
+          return dpd.users.me();
+        })
+        .then(function (user) {
+          expect(user).to.exist;
+          done();
+        })
+        .fail(function (err) {
+          done(err);
+        });
+      });
 		});
 		describe('.del({id: \'...\'}, fn)', function() {
 			it('should remove a user', function(done) {
 				dpd.users.post(credentials, function (user, err) {
 					expect(user.id.length).to.equal(16);
-					dpd.users.del({id: user.id}, function (session, err) {
+					dpd.users.del({id: user.id}, function (res, err) {
+						expect(err).to.not.exist;
+						expect(res.count).to.equal(1);
 						dpd.users.get({id: user.id}, function (user) {
 							expect(user).to.not.exist;
 							done(err);

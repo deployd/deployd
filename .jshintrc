@@ -3,5 +3,8 @@
   "expr": true,
   "proto": true,
   "lastsemic": true,
-  "laxbreak": true
+  "laxbreak": true,
+  "globals": {
+    "Promise": true
+  }
 }
