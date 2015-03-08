@@ -210,6 +210,27 @@ describe('User Collection', function() {
           doLogin();
         });
       });
+      
+      it('should allow login with Authorization: Bearer HTTP header ', function (done) {
+        // ensure we're logged out
+        dpd.users.logout(function() {
+          // setting this header will disable setting a sid cookie by deployd
+          _dpd.ajax.headers = { Authorization: "Bearer" };
+          dpd.users.post({ username: 'authheader', password: '123456' }, function (user, err) {
+            expect(user.id.length).to.equal(16);
+            expect(user.lastLoginTime).to.not.exist;
+            dpd.users.login({ username: 'authheader', password: '123456' }).then(function (session) {
+              _dpd.ajax.headers = { Authorization: "Bearer " + session.id };
+              dpd.users.me(function (me, err) {
+                _dpd.ajax.headers = null;
+                expect(me).to.exist;
+                expect(me.username).to.equal("authheader");
+                done();
+              });
+            });
+          });
+        });
+      });
     });
     
 	    
