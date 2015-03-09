@@ -193,5 +193,76 @@ describe('InternalResources', function() {
           throw Error("next called");
         });
     });
+
+    it('should call callbacks for config changes with errors', function(done) {
+      var file = path.join(configPath, 'resources/foo/config.json');
+
+      sh.mkdir('-p', path.join(configPath, 'resources/foo'));
+      JSON.stringify({type: 'Foo'}).to(file);
+
+      this.ir.handle(
+        {
+          server: {
+            resources: [
+              {
+                name: 'foo',
+                config: {},
+                configChanged: function(config, fn){
+                  console.log('CONFIG CHANGED!');
+                  return fn('ERROR');
+                }
+              }
+            ]
+          },
+          url: '/foo',
+          body: {type: 'Foo', value: {something: 'new config'}},
+          req: {
+            method: 'PUT', 
+            url: '/__resources/foo', 
+            isRoot: true
+          }, 
+          done: function(err){
+            console.log('CALL');
+            expect(err).to.exist.and.to.equal('ERROR');
+            done();
+          }
+      }
+    );
+
+
+    });
+    it('should call callbacks for resource deletion with errors', function(done) {
+      var file = path.join(configPath, 'resources/foo/config.json');
+
+      sh.mkdir('-p', path.join(configPath, 'resources/foo'));
+      JSON.stringify({type: 'Foo'}).to(file);
+
+      this.ir.handle(
+        {
+          server: {
+            resources: [
+              {
+                name: 'foo',
+                config: {},
+                configDeleted: function(config, fn){
+                  return fn('ERROR');
+                }
+              }
+            ]
+          },
+          url: '/foo',
+          body: {type: 'Foo', value: {something: 'new config'}},
+          req: {
+            method: 'DELETE', 
+            url: '/__resources/foo', 
+            isRoot: true
+          }, 
+          done: function(err){
+            expect(err).to.exist.and.to.equal('ERROR');
+            done();
+          }
+        }
+      );
+    });
   });
 });
