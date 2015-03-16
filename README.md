@@ -31,6 +31,7 @@ The macosx installer is deprecated. The recommended way is now npm (`npm install
  - [Hello World Tutorial](http://docs.deployd.com/docs/getting-started/your-first-api.html)
  - [API Docs](http://docs.deployd.com/api)
  - [Community Discussion Page](https://groups.google.com/forum/?fromgroups#!forum/deployd-users)
+ - [Gitter Chat Page](https://gitter.im/deployd/deployd)
  - [Example Apps](http://docs.deployd.com/examples/)
 
 ## install from npm
