@@ -31,7 +31,7 @@ describe('config-loader', function() {
 
     it('should load resources', function(done) {
       this.timeout(10000);
-      
+
       sh.mkdir('-p', path.join(basepath, 'resources/foo'));
       sh.mkdir('-p', path.join(basepath, 'resources/bar'));
       JSON.stringify({type: "Collection", val: 1}).to(path.join(basepath, 'resources/foo/config.json'));
@@ -42,7 +42,7 @@ describe('config-loader', function() {
         expect(resources).to.have.length(6);
         expect(resources.filter(function(r) { return r.name == 'foo';})).to.have.length(1);
         expect(resources.filter(function(r) { return r.name == 'bar';})).to.have.length(1);
-        done();  
+        done();
       });
     });
 
@@ -68,11 +68,44 @@ describe('config-loader', function() {
         expect(resourceList).to.have.length(4);
 
         expect(resourceList[0] instanceof Files).to.equal(true);
-        expect(resourceList[1] instanceof ClientLib).to.equal(true);
-        expect(resourceList[2] instanceof InternalResources).to.equal(true);
-        expect(resourceList[3] instanceof Dashboard).to.equal(true);      
+        expect(resourceList[1] instanceof InternalResources).to.equal(true);
+        expect(resourceList[2] instanceof ClientLib).to.equal(true);
+        expect(resourceList[3] instanceof Dashboard).to.equal(true);
 
-        done(err);  
+        done(err);
+      });
+    });
+
+    it('should add internal resources but hide_dpdjs', function(done) {
+      sh.mkdir('-p', path.join(basepath, 'resources'));
+
+      server = { options: { hide_dpdjs: true } }
+
+      configLoader.loadConfig( basepath, server, function(err, resourceList) {
+        if (err) return done(err);
+        expect(resourceList).to.have.length(2);
+
+        expect(resourceList[0] instanceof Files).to.equal(true);
+        expect(resourceList[1] instanceof InternalResources).to.equal(true);
+
+        done(err);
+      });
+    });
+
+    it('should add internal resources but hide_dashboard', function(done) {
+      sh.mkdir('-p', path.join(basepath, 'resources'));
+
+      server = { options: { hide_dashboard: true } }
+
+      configLoader.loadConfig( basepath, server, function(err, resourceList) {
+        if (err) return done(err);
+        expect(resourceList).to.have.length(3);
+
+        expect(resourceList[0] instanceof Files).to.equal(true);
+        expect(resourceList[1] instanceof InternalResources).to.equal(true);
+        expect(resourceList[2] instanceof ClientLib).to.equal(true);
+
+        done(err);
       });
     });
 
@@ -132,8 +165,8 @@ describe('config-loader', function() {
           done();
       });
     });
-      
-    
+
+
     it('should read directories only once on multiple server.route requests', function (done) {
       sh.mkdir('-p', path.join(basepath, 'resources'));
       var server = new Server({ server_dir: basepath });
@@ -160,7 +193,7 @@ describe('config-loader', function() {
 
       var req = { url: 'foo', headers: {} };
       var res = { body: 'bar' };
-        
+
       var fs = require('fs');
       sinon.spy(fs, 'readdir');
 
