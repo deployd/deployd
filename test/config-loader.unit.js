@@ -81,7 +81,7 @@ describe('config-loader', function() {
 
       server = { options: { hide_dpdjs: true } }
 
-      configLoader.loadConfig(server, basepath, {}, function(err, resourceList) {
+      configLoader.loadConfig( basepath, server, function(err, resourceList) {
         if (err) return done(err);
         expect(resourceList).to.have.length(4);
 
@@ -99,7 +99,7 @@ describe('config-loader', function() {
 
       server = { options: { hide_dashboard: true } }
 
-      configLoader.loadConfig(server, basepath, {}, function(err, resourceList) {
+      configLoader.loadConfig( basepath, server, function(err, resourceList) {
         if (err) return done(err);
         expect(resourceList).to.have.length(4);
 
