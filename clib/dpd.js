@@ -22,33 +22,32 @@
   var BASE_URL = '/';
 
   function setBaseUrl(options) {
+    var oldRoot = root;
+    
     options = options || {};
     if (typeof options === "string") {
       // TODO: may need to parse the url to get the domain for socket
       root = options;
-      return;
-    }
-    
-    if (options.hostname) {
-      root = (options.protocol||location.protocol) + '//' + options.hostname;
-      var port = options.port || location.port;
-      if (port) {
-        root += ':' + port;
+    } else { 
+      if (options.hostname) {
+        root = (options.protocol||location.protocol) + '//' + options.hostname;
+        var port = options.port || location.port;
+        if (port) {
+          root += ':' + port;
+        }
+      } else {
+        var element = document.currentScript;
+        if (!element) {
+          element = document.querySelector('script[src$="dpd.js"]');
+        }
+        if (element) {
+          var src = element.src || '';
+          var m = /((\w+:)?\/\/(.+):?(\d+)?)\//.exec(src);
+          if (m) {
+            root = m[1];
+          }        
+        }
       }
-    } else {
-      
-      var element = document.currentScript;
-      if (!element) {
-        element = document.querySelector('script[src$="dpd.js"]');
-      }
-      if (element) {
-        var src = element.getAttribute('src') || '';
-        var m = /((\w+:)?\/\/(.+):?(\d+)?)\//.exec(src);
-        if (m) {
-          root = m[1];
-        }        
-      }
-
     }
     
     if (!root && location.hostname) {
@@ -57,9 +56,15 @@
         root += ':' + location.port;
       }
     }
-
+    if (root !== oldRoot) {
+      if (socket && socket.io) {
+        // disconnect socket if we're changing url
+        socket.io.disconnect();
+      }
+      socket = null;
+    }
   }
-  
+
   function getBaseUrl(){
     return root + BASE_URL;
   }
