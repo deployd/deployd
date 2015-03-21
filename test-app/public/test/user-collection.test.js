@@ -396,6 +396,37 @@ describe('User Collection', function() {
         });
       });
 
+      it('should not allow nulled password', function(done) {
+        var uid;
+        chain(function(next) {
+          dpd.users.post(credentials, next);
+        }).chain(function(next, res, err) {
+          uid = res.id;
+          dpd.users.login(credentials, next);
+        }).chain(function(next, res, err) {
+          dpd.users.put(uid, {password: null}, next);
+        }).chain(function(next, res, err) {
+          expect(err).to.exist.with.property('errors');
+          expect(err.errors).to.have.property('password');
+          done(res);
+        });
+      });
+
+      it('should not allow empty password string', function(done) {
+        var uid;
+        chain(function(next) {
+          dpd.users.post(credentials, next);
+        }).chain(function(next, res, err) {uid = res.id;
+          dpd.users.login(credentials, next);
+        }).chain(function(next, res, err) {
+          dpd.users.put(uid, {password: ''}, next);
+        }).chain(function(next, res, err) {
+          expect(err).to.exist.with.property('errors');
+          expect(err.errors).to.have.property('password');
+          done(res);
+        });
+      });
+
       it('should not allow unauthenticated changes to username or password', function(done) {
         chain(function(next) {
           dpd.users.post({username: 'foo', password: 'bar'}, next);
