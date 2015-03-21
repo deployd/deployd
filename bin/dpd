@@ -215,6 +215,8 @@ program
     var Keys = require('../lib/keys')
       , keys = new Keys();
 
+    if ( keys.path.indexOf('.dpd') === 0 && !fs.existsSync('.dpd') ) fs.mkdirSync('.dpd');
+
     keys.create(function(err, key) {
       if(err) return console.error(err);
       console.log('created key', key.substr(0, 16) + '...');
