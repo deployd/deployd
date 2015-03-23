@@ -8,7 +8,8 @@ describe('SessionStore', function() {
 		var sockets = new EventEmitter()
 			,	store = new SessionStore('sessions', db.create(TEST_DB), sockets)
 			, fauxSocket = {
-					handshake: {headers: {cookie: 'name=value; name2=value2; sid=123'}}
+					handshake: {headers: {cookie: 'name=value; name2=value2; sid=123'}},
+					on: function() {}
 				};
 
 		sockets.emit('connection', fauxSocket);

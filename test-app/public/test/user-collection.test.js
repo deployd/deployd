@@ -29,7 +29,26 @@ describe('User Collection', function() {
 					done();
 				});
 			});
-
+      
+      it('should properly receive emitToUsers messages', function(done) {
+        dpd.socketReady(function() {
+          dpd.users.once('created', function(u) {
+            expect(u).to.contain({ username: 'foo2' });
+            done();
+          });
+        });
+         
+        dpd.users.post({ username: 'foo', password: 'bar', admin: true })
+        .then(function(res){
+          expect(res).to.exist;
+          return dpd.users.login({ username: 'foo', password: 'bar'});
+        })
+        .then(function(res){
+          dpd.socket.emit('server:setSession', {sid: res.id});
+          dpd.users.post({ username: 'foo2', password: 'bar' });
+        });
+      });
+      
       it('should properly show username and password errors', function(done) {
         dpd.users.post({}, function(res, err) {
           expect(res).to.not.exist;
@@ -447,17 +466,9 @@ describe('User Collection', function() {
     afterEach(function (done) {
       this.timeout(10000);
       dpd.users.logout(function () {
-        dpd.users.get(function (users) {
-          var total = users.length;
-          if(total === 0) return done();
-          users.forEach(function(user) {
-            dpd.users.del({id: user.id}, function () {
-              total--;
-              if(!total) {
-                done();
-              }
-            });
-          });
+        // delete all users
+        dpd.users.del({id: { $ne: null } }, function (users) {
+          done();
         });
       });
     });
