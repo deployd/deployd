@@ -48,6 +48,14 @@
 			"required": false,
 			"id": "banned",
 			"order": 5
+		},
+		"admin": {
+			"name": "admin",
+			"type": "boolean",
+			"typeLabel": "boolean",
+			"required": false,
+			"id": "admin",
+			"order": 6
 		}
 	},
 	"typeLabel": "Users Collection",
