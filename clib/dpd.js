@@ -1,4 +1,4 @@
-(function(undefined) {
+(function (undefined) {
 
   if (!window._dpd) window._dpd = {};
 
@@ -164,7 +164,7 @@
       var query = encodeIfComplex(options.query);
 
       return _dpd.ajax(root + joinPath(BASE_URL, options.path), {
-        method: "GET"
+          method: "GET"
         , query: query
         , success: returnSuccess(fn)
         , error: returnError(fn)
@@ -174,7 +174,7 @@
       var query = encodeIfComplex(options.query);
 
       return _dpd.ajax(root + joinPath(BASE_URL, options.path), {
-        method: "DELETE"
+          method: "DELETE"
         , query: query
         , success: returnSuccess(fn)
         , error: returnError(fn)
@@ -186,7 +186,7 @@
       else query = '';
 
       return _dpd.ajax(root + joinPath(BASE_URL, options.path) + query, {
-        method: method
+          method: method
         , contentType: options.body && "application/json"
         , data: JSON.stringify(options.body || {}) || "{}"
         , success: returnSuccess(fn)
@@ -213,7 +213,7 @@
 
   function parseGetSignature(args) {
     var settings = {}
-    , i = 0;
+      , i = 0;
 
     // path/func
     if (isString(args[i]) || !args[i]) {
@@ -242,7 +242,7 @@
 
   function parsePostSignature(args) {
     var settings = {}
-    , i = 0;
+      , i = 0;
 
     //path
     if (isString(args[i]) || !args[i]) {
@@ -300,7 +300,7 @@
 
     r.exec = function(func, path, body, fn) {
       var settings = {}
-      , i = 0;
+        , i = 0;
 
       settings.func = arguments[i];
       i++;

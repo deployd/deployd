@@ -15,11 +15,3 @@ describe('404s', function(){
     }
   });
 });
-
-// TODO: this break root requests
-// describe('dpd.getBaseUrl', function(){
-//   it('should set BaseUrl', function() {
-//     var baseUrl = dpd.getBaseUrl();
-//     expect(baseUrl).to.equal('http://127.0.0.1:2403/');
-//   });
-// });
