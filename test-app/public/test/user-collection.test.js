@@ -77,7 +77,19 @@ describe('User Collection', function() {
           done();
         });
       });
-	  
+      
+      it('should not crash the server when called without a password', function(done) {
+        dpd.users.post({username: 'foo@bar.com', password: '123456'})
+        .then(function(res) {
+          expect(res).to.exist;
+          expect(res.username).to.equal('foo@bar.com');
+          dpd.users.login({username: 'foo@bar.com'}, function(session, err) {
+            expect(err).to.exist;
+            done();
+          });  
+        });
+      });
+      
       it('should call login event and provide access to user in event', function(done) {
         dpd.users.post(credentials, function (user, err) {
           expect(user.id.length).to.equal(16);
