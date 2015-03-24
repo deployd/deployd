@@ -12,7 +12,7 @@ Deployd is the simplest way to build realtime APIs for web and mobile apps. Read
 
 ## install on windows
 
-[Download](https://bintray.com/artifact/download/deployd/dpd-win-installer/deployd-win-0.7.0.exe) the installer.
+[Download](https://bintray.com/artifact/download/deployd/dpd-win-installer/deployd-win-0.8.0.exe) the installer.
 
 ## install on macosx
 
