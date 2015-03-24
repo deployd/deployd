@@ -4,70 +4,13 @@
 
   var root = null;
 
-  setBaseUrl();
+
 
   var consoleLog = (typeof console !== 'undefined') && console.log;
 
   var socket;
 
-  function checkAndConnectSocketIO() {
-    if (!socket) {
-      socket = io.connect(root);
-      window.dpd.once('connect', function() {
-        isSocketReady = true;
-      });
-    }
-  }
-
   var BASE_URL = '/';
-
-  function setBaseUrl(options) {
-    var oldRoot = root;
-    
-    options = options || {};
-    if (typeof options === "string") {
-      // TODO: may need to parse the url to get the domain for socket
-      root = options;
-    } else { 
-      if (options.hostname) {
-        root = (options.protocol||location.protocol) + '//' + options.hostname;
-        var port = options.port || location.port;
-        if (port) {
-          root += ':' + port;
-        }
-      } else {
-        var element = document.currentScript;
-        if (!element) {
-          element = document.querySelector('script[src$="dpd.js"]');
-        }
-        if (element) {
-          var src = element.src || '';
-          var m = /((\w+:)?\/\/(.+):?(\d+)?)\//.exec(src);
-          if (m) {
-            root = m[1];
-          }        
-        }
-      }
-    }
-    
-    if (!root && location.hostname) {
-      root = location.protocol + '//' + location.hostname;
-      if (location.port) {
-        root += ':' + location.port;
-      }
-    }
-    if (root !== oldRoot) {
-      if (socket && socket.io) {
-        // disconnect socket if we're changing url
-        socket.io.disconnect();
-      }
-      socket = null;
-    }
-  }
-
-  function getBaseUrl(){
-    return root + BASE_URL;
-  }
 
   function normalizeArray(parts, allowAboveRoot) {
     // if the path tries to go above the root, `up` ends up > 0
@@ -325,6 +268,65 @@
 
     return r;
   };
+  
+  function getBaseUrl(){
+    return root + BASE_URL;
+  }
+  
+  function setBaseUrl(options) {
+    var oldRoot = root;
+    
+    options = options || {};
+    if (typeof options === "string") {
+      // TODO: may need to parse the url to get the domain for socket
+      root = options;
+    } else { 
+      if (options.hostname) {
+        root = (options.protocol||location.protocol) + '//' + options.hostname;
+        var port = options.port || location.port;
+        if (port) {
+          root += ':' + port;
+        }
+      } else {
+        var element = document.currentScript;
+        if (!element) {
+          element = document.querySelector('script[src$="dpd.js"]');
+        }
+        if (element) {
+          var src = element.src || '';
+          var m = /((\w+:)?\/\/(.+):?(\d+)?)\//.exec(src);
+          if (m) {
+            root = m[1];
+          }        
+        }
+      }
+    }
+    
+    if (!root && location.hostname) {
+      root = location.protocol + '//' + location.hostname;
+      if (location.port) {
+        root += ':' + location.port;
+      }
+    }
+    if (root !== oldRoot) {
+      if (socket && socket.io) {
+        // disconnect socket if we're changing url
+        socket.io.disconnect();
+      }
+      socket = null;
+      window.dpd.socket = null;
+    }
+  }
+  
+  function checkAndConnectSocketIO() {
+    if (!socket) {
+      socket = io.connect(root);
+      window.dpd.socket = socket;
+      window.dpd.once('connect', function() {
+        isSocketReady = true;
+      });
+    }
+  }
 
   window.dpd.setBaseUrl = setBaseUrl;
   window.dpd.getBaseUrl = getBaseUrl;
@@ -362,8 +364,6 @@
       window.dpd.once('connect', fn);
     }
   };
-
-  window.dpd.socket = socket;
-
-
+  
+  setBaseUrl();
 })();
