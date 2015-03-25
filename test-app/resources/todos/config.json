@@ -58,6 +58,14 @@
 			"id": "done",
 			"name": "done",
 			"order": 6
+		},
+		"todoId": {
+			"name": "todoId",
+			"type": "string",
+			"typeLabel": "string",
+			"required": false,
+			"id": "todoId",
+			"order": 7
 		}
 	},
 	"path": "/todos",

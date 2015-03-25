@@ -1,3 +1,7 @@
+if (this.todoId) {
+  this.id = this.todoId;
+}
+
 if (this.title == "$REQUIRE_AUTH") {
     if (!me) cancel("You are not authorized", 401);
 }
