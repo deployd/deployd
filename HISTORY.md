@@ -1,5 +1,12 @@
 # History
 
+## 0.8.2 (2015-04-23)
+
+### Bug Fixes
+
+- **collection:** should not crash on deleting non existent id
+  ([1b85c2127c](https://github.com/deployd/deployd/commit/1b85c2127c0badda706e34e10522e20dbd7bd879))
+  
 ## 0.8.1 (2015-04-22)
 
 ### Bug Fixes
