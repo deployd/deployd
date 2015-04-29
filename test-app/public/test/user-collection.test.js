@@ -348,7 +348,7 @@ describe('User Collection', function() {
 			});
 		});
 		describe('dpd.users.on("changed", fn)', function() {
-      it('should respond to the built-in changed event on post', function(done) {
+      it('should respond to the changed event (in AfterCommit) on post', function(done) {
         dpd.socketReady(function() {
           dpd.users.once('changed', function() {
             done();
@@ -358,7 +358,7 @@ describe('User Collection', function() {
         });
       });
       
-      it('should respond to the built-in changed event on put', function(done) {
+      it('should respond to the changed event (in AfterCommit) on put', function(done) {
         dpd.users.post({username: 'foo2@bar.com', password: '123456'}, function(item) {
           dpd.socketReady(function() {
             dpd.users.once('changed', function() {
@@ -370,7 +370,7 @@ describe('User Collection', function() {
         });
       });
       
-      it('should respond to the built-in changed event on del', function(done) {
+      it('should respond to the changed event (in AfterCommit) on del', function(done) {
         dpd.users.post({username: 'foo2@bar.com', password: '123456'}, function(item) {
           dpd.socketReady(function() {
             dpd.users.once('changed', function() {

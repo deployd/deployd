@@ -85,7 +85,7 @@ describe('Collection', function () {
     });
 
     describe('dpd.todos.on("changed", fn)', function() {
-      it('should respond to the built-in changed event on post', function(done) {
+      it('should respond to the changed event (in AfterCommit) on post', function(done) {
         dpd.socketReady(function() {
           dpd.todos.once('changed', function() {
             done();
@@ -95,7 +95,7 @@ describe('Collection', function () {
         });
       });
 
-      it('should respond to the built-in changed event on put', function(done) {
+      it('should respond to the changed event (in AfterCommit) on put', function(done) {
         dpd.todos.post({title: 'changed - create'}, function(item) {
           dpd.socketReady(function() {
             dpd.todos.once('changed', function() {
@@ -107,7 +107,7 @@ describe('Collection', function () {
         });
       });
 
-      it('should respond to the built-in changed event on del', function(done) {
+      it('should respond to the changed event (in AfterCommit) on del', function(done) {
         dpd.todos.post({title: 'changed - create'}, function(item) {
           dpd.socketReady(function() {
             dpd.todos.once('changed', function() {
