@@ -304,6 +304,19 @@ describe('collection', function(){
     //   c.save({}, {count: {$inc: 100}}, {id: 'foo'}, {}, done);
     // });
   });
+  
+  describe('.remove()', function() {
+    it('should not crash on non existent id', function(done) {
+      var c = new Collection('foo_del', {db: db.create(TEST_DB), config: { properties: {count: {type: 'number'}}}});
+
+      c.remove({query: {id: "abc"}}, function (err, item) {
+        c.find({}, function (err, items) {
+          expect(items.length).to.equal(0);
+          done(err);
+        });
+      });
+    });
+  });
 
   describe('.get()', function() {
     it('should return the provided data', function(done) {
