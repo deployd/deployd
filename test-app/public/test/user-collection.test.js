@@ -29,7 +29,26 @@ describe('User Collection', function() {
 					done();
 				});
 			});
-
+      
+      it('should properly receive emitToUsers messages', function(done) {
+        dpd.socketReady(function() {
+          dpd.users.once('created', function(u) {
+            expect(u).to.contain({ username: 'foo2' });
+            done();
+          });
+        });
+         
+        dpd.users.post({ username: 'foo', password: 'bar', admin: true })
+        .then(function(res){
+          expect(res).to.exist;
+          return dpd.users.login({ username: 'foo', password: 'bar'});
+        })
+        .then(function(res){
+          dpd.socket.emit('server:setSession', {sid: res.id});
+          dpd.users.post({ username: 'foo2', password: 'bar' });
+        });
+      });
+      
       it('should properly show username and password errors', function(done) {
         dpd.users.post({}, function(res, err) {
           expect(res).to.not.exist;
@@ -77,7 +96,19 @@ describe('User Collection', function() {
           done();
         });
       });
-	  
+      
+      it('should not crash the server when called without a password', function(done) {
+        dpd.users.post({username: 'foo@bar.com', password: '123456'})
+        .then(function(res) {
+          expect(res).to.exist;
+          expect(res.username).to.equal('foo@bar.com');
+          dpd.users.login({username: 'foo@bar.com'}, function(session, err) {
+            expect(err).to.exist;
+            done();
+          });  
+        });
+      });
+      
       it('should call login event and provide access to user in event', function(done) {
         dpd.users.post(credentials, function (user, err) {
           expect(user.id.length).to.equal(16);
@@ -317,7 +348,7 @@ describe('User Collection', function() {
 			});
 		});
 		describe('dpd.users.on("changed", fn)', function() {
-      it('should respond to the built-in changed event on post', function(done) {
+      it('should respond to the changed event (in AfterCommit) on post', function(done) {
         dpd.socketReady(function() {
           dpd.users.once('changed', function() {
             done();
@@ -327,7 +358,7 @@ describe('User Collection', function() {
         });
       });
       
-      it('should respond to the built-in changed event on put', function(done) {
+      it('should respond to the changed event (in AfterCommit) on put', function(done) {
         dpd.users.post({username: 'foo2@bar.com', password: '123456'}, function(item) {
           dpd.socketReady(function() {
             dpd.users.once('changed', function() {
@@ -339,7 +370,7 @@ describe('User Collection', function() {
         });
       });
       
-      it('should respond to the built-in changed event on del', function(done) {
+      it('should respond to the changed event (in AfterCommit) on del', function(done) {
         dpd.users.post({username: 'foo2@bar.com', password: '123456'}, function(item) {
           dpd.socketReady(function() {
             dpd.users.once('changed', function() {
@@ -472,17 +503,9 @@ describe('User Collection', function() {
     afterEach(function (done) {
       this.timeout(10000);
       dpd.users.logout(function () {
-        dpd.users.get(function (users) {
-          var total = users.length;
-          if(total === 0) return done();
-          users.forEach(function(user) {
-            dpd.users.del({id: user.id}, function () {
-              total--;
-              if(!total) {
-                done();
-              }
-            });
-          });
+        // delete all users
+        dpd.users.del({id: { $ne: null } }, function (users) {
+          done();
         });
       });
     });

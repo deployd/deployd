@@ -24,23 +24,32 @@ describe('UserCollection', function() {
 			this.ctx.query = {};
 			this.ctx.session = {
 				set: function(changes) {
-					expect(changes).to.eql({uid: '123', path: '/users'});
+					expect(changes).to.contain({uid: '123', path: '/users'});
 					return this;
 				},
 				save: function(fn) {
 					expect(fn).to.be.a('function');
-					fn();
+					fn(null, { path: '/users', uid: '123', id: 'abc' });
 				}
 			};
 			this.ctx.req.url = '/users/login';
 			this.ctx.req.method = 'POST';
-			this.ctx.req.body.email = 'foo@bar.com';
+			this.ctx.req.body.username = 'foo@bar.com';
 			this.ctx.req.body.password = 'abcd';
-			this.uc.store.find = function(query, fn) {
-				expect(query).to.eql({email: 'foo@bar.com', password: 'abcd'});
-				fn(null, {id: '123', email: 'foo@bar.com'});
+			// hash the password so we can use it in our mocked loginFindUser function below
+			this.uc.setPassword(this.ctx.req.body);
+			var hashedPassword = this.ctx.req.body.password;
+			// reset it as plain test
+			this.ctx.req.body.password = 'abcd';
+
+			this.uc.loginFindUser = function (ctx, fn) {
+			  expect(ctx.req.body).to.eql({ username: 'foo@bar.com', password: 'abcd' });
+			  fn(null, { id: '123', username: 'foo@bar.com', password: hashedPassword });
 			};
-			this.complete = function(err, res) {
+
+			this.complete = function (err, res) {
+			  expect(err).to.not.exist;
+			  expect(res).to.contain({ uid: '123', path: '/users' });
 				done();
 			};
 

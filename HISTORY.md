@@ -1,5 +1,37 @@
 # History
 
+## 0.8.2 (2015-04-23)
+
+### Bug Fixes
+
+- **collection:** should not crash on deleting non existent id
+  ([1b85c2127c](https://github.com/deployd/deployd/commit/1b85c2127c0badda706e34e10522e20dbd7bd879))
+  
+## 0.8.1 (2015-04-22)
+
+### Bug Fixes
+
+- **UserCollection:** res.cookies not available from internal client
+  ([5717c4d1](https://github.com/deployd/deployd/commit/5717c4d124060bcb41a794ceeec1a84ed4ca1597))
+- **cli:**
+  - dpd keygen fails when .dpd folder doesn't exist
+  ([b5a6fd5b](https://github.com/deployd/deployd/commit/b5a6fd5b5eebdbc755153cc58234459aeabef908))
+  - bug515 correct wrong error message when deployd crashes
+  ([59af175c](https://github.com/deployd/deployd/commit/59af175c5c40e210828a2aa6ea71cad459d0f8c2))
+- **dashboard:** use ejs delimiter instead of open and close tag
+  ([776e17cf](https://github.com/deployd/deployd/commit/776e17cfa8b1263373ddf9ef6c1336d8af37315c))
+- **delete:** call Delete event for every record matched
+  ([462c6766](https://github.com/deployd/deployd/commit/462c6766351a1bbac86d730d58f272ca98869527))
+- **dpd.js:** dpd.socket null
+  ([5331ac39](https://github.com/deployd/deployd/commit/5331ac397400e0c6c11a6caee3ea1d1d3cefa58b))
+- **script:** memory leak and performance improvement
+  ([578bd28d](https://github.com/deployd/deployd/commit/578bd28d0feee81caa1bcb7045c259b8e0d44797))
+- **server:** allow request.rawBody for middlewares
+  ([59fbdbab](https://github.com/deployd/deployd/commit/59fbdbab1760bafe043a4f4e4dfef851ac02c7c8),
+   [#519](https://github.com/deployd/deployd/issues/519))
+- **user-collection:** crash when password is not specified in login
+  ([65f4170b](https://github.com/deployd/deployd/commit/65f4170b7881ebb01ba50c4ee47fae22f3fe001e))
+
 ## 0.8.0
 
 ### Bug Fixes

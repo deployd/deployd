@@ -1,7 +1,8 @@
 # deployd
 
-[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/deployd/deployd?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)  
-[![Current Version](https://img.shields.io/npm/v/deployd.svg?style=flat-square)](https://www.npmjs.org/package/deployd) [![Build Status](https://img.shields.io/travis/deployd/deployd.svg?style=flat-square)](http://travis-ci.org/deployd/deployd)
+> the simplest way to build an api.
+
+[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/deployd/deployd)  [![Current Version](https://img.shields.io/npm/v/deployd.svg?style=flat-square)](https://www.npmjs.org/package/deployd) [![Build Status](https://img.shields.io/travis/deployd/deployd.svg?style=flat-square)](http://travis-ci.org/deployd/deployd)
 
 ## overview
 
@@ -9,21 +10,12 @@ Deployd is the simplest way to build realtime APIs for web and mobile apps. Read
 
 [Read more about deployd](http://deployd.com)
 
-
-## install on windows
-
-[Download](https://bintray.com/artifact/download/deployd/dpd-win-installer/deployd-win-0.7.0.exe) the installer.
-
-## install on macosx
-
-The macosx installer is deprecated. The recommended way is now npm (`npm install deployd -g`) and [install mongodb](http://docs.mongodb.org/manual/tutorial/install-mongodb-on-os-x/) separately.
-
 ## quick start
 
 	$ dpd create hello
 	$ cd hello
 	$ dpd -d
-	
+
 ## helpful resources
 
  - [Docs](http://docs.deployd.com/)
@@ -34,9 +26,18 @@ The macosx installer is deprecated. The recommended way is now npm (`npm install
  - [Gitter Chat Page](https://gitter.im/deployd/deployd)
  - [Example Apps](http://docs.deployd.com/examples/)
 
+
 ## install from npm
 
 	npm install deployd -g
+
+## install on windows
+
+[Download](https://bintray.com/artifact/download/deployd/dpd-win-installer/deployd-win-0.8.0.exe) the installer.
+
+## install on macosx
+
+The macosx installer is deprecated. The recommended way is now npm (`npm install deployd -g`) and [install mongodb](http://docs.mongodb.org/manual/tutorial/install-mongodb-on-os-x/) separately.
 
 ## install from source
 

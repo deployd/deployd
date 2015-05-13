@@ -1,0 +1,1 @@
+emit('users:changed');

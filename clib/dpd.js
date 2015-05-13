@@ -2,15 +2,13 @@
 
   if (!window._dpd) window._dpd = {};
 
-  var root = window.location.protocol + '//' + window.location.hostname;
-  if (window.location.port !== '') {
-    root += ':' + window.location.port;
-  }
+  var root = null;
+
+
 
   var consoleLog = (typeof console !== 'undefined') && console.log;
 
-  // initial socket connection
-  var socket = io.connect(root);
+  var socket;
 
   var BASE_URL = '/';
 
@@ -76,7 +74,7 @@
     var parts = [];
     for (var k in query) {
       if (query.hasOwnProperty(k)) {
-        parts.push(encodeURIComponent(k) + "=" + encodeURIComponent(query[k]));  
+        parts.push(encodeURIComponent(k) + "=" + encodeURIComponent(query[k]));
       }
     }
     return parts.join('&');
@@ -167,23 +165,23 @@
     }
 
     // join path to func
-    if (isString(args[i])  || !args[i]) {
+    if (isString(args[i]) || !args[i]) {
       settings.path = joinPath(settings.path, toString(args[i]));
       i++;
     }
 
     // query
-    if (args[i] !== consoleLog && typeof args[i] === 'object' || !args[i]) { // IE considers console.log to be an object. 
+    if (args[i] !== consoleLog && typeof args[i] === 'object' || !args[i]) { // IE considers console.log to be an object.
       settings.query = args[i];
       i++;
     }
 
     if (typeof args[i] === 'function' || args[i] === consoleLog) {
-      settings.fn = args[i];  
+      settings.fn = args[i];
     }
 
     return settings;
-}
+  }
 
   function parsePostSignature(args) {
     var settings = {}
@@ -209,7 +207,7 @@
     }
 
     if (typeof args[i] === 'function' || args[i] === consoleLog) {
-      settings.fn = args[i];  
+      settings.fn = args[i];
     }
 
     return settings;
@@ -270,12 +268,76 @@
 
     return r;
   };
+  
+  function getBaseUrl(){
+    return root + BASE_URL;
+  }
+  
+  function setBaseUrl(options) {
+    var oldRoot = root;
+    
+    options = options || {};
+    if (typeof options === "string") {
+      // TODO: may need to parse the url to get the domain for socket
+      root = options;
+    } else { 
+      if (options.hostname) {
+        root = (options.protocol||location.protocol) + '//' + options.hostname;
+        var port = options.port || location.port;
+        if (port) {
+          root += ':' + port;
+        }
+      } else {
+        var element = document.currentScript;
+        if (!element) {
+          element = document.querySelector('script[src$="dpd.js"]');
+        }
+        if (element) {
+          var src = element.src || '';
+          var m = /((\w+:)?\/\/(.+):?(\d+)?)\//.exec(src);
+          if (m) {
+            root = m[1];
+          }        
+        }
+      }
+    }
+    
+    if (!root && location.hostname) {
+      root = location.protocol + '//' + location.hostname;
+      if (location.port) {
+        root += ':' + location.port;
+      }
+    }
+    if (root !== oldRoot) {
+      if (socket && socket.io) {
+        // disconnect socket if we're changing url
+        socket.io.disconnect();
+      }
+      socket = null;
+      window.dpd.socket = null;
+    }
+  }
+  
+  function checkAndConnectSocketIO() {
+    if (!socket) {
+      socket = io.connect(root);
+      window.dpd.socket = socket;
+      window.dpd.once('connect', function() {
+        isSocketReady = true;
+      });
+    }
+  }
+
+  window.dpd.setBaseUrl = setBaseUrl;
+  window.dpd.getBaseUrl = getBaseUrl;
 
   window.dpd.on = function() {
+    checkAndConnectSocketIO();
     socket.on.apply(socket, arguments);
   };
 
   window.dpd.once = function(name, fn) {
+    checkAndConnectSocketIO();
     var _fn = function() {
       socket.removeListener(name, _fn);
       fn.apply(this, arguments);
@@ -284,6 +346,7 @@
   };
 
   window.dpd.off = function(name, fn) {
+    checkAndConnectSocketIO();
     if (fn == null) {
       socket.removeAllListeners(name);
     } else {
@@ -292,19 +355,15 @@
   };
 
   var isSocketReady = false;
-  window.dpd.once('connect', function() {
-    isSocketReady = true;
-  });
 
   window.dpd.socketReady = function(fn) {
+    checkAndConnectSocketIO();
     if (isSocketReady) {
       setTimeout(fn, 0);
     } else {
       window.dpd.once('connect', fn);
     }
   };
-
-  window.dpd.socket = socket;
-
-
+  
+  setBaseUrl();
 })();
