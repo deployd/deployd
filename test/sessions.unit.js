@@ -204,7 +204,6 @@ describe('Session', function() {
 		var sockets = new EventEmitter()
 			,	store = new SessionStore('sessions', db.create(TEST_DB), sockets)
 			, totalSockets = 5
-			, remainingTo = totalSockets
 			, remainingFrom = totalSockets * 3;
 
 		var fauxUsers = { get: function (q, fn) {
@@ -223,13 +222,6 @@ describe('Session', function() {
 		};
 
 		var bindSession = function(data, session){
-			// bind to an event even before a connection has been made
-			session.socket.on('message TO server', function (data) {
-				expect(data).to.equal("message from " + (totalSockets - remainingTo));
-				remainingTo--;
-				if (remainingTo === 0 && remainingFrom === 0) done();
-			});
-
 			// simulate totalSockets connections per user
 			for (var i = 0; i < totalSockets; i++){
 				var fauxSocket = new EventEmitter();
