@@ -29,7 +29,7 @@ describe('User Collection', function() {
 					done();
 				});
 			});
-      
+
       it('should properly receive emitToUsers messages', function(done) {
         dpd.socketReady(function() {
           dpd.users.once('created', function(u) {
@@ -37,18 +37,17 @@ describe('User Collection', function() {
             done();
           });
         });
-         
+
         dpd.users.post({ username: 'foo', password: 'bar', admin: true })
         .then(function(res){
           expect(res).to.exist;
           return dpd.users.login({ username: 'foo', password: 'bar'});
         })
         .then(function(res){
-          dpd.socket.emit('server:setSession', {sid: res.id});
           dpd.users.post({ username: 'foo2', password: 'bar' });
         });
       });
-      
+
       it('should properly show username and password errors', function(done) {
         dpd.users.post({}, function(res, err) {
           expect(res).to.not.exist;
@@ -96,7 +95,7 @@ describe('User Collection', function() {
           done();
         });
       });
-      
+
       it('should not crash the server when called without a password', function(done) {
         dpd.users.post({username: 'foo@bar.com', password: '123456'})
         .then(function(res) {
@@ -105,14 +104,14 @@ describe('User Collection', function() {
           dpd.users.login({username: 'foo@bar.com'}, function(session, err) {
             expect(err).to.exist;
             done();
-          });  
+          });
         });
       });
-      
+
       it('should call login event and provide access to user in event', function(done) {
         dpd.users.post(credentials, function (user, err) {
           expect(user.id.length).to.equal(16);
-          
+
           dpd.socketReady(function() {
             dpd.users.once('test_event', function(u) {
               expect(u['this']).to.eql(user);
@@ -127,7 +126,7 @@ describe('User Collection', function() {
           });
         });
       });
-      
+
       // see the code in login.js in the users collection for more details about what these tests assume
       it('should allow canceling login from login event', function (done) {
         dpd.users.post({username: 'foo@bar.com', password: '123456'}, function (user, err) {
@@ -139,7 +138,7 @@ describe('User Collection', function() {
           });
         });
       });
-        
+
       it('should allow updating the user from the login event', function (done) {
         dpd.users.post({ username: 'foo2@bar.com', password: '123456' }, function (user, err) {
           expect(user.id.length).to.equal(16);
@@ -160,7 +159,7 @@ describe('User Collection', function() {
       it('should allow updating the user from the login event when login fails', function (done) {
         dpd.users.post({ username: 'foo3@bar.com', password: '123456' }, function (user, err) {
           expect(user.id.length).to.equal(16);
-          
+
           // try 4 bad logins; the logic in the login event will ban the user after 3 failed attempts
           chain(function (next) {
             dpd.users.login({ username: 'foo3@bar.com', password: 'bad' }, next);
@@ -189,10 +188,10 @@ describe('User Collection', function() {
             expect(session.uid.length).to.equal(16);
             expect(err).to.not.exist;
             done();
-          });                  
+          });
         });
       });
-      
+
       it('should not call other events after update of user from login event', function (done) {
         dpd.users.post({ username: '$SKIP_EVENTS_TEST', password: '123456' })
         .then(function (user) {
@@ -217,7 +216,7 @@ describe('User Collection', function() {
           done();
         });
       });
-      
+
       it('should not crash server when login is called repeatedly', function (done) {
         this.timeout(10000);
         dpd.users.post({ username: 'foo@bar.com', password: '123456' }, function (user, err) {
@@ -237,11 +236,11 @@ describe('User Collection', function() {
           function doLogin() {
             dpd.users.login({ username: 'foo@bar.com', password: '123456' }, loginDone);
           }
-          
+
           doLogin();
         });
       });
-      
+
       it('should allow login with Authorization: Bearer HTTP header ', function (done) {
         // ensure we're logged out
         dpd.users.logout(function() {
@@ -263,8 +262,8 @@ describe('User Collection', function() {
         });
       });
     });
-    
-	    
+
+
 		describe('.me(fn)', function() {
 			it('should return the current user', function(done) {
 				dpd.users.post(credentials, function (user, err) {
@@ -278,7 +277,7 @@ describe('User Collection', function() {
 					});
 				});
       });
-      
+
       it('should invalidate session if username or password is changed', function (done) {
         dpd.users.post({ username: 'foo123@bar.com', password: '123456' }).then(function (user) {
           expect(user.id.length).to.equal(16);
@@ -299,7 +298,7 @@ describe('User Collection', function() {
         })
         .then(function (user) {
           expect(user).to.equal('');
-          return dpd.users.login({ username: 'foo1234@bar.com', password: '123456' }); 
+          return dpd.users.login({ username: 'foo1234@bar.com', password: '123456' });
         })
         .then(function (session) {
           expect(session).to.exist;
@@ -357,26 +356,26 @@ describe('User Collection', function() {
           dpd.users.post({username: 'foo@bar.com', password: '123456'});
         });
       });
-      
+
       it('should respond to the changed event (in AfterCommit) on put', function(done) {
         dpd.users.post({username: 'foo2@bar.com', password: '123456'}, function(item) {
           dpd.socketReady(function() {
             dpd.users.once('changed', function() {
               done();
             });
-            
+
             dpd.users.put(item.id, {username: 'foo3@bar.com'});
           });
         });
       });
-      
+
       it('should respond to the changed event (in AfterCommit) on del', function(done) {
         dpd.users.post({username: 'foo2@bar.com', password: '123456'}, function(item) {
           dpd.socketReady(function() {
             dpd.users.once('changed', function() {
               done();
             });
-            
+
             dpd.users.del(item.id);
           });
         });

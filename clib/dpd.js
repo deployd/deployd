@@ -4,8 +4,6 @@
 
   var root = null;
 
-
-
   var consoleLog = (typeof console !== 'undefined') && console.log;
 
   var socket;
@@ -102,39 +100,52 @@
     };
   }
 
+  function unwrapPromise(promise, fn) {
+    return promise
+    .then(function (res) {
+      var sessionId = res.raw.getResponseHeader("X-Session-Token");
+      if (sessionId) {
+        window.dpd.setSessionId(sessionId);
+      }
+      return res;
+    })
+    .then(function (res) {
+      returnSuccess(fn)(res.data);
+      return res.data;
+    })
+    .fail(function (err) {
+      returnError(fn)(err.data);
+      throw err.data;
+    });
+  }
+
   var baseMethods = {
     get: function(options, fn) {
       var query = encodeIfComplex(options.query);
 
-      return _dpd.ajax(root + joinPath(BASE_URL, options.path), {
+      return unwrapPromise(_dpd.ajax(root + joinPath(BASE_URL, options.path), {
           method: "GET"
         , query: query
-        , success: returnSuccess(fn)
-        , error: returnError(fn)
-      });
+      }), fn);
     }
     , del: function(options, fn) {
       var query = encodeIfComplex(options.query);
 
-      return _dpd.ajax(root + joinPath(BASE_URL, options.path), {
+      return unwrapPromise(_dpd.ajax(root + joinPath(BASE_URL, options.path), {
           method: "DELETE"
         , query: query
-        , success: returnSuccess(fn)
-        , error: returnError(fn)
-      });
+      }), fn);
     }
     , requestWithBody: function(method, options, fn) {
       var query = encodeIfComplex(options.query);
       if (query) query = '?' + query;
       else query = '';
 
-      return _dpd.ajax(root + joinPath(BASE_URL, options.path) + query, {
+      return unwrapPromise(_dpd.ajax(root + joinPath(BASE_URL, options.path) + query, {
           method: method
         , contentType: options.body && "application/json"
-        , data: JSON.stringify(options.body || {}) || "{}"
-        , success: returnSuccess(fn)
-        , error: returnError(fn)
-      });
+        , data: JSON.stringify(options.body || {}) || "{}" })
+      , fn);
     }
   };
 
@@ -268,19 +279,19 @@
 
     return r;
   };
-  
+
   function getBaseUrl(){
     return root + BASE_URL;
   }
-  
+
   function setBaseUrl(options) {
     var oldRoot = root;
-    
+
     options = options || {};
     if (typeof options === "string") {
       // TODO: may need to parse the url to get the domain for socket
       root = options;
-    } else { 
+    } else {
       if (options.hostname) {
         root = (options.protocol||location.protocol) + '//' + options.hostname;
         var port = options.port || location.port;
@@ -297,11 +308,11 @@
           var m = /((\w+:)?\/\/(.+):?(\d+)?)\//.exec(src);
           if (m) {
             root = m[1];
-          }        
+          }
         }
       }
     }
-    
+
     if (!root && location.hostname) {
       root = location.protocol + '//' + location.hostname;
       if (location.port) {
@@ -317,7 +328,9 @@
       window.dpd.socket = null;
     }
   }
-  
+
+  var _sessionId;
+
   function checkAndConnectSocketIO() {
     if (!socket) {
       socket = io.connect(root);
@@ -325,11 +338,23 @@
       window.dpd.once('connect', function() {
         isSocketReady = true;
       });
+      window.dpd.on('reconnect', function(){
+        if (_sessionId) window.dpd.setSessionId(_sessionId, true);
+      });
     }
   }
 
   window.dpd.setBaseUrl = setBaseUrl;
   window.dpd.getBaseUrl = getBaseUrl;
+
+  window.dpd.setSessionId = function (sessionId, force) {
+    if (force || (sessionId != _sessionId)) {
+      window.dpd.socketReady(function (){
+        window.dpd.socket.emit('server:setSession', { sid: sessionId });
+        _sessionId = sessionId;
+      });
+    }
+  };
 
   window.dpd.on = function() {
     checkAndConnectSocketIO();
@@ -364,6 +389,6 @@
       window.dpd.once('connect', fn);
     }
   };
-  
+
   setBaseUrl();
 })();

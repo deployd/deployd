@@ -15,9 +15,9 @@ function parseBody(req) {
       return req.responseText;
     }
   } else {
-    return req.responseText;  
+    return req.responseText;
   }
-  
+
 }
 
 function sendRequest(url,options) {
@@ -36,23 +36,24 @@ function sendRequest(url,options) {
     req.setRequestHeader('Content-Type', options.contentType || 'application/json');
   }
   req.setRequestHeader('Accept', 'application/json');
-    
+
   if (typeof sendRequest.headers === 'object') {
     for (var k in sendRequest.headers) {
       if (sendRequest.headers.hasOwnProperty(k)) {
-        req.setRequestHeader(k, sendRequest.headers[k]);  
+        req.setRequestHeader(k, sendRequest.headers[k]);
       }
     }
   }
   req.onreadystatechange = function () {
     if (req.readyState != 4) return;
+    var result = { data: parseBody(req), raw: req };
     if (req.status != 200 && req.status != 204 && req.status != 304) {
-      if (typeof options.error === 'function') options.error(parseBody(req));
-      deferred.reject(parseBody(req));
+      if (typeof options.error === 'function') options.error(result);
+      deferred.reject(result);
       return;
     }
-    if (typeof options.success === 'function') options.success(parseBody(req));
-    deferred.resolve(parseBody(req));
+    if (typeof options.success === 'function') options.success(result);
+    deferred.resolve(result);
   };
   if (req.readyState == 4) return;
   req.send(data);
