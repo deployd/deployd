@@ -4,17 +4,28 @@ var SessionStore = require('../lib/session').SessionStore
 	, sinon = require('sinon');
 
 describe('SessionStore', function() {
-	it('should bind sockets to sessions', function() {
-		var sockets = new EventEmitter()
-			,	store = new SessionStore('sessions', db.create(TEST_DB), sockets)
-			, fauxSocket = {
-					handshake: {headers: {cookie: 'name=value; name2=value2; sid=123'}},
-					on: function() {}
-				};
+	it('should allow binding multiple sockets to a single session', function(done) {
+		var store = new SessionStore('sessions', db.create(TEST_DB))
+			,	sid = store.createUniqueIdentifier();
 
-		sockets.emit('connection', fauxSocket);
+		store.createSession(function (err, session) {
+			session.save(function(err, data){
+				var sockets = new EventEmitter()
+					,	store = new SessionStore('sessions', db.create(TEST_DB), sockets)
 
-		expect(store.socketIndex['123']).to.equal(fauxSocket);
+				for(var i = 1; i < 9; i++) {
+					fauxSocket = {
+								id: 'abcd' + i,
+								handshake: {headers: {cookie: 'name=value; name2=value2; sid=' + data.id}},
+								on: function() {}
+							};
+
+					sockets.emit('connection', fauxSocket);
+					expect(store.socketIndex[data.id]['abcd' + i]).to.equal(fauxSocket);
+				}
+				done();
+			});
+		});
 	});
 
 	describe('.createUniqueIdentifier()', function() {
@@ -49,9 +60,9 @@ describe('SessionStore', function() {
 					// create again from store
 					store.createSession(session.sid, function (err, session2) {
 						// get back the session
-						var s = store.getSession('my-uid');
+						var s = store.getSession('my-uid', session.sid);
 						expect(s.sid).to.equal(session.sid);
-						
+
 						done(err);
 					});
 				});
@@ -62,7 +73,7 @@ describe('SessionStore', function() {
 
 describe('Session', function() {
   var clock;
-    
+
   function createSession(fn) {
 		var store = new SessionStore('sessions', db.create(TEST_DB));
 
@@ -72,27 +83,27 @@ describe('Session', function() {
 			fn(err, session);
 		});
   }
-  
+
   beforeEach(function () {
     this.sinon = sinon.sandbox.create();
   });
-  
+
   afterEach(function () {
     this.sinon.restore();
   });
-  
+
   describe('.createSession()', function () {
     beforeEach(function () {
       clock = sinon.useFakeTimers(new Date(2015, 01, 01).getTime());
     });
-    
+
     afterEach(function () {
       clock.restore();
     });
-    
+
     it('should expire sessions after max age', function (done) {
       var store = new SessionStore('sessions', db.create(TEST_DB), undefined, { maxAge: 100000 });
-      
+
       store.createSession(function (err, session) {
         session.set({ foo: 'bar' }).save(function (err, data) {
           expect(err).to.not.exist;
@@ -130,18 +141,131 @@ describe('Session', function() {
 			,	store = new SessionStore('sessions', db.create(TEST_DB), sockets);
 
 		store.createSession(function (err, session) {
-			// generate faux headers
-			fauxSocket.handshake = { headers: {cookie: 'name=value; name2=value2; sid=' + session.sid} };
+			session.save(function(err, data){
 
+				// generate faux headers
+				fauxSocket.id = 'test123';
+				fauxSocket.handshake = { headers: {cookie: 'name=value; name2=value2; sid=' + data.id} };
+
+				// bind to an event even before a connection has been made
+				session.socket.on('test', function (data) {
+					expect(data).to.equal(123);
+					done();
+				});
+
+				sockets.emit('connection', fauxSocket);
+
+				fauxSocket.emit('test', 123);
+			})
+		});
+	});
+
+
+	it('should bind multiple sockets to the same session id', function(done) {
+		var sockets = new EventEmitter()
+			,	store = new SessionStore('sessions', db.create(TEST_DB), sockets)
+			, total = 5
+			, remainingTo = total
+			, remainingFrom = total;
+
+		store.createSession(function (err, session) {
+			session.save(function(err, data){
+				// bind to an event even before a connection has been made
+				session.socket.on('message TO server', function (data) {
+					expect(data).to.equal("message from " + (total - remainingTo));
+					remainingTo--;
+					if (remainingTo === 0 && remainingFrom === 0) done();
+				});
+
+				for (var i = 0; i < total; i++){
+					var fauxSocket = new EventEmitter();
+					// generate faux headers
+					fauxSocket.id = 'testSocket' + i;
+					fauxSocket.handshake = { headers: {cookie: 'name=value; name2=value2; sid=' + data.id} };
+
+					sockets.emit('connection', fauxSocket);
+
+					fauxSocket.emit('message TO server', "message from " + i);
+
+					fauxSocket.on('message FROM server', function(data) {
+						// must receive all events
+						expect(data).to.equal("hello");
+						remainingFrom--;
+						if (remainingTo === 0 && remainingFrom === 0) done();
+					})
+				}
+
+				session.socket.emit('message FROM server', "hello");
+			})
+		});
+	});
+
+	it('should bind multiple sessions to the same user id', function(done) {
+		var sockets = new EventEmitter()
+			,	store = new SessionStore('sessions', db.create(TEST_DB), sockets)
+			, totalSockets = 5
+			, remainingTo = totalSockets
+			, remainingFrom = totalSockets * 3;
+
+		var fauxUsers = { get: function (q, fn) {
+			fn([{ id: "abc123" }]);
+		}};
+
+		var sessions = [];
+
+		var createSessionForUser = function(uid, fn) {
+			return store.createSession(function (err, session) {
+				session.set({uid: uid}).save(function(err, data){
+					sessions.push(data);
+					fn(err, data, session);
+				});
+			});
+		};
+
+		var bindSession = function(data, session){
 			// bind to an event even before a connection has been made
-			session.socket.on('test', function (data) {
-				expect(data).to.equal(123);
-				done();
+			session.socket.on('message TO server', function (data) {
+				expect(data).to.equal("message from " + (totalSockets - remainingTo));
+				remainingTo--;
+				if (remainingTo === 0 && remainingFrom === 0) done();
 			});
 
-			sockets.emit('connection', fauxSocket);
+			// simulate totalSockets connections per user
+			for (var i = 0; i < totalSockets; i++){
+				var fauxSocket = new EventEmitter();
+				// generate faux headers
+				fauxSocket.id = 'testSocket' + i;
+				fauxSocket.handshake = { headers: {cookie: 'name=value; name2=value2; sid=' + data.id} };
 
-			fauxSocket.emit('test', 123);
+				sockets.emit('connection', fauxSocket);
+
+				// asserts here:
+				fauxSocket.on('hey', function(data) {
+					// must receive all events
+					expect(data).to.equal("test");
+					remainingFrom--;
+					if (remainingFrom === 0) done();
+				})
+			}
+		};
+
+		// session #1
+		createSessionForUser("abc123", function(err, data, session){
+			bindSession(data, session);
+			// session #2 (some other user id)
+			createSessionForUser("abc234", function(err, data, session){
+				bindSession(data, session);
+				// session #3
+				createSessionForUser("abc123", function(err, data, session){
+					bindSession(data, session);
+					// session #4
+					createSessionForUser("abc123", function(err, data, session){
+						bindSession(data, session);
+						// emit
+						session.emitToUsers(fauxUsers, {}, "hey", "test");
+					});
+				});
+			});
 		});
 	});
 
@@ -153,21 +277,21 @@ describe('Session', function() {
 			// simulate 10 ms latency for find function
 			setTimeout(function() { originalFind.apply(store, myArgs); }, 10);
 		});
-			
+
 		var callsLeft = 5;
 		function callback(err) {
 			expect(err).to.not.exist;
 			callsLeft--;
 			if (callsLeft == 0) return done();
-		} 
-		
+		}
+
 		for (var i = 0; i< 5; i++) {
 			setTimeout(function() {
 				store.createSession("1c829fa9ed135d0301919aa70505cf36a39b35527b775e45e1523c354e0c5f2b0b1636f173a94e26082291ae9ad0e3e74cb5226bd0aa86ee9f7a3749d57cc74d", callback);
 			}, 1);
 		}
 	});
-		
+
 	describe('.set(changes)', function() {
 		it('should set the changes to a sessions data', function(done) {
 			createSession(function (err, session) {
