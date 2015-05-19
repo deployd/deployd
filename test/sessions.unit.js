@@ -38,7 +38,7 @@ describe('SessionStore', function() {
 		});
 	});
 
-	describe('.getSession(uid)', function() {
+	describe('.getSession(uid, sid)', function() {
 		it('should get back the created session', function(done) {
 			var store = new SessionStore('sessions', db.create(TEST_DB));
 
@@ -49,7 +49,7 @@ describe('SessionStore', function() {
 					// create again from store
 					store.createSession(session.sid, function (err, session2) {
 						// get back the session
-						var s = store.getSession('my-uid');
+						var s = store.getSession('my-uid', session.sid);
 						expect(s.sid).to.equal(session.sid);
 						
 						done(err);
