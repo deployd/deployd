@@ -129,6 +129,18 @@ describe('Collection', function () {
           done();
         });
       });
+      it('should create a todo with a custom id', function(done) {
+        dpd.todos.post({id:'MY_ID', title: 'should create a todo with a custom id'}, function (todo, err) {
+          expect(err).to.exist;
+          expect(err.status).to.equal(400);
+          dpd.todos.post( {todoId:'MY_ID', title:'should create a todo with a custom id'}, function (todo, err) {
+            expect(err).to.not.exist;
+            expect(todo.id).to.equal('MY_ID');
+            expect(todo.title).to.equal('should create a todo with a custom id');
+            done();
+          });
+        });
+      });
       it('should create a todo that exists in the store', function(done) {
         dpd.todos.post({title: 'faux'}, function (todo, err) {
           expect(todo.id.length).to.equal(16);
