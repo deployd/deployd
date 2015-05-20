@@ -200,6 +200,50 @@ describe('Session', function() {
 		});
 	});
 
+	it('should not bind multiple sessions to the same socket', function(done) {
+		var sockets = new EventEmitter()
+			,	store = new SessionStore('sessions', db.create(TEST_DB), sockets)
+			, calls = 0;
+
+		var sessions = [];
+
+		var createSession = function(fn) {
+			return store.createSession(function (err, session) {
+				session.save(function(err, data){
+					sessions.push(data);
+					fn(err, data, session);
+				});
+			});
+		};
+
+		createSession(function(err, data, session1){
+			var fauxSocket = new EventEmitter();
+			fauxSocket.id = 'testSocket1';
+			fauxSocket.handshake = { headers: {} };
+			sockets.emit('connection', fauxSocket);
+			fauxSocket.emit('server:setSession', { sid: data.id });
+			fauxSocket.on('hello', function(data){
+				expect(data).to.equal('message from server to session2');
+				calls++;
+				setTimeout(function(){
+					expect(calls).to.equal(1);
+					done();
+				}, 50);
+			});
+
+
+			createSession(function(err, data, session2){
+				fauxSocket.emit('server:setSession', { sid: data.id });
+				// this message shouldn't be received:
+				session1.socket.emit('hello', 'message from server to session1');
+				// this message should be received:
+				session2.socket.emit('hello', 'message from server to session2');
+			})
+		})
+
+	});
+
+
 	it('should bind multiple sessions to the same user id', function(done) {
 		var sockets = new EventEmitter()
 			,	store = new SessionStore('sessions', db.create(TEST_DB), sockets)
