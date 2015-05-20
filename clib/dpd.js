@@ -329,6 +329,8 @@
     }
   }
 
+  var _sessionId;
+
   function checkAndConnectSocketIO() {
     if (!socket) {
       socket = io.connect(root);
@@ -336,15 +338,17 @@
       window.dpd.once('connect', function() {
         isSocketReady = true;
       });
+      window.dpd.on('reconnect', function(){
+        if (_sessionId) window.dpd.setSessionId(_sessionId, true);
+      });
     }
   }
 
   window.dpd.setBaseUrl = setBaseUrl;
   window.dpd.getBaseUrl = getBaseUrl;
 
-  var _sessionId;
-  window.dpd.setSessionId = function (sessionId) {
-    if (sessionId != _sessionId) {
+  window.dpd.setSessionId = function (sessionId, force) {
+    if (force || (sessionId != _sessionId)) {
       window.dpd.socketReady(function (){
         window.dpd.socket.emit('server:setSession', { sid: sessionId });
         _sessionId = sessionId;
