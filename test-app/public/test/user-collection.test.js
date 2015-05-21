@@ -251,7 +251,7 @@ describe('User Collection', function() {
             expect(user.lastLoginTime).to.not.exist;
             dpd.users.login({ username: 'authheader', password: '123456' }).then(function (session) {
               _dpd.ajax.headers = { Authorization: "Bearer " + session.id };
-              dpd.users.me(function (me, err) {
+              dpd.users.me({showUsername: true}, function (me, err) {
                 _dpd.ajax.headers = null;
                 expect(me).to.exist;
                 expect(me.username).to.equal("authheader");
