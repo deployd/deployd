@@ -94,7 +94,7 @@ describe('Session', function() {
 
   describe('.createSession()', function () {
     beforeEach(function () {
-      clock = sinon.useFakeTimers(new Date(2015, 01, 01).getTime());
+      clock = sinon.useFakeTimers(new Date(2015, 01, 01).getTime(), "Date");
     });
 
     afterEach(function () {
@@ -103,12 +103,12 @@ describe('Session', function() {
 
     it('should expire sessions after max age', function (done) {
       var store = new SessionStore('sessions', db.create(TEST_DB), undefined, { maxAge: 100000 });
-
       store.createSession(function (err, session) {
         session.set({ foo: 'bar' }).save(function (err, data) {
           expect(err).to.not.exist;
           store.createSession(session.sid, function (err, session2) {
             expect(session.sid).to.equal(session2.sid);
+
             // check that the session is still valid 1 tick before expiration
             clock.tick(99999);
             process.nextTick(function () {

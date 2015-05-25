@@ -27,7 +27,7 @@ freq = function(url, options, fn, callback) {
     if(callback) {
       var end = res.end;
       res.end = function () {
-        callback(req, res);
+
         var r = end.apply(res, arguments);
         s.close();
         return r;
@@ -39,7 +39,9 @@ freq = function(url, options, fn, callback) {
   })
   .listen(port)
   .on('listening', function () {
-    request(options);
+    request(options, function(){
+      callback.apply(null, arguments);
+    });
   });
 };
 
@@ -60,20 +62,20 @@ before(function (done) {
 
 /**
  * Utility for easily testing resources with mock contexts
- * 
+ *
  * Inputs:
  *  - url (relative to the base path)
  *  - query object
  *  - body object or stream
  *  - headers object
  *  - method (get,post,put,delete,etc)
- * 
+ *
  * Output:
  *   Should be what context.done should be called with
- * 
+ *
  * Behavior:
  *  - error true if should expect an error
- *  - next should call next if 
+ *  - next should call next if
  */
 
 var ServerRequest = require('http').ServerRequest
@@ -109,5 +111,3 @@ fauxContext = function(resource, url, input, expectedOutput, behavior) {
 
   resource.handle(context, next);
 };
-
-

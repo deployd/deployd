@@ -17,24 +17,24 @@ describe('collection', function(){
           type: 'string'
         }
       });
-      
+
       var errs = r.validate({title: 'foobar'});
-      
+
       expect(errs).to.not.exist;
     });
-    
+
     it('should fail to validate the invalid request', function() {
       var r = createCollection({
         title: {
           type: 'string'
         }
       });
-      
+
       var errs = r.validate({title: 7});
-      
+
       expect(errs).to.eql({'title': 'must be a string'});
     });
-    
+
     it('should fail to validate the invalid request with multiple errors', function() {
       var r = createCollection({
         title: {
@@ -49,13 +49,13 @@ describe('collection', function(){
           type: 'date'
         }
       });
-      
+
       var errs = r.validate({title: 7, created: 'foo'}, true);
-      
+
       expect(errs).to.eql({title: 'must be a string', age: 'is required', created: 'must be a date'});
     });
   });
-  
+
   describe('.sanitize(body)', function(){
     it('should remove properties outside the schema', function() {
       var r = createCollection({
@@ -63,21 +63,21 @@ describe('collection', function(){
           type: 'string'
         }
       });
-      
+
       var sanitized = r.sanitize({foo: 7, bar: 8, title: 'foo'});
-      
+
       expect(sanitized.foo).to.not.exist;
       expect(sanitized.bar).to.not.exist;
       expect(sanitized.title).to.equal('foo');
     });
-    
+
     it('should convert int strings to numbers', function() {
       var r = createCollection({
         age: {
           type: 'number'
         }
       });
-      
+
       var sanitized = r.sanitize({age: '22'});
       expect(sanitized.age).to.equal(22);
     });
@@ -88,12 +88,12 @@ describe('collection', function(){
           type: 'string'
         }
       });
-      
+
       var sanitized = r.sanitize({token: 123456});
       expect(sanitized.token).to.equal('123456');
-    });    
+    });
   });
-  
+
   describe('.sanitizeQuery(query)', function(){
     it('should convert number to strings', function() {
       var r = createCollection({
@@ -101,10 +101,10 @@ describe('collection', function(){
           type: 'string'
         }
       });
-      
+
       var sanitized = r.sanitizeQuery({token: 123456});
       expect(sanitized.token).to.equal('123456');
-    });       
+    });
   });
 
   describe('.handle(ctx)', function(){
@@ -112,17 +112,23 @@ describe('collection', function(){
       var c = new Collection('foo', { db: db.create(TEST_DB) });
       expect(c.store).to.exist;
     });
-    
+
     function example(method, path, properties, body, query, test, done, testData) {
       var c = new Collection(path, {db: db.create(TEST_DB), config: { properties: properties } });
-      
+
       function t() {
         freq(path, {method: method, url: '',  body: body, json: true}, function (req, res) {
-          // faux body
-          req.body = body;
           req.query = query;
-          c.handle({req: req, res: res, query: query || {}, session: {}, done: function() {res.end();}});
-        }, function (req, res) {       
+          c.handle({req: req, body: body, res: res, query: query || {}, session: {},
+            done: function(err, result) {
+              if (!err) {
+                res.end(JSON.stringify(result));
+              } else {
+                res.statusCode = err.statusCode || 400;
+                res.end(JSON.stringify({ message: err.message }));
+              }
+            }});
+        }, function (req, res) {
           test(req, res, method, path, properties, body, query);
           // cleanup
           c.store.remove(function (err) {
@@ -130,28 +136,30 @@ describe('collection', function(){
           });
         });
       }
-      
+
       if(testData) {
         c.store.insert(testData, t);
       } else {
         t();
       }
     }
-    
+
     it('should handle POST', function(done) {
       example('POST', '/foo', {test: {type: 'boolean'}}, {test: true}, null,
-        function (req, res, method, path, properties, body) {
-            expect(req.body).to.eql(body);
+        function (err, res, body) {
+            expect(err).to.not.exist;
+            expect(res.body).to.include({test: true});
             expect(res.statusCode).to.equal(200);
         },
         done
       );
     });
-    
+
     it('should handle GET', function(done) {
       var testData = [{test: true}, {test: false}];
       example('GET', '/foo', {test: {type: 'boolean'}}, null, null,
-        function (req, res, method, path, properties, body) {
+        function (err, res, body) {
+          expect(err).to.not.exist;
           expect(res.statusCode).to.equal(200);
         },
         done,
@@ -162,39 +170,41 @@ describe('collection', function(){
     it('should handle GET without data', function(done) {
       var testData = [];
       example('GET', '/foo', {test: {type: 'boolean'}}, null, null,
-        function (req, res, method, path, properties, body) {
+        function (err, res, body) {
           expect(res.statusCode).to.equal(200);
         },
         done,
         testData
       );
     });
-    
+
     it('should handle GET and not crash on invalid query', function (done) {
       var testData = [];
       example('GET', '/foo1', { test: { type: 'boolean' } }, null, { "$fields": "test" },
-        function (req, res, method, path, properties, body) {
+      function (err, res, body) {
         expect(res.statusCode).to.equal(200);
       },
         done,
         testData
       );
     });
-    
+
     it('should handle PUT', function(done) {
       var testData = [{test: true}, {test: false}];
-      example('PUT', '/foo', {test: {type: 'boolean'}}, {test: false, id: 7}, null,
-        function (req, res, method, path, properties, body) {
-          expect(res.statusCode).to.equal(200);
+      example('PUT', '/foo', {test: {type: 'boolean'}}, {test: false, id: "7"}, null,
+        function (err, res, body) {
+          expect(res.statusCode).to.equal(400);
+          expect(res.body.message).to.equal("No object exists that matches that query");
         },
         done,
         testData
       );
     });
-    
+
     it('should handle DELETE', function(done) {
-      example('DELETE', '/foo', {test: {type: 'boolean'}}, null, {id: 7},
-        function (req, res, method, path, properties, body) {
+      example('DELETE', '/foo', {test: {type: 'boolean'}}, null, {id: "7"},
+        function (err, res, body) {
+          expect(err).to.not.exist;
           expect(res.statusCode).to.equal(200);
         },
         done
@@ -266,10 +276,10 @@ describe('collection', function(){
         });
       });
     });
-    
+
     it('should not fail validation on $push with required array', function (done) {
       var c = new Collection('persons', { db: db.create(TEST_DB), config: { properties: { names: { type: 'array', required: true } } } });
-      
+
       c.save({ body: { names: { $pushAll: ['jim','sam', 'joe'] } } }, function (err, item) {
         expect(item.id).to.exist;
         expect(err).to.not.exist;
@@ -304,7 +314,7 @@ describe('collection', function(){
     //   c.save({}, {count: {$inc: 100}}, {id: 'foo'}, {}, done);
     // });
   });
-  
+
   describe('.remove()', function() {
     it('should not crash on non existent id', function(done) {
       var c = new Collection('foo_del', {db: db.create(TEST_DB), config: { properties: {count: {type: 'number'}}}});
