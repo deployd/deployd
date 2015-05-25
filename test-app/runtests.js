@@ -44,8 +44,12 @@ function kill(e) {
   if (e && e !== 0){
     process.stdout.write("Test run failed. dpd output was: \n\n" + buf);
   }
-  proc.kill();
-  process.exit(e);
+  
+  proc.on('close', function(){
+    process.exit(e);
+  });
+  
+  proc.stdin.end(); // this will cause the process to exit (see mongod.js, handled there)
 }
 
 proc.once('listening', function (port){
