@@ -1,12 +1,49 @@
 # History
 
+
+<a name="v0.8.3"></a>
+## v0.8.3 (2015-05-26)
+
+
+### Bug Fixes
+
+- **UserCollection:** `onGet` event can break session handling
+  ([74f23631](https://github.com/deployd/deployd/commit/74f2363141defd66b969a8ad84e2a0932f5c57ff))
+- **db:** Properly report database connection issues
+  ([25308f89](https://github.com/deployd/deployd/commit/25308f8941bd63b91d0174015d0d58a3fa3dddeb))
+- **http:**
+  - allow X-Session-* headers through CORS response
+  ([e8aa28b3](https://github.com/deployd/deployd/commit/e8aa28b34ba801d77347d1f5967e705957d83aad))
+  - Allow CORS authorization header (for non-cookie auth)
+  ([f6c13c96](https://github.com/deployd/deployd/commit/f6c13c964c021840a15936c2bca1d1933e273cf3))
+- **internal-resource:** handle errors in type events
+  ([7cec886c](https://github.com/deployd/deployd/commit/7cec886c7adde990b332f1c004d1b761e14d9274))
+- **session:** socket disconnection after login
+  ([56fe4d83](https://github.com/deployd/deployd/commit/56fe4d835d20026c1a46ae12a0a8f7e4f5562700))
+- **store:** add error handling in callbacks
+  ([0bbce4e7](https://github.com/deployd/deployd/commit/0bbce4e7940b84e96050a7cccbe304fc80656e02))
+- **user-collection:** do not allow empty passwords on PUT/POST
+  ([fa076553](https://github.com/deployd/deployd/commit/fa07655318f89e1793a0d12772f1e165421cada9))
+
+  **NB:** There's a breaking change for an undocumented feature: due to the CORS improvements, all unknown origins will be rejected for CORS requests.
+For more info, please refer to [this message](https://github.com/deployd/deployd/pull/572#issuecomment-103904502)
+
+### Features
+
+- **collection:** add AfterCommit event
+  ([1d6bec51](https://github.com/deployd/deployd/commit/1d6bec51e791b894c6dfa8286401045be709c93f))
+- **dashboard:** height of code editor should fill window
+  ([7ed76106](https://github.com/deployd/deployd/commit/7ed761069596bef0e7572b977be8196b1d54f15a))
+- **session:** allow multiple sockets per sessions And add options.origins
+  ([f67ee1ec](https://github.com/deployd/deployd/commit/f67ee1ecc59fd8825059793462fab40fc89d2faf))
+
 ## 0.8.2 (2015-04-23)
 
 ### Bug Fixes
 
 - **collection:** should not crash on deleting non existent id
   ([1b85c2127c](https://github.com/deployd/deployd/commit/1b85c2127c0badda706e34e10522e20dbd7bd879))
-  
+
 ## 0.8.1 (2015-04-22)
 
 ### Bug Fixes
