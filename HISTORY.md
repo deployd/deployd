@@ -1,6 +1,12 @@
 # History
 
 
+<a name="v0.8.4"></a>
+## v0.8.4 (2015-05-26)
+
+- **chore:** update mongo and socket.io
+
+
 <a name="v0.8.3"></a>
 ## v0.8.3 (2015-05-26)
 
