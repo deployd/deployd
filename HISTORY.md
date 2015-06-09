@@ -1,5 +1,7 @@
 # History
 
+This document records all notable changes to [Deployd](http://deployd.com/). This project adheres to [Semantic Versioning](http://semver.org/).
+
 
 <a name="v0.8.4"></a>
 ## v0.8.4 (2015-05-26)
