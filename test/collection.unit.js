@@ -420,4 +420,17 @@ describe('collection', function(){
       c.execCommands('update', item, {names: {$pushAll: ['jim', 'sam']}});
     });
   });
+
+  describe('Collection.extendDomain', function() {
+    it('should properly bind function to collection instance', function() {
+      Collection.extendDomain("getName", function(){
+        return { name: this.collection.name, data: this.domain.data };
+      });
+
+      var col = new Collection('foo', {db: db.create(TEST_DB), config: { properties: {count: {type: 'number'}}}});
+
+      var domain = col.createDomain({count: 1}, {});
+      expect(domain.getName()).to.eql({name: "foo", data: {count: 1}});
+    });
+  });
 });
