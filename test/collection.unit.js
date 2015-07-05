@@ -105,6 +105,29 @@ describe('collection', function(){
       var sanitized = r.sanitizeQuery({token: 123456});
       expect(sanitized.token).to.equal('123456');
     });
+
+    it('should convert string to boolean', function() {
+      var r = createCollection({
+        bool: {
+          type: 'boolean'
+        }
+      });
+
+      var sanitized = r.sanitizeQuery({bool: "true"});
+      expect(sanitized.bool).to.equal(true);
+    });
+
+
+    it('should allow object query on booleans', function() {
+      var r = createCollection({
+        bool: {
+          type: 'boolean'
+        }
+      });
+
+      var sanitized = r.sanitizeQuery({bool: { $ne: true }});
+      expect(sanitized.bool).to.eql({$ne: true});
+    });
   });
 
   describe('.handle(ctx)', function(){
