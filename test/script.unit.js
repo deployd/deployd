@@ -16,6 +16,25 @@ describe('script', function(){
       });
     });
 
+    it('should keep error intact when calling cancel(err)', function(done) {
+      var s = new Script('cancel(new Error("test"))');
+      s.run({}, function (e) {
+        expect(e).to.exist;
+        expect(e.message).to.equal('test');
+        done();
+      });
+    });
+
+    it('should keep object intact when calling cancel({message: , status: })', function(done) {
+      var s = new Script('cancel({message: "test", status: 404})');
+      s.run({}, function (e) {
+        expect(e).to.exist;
+        expect(e.message).to.equal('test');
+        expect(e.statusCode).to.equal(404); // status is turned into statusCode
+        done();
+      });
+    });
+
     it('should have access to the current user if one exists', function(done) {
       var s = new Script('if(!me) throw "no user"');
       var session = {
