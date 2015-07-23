@@ -298,7 +298,9 @@ function checkForUpdates() {
 
       if (json && json['dist-tags'] && json['dist-tags'].latest) {
         var latest = json['dist-tags'].latest;
-        fs.writeFile(latestversionFile, latest);
+        fs.writeFile(latestversionFile, latest, function(err){
+          // Need this callback function to prevent the process being killed, when latestversionFile is NOT writable
+        });
       }
     }
   });
