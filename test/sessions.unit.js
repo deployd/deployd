@@ -11,7 +11,7 @@ describe('SessionStore', function() {
 		store.createSession(function (err, session) {
 			session.save(function(err, data){
 				var sockets = new EventEmitter()
-					,	store = new SessionStore('sessions', db.create(TEST_DB), sockets)
+					,	store = new SessionStore('sessions', db.create(TEST_DB), sockets);
 
 				for(var i = 1; i < 9; i++) {
 					fauxSocket = {
@@ -156,7 +156,7 @@ describe('Session', function() {
 				sockets.emit('connection', fauxSocket);
 
 				fauxSocket.emit('test', 123);
-			})
+			});
 		});
 	});
 
@@ -192,11 +192,11 @@ describe('Session', function() {
 						expect(data).to.equal("hello");
 						remainingFrom--;
 						if (remainingTo === 0 && remainingFrom === 0) done();
-					})
+					});
 				}
 
 				session.socket.emit('message FROM server', "hello");
-			})
+			});
 		});
 	});
 
@@ -238,8 +238,8 @@ describe('Session', function() {
 				session1.socket.emit('hello', 'message from server to session1');
 				// this message should be received:
 				session2.socket.emit('hello', 'message from server to session2');
-			})
-		})
+			});
+		});
 
 	});
 
@@ -281,7 +281,7 @@ describe('Session', function() {
 					expect(data).to.equal("test");
 					remainingFrom--;
 					if (remainingFrom === 0) done();
-				})
+				});
 			}
 		};
 

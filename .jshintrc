@@ -1,4 +1,6 @@
 {
+
+  "node": true,
   "laxcomma": true,
   "expr": true,
   "proto": true,
@@ -6,5 +8,7 @@
   "laxbreak": true,
   "globals": {
     "Promise": true
-  }
+  },
+  "unused": "vars",
+  "undef": true
 }

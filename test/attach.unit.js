@@ -6,8 +6,8 @@ var rewire = require('rewire')
 ,	sh = require('shelljs')
 ,	sinon = require('sinon')
 ,	fs = require('fs')
-,   configLoader = require('../lib/config-loader')
-,   basepath = './test/support/proj';
+, configLoader = require('../lib/config-loader')
+, basepath = './test/support/proj';
 
 
 function MockServer () {}
@@ -32,7 +32,7 @@ describe('attach', function() {
     });
 
     var fakeHttpServer = new MockServer();
-    var fakeSocketIo = {sockets:{on:function(){}}}
+    var fakeSocketIo = {sockets:{on:function(){}}};
     var PORT;
     var opts;
 

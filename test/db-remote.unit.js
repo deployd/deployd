@@ -1,4 +1,4 @@
-var fs = require('fs') 
+var fs = require('fs')
   , db = require('../lib/db')
   , config = require(__dirname + '/support/db-remote.config.json')
   , tester = db.create(config)
@@ -43,7 +43,7 @@ describe('db', function(){
   describe('.create(options)', function(){
     it('should connect to a remote database', function(done) {
       store.find(function (err, empty) {
-        assert.equal(empty.length, 0)
+        assert.equal(empty.length, 0);
         done(err);
       });
     });
@@ -59,19 +59,19 @@ describe('store', function(){
         done(err);
       });
     });
-    
+
     it('should pass the query to the underlying database', function(done) {
       store.insert([{i:1},{i:2},{i:3}], function () {
         store.find({i: {$lt: 3}}, function (err, result) {
           assert.equal(result.length, 2);
           result.forEach(function (obj) {
-            assert.equal(typeof obj.id, 'string')
+            assert.equal(typeof obj.id, 'string');
           });
           done(err);
         });
       });
     });
-    
+
     // TODO: convert the rest of the tests
   });
 });

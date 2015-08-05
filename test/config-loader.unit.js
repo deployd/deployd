@@ -79,7 +79,7 @@ describe('config-loader', function() {
     it('should add internal resources but hide_dpdjs', function(done) {
       sh.mkdir('-p', path.join(basepath, 'resources'));
 
-      server = { options: { hide_dpdjs: true } }
+      server = { options: { hide_dpdjs: true } };
 
       configLoader.loadConfig( basepath, server, function(err, resourceList) {
         if (err) return done(err);
@@ -95,7 +95,7 @@ describe('config-loader', function() {
     it('should add internal resources but hide_dashboard', function(done) {
       sh.mkdir('-p', path.join(basepath, 'resources'));
 
-      server = { options: { hide_dashboard: true } }
+      server = { options: { hide_dashboard: true } };
 
       configLoader.loadConfig( basepath, server, function(err, resourceList) {
         if (err) return done(err);
@@ -177,7 +177,7 @@ describe('config-loader', function() {
         if (callsLeft == 0) {
           expect(fs.readdir.callCount).to.equal(1);
           return done();
-        };
+        }
         callsLeft--;
         server.route(req, res);
       }
