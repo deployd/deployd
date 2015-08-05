@@ -7,7 +7,7 @@ var rewire = require('rewire')
   ,	sinon = require('sinon');
 
 function MockServer () {}
-MockServer.prototype.listen = function () {}
+MockServer.prototype.listen = function () {};
 
 Server.__set__('process', {});
 Server.__set__('http', {

@@ -1,5 +1,6 @@
 {
   "laxcomma": true,
+  "node": true,
   "expr": true,
   "proto": true,
   "lastsemic": true,
@@ -14,8 +15,8 @@
     , "it": true
     , "afterEach": true
     , "beforeEach": true
-    
-    , "expect": true    
+
+    , "expect": true
 
     , "dpd": true
 

@@ -6,16 +6,13 @@
 
 var program = require('commander')
   , repl = require('../lib/client/repl')
-  , shelljs = require('shelljs/global')
   , mongod = require('../lib/util/mongod')
   , path = require('path')
   , fs = require('fs')
-  , tty = require('tty')
   , request = require('request')
   , packageInfo = require('../package')
   , latestversionFile = path.join(__dirname, '../.latestversion')
   , Step = require('step')
-  , open = require('../lib/util/open')
   , semver = require('semver')
   , Server = require('../lib/server')
   , upgrade = require('doh').upgrade;

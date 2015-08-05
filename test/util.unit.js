@@ -58,7 +58,7 @@ describe('.getBody', function(){
     req.rawBody = '';
     req.on('data', function(chunk){
       req.rawBody += chunk;
-    })
+    });
 
     var res = this.res;
 
@@ -81,7 +81,7 @@ describe('.parseBody()', function() {
   beforeEach(function () {
     this.res = {
       setHeader: function () {
-        
+
       }
     };
   });
@@ -130,7 +130,7 @@ describe('.parseBody()', function() {
     req.emit('data', value);
     req.emit('end');
   });
-  
+
   it('should interpret an empty body as an empty object', function(done) {
     var req = new Stream();
 
@@ -143,4 +143,3 @@ describe('.parseBody()', function() {
   });
 });
 });
-

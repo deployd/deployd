@@ -44,17 +44,17 @@ function kill(e) {
   if (e && e !== 0){
     process.stdout.write("Test run failed. dpd output was: \n\n" + buf);
   }
-  
+
   proc.on('close', function(){
     process.exit(e);
   });
-  
+
   proc.stdin.end(); // this will cause the process to exit (see mongod.js, handled there)
 }
 
 proc.once('listening', function (port){
   var mpjsProc = fork('../node_modules/mocha-phantomjs/bin/mocha-phantomjs', [ '--ignore-resource-errors', 'http://localhost:' + port ], {silent: true});
-  mpjsProc.on("error", function(err) { 
+  mpjsProc.on("error", function(err) {
     console.error(err);
   });
   mpjsProc.stdout.on('data', function(data) {
@@ -64,4 +64,4 @@ proc.once('listening', function (port){
     process.stderr.write(data.toString());
   });
   mpjsProc.on('exit', kill);
-})
+});
