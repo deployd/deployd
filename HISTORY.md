@@ -2,6 +2,49 @@
 
 This document records all notable changes to [Deployd](http://deployd.com/). This project adheres to [Semantic Versioning](http://semver.org/).
 
+<a name="v0.8.5"></a>
+# v0.8.5 (2015-08-05)
+
+
+## Bug Fixes
+
+- **bin/dpd:** prevent process quit when latestversion is not writable
+  ([d8a507d5](https://github.com/deployd/deployd/commit/d8a507d560d0c013ee32f501d3137579b682498d))
+- **collection:** object queries on booleans would be converted to false
+  ([84a1d039](https://github.com/deployd/deployd/commit/84a1d039833a023e22b98d5f4707f131d2f4f8d9))
+- **internal-client:** add null check for ctx
+  ([d3ccf38f](https://github.com/deployd/deployd/commit/d3ccf38ffd3c79afc8d6cb5c4a100ee0a2ba4472))
+- **session:** improve how socket.io connection to finds session
+  ([bb05ce4a](https://github.com/deployd/deployd/commit/bb05ce4a9f076d0c2b3c23c2438a8a70ee2dab56))
+- **user-collection:** null check to prevent crash
+  ([36c4ec2d](https://github.com/deployd/deployd/commit/36c4ec2df705278cdb7de16c774bd3b938b35a1d))
+
+
+## Features
+
+- **collection:**
+  - add BeforeRequest event
+  ([4960d07f](https://github.com/deployd/deployd/commit/4960d07fbade755470ee6d7ff29b9ccc7645c941))
+  - Add Collection.extendDomain()
+  ([450b8ada](https://github.com/deployd/deployd/commit/450b8adae23770ff7899fe8dceef971cdcb539c9))
+  - Add `previous` to AfterCommit event
+  ([fd8c9750](https://github.com/deployd/deployd/commit/fd8c9750922ebfeb35ab9b9c31ba9056c3687bf5))
+- **http:**
+  - option to allow dpd-ssh-key via CORS
+  ([2f795565](https://github.com/deployd/deployd/commit/2f795565036a20b731bfd0d0d3bdaa8fea3f5140))
+  - cache OPTIONS request for 5 minutes
+  ([89cd1f02](https://github.com/deployd/deployd/commit/89cd1f023fddee118162d4efc055d8409fd9e899))
+- **internal-client:**
+  - allow access to underlying resource from dpd internal client
+  ([d478b348](https://github.com/deployd/deployd/commit/d478b348d62be16fa2801aaff5f40d376fb9f193))
+  - pass through headers and connection from caller
+  ([9a1cefc0](https://github.com/deployd/deployd/commit/9a1cefc0865412fedc14bf158b07ea595ca4a3e4))
+- **script:**
+  - improve cancel()
+  ([ea2bb011](https://github.com/deployd/deployd/commit/ea2bb0110a2aa55e9127a5547d943577eb79fb22))
+  - $addCallback $finishCallback
+  ([d8dbf3b0](https://github.com/deployd/deployd/commit/d8dbf3b0f3b0dfc6d0e0b18913c67f84814cafc1))
+
 
 <a name="v0.8.4"></a>
 ## v0.8.4 (2015-05-26)
