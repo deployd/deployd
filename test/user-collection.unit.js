@@ -17,6 +17,34 @@ describe('UserCollection', function() {
 				}
 			};
 		});
+		it('should not crash when the posted password is a number', function(done) {
+			var test = this;
+			this.ctx.url = '/users';
+			this.ctx.query = {username: "Foo", password: Math.random()};
+
+			this.ctx.req.url = '/users';
+			this.ctx.req.method = 'POST';
+			this.ctx.req.body.username = 'foo@bar.com';
+			this.ctx.req.body.password = Math.random();
+			// hash the password so we can use it in our mocked loginFindUser function below
+			this.uc.setPassword(this.ctx.req.body);
+			var hashedPassword = this.ctx.req.body.password;
+			// reset it as plain test
+			this.ctx.req.body.password = Math.random();
+
+			this.uc.loginFindUser = function (ctx, fn) {
+			  expect(ctx.req.body).to.eql({ username: 'foo@bar.com', password: 'abcd' });
+			  fn(null, { id: '123', username: 'foo@bar.com', password: hashedPassword });
+			};
+
+			this.complete = function (err, res) {
+			  expect(err).to.equal("Missing request body")
+				done();
+			};
+
+			this.uc.handle(this.ctx);
+
+		})
 
 		it('should login a user when credentials are POSTed to "/login"', function(done) {
 			var test = this;
