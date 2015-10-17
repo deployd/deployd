@@ -9,7 +9,7 @@ var InternalResources = require('../lib/resources/internal-resources')
   , ClientLib = require('../lib/resources/client-lib')
   , configPath = './test/support/proj'
   , Dashboard = require('../lib/resources/dashboard');
-  
+
 describe('InternalResources', function() {
   describe('.handle(ctx)', function() {
     beforeEach(function() {
@@ -19,7 +19,7 @@ describe('InternalResources', function() {
         sh.mkdir(__dirname + '/support/proj');
         sh.mkdir('-p', __dirname + '/support/proj/resources');
       }
-      
+
       this.ir = new InternalResources('__resources', {config: {configPath: configPath}});
     });
 
@@ -142,7 +142,7 @@ describe('InternalResources', function() {
       sh.mkdir('-p', path.join(configPath, 'resources/bar'));
       JSON.stringify(q).to(path.join(configPath, 'resources/foo/config.json'));
       JSON.stringify(q2).to(path.join(configPath, 'resources/bar/config.json'));
-      
+
       test.ir.handle({req: {method: 'GET', url: '/__resources', isRoot: true}, url: '/', done: function(err, result) {
         if (err) return done(err);
         expect(result).to.have.length(2);
@@ -208,7 +208,6 @@ describe('InternalResources', function() {
                 name: 'foo',
                 config: {},
                 configChanged: function(config, fn){
-                  console.log('CONFIG CHANGED!');
                   return fn('ERROR');
                 }
               }
@@ -217,12 +216,11 @@ describe('InternalResources', function() {
           url: '/foo',
           body: {type: 'Foo', value: {something: 'new config'}},
           req: {
-            method: 'PUT', 
-            url: '/__resources/foo', 
+            method: 'PUT',
+            url: '/__resources/foo',
             isRoot: true
-          }, 
+          },
           done: function(err){
-            console.log('CALL');
             expect(err).to.exist.and.to.equal('ERROR');
             done();
           }
@@ -253,10 +251,10 @@ describe('InternalResources', function() {
           url: '/foo',
           body: {type: 'Foo', value: {something: 'new config'}},
           req: {
-            method: 'DELETE', 
-            url: '/__resources/foo', 
+            method: 'DELETE',
+            url: '/__resources/foo',
             isRoot: true
-          }, 
+          },
           done: function(err){
             expect(err).to.exist.and.to.equal('ERROR');
             done();

@@ -5,10 +5,10 @@ cache:
 sudo: false
 services: mongodb
 node_js:
-  - 0.12
-  - 0.10
-  - iojs
-
-branches:
-  only:
-    - master
+  - "4.2"
+  - "4.1"
+  - "4.0"
+  - "0.12"
+  - "0.11"
+  - "0.10"
+  - "iojs"

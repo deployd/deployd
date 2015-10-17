@@ -52,7 +52,6 @@
     "dpd": "./bin/dpd"
   },
   "scripts": {
-    "test": "mocha && cd test-app && node runtests.js",
-    "docs": "node docs/src/build.js"
+    "test": "mocha --timeout 5000 && cd test-app && node runtests.js"
   }
 }
