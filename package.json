@@ -37,7 +37,7 @@
     "wrench": "^1.5.8"
   },
   "devDependencies": {
-    "chai": "*",
+    "chai": "3.4.0",
     "grunt": "^0.4.1",
     "grunt-contrib-jshint": "^0.11.3",
     "grunt-contrib-less": "^0.12.0",
