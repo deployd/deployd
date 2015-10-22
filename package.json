@@ -45,7 +45,7 @@
     "mocha": "*",
     "rewire": "~2.1.3",
     "sinon": "~1.17.1",
-    "mocha-phantomjs": "^3.5.3",
+    "mocha-phantomjs": "^4.0.1",
     "mocha-jshint": "0.0.9"
   },
   "bin": {
