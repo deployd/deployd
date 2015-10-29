@@ -2,6 +2,37 @@
 
 This document records all notable changes to [Deployd](http://deployd.com/). This project adheres to [Semantic Versioning](http://semver.org/).
 
+<a name="v0.8.6"></a>
+# v0.8.6 (2015-10-29)
+
+
+## Bug Fixes
+
+- **User-collection:**
+  - prevent crash on invalid user for session (thx @nicholasareed)
+  ([4183b7c9](https://github.com/deployd/deployd/commit/4183b7c904889b70b703ac7324f40bb1cc457ca0))
+  - Server crashes if password is number (thx @docnoe)
+  ([52212427](https://github.com/deployd/deployd/commit/52212427bb80a46ac1a1afdf46316308c9ca9a4c))
+- **collection:** can't rename or delete new, empty collection (thx @docnoe)
+  ([49f769600](https://github.com/deployd/deployd/commit/49f7696006461c2f4c07ec8bd6b04c277b405669))
+- **Dashboard:** Property types in dashboard are sortable (thx @docnoe)
+  ([ab7cec630](https://github.com/deployd/deployd/commit/ab7cec6302a901c6f73612b610ac6b559ad1081f))
+
+## Chore
+
+  - **Dependency Update:**
+    - qs to version 5.2.0
+    - shelljs to version 0.5.3
+    - grunt-contrib-jshint to version 0.11.3
+    - sinon to version 1.17.1
+    - request to version 2.65.0
+  - **Cleanup**: request to version 2.65.0
+  ([0adf309a5](https://github.com/deployd/deployd/commit/0adf309a5325949144a1f617f2fd5673ab4b7060))
+  - **Build**: Our tests now run on NodeJS 4.2
+  ([a5687dc352](https://github.com/deployd/deployd/commit/a5687dc352819a6278d01364bbf97ed003d7cecf))
+
+
+
 <a name="v0.8.5"></a>
 # v0.8.5 (2015-08-05)
 
