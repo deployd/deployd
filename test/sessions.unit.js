@@ -134,7 +134,7 @@ describe('Session', function() {
 
 
 	it('should make sockets available even before they exist', function(done) {
-		this.timeout(100);
+		this.timeout(400);
 
 		var sockets = new EventEmitter()
 			,	fauxSocket = new EventEmitter()
