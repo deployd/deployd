@@ -17,6 +17,9 @@ var program = require('commander')
   , Server = require('../lib/server')
   , upgrade = require('doh').upgrade;
 
+// require shell command to have them globally
+require('shelljs/global');
+
 /**
  * Get the version number from the package.json
  */
