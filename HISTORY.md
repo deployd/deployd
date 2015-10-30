@@ -3,6 +3,16 @@
 This document records all notable changes to [Deployd](http://deployd.com/). This project adheres to [Semantic Versioning](http://semver.org/).
 
 <a name="v0.8.6"></a>
+# v0.8.7 (2015-10-30)
+
+
+## Bug Fixes
+
+- **dpd:**: dpd CLI was crashing (shelljs global missing)
+  ([e1729f2d88](https://github.com/deployd/deployd/commit/e1729f2d887ed28d1bf7cdde123471a2b200e91f))
+
+
+<a name="v0.8.6"></a>
 # v0.8.6 (2015-10-29)
 
 
