@@ -2,7 +2,7 @@
 
 This document records all notable changes to [Deployd](http://deployd.com/). This project adheres to [Semantic Versioning](http://semver.org/).
 
-<a name="v0.8.6"></a>
+<a name="v0.8.7"></a>
 # v0.8.7 (2015-10-30)
 
 
