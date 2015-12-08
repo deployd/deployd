@@ -114,7 +114,7 @@ in mind as you work on code to submit to deployd:
  * All public APIs must be documented in our
     [docs](https://github.com/deployd/docs)
  * JSHint should be run against all changes
-    without warnings by running `grunt jshint`
+    without warnings
 
 ## Git Commit Guidelines
 
