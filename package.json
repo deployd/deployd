@@ -38,7 +38,7 @@
   },
   "devDependencies": {
     "chai": "*",
-    "grunt": "^0.4.1",
+    "grunt": "^0.4.5",
     "grunt-contrib-jshint": "^0.11.3",
     "grunt-contrib-less": "^0.12.0",
     "less": "*",
