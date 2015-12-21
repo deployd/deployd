@@ -13,6 +13,7 @@
   "main": "index",
   "dependencies": {
     "async": "^0.9.0",
+    "base-require": "^1.0.0",
     "bluebird": "^2.9.26",
     "commander": "^2.2.0",
     "cookies": "^0.5.0",
