@@ -186,6 +186,8 @@ describe('Session', function() {
           // generate faux headers
           fauxSocket.id = 'testSocket' + i;
           fauxSocket.handshake = { headers: {cookie: 'name=value; name2=value2; sid=' + data.id} };
+          fauxSocket.join = function() {};
+          fauxSocket.leave = function() {};
 
           sockets.emit('connection', fauxSocket);
 
@@ -253,6 +255,17 @@ describe('Session', function() {
       , store = new SessionStore('sessions', db.create(TEST_DB), sockets)
       , totalSockets = 5
       , remainingFrom = totalSockets * 3;
+    var rooms = {};
+
+    sockets.to = function(channel) {
+      return {
+        emit: function(event, data) {
+          rooms[channel].forEach(function(em) {
+            em.emit(event, data);
+          });
+        }
+      };
+    };
 
     var fauxUsers = { get: function (q, fn) {
       fn([{ id: "abc123" }]);
@@ -276,6 +289,12 @@ describe('Session', function() {
         // generate faux headers
         fauxSocket.id = 'testSocket' + i;
         fauxSocket.handshake = { headers: {cookie: 'name=value; name2=value2; sid=' + data.id} };
+        fauxSocket.join = function(channel) {
+          rooms[channel] = rooms[channel] || [];
+          rooms[channel].push(fauxSocket);
+        };
+
+        fauxSocket.leave = function() {};
 
         sockets.emit('connection', fauxSocket);
 
@@ -285,7 +304,7 @@ describe('Session', function() {
           expect(data).to.equal("test");
           remainingFrom--;
           if (remainingFrom === 0) done();
-        })
+        });
       }
     };
 
