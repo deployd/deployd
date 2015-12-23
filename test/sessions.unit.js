@@ -11,7 +11,7 @@ describe('SessionStore', function() {
     store.createSession(function (err, session) {
       session.save(function(err, data){
         var sockets = new EventEmitter()
-          ,  store = new SessionStore('sessions', db.create(TEST_DB), sockets)
+          ,  store = new SessionStore('sessions', db.create(TEST_DB), sockets);
 
         for(var i = 1; i < 9; i++) {
           fauxSocket = {
@@ -125,7 +125,7 @@ describe('Session', function() {
                         expect(s).to.not.exist;
                         done();
                       });
-                    }, 10);
+                    }, 300);
                   });
                 });
               });
@@ -136,12 +136,49 @@ describe('Session', function() {
     });
   });
 
+  // mock socket io functionality
+  function createMockSocketIo() {
+    var sockets = new EventEmitter();
+    var rooms = {};
+
+    sockets.to = sinon.spy(function(channel) {
+      return {
+        emit: function(event, data) {
+          rooms[channel].forEach(function(em) {
+            em.emit(event, data);
+          });
+        }
+      };
+    });
+
+    sockets.createClient = function(name) {
+      var fauxSocket = new EventEmitter();
+      fauxSocket.id = name;
+      fauxSocket.handshake = { headers: {} };
+      fauxSocket.join = sinon.spy(function(channel) {
+        rooms[channel] = rooms[channel] || [];
+        rooms[channel].push(fauxSocket);
+      });
+      fauxSocket.leave = sinon.spy(function(channel) {
+        rooms[channel] = rooms[channel] || [];
+        var index = rooms[channel];
+        if (index !== -1) rooms[channel].splice(index, 1);
+      });
+      fauxSocket.on('disconnect', function() {
+        Object.keys(rooms).forEach(function(room) {
+          fauxSocket.leave(room);
+        });
+      });
+      return fauxSocket;
+    };
+    return sockets;
+  }
 
   it('should make sockets available even before they exist', function(done) {
     this.timeout(100);
 
-    var sockets = new EventEmitter()
-      ,  fauxSocket = new EventEmitter()
+    var sockets = createMockSocketIo()
+      ,  fauxSocket = sockets.createClient()
       ,  store = new SessionStore('sessions', db.create(TEST_DB), sockets);
 
     store.createSession(function (err, session) {
@@ -160,13 +197,13 @@ describe('Session', function() {
         sockets.emit('connection', fauxSocket);
 
         fauxSocket.emit('test', 123);
-      })
+      });
     });
   });
 
 
   it('should bind multiple sockets to the same session id', function(done) {
-    var sockets = new EventEmitter()
+    var sockets = createMockSocketIo()
       , store = new SessionStore('sessions', db.create(TEST_DB), sockets)
       , total = 5
       , remainingTo = total
@@ -182,12 +219,9 @@ describe('Session', function() {
         });
 
         for (var i = 0; i < total; i++){
-          var fauxSocket = new EventEmitter();
+          var fauxSocket = sockets.createClient('testSocket' + i);
           // generate faux headers
-          fauxSocket.id = 'testSocket' + i;
           fauxSocket.handshake = { headers: {cookie: 'name=value; name2=value2; sid=' + data.id} };
-          fauxSocket.join = function() {};
-          fauxSocket.leave = function() {};
 
           sockets.emit('connection', fauxSocket);
 
@@ -198,16 +232,16 @@ describe('Session', function() {
             expect(data).to.equal("hello");
             remainingFrom--;
             if (remainingTo === 0 && remainingFrom === 0) done();
-          })
+          });
         }
 
         session.socket.emit('message FROM server', "hello");
-      })
+      });
     });
   });
 
   it('should not bind multiple sessions to the same socket', function(done) {
-    var sockets = new EventEmitter()
+    var sockets = createMockSocketIo()
       , store = new SessionStore('sessions', db.create(TEST_DB), sockets)
       , calls = 0;
 
@@ -223,20 +257,11 @@ describe('Session', function() {
     };
 
     createSession(function(err, data, session1){
-      var fauxSocket = new EventEmitter();
-      fauxSocket.id = 'testSocket1';
-      fauxSocket.handshake = { headers: {} };
+      var fauxSocket = sockets.createClient('testSocket1');
       sockets.emit('connection', fauxSocket);
       fauxSocket.emit('server:setSession', { sid: data.id });
-      fauxSocket.on('hello', function(data){
-        expect(data).to.equal('message from server to session2');
-        calls++;
-        setTimeout(function(){
-          expect(calls).to.equal(1);
-          done();
-        }, 50);
-      });
-
+      var handler = sinon.spy();
+      fauxSocket.on('hello', handler);
 
       createSession(function(err, data, session2){
         fauxSocket.emit('server:setSession', { sid: data.id });
@@ -244,28 +269,98 @@ describe('Session', function() {
         session1.socket.emit('hello', 'message from server to session1');
         // this message should be received:
         session2.socket.emit('hello', 'message from server to session2');
-      })
-    })
+        expect(handler.calledOnce).to.be.true;
+        expect(handler.firstCall.calledWith('message from server to session2')).to.be.true;
+        done();
+      });
+    });
+  });
 
+  it('should rebind socket to rooms on reconnect', function(done) {
+    var sockets = createMockSocketIo()
+      , store = new SessionStore('sessions', db.create(TEST_DB), sockets)
+      , calls = 0;
+
+    var sessions = [];
+
+    var createSession = function(fn) {
+      return store.createSession(function (err, session) {
+        session.save(function(err, data){
+          sessions.push(data);
+          fn(err, data, session);
+        });
+      });
+    };
+
+    createSession(function(err, data, session1){
+      var fauxSocket = sockets.createClient('socket1');
+      sockets.emit('connection', fauxSocket);
+      fauxSocket.emit('server:setSession', { sid: data.id });
+      session1.joinRoom('administrators');
+
+      var handler = sinon.spy();
+      fauxSocket.on('test', handler);
+      session1.emitToRoom('administrators', 'test', 'message 1');
+      expect(handler.calledWith('message 1')).to.be.true;
+
+      fauxSocket.emit('disconnect');
+
+      var fauxSocket2 = sockets.createClient('socket2');
+      sockets.emit('connection', fauxSocket2);
+      fauxSocket2.emit('server:setSession', { sid: data.id });
+      // rejoins room
+      expect(fauxSocket2.join.calledWith('administrators')).to.be.true;
+
+      fauxSocket2.on('test', handler);
+      session1.emitToRoom('administrators', 'test', 'message 2');
+      expect(handler.calledWith('message 2')).to.be.true;
+      expect(handler.calledTwice).to.be.true;
+      done();
+    });
+
+  });
+
+  it('should allow joining multiple rooms at once', function(done) {
+    var sockets = createMockSocketIo()
+      , store = new SessionStore('sessions', db.create(TEST_DB), sockets)
+      , calls = 0;
+
+    var sessions = [];
+
+    var createSession = function(fn) {
+      return store.createSession(function (err, session) {
+        session.save(function(err, data){
+          sessions.push(data);
+          fn(err, data, session);
+        });
+      });
+    };
+
+    createSession(function(err, data, session1){
+      var fauxSocket = sockets.createClient('socket1');
+      sockets.emit('connection', fauxSocket);
+      fauxSocket.emit('server:setSession', { sid: data.id });
+      session1.joinRoom(['administrators', 'users']);
+      var remaining = 2;
+
+      var handler = sinon.spy();
+
+      fauxSocket.on('test', handler);
+      session1.emitToRoom('administrators', 'test', 'for admins');
+      session1.emitToRoom('users', 'test', 'for users');
+      expect(handler.firstCall.calledWith('for admins')).to.be.true;
+      expect(handler.secondCall.calledWith('for users')).to.be.true;
+      expect(handler.calledTwice).to.be.true;
+      done();
+    });
   });
 
 
   it('should bind multiple sessions to the same user id', function(done) {
-    var sockets = new EventEmitter()
+    var sockets = createMockSocketIo()
       , store = new SessionStore('sessions', db.create(TEST_DB), sockets)
       , totalSockets = 5
       , remainingFrom = totalSockets * 3;
-    var rooms = {};
-
-    sockets.to = function(channel) {
-      return {
-        emit: function(event, data) {
-          rooms[channel].forEach(function(em) {
-            em.emit(event, data);
-          });
-        }
-      };
-    };
 
     var fauxUsers = { get: function (q, fn) {
       fn([{ id: "abc123" }]);
@@ -285,16 +380,9 @@ describe('Session', function() {
     var bindSession = function(data, session){
       // simulate totalSockets connections per user
       for (var i = 0; i < totalSockets; i++){
-        var fauxSocket = new EventEmitter();
+        var fauxSocket = sockets.createClient('testSocket' + i);
         // generate faux headers
-        fauxSocket.id = 'testSocket' + i;
         fauxSocket.handshake = { headers: {cookie: 'name=value; name2=value2; sid=' + data.id} };
-        fauxSocket.join = function(channel) {
-          rooms[channel] = rooms[channel] || [];
-          rooms[channel].push(fauxSocket);
-        };
-
-        fauxSocket.leave = function() {};
 
         sockets.emit('connection', fauxSocket);
 
@@ -341,7 +429,7 @@ describe('Session', function() {
     function callback(err) {
       expect(err).to.not.exist;
       callsLeft--;
-      if (callsLeft == 0) return done();
+      if (callsLeft === 0) return done();
     }
 
     for (var i = 0; i< 5; i++) {
