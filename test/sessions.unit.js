@@ -154,15 +154,18 @@ describe('Session', function() {
     sockets.createClient = function(name) {
       var fauxSocket = new EventEmitter();
       fauxSocket.id = name;
+      fauxSocket.rooms = [];
       fauxSocket.handshake = { headers: {} };
       fauxSocket.join = sinon.spy(function(channel) {
         rooms[channel] = rooms[channel] || [];
         rooms[channel].push(fauxSocket);
+        if (fauxSocket.rooms.indexOf(channel) === -1) fauxSocket.rooms.push(channel);
       });
       fauxSocket.leave = sinon.spy(function(channel) {
         rooms[channel] = rooms[channel] || [];
         var index = rooms[channel];
         if (index !== -1) rooms[channel].splice(index, 1);
+        if (fauxSocket.rooms.indexOf(channel) !== -1) fauxSocket.rooms.splice(fauxSocket.rooms.indexOf(channel), 1);
       });
       fauxSocket.on('disconnect', function() {
         Object.keys(rooms).forEach(function(room) {
@@ -172,6 +175,27 @@ describe('Session', function() {
       return fauxSocket;
     };
     return sockets;
+  }
+
+  function createMockPubSub() {
+    var pubsub = new EventEmitter();
+
+    var pub = {
+      publish: sinon.spy(function(channel, data) {
+        pubsub.emit('message', channel, data);
+      })
+    };
+
+    var sub = {
+      subscribe: sinon.spy(function(channel) {
+
+      }),
+      on: sinon.spy(function() {
+        return pubsub.on.apply(pubsub, arguments);
+      })
+    };
+
+    return {pub: pub, sub: sub};
   }
 
   it('should make sockets available even before they exist', function(done) {
@@ -307,15 +331,23 @@ describe('Session', function() {
 
       var fauxSocket2 = sockets.createClient('socket2');
       sockets.emit('connection', fauxSocket2);
-      fauxSocket2.emit('server:setSession', { sid: data.id });
-      // rejoins room
-      expect(fauxSocket2.join.calledWith('administrators')).to.be.true;
 
-      fauxSocket2.on('test', handler);
-      session1.emitToRoom('administrators', 'test', 'message 2');
-      expect(handler.calledWith('message 2')).to.be.true;
-      expect(handler.calledTwice).to.be.true;
-      done();
+      fauxSocket2.emit('server:setSession', { sid: data.id });
+
+      // this will be called asynchronously, tap into it
+      var originalJoin = fauxSocket2.join;
+      fauxSocket2.join = function(channel) {
+        originalJoin(channel);
+        // rejoins room
+        expect(channel).to.equal('administrators');
+
+        fauxSocket2.on('test', handler);
+        session1.emitToRoom('administrators', 'test', 'message 2');
+        expect(handler.calledWith('message 2')).to.be.true;
+        expect(handler.calledTwice).to.be.true;
+        done();
+        fauxSocket2.join = originalJoin;
+      };
     });
 
   });
@@ -416,6 +448,84 @@ describe('Session', function() {
     });
   });
 
+  it('should join channels across nodes via pubsub', function(done) {
+    var pubsub = createMockPubSub();
+    var database = db.create(TEST_DB);
+    var remaining = 3;
+
+    function createStore(sockets) {
+      return new SessionStore('sessions', database, sockets, {
+          pubClient: pubsub.pub,
+          subClient: pubsub.sub
+        });
+    }
+
+    var createSession = function(store, sid, fn) {
+      return store.createSession(sid, function (err, session) {
+        session.save(function(err, data){
+          fn(err, data, session);
+        });
+      });
+    };
+
+    // create two mock nodes
+    var sockets1 = createMockSocketIo();
+    var sockets2 = createMockSocketIo();
+
+    var store1 = createStore(sockets1);
+    var store2 = createStore(sockets2);
+
+    expect(store1.pubClient).to.equal(pubsub.pub);
+    expect(store1.subClient).to.equal(pubsub.sub);
+    expect(store2.pubClient).to.equal(pubsub.pub);
+    expect(store2.subClient).to.equal(pubsub.sub);
+
+    // create a session store
+    createSession(store1, null, function(err, data, session) {
+      // assume socket connects to the first node
+      var fauxSocket = sockets1.createClient('testSocket1');
+      sockets1.emit('connection', fauxSocket);
+      fauxSocket.emit('server:setsession', { sid: data.id });
+
+      var originalRefresh = store1.refreshSessionRooms;
+      store1.refreshSessionRooms = function(sid, fn) {
+        // need to ensure this is called
+        expect(sid).to.equal(session.sid);
+        originalRefresh.apply(store1, arguments);
+        --remaining || done();
+      };
+
+      // later on, second node receives a request for the session id to join a specific room
+      // this can happen with load balancing
+      createSession(store2, session.sid, function(err, data, session2) {
+        session2.joinRoom('administrators');
+
+        // the only connection between the two stores is via pubsub, otherwise they have separate
+        // socket instances, etc
+        var originalJoin = fauxSocket.join;
+        fauxSocket.join = function(channel) {
+          // ensure this is called
+          originalJoin(channel);
+          expect(channel).to.equal('administrators');
+
+          session2.leaveRoom('administrators');
+
+          --remaining || done();
+        };
+
+        var originalLeave = fauxSocket.leave;
+        fauxSocket.leave = function(channel) {
+          // ensure this is called
+          originalLeave(channel);
+          expect(channel).to.equal('administrators');
+
+          --remaining || done();
+        };
+      });
+
+    });
+  });
+
   it('should not crash process when inserting the same session to the database', function (done) {
     var store = new SessionStore('sessions', db.create(TEST_DB));
     var originalFind = store.find;
@@ -465,10 +575,36 @@ describe('Session', function() {
   describe('.remove(fn)', function() {
     it('should remove the session data from the store', function(done) {
       createSession(function (err, session) {
+
         session.set({foo: 'bar'}).save(function (err, data) {
           session.store.first({id: session.sid}, function (err, sdata) {
             expect(sdata.foo).to.equal('bar');
             session.remove(function () {
+              session.store.first({id: session.sid}, function (err, sdata) {
+                expect(sdata).to.not.exist;
+                done(err);
+              });
+            });
+          });
+        });
+      });
+    });
+
+    it('should unjoin all channels', function(done) {
+      var sockets = createMockSocketIo()
+        , store = new SessionStore('sessions', db.create(TEST_DB), sockets);
+
+      store.createSession(function (err, session) {
+        session.set({foo: 'bar'}).save(function (err, data) {
+          session.store.first({id: session.sid}, function (err, sdata) {
+            var fauxSocket = sockets.createClient('socket1');
+            sockets.emit('connection', fauxSocket);
+            fauxSocket.emit('server:setSession', { sid: session.sid });
+            session.joinRoom('administrators');
+            expect(fauxSocket.rooms).to.include('administrators');
+            expect(sdata.foo).to.equal('bar');
+            session.remove(function () {
+              expect(fauxSocket.rooms).to.not.include('administrators');
               session.store.first({id: session.sid}, function (err, sdata) {
                 expect(sdata).to.not.exist;
                 done(err);
