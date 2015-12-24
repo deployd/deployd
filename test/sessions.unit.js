@@ -156,16 +156,18 @@ describe('Session', function() {
       fauxSocket.id = name;
       fauxSocket.rooms = [];
       fauxSocket.handshake = { headers: {} };
-      fauxSocket.join = sinon.spy(function(channel) {
+      fauxSocket.join = sinon.spy(function(channel, fn) {
         rooms[channel] = rooms[channel] || [];
         rooms[channel].push(fauxSocket);
         if (fauxSocket.rooms.indexOf(channel) === -1) fauxSocket.rooms.push(channel);
+        if (fn) setTimeout(fn, 1);
       });
-      fauxSocket.leave = sinon.spy(function(channel) {
+      fauxSocket.leave = sinon.spy(function(channel, fn) {
         rooms[channel] = rooms[channel] || [];
         var index = rooms[channel];
         if (index !== -1) rooms[channel].splice(index, 1);
         if (fauxSocket.rooms.indexOf(channel) !== -1) fauxSocket.rooms.splice(fauxSocket.rooms.indexOf(channel), 1);
+        if (fn) setTimeout(fn, 1);
       });
       fauxSocket.on('disconnect', function() {
         Object.keys(rooms).forEach(function(room) {
@@ -337,7 +339,7 @@ describe('Session', function() {
       // this will be called asynchronously, tap into it
       var originalJoin = fauxSocket2.join;
       fauxSocket2.join = function(channel) {
-        originalJoin(channel);
+        originalJoin.apply(fauxSocket2, arguments);
         // rejoins room
         expect(channel).to.equal('administrators');
 
@@ -505,7 +507,7 @@ describe('Session', function() {
         var originalJoin = fauxSocket.join;
         fauxSocket.join = function(channel) {
           // ensure this is called
-          originalJoin(channel);
+          originalJoin.apply(fauxSocket, arguments);
           expect(channel).to.equal('administrators');
 
           session2.leaveRoom('administrators');
@@ -516,7 +518,7 @@ describe('Session', function() {
         var originalLeave = fauxSocket.leave;
         fauxSocket.leave = function(channel) {
           // ensure this is called
-          originalLeave(channel);
+          originalLeave.apply(fauxSocket, arguments);
           expect(channel).to.equal('administrators');
 
           --remaining || done();
