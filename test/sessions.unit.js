@@ -489,12 +489,16 @@ describe('Session', function() {
       sockets1.emit('connection', fauxSocket);
       fauxSocket.emit('server:setsession', { sid: data.id });
 
+      // test that the uid room is joined
+      session.set({uid: 'user1'});
+
       var originalRefresh = store1.refreshSessionRooms;
       store1.refreshSessionRooms = function(sid, fn) {
         // need to ensure this is called
         expect(sid).to.equal(session.sid);
         originalRefresh.apply(store1, arguments);
-        --remaining || done();
+        expect(fauxSocket.rooms).to.include('dpd_uid:user1'); // should not leave user channel
+        remaining-- || done();
       };
 
       // later on, second node receives a request for the session id to join a specific room
@@ -509,10 +513,9 @@ describe('Session', function() {
           // ensure this is called
           originalJoin.apply(fauxSocket, arguments);
           expect(channel).to.equal('administrators');
-
           session2.leaveRoom('administrators');
 
-          --remaining || done();
+          remaining-- || done();
         };
 
         var originalLeave = fauxSocket.leave;
@@ -520,8 +523,7 @@ describe('Session', function() {
           // ensure this is called
           originalLeave.apply(fauxSocket, arguments);
           expect(channel).to.equal('administrators');
-
-          --remaining || done();
+          remaining-- || done();
         };
       });
 
