@@ -80,7 +80,7 @@
 
   function encodeIfComplex(query) {
     if (isComplex(query)) {
-      return encodeURI(JSON.stringify(query));
+      return encodeURIComponent(JSON.stringify(query));
     } else if (query) {
       return createQueryString(query);
     }
