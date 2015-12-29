@@ -10,6 +10,11 @@
   <script src="mocha.js"></script>
   <script src="util.js"></script>
   <script src="sinon.js"></script>
+  <script>
+  if (typeof initMochaPhantomJS === 'function') {
+    initMochaPhantomJS()
+  }
+  </script>
   <script>mocha.setup('bdd')</script>
   <!-- -- tests -- -->
   <script src="test/util.test.js"></script>
@@ -22,8 +27,7 @@
   <div id="mocha"></div>
   <script>
     expect = chai.expect;
-    if (window.mochaPhantomJS) { mochaPhantomJS.run(); }
-      else { mocha.run(); }
+    mocha.run();
   </script>
 </body>
 </html>
