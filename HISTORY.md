@@ -8,8 +8,8 @@ This document records all notable changes to [Deployd](http://deployd.com/). Thi
 
 ## Refactor
 
-- **session**: use socket.io rooms for emitToUsers ([ff5f840c95](https://github.com/deployd/deployd/commit/ff5f840c9514679f9161af146266d83f3a4f16af))
-- 
+- **session:** use socket.io rooms for emitToUsers ([ff5f840c95](https://github.com/deployd/deployd/commit/ff5f840c9514679f9161af146266d83f3a4f16af))
+
 ## Bug Fixes
 
 - **dpd.js:** use encodeURIComponent
