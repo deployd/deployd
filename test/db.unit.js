@@ -69,6 +69,31 @@ describe('store', function(){
       });
     });
 
+    describe('.find({$limit: "n"}, fn)', function() {
+      it('should limit the result using integer value', function(done) {
+        store.insert([{i:1},{i:2},{i:3},{i:4},{i:5},{i:6},{i:7},{i:8},{i:9}], function () {
+          store.find({$limit: "2"}, function (err, result) {
+            expect(result).to.exist;
+            expect(result).to.have.length(2);
+            done(err);
+          });
+        });
+      });
+    });
+
+    describe('.find({$skip: n}, fn)', function() {
+      it('should skip the result using integer value', function(done) {
+        store.insert([{i:1},{i:2},{i:33333},{i:4},{i:5},{i:6},{i:7},{i:8},{i:9}], function () {
+          store.find({$skip: "2"}, function (err, result) {
+            expect(result).to.exist;
+            expect(result[0].i).to.equal(33333);
+            done(err);
+          });
+        });
+      });
+    });
+
+
     describe('.count({}, fn)', function() {
       it('should count the results', function(done) {
         store.insert([{i:1},{i:2},{i:33333},{i:4},{i:5},{i:6},{i:7},{i:8},{i:9}], function () {
