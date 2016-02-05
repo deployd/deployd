@@ -2,6 +2,36 @@
 
 This document records all notable changes to [Deployd](http://deployd.com/). This project adheres to [Semantic Versioning](http://semver.org/).
 
+
+<a name="v0.8.8"></a>
+# v0.8.8 (2016-01-18)
+
+## Refactor
+
+- **session:** use socket.io rooms for emitToUsers ([ff5f840c95](https://github.com/deployd/deployd/commit/ff5f840c9514679f9161af146266d83f3a4f16af))
+
+## Bug Fixes
+
+- **dpd.js:** use encodeURIComponent
+  ([8d58a12e](https://github.com/deployd/deployd/commit/8d58a12e9e0031da73970d6079c4dd2d525b3838))
+- **repl:** update outdated property name
+  ([05f731c8](https://github.com/deployd/deployd/commit/05f731c88cd6bbbfedf79b2fb2b4d17c9860ed21),
+   [#680](https://github.com/deployd/deployd/issues/680))
+- **session:**
+  - memory leak
+  ([a5e572a2](https://github.com/deployd/deployd/commit/a5e572a2504bc7f8230565be574d2107883fe1b1))
+  - use update for updating sessions, not remove and insert
+  ([3965ed3b](https://github.com/deployd/deployd/commit/3965ed3b59ffb05130a2c7f986e3296a6df22a83))
+- **test:** allow some time for sessions to be cleaned up
+  ([ca0ca85e](https://github.com/deployd/deployd/commit/ca0ca85eed723436ebcfc2674e420c79d1fe1d96))
+
+
+## Performance Improvements
+
+- **script:** memoize dynamic function
+  ([ff6a4dce](https://github.com/deployd/deployd/commit/ff6a4dceee02401d67d4ba1348648cc55ebc13fb))
+
+
 <a name="v0.8.7"></a>
 # v0.8.7 (2015-10-30)
 
