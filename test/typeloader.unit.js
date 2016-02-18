@@ -21,7 +21,12 @@ describe('type-loader', function(){
       sh.mkdir('-p', basepath);
       sh.cp('./lib/resource.js', basepath + '/resource.js');
       sh.cp('./lib/script.js', basepath + '/script.js');
-      JSON.stringify({dependencies: {'dpd-fileupload':'^0.0.10'}}).to(path.join(basepath, 'package.json'));
+      var pack = {dependencies:
+        {'dpd-fileupload':'^0.0.10', 'dpd-count': '0.0.1'},
+        dpdIgnore: ["dpd-count"]
+      };
+
+      JSON.stringify(pack).to(path.join(basepath, 'package.json'));
       sh.mkdir('-p', path.join(basepath, 'node_modules/dpd-fileupload'));
       var dpdFileuploadIndexJs = "var Resource   = require('../../resource');\n";
           dpdFileuploadIndexJs += "util = require('util');\n";
@@ -29,13 +34,23 @@ describe('type-loader', function(){
           dpdFileuploadIndexJs += "util.inherits(Fileupload, Resource);\n";
           dpdFileuploadIndexJs += "module.exports = Fileupload;\n";
       dpdFileuploadIndexJs.to(path.join(basepath + '/node_modules/dpd-fileupload', 'index.js'));
+      sh.mkdir('-p', path.join(basepath, 'node_modules/dpd-event'));
+
+      sh.mkdir('-p', path.join(basepath, 'node_modules/dpd-count'));
+      var dpdCountIndexJs = "var Resource   = require('../../resource');\n";
+          dpdCountIndexJs += "util = require('util');\n";
+          dpdCountIndexJs += "function Count() { console.log('type-loader');}\n";
+          dpdCountIndexJs += "util.inherits(Count, Resource);\n";
+          dpdCountIndexJs += "module.exports = Count;\n";
+      dpdCountIndexJs.to(path.join(basepath + '/node_modules/dpd-count', 'index.js'));
+      sh.mkdir('-p', path.join(basepath, 'node_modules/dpd-count'));
+
       this.server = new Server();
     };
 
 
     it('should load the default resources', function(done) {
       TypeLoader(basepath, function(resources, customResources) {
-
         expect(resources).to.not.be.empty;
         expect(resources).to.include.keys('ClientLib');
         expect(resources).to.include.keys('Collection');
@@ -53,9 +68,9 @@ describe('type-loader', function(){
     it('should load the default resources and the customResources based on package.json', function(done) {
       createPackageJson();
       TypeLoader(basepath, function(resources, customResources) {
-
         expect(customResources).to.not.be.empty;
         expect(customResources).to.include.keys('Fileupload');
+        expect(customResources).to.not.include.keys('Count');
         done();
       });
     });
