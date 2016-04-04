@@ -14,7 +14,7 @@ describe('type-loader', function(){
   });
 
   describe('.loadTypes(basepath, fn)', function() {
-    var createPackageJson = function() {
+    var createPackageJson = function(opts) {
       if (fs.existsSync(basepath)) {
         sh.rm('-rf', basepath);
       }
@@ -22,9 +22,16 @@ describe('type-loader', function(){
       sh.cp('./lib/resource.js', basepath + '/resource.js');
       sh.cp('./lib/script.js', basepath + '/script.js');
       var pack = {dependencies:
-        {'dpd-fileupload':'^0.0.10', 'dpd-count': '0.0.1'},
-        dpdIgnore: ["dpd-count"]
+        {'dpd-fileupload':'^0.0.10', 'dpd-count': '0.0.1'}
       };
+
+      if(opts.ignore){
+        pack.dpdIgnore = ["dpd-count"];
+      }
+
+      if(opts.include){
+        pack.dpdInclude = ["dpd-count"];
+      }
 
       JSON.stringify(pack).to(path.join(basepath, 'package.json'));
       sh.mkdir('-p', path.join(basepath, 'node_modules/dpd-fileupload'));
@@ -65,12 +72,26 @@ describe('type-loader', function(){
     });
 
 
-    it('should load the default resources and the customResources based on package.json', function(done) {
-      createPackageJson();
+    it('should load the default resources and the customResources based on package.json (w dpdIgnore)', function(done) {
+      createPackageJson({ignore: true});
       TypeLoader(basepath, function(resources, customResources) {
         expect(customResources).to.not.be.empty;
         expect(customResources).to.include.keys('Fileupload');
         expect(customResources).to.not.include.keys('Count');
+        done();
+      });
+    });
+
+    it('should load the default resources and the customResources based on package.json (w dpdInclude)', function(done) {
+      if (fs.existsSync(basepath)) {
+        sh.rm('-rf', basepath);
+      }
+
+      createPackageJson({include: true});
+      TypeLoader(basepath, function(resources, customResources) {
+        expect(customResources).to.not.be.empty;
+        expect(customResources).to.not.include.keys('Fileupload');
+        expect(customResources).to.include.keys('Count');
         done();
       });
     });
