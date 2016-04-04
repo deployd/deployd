@@ -83,10 +83,6 @@ describe('type-loader', function(){
     });
 
     it('should load the default resources and the customResources based on package.json (w dpdInclude)', function(done) {
-      if (fs.existsSync(basepath)) {
-        sh.rm('-rf', basepath);
-      }
-
       createPackageJson({include: true});
       TypeLoader(basepath, function(resources, customResources) {
         expect(customResources).to.not.be.empty;
