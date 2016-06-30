@@ -113,7 +113,7 @@ describe('User Collection', function() {
         .fail(function(err) {
           expect(err).to.exist;
           expect(err.errors.password).to.equal('is required');
-        	done();
+          done();
         });
       });
 
