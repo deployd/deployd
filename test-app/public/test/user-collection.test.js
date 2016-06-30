@@ -96,6 +96,18 @@ describe('User Collection', function() {
         });
       });
 
+      it('should not crash the server when called with an invalid password', function(done) {
+        dpd.users.post({username: 'foo@bar.com', password: '123456'})
+        .then(function(res) {
+          expect(res).to.exist;
+          expect(res.username).to.equal('foo@bar.com');
+          dpd.users.login({username: 'foo@bar.com', password: {}}, function(session, err) {
+            expect(err).to.exist;
+            done();
+          });
+        });
+      });
+
       it('should not crash the server when called without a password', function(done) {
         dpd.users.post({username: 'foo@bar.com', password: '123456'})
         .then(function(res) {
