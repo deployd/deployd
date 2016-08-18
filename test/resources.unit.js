@@ -73,7 +73,7 @@ describe('InternalResources', function() {
       this.ir.handle({req: {method: 'POST', url: '/__resources/foo/get.js', isRoot: true}, url: '/foo/get.js', body: {value: "this.foo = 'bar';"}, done: function(err, resource) {
         if (err) return done(err);
         var fileVal = sh.cat(path.join(configPath, 'resources/foo/get.js'));
-        expect(fileVal).to.exist.and.to.equal("this.foo = 'bar';");
+        expect(fileVal.toString()).to.exist.and.to.equal("this.foo = 'bar';");
         done();
       }});
     });
