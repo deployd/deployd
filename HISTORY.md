@@ -2,6 +2,23 @@
 
 This document records all notable changes to [Deployd](http://deployd.com/). This project adheres to [Semantic Versioning](http://semver.org/).
 
+<a name="v0.8.9"></a>
+# v0.8.9 (2016-08-29)
+
+
+## Bug Fixes
+
+- **db:** convert skip/limit arg to integer
+  ([86e6f5f6](https://github.com/deployd/deployd/commit/86e6f5f6a06d1c338974735d237fc9d8f33c8ec9))
+- **package:**
+  - pin mongodb to 2.1.18 (upstream bug) (#740)
+  ([79ed7b77](https://github.com/deployd/deployd/commit/79ed7b779be53ec2b45c8b62a972e8e74eb064af))
+  - pin mongodb to 2.1.x (#739)
+  ([d07f3ca4](https://github.com/deployd/deployd/commit/d07f3ca49640b90401b30ae7383870c50b9b44be))
+- **user-collection:** ensure password is a string
+  ([e81c6c7b](https://github.com/deployd/deployd/commit/e81c6c7bc3b28c1c2fddee8c85014724356ca8bb),
+   [#735](https://github.com/deployd/deployd/issues/735))
+
 
 <a name="v0.8.8"></a>
 # v0.8.8 (2016-01-18)
