@@ -8,6 +8,7 @@ var Server = require('./lib/server')
 module.exports = function (config) {
   var server = new Server(config);
   upgrade(server);
+  server.options.responseHeaders=config.responseHeaders;
   return server;
 };
 
