@@ -44,7 +44,7 @@ describe('script', function(){
     });
 
     it('should always have access to require()', function(done) {
-      var s = new Script('if(typeof require !== "function") throw "now access to require"');
+      var s = new Script('if(typeof require !== "function") throw "no access to require"');
       s.run({}, done);
     });
 
