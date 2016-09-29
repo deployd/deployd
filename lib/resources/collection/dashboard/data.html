@@ -35,7 +35,7 @@
             <input type="text" class="number" data-bind="hasfocus: edit.focusInput, select: 'selectEditor', numberValue: edit.editValue, valueUpdate: 'afterkeydown'" />
           <!-- /ko -->
           <!-- ko if: selectedProp().type === 'date' -->
-            <input type="date" class="inline-editor-input" data-bind="hasfocus: edit.focusInput, select: 'selectEditor', customValue: edit.editValue, valueUpdate: 'afterkeydown'" />
+            <input type="text" class="inline-editor-input" data-bind="hasfocus: edit.focusInput, select: 'selectEditor', customValue: edit.editValue, valueUpdate: 'afterkeydown'" />
           <!-- /ko -->
           <!-- ko if: selectedProp().type === 'boolean' -->
             <label><input type="checkbox" data-bind="hasfocus: edit.focusInput, checked: edit.editValue" /><span data-bind="text: selectedProp().name"></span></label>
