@@ -7,7 +7,7 @@
     <a href="../properties">Add some now</a> before editing data.
   </div>
 
-  <div id="table-container" data-bind="scrollY: view.scrollY, scrollX: view.scrollX, screenDimensions: view.dimensions, reflow: view.init, style: {height: view.dimensions().height + 'px'}">      
+  <div id="table-container" data-bind="scrollY: view.scrollY, scrollX: view.scrollX, screenDimensions: view.dimensions, reflow: view.init, style: {height: view.dimensions().height + 'px'}">
 
     <div id="editor-modal" class="modal hide" data-bind="if: propertiesLoaded, bootstrapModal: edit.editingModal">
       <div class="modal-header">
@@ -34,12 +34,15 @@
           <!-- ko if: selectedProp().type === 'number' -->
             <input type="text" class="number" data-bind="hasfocus: edit.focusInput, select: 'selectEditor', numberValue: edit.editValue, valueUpdate: 'afterkeydown'" />
           <!-- /ko -->
+          <!-- ko if: selectedProp().type === 'date' -->
+            <input type="date" class="inline-editor-input" data-bind="hasfocus: edit.focusInput, select: 'selectEditor', customValue: edit.editValue, valueUpdate: 'afterkeydown'" />
+          <!-- /ko -->
           <!-- ko if: selectedProp().type === 'boolean' -->
             <label><input type="checkbox" data-bind="hasfocus: edit.focusInput, checked: edit.editValue" /><span data-bind="text: selectedProp().name"></span></label>
           <!-- /ko -->
         </div>
       </div>
-      
+
     </div>
 
     <div id="margin-container" data-bind="style: {top: view.dimensions().top + 'px', left: view.dimensions().left + 'px', height: view.dimensions().height - view.scrollWidth() + 'px'}">
@@ -76,7 +79,7 @@
           <tr>
             <th class="margin">&nbsp;</th>
             <th class="id-cell">
-              <div class="value"><i class="icon-custom icon-white string" data-bind="tooltip: 'id'"></i> id</div> 
+              <div class="value"><i class="icon-custom icon-white string" data-bind="tooltip: 'id'"></i> id</div>
             </th>
             <!-- ko foreach: properties -->
             <th>
@@ -155,4 +158,4 @@
       </table>
     </div>
   </div>
-</div>  
+</div>
