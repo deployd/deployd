@@ -1,19 +1,18 @@
 # Contributing to Deployd
 
-(Guidelines inspired by [AngularJS](https://github.com/angular/angular.js))
-
 We'd love to have your contribution to deployd. There are several ways to contribute:
 
  * Build an external module for deployd
  * Open bugs and feature requests for deployd core itself
  * Submit Pull Requests to deployd core
+ * Help users on the [chat](https://gitter.im/deployd/deployd)
 
 ## Questions or Issues?
 
-The best place to start is to look at existing discussions in the [Deployd Users](https://groups.google.com/forum/#!forum/deployd-users) Google Group and to look at answered questions on Stack Overflow.
-If an answer can't be found, the best bet is to post a new question
-in the Google Group, or post an issue on Github if the issue
-appears to be a bug in deployd core.
+* [chat on Gitter](https://gitter.im/deployd/deployd): Best chance to find someone to help you
+* [Discussion on Google groups](https://groups.google.com/forum/?fromgroups#!forum/deployd-users)
+* [Q&A on stackoverflow](http://stackoverflow.com/questions/tagged/deployd)
+* [Submit a bug on github](https://github.com/deployd/deployd/issues/new): only report if it's a bug from deployd Code.
 
 ### External Deployd Modules
 
@@ -221,65 +220,5 @@ git pull --ff upstream master
 
 ## Maintainers Rebase Guide
 
-To keep a flat and readable code history and revert easier, we rebase pull requests instead of merging them. It means that we can't use the github merge feature.
-
-1. Make a [fork of deployd](https://github.com/deployd/deployd/fork) (or use the one you probably already have and make sure it's even with Deployd)
-
-2. Set the main Deployd repo as upstream remote
-
-  ````shell
-  git remote add upstream git@github.com:deployd/deployd.git
-  ````
-
-3. Fetch the pull request you want to rebase
-
-  ````shell
-  git fetch upstream pull/${PR}/head:${BRANCH}
-  ````
-  $PR is the ID of the PR and $branch is the name of the temporary branch you'll use for that (ie. ```git fetch upstream pull/440/head:pr-440```)
-
-4. Checkout this new branch
-
-  ````shell
-  git checkout ${BRANCH}
-  ````
-
-5. Do the rebase
-
-  ````shell
-  git fetch upstream master
-  git rebase upstream/master
-  ````
-
-6. If the PR contains multiple commits, squash them
-
-  ````shell
-  git rebase -i HEAD~${COMMIT_NUMBER}
-  ````
-  ${COMMIT_NUMBER} being the number of commits you want to squash (ex: ```git rebase -i HEAD~2``` to squash 2 commits)
-
-7. Verify that the commit message follows the guidelines, if not, amend it
-
-  ````shell
-  git commit --amend -m "Fix(collection): add check for id"
-  ````
-
-8. Run the tests
-
-  ````shell
-  npm test
-  ````
-
-9. Push to upstream
-
-  ````shell
-  git push upstream ${BRANCH}:master
-  ````
-  ie: ```git push upstream pr-440:master```
-
-10. Close the PR with the message
-
-  ````shell
-  Thanks for your contribution!
-  Landed as ${COMMIT_SHA}
-  ````
+To keep a flat and readable code history and revert easier, we rebase pull requests instead of merging them. Please use the github button "Squash and merge".
+![http://i.stack.imgur.com/cyHZY.png](http://i.stack.imgur.com/cyHZY.png)
