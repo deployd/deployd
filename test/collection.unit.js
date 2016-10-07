@@ -92,6 +92,28 @@ describe('collection', function(){
       var sanitized = r.sanitize({token: 123456});
       expect(sanitized.token).to.equal('123456');
     });
+
+    it('should convert date strings to dates', function() {
+      var r = createCollection({
+        date: {
+          type: 'date'
+        }
+      });
+
+      var sanitized = r.sanitize({date: '2016-09-09T09:09:09.09Z'});
+      expect(sanitized.date).to.eql(new Date('2016-09-09T09:09:09.09Z'));
+    });
+
+    it('should convert numbers to dates', function() {
+      var r = createCollection({
+        date: {
+          type: 'date'
+        }
+      });
+
+      var sanitized = r.sanitize({date: 1473412149090});
+      expect(sanitized.date).to.eql(new Date('2016-09-09T09:09:09.09Z'));
+    });
   });
 
   describe('.sanitizeQuery(query)', function(){
@@ -127,6 +149,39 @@ describe('collection', function(){
 
       var sanitized = r.sanitizeQuery({bool: { $ne: true }});
       expect(sanitized.bool).to.eql({$ne: true});
+    });
+
+    it('should convert date strings to dates', function() {
+      var r = createCollection({
+        date: {
+          type: 'date'
+        }
+      });
+
+      var sanitized = r.sanitizeQuery({date: '2016-09-09T09:09:09.09Z'});
+      expect(sanitized.date).to.eql(new Date('2016-09-09T09:09:09.09Z'));
+    });
+
+    it('should convert numbers to dates', function() {
+      var r = createCollection({
+        date: {
+          type: 'date'
+        }
+      });
+
+      var sanitized = r.sanitizeQuery({date: 1473412149090});
+      expect(sanitized.date).to.eql(new Date('2016-09-09T09:09:09.09Z'));
+    });
+
+    it('should allow object query on dates', function() {
+      var r = createCollection({
+        date: {
+          type: 'date'
+        }
+      });
+
+      var sanitized = r.sanitizeQuery({date: { $gte: new Date(2016, 01, 01) }});
+      expect(sanitized.date).to.eql({ $gte: new Date(2016, 01, 01) });
     });
   });
 
