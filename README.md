@@ -33,7 +33,7 @@ Deployd is the simplest way to build realtime APIs for web and mobile apps. Read
 
 ## install on windows
 
-[Download](https://bintray.com/artifact/download/deployd/dpd-win-installer/deployd-win-0.8.0.exe) the installer.
+The windows installer is deprecated. The recommended way is now npm (`npm install deployd -g`) and [install mongodb](http://docs.mongodb.org/manual/tutorial/install-mongodb-on-os-x/) separately.
 
 ## install on macosx
 
