@@ -1,3 +1,0 @@
-BASEDIR=$(dirname $0)
-
-node --debug $BASEDIR/dpd $@
