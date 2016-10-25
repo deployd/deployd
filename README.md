@@ -27,9 +27,18 @@ Deployd is the simplest way to build realtime APIs for web and mobile apps. Read
  - [Example Apps](http://docs.deployd.com/examples/)
 
 
+## requirements
+
+Deployd is build using node and published using npm.  
+To install and use it, you need to install **[Node.JS](https://nodejs.org/en/download/)**.
+
 ## install from npm
 
+Once Node.JS is installed, open your terminal and type the following command:
+
 	npm install deployd -g
+
+the `dpd` command should be available. Type `dpd -V` and the current version should appear.
 
 ## install on windows
 
