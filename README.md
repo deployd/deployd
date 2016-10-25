@@ -29,7 +29,7 @@ Deployd is the simplest way to build realtime APIs for web and mobile apps. Read
 
 ## requirements
 
-Deployd is build using node and published using npm.  
+Deployd is built using node and published using npm.  
 To install and use it, you need to install **[Node.JS](https://nodejs.org/en/download/)**.
 
 ## install from npm
