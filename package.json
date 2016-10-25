@@ -38,15 +38,13 @@
   },
   "devDependencies": {
     "chai": "*",
+    "deployd-cli": "github:andreialecu/deployd-cli",
     "less": "*",
     "mocha": "*",
-    "rewire": "~2.5.2",
-    "sinon": "~1.17.5",
+    "mocha-jshint": "2.3.1",
     "mocha-phantomjs": "^4.1.0",
-    "mocha-jshint": "2.3.1"
-  },
-  "bin": {
-    "dpd": "./bin/dpd"
+    "rewire": "~2.5.2",
+    "sinon": "~1.17.5"
   },
   "scripts": {
     "test": "mocha --timeout 5000 && cd test-app && node runtests.js"
