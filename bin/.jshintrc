@@ -1,9 +1,0 @@
-{
-  "laxcomma": true,
-  "unused": "vars",
-  "expr": true,
-  "proto": true,
-  "lastsemic": true,
-  "laxbreak": true,
-  "strict": false
-}
