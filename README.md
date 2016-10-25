@@ -33,7 +33,7 @@ Deployd is the simplest way to build realtime APIs for web and mobile apps. Read
 
 ## install on windows
 
-The windows installer is deprecated. The recommended way is now npm (`npm install deployd -g`) and [install mongodb](http://docs.mongodb.org/manual/tutorial/install-mongodb-on-os-x/) separately.
+The windows installer is deprecated. The recommended way is now npm (`npm install deployd -g`) and [install mongodb](https://docs.mongodb.com/manual/tutorial/install-mongodb-on-windows/) separately.
 
 ## install on macosx
 
