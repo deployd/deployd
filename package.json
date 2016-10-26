@@ -33,7 +33,7 @@
   },
   "devDependencies": {
     "chai": "*",
-    "deployd-cli": "github:andreialecu/deployd-cli",
+    "deployd-cli": "github:deployd/deployd-cli",
     "less": "*",
     "mocha": "*",
     "mocha-jshint": "2.3.1",
