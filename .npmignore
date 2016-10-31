@@ -23,3 +23,5 @@ examples/test/data
 .latestversion
 
 !bin/createtemplate/**
+
+.github
