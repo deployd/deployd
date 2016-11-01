@@ -23,7 +23,7 @@ var deploydPath = path.join(process.cwd(), '..');
 
 // using `spawn` because with `fork` the child script won't be able to catch a `process.exit()` event
 // thus leaving mongod zombie processes behind. see https://github.com/joyent/node/issues/5766
-var proc = spawn(process.argv[0], ["../node_modules/deployd-cli/bin/dpd", "--deploydPath", deploydPath], {env: process.env})
+var proc = spawn(process.argv[0], ["../node_modules/dpd-cli/bin/dpd", "--deploydPath", deploydPath], {env: process.env})
   , buf = '';
 
 proc.on("error", function(err) {
