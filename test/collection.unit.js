@@ -499,6 +499,58 @@ describe('collection', function(){
     });
   });
 
+  describe('.createDomain()', function() {
+    it('should make property non enumerable when calling hide() on domain', function() {
+      var col = new Collection('foodomain', {db: db.create(TEST_DB), config: { properties: {count: {type: 'number'}}}});
+
+      var domain = col.createDomain({count: 1}, {});
+      domain.hide('count');
+
+      expect(domain.data.count).to.equal(1);
+      expect(Object.keys(domain.data).length).to.equal(0);
+
+      // test unhide
+      domain.hide('count', false);
+      expect(domain.data.count).to.equal(1);
+      expect(Object.keys(domain.data).length).to.equal(1);
+    });
+
+    it('should throw when modifying protect()ed property on domain', function() {
+      var col = new Collection('foodomain', {db: db.create(TEST_DB), config: { properties: {count: {type: 'number'}}}});
+
+      var domain = col.createDomain({count: 1}, {}, true);
+      var previousCount = 0;
+      domain.previous.count = previousCount;
+      
+      domain.protect('count');
+      expect(domain.data.count).to.equal(previousCount);
+
+      expect(function() { domain.data.count = 2; }).to.throw(/cannot modify protected property/i);
+
+      // test unprotect
+      domain.protect('count', false);
+      domain.data.count = 2;
+      expect(domain.data.count).to.equal(2);
+
+      domain.protect('count');
+      expect(function() { domain.data.count = 3; }).to.throw(/cannot modify protected property/i);
+      expect(domain.data.count).to.equal(previousCount);
+
+      domain.unprotect('count');
+      domain.data.count = 3;
+      expect(domain.data.count).to.equal(3);
+    });
+
+    it('should properly report changed() properties on domain', function() {
+      var col = new Collection('foodomain', {db: db.create(TEST_DB), config: { properties: {count: {type: 'number'}}}});
+
+      var domain = col.createDomain({count: 1}, {}, true);
+      domain.previous.count = 2;
+      
+      expect(domain.changed('count')).to.be.true;
+    });
+  })
+
   describe('Collection.extendDomain', function() {
     it('should properly bind function to collection instance', function() {
       Collection.extendDomain("getName", function(){
