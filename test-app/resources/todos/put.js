@@ -14,7 +14,6 @@ if (this.title === "$PROTECT_TEST") {
   protect('message');
   
   if (this.message !== 'x') error('message', 'should be x again after protect');
-  console.log(this.message);
 
   try {
     // this should throw an error
