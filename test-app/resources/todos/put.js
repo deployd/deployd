@@ -34,6 +34,10 @@ if (this.title === "$PROTECT_TEST") {
   }
 
   hide('title'); // check that hide also works in put
+
+  // keep this to ensure that even if the field is hidden it is still updated properly
+  this.done = true;
+  hide('done');
 }
 
 if (previous.message == "protected") {

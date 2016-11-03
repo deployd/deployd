@@ -527,6 +527,7 @@ describe('Collection', function () {
           expect(result.title).to.not.exist;
           dpd.todos.get(result.id, next);
         }).chain(function(next, result, err) {
+          expect(result.done).to.equal(true);
           expect(result.error_message_ok).to.equal(true);
           expect(result.error_id_ok).to.equal(true);
           expect(result.message).to.equal("x");
