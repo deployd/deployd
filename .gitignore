@@ -23,3 +23,6 @@ examples/test/data
 .latestversion
 
 !bin/createtemplate/**
+test-app/node_modules
+!test-app/node_modules/hello.js
+!test-app/node_modules/proxy
