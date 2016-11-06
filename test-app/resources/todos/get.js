@@ -25,3 +25,7 @@ if (query.numberGet) {
 if (query.arbitrary) {
     this.custom = 'arbitrary';
 }
+
+if (query.hideTitle) {
+    hide('title');
+}

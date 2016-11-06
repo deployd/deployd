@@ -118,6 +118,22 @@ describe('Collection', function () {
           });
         });
       });
+
+      it('should respond to the changed event (in AfterCommit) on put and have access to previous data', function(done) {
+        dpd.todos.post({title: 'changed - create', message: 'protected'}, function(item) {
+          dpd.socketReady(function() {
+            dpd.todos.once('changed', function(data) {
+              expect(data.previous.title).to.equal('changed - create');
+              expect(data.previous.message).to.equal('protected');
+              expect(data.current.title).to.equal('changed - updated');
+              expect(data.current.message).to.equal('protected');
+              done();
+            });
+
+            dpd.todos.put(item.id, {title: 'changed - updated', message: 'should not change'});
+          });
+        });
+      });
     });
 
     describe('.post({title: \'faux\'}, fn)', function() {
@@ -378,6 +394,19 @@ describe('Collection', function () {
       });
     });
 
+    describe('.get({hideTitle: true}, fn)', function() {
+      it('should hide property from response', function(done) {
+        dpd.todos.post({title: 'foobar'}, function () {
+          dpd.todos.get({hideTitle: true}, function (todos, err) {
+            expect(todos.length).to.equal(1);
+            expect(todos[0].title).to.not.exist;
+            done(err);
+          });
+        });
+      });
+    });
+
+
     describe('.get({arbitrary: true}, fn)', function() {
       it('should allow arbitrary query parameters', function(done) {
         dpd.todos.post({title: 'foobar'}, function () {
@@ -482,6 +511,26 @@ describe('Collection', function () {
         }).chain(function(next, result) {
           expect(result.message).to.equal("xx");
           expect(result.done).to.equal(true);
+          done();
+        });
+      });
+    });
+
+    describe('.put(id, fn)', function() {
+      it('should be able to read properties after using protect(...) in On Put', function(done) {
+        chain(function(next) {
+          dpd.todos.post({title: '$PROTECT_TEST', message: "x"}, next);
+        }).chain(function(next, result, err) {
+          dpd.todos.put(result.id, {message: "y"}, next);
+        }).chain(function(next, result, err) {
+          expect(result.message).to.equal("x");
+          expect(result.title).to.not.exist;
+          dpd.todos.get(result.id, next);
+        }).chain(function(next, result, err) {
+          expect(result.done).to.equal(true);
+          expect(result.error_message_ok).to.equal(true);
+          expect(result.error_id_ok).to.equal(true);
+          expect(result.message).to.equal("x");
           done();
         });
       });
