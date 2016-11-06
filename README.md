@@ -2,16 +2,20 @@
 
 > the simplest way to build an api.
 
-[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/deployd/deployd)  [![Current Version](https://img.shields.io/npm/v/deployd.svg?style=flat-square)](https://www.npmjs.org/package/deployd) [![Build Status](https://img.shields.io/travis/deployd/deployd.svg?style=flat-square)](http://travis-ci.org/deployd/deployd)
+[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/deployd/deployd)
+[![Current Version](https://img.shields.io/npm/v/deployd.svg?style=flat-square)](https://www.npmjs.org/package/deployd)
+[![Build Status](https://img.shields.io/travis/deployd/deployd.svg?style=flat-square)](http://travis-ci.org/deployd/deployd)
 
 ## overview
 
-Deployd is the simplest way to build realtime APIs for web and mobile apps. Ready-made, configurable Resources add common functionality to a Deployd backend, which can be further customized with JavaScript Events.
+Deployd is the simplest way to build realtime APIs for web and mobile apps.
+Ready-made, configurable Resources add common functionality to a Deployd backend, which can be further customized with JavaScript Events.
 
 [Read more about deployd](http://deployd.com)
 
 ## quick start
 
+  $ npm install dpd-cli -g
 	$ dpd create hello
 	$ cd hello
 	$ dpd -d
@@ -31,26 +35,19 @@ Deployd is the simplest way to build realtime APIs for web and mobile apps. Read
 
 Deployd is built using node and published using npm.  
 To install and use it, you need to install **[Node.JS](https://nodejs.org/en/download/)**.
+MongoDB is required to run Deployd.
 
 ## install from npm
 
 Once Node.JS is installed, open your terminal and type the following command:
 
-	npm install deployd -g
+	npm install dpd-cli -g
 
 the `dpd` command should be available. Type `dpd -V` and the current version should appear.
 
-## install on windows
-
-The windows installer is deprecated. The recommended way is now npm (`npm install deployd -g`) and [install mongodb](https://docs.mongodb.com/manual/tutorial/install-mongodb-on-windows/) separately.
-
-## install on macosx
-
-The macosx installer is deprecated. The recommended way is now npm (`npm install deployd -g`) and [install mongodb](http://docs.mongodb.org/manual/tutorial/install-mongodb-on-os-x/) separately.
-
 ## install from source
 
-	git clone https://github.com/deployd/deployd.git
+	git clone https://github.com/deployd/deployd-cli.git
 	npm install
 	npm link
 
