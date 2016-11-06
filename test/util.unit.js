@@ -39,7 +39,6 @@ describe('.getBody', function(){
     var res = this.res;
 
     http.getBody(req, function(buffer) {
-      console.error('STREAM', buffer, typeof buffer);
       expect(buffer).to.exist;
       expect(buffer).to.eql(obj);
       done();
