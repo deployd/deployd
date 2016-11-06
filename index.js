@@ -11,6 +11,4 @@ module.exports = function (config) {
   return server;
 };
 
-
-
 module.exports.attach = require('./lib/attach');
