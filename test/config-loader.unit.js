@@ -82,16 +82,6 @@ describe('config-loader', function() {
       });
     });
 
-    it('should throw a sane error when looking for config.json', function(done) {
-      sh.mkdir('-p', path.join(basepath, 'resources/foo'));
-
-      configLoader.loadConfig(basepath, {}, function(err, resourceList) {
-        expect(err).to.exist;
-        expect(err.message).to.equal("Expected file: " + path.join('resources', 'foo', 'config.json'));
-        done();
-      });
-    });
-
     it('should use public_dir option if available', function(done) {
       sh.mkdir('-p', path.join(basepath, 'resources'));
       configLoader.loadConfig(basepath, {}, function(err, resourceList) {
@@ -138,7 +128,7 @@ describe('config-loader', function() {
 
       function next() {
         if (callsLeft == 0) {
-          expect(fs.readdir.callCount).to.equal(2);
+          expect(fs.readdir.callCount).to.equal(1);
           return done();
         }
         callsLeft--;
