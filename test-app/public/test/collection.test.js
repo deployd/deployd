@@ -1353,4 +1353,38 @@ describe('Collection', function () {
       });
     });
   });
+
+  
+  describe('dpd(\'somenamespace/test\')', function () {
+    describe('.post({data: \'faux\'}, fn)', function() {
+      it('should create a document with an id', function (done) {
+        dpd('somenamespace/test').post({ data: 'faux' }, function (doc, err) {
+          expect(doc.id.length).to.equal(16);
+          expect(doc.data).to.equal('faux');
+          expect(doc.onValidate).to.equal(true);
+          expect(doc.onPost).to.equal(true);
+          expect(err).to.not.exist;
+          done();
+        });
+      });
+    });
+
+    describe('.put({data: \'faux\'}, fn)', function() {
+      it('should update a document with an id', function (done) {
+        dpd('somenamespace/test').post({ data: 'faux' }, function (doc1, err) {
+          expect(doc1.id.length).to.equal(16);
+
+          dpd('somenamespace/test').put({id: doc1.id, data: 'faux' }, function (doc2, err) {
+            expect(doc2.data).to.equal('faux');
+            expect(doc2.onValidate).to.equal(true);
+            expect(doc2.onPut).to.equal(true);
+            expect(err).to.not.exist;
+            done();
+          });
+         
+        });
+      });
+    }); 
+  });
+
 });
