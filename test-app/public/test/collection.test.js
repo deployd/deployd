@@ -7,32 +7,32 @@ describe('Collection', function () {
     it('should call delete event for every record when query matches more than one', function (done) {
       var calls = 0;
       dpd.socketReady(function () {
-        dpd.on('delete:called', function() {
+        dpd.on('delete:called', function () {
           calls++;
           if (calls === 3) {
             done();
           }
         });
       });
-      dpd.delete.post({ data: '1' }).then(function() {
+      dpd.delete.post({ data: '1' }).then(function () {
         return dpd.delete.post({ data: '1' });
-      }).then(function() {
+      }).then(function () {
         return dpd.delete.post({ data: '2' });
-      }).then(function() {
+      }).then(function () {
         return dpd.delete.del({ id: { $ne: null } });
       });
     });
 
     it('should allow canceling deletion from script', function (done) {
-      dpd.delete.post({ data: '1' }).then(function() {
+      dpd.delete.post({ data: '1' }).then(function () {
         return dpd.delete.post({ data: '1' });
-      }).then(function() {
+      }).then(function () {
         return dpd.delete.post({ data: '$DONTDELETE' });
-      }).then(function() {
+      }).then(function () {
         return dpd.delete.del({ id: { $ne: null }, fromTest: true });
-      }).then(function() {
+      }).then(function () {
         return dpd.delete.get();
-      }).then(function(result) {
+      }).then(function (result) {
         expect(result.length).to.equal(1);
         expect(result[0].data).to.equal('$DONTDELETE');
         done();
@@ -42,7 +42,7 @@ describe('Collection', function () {
     it('should return error if only one item to delete and an error occurs', function (done) {
       dpd.delete.post({ data: '$DONTDELETE' }).then(function (d) {
         return dpd.delete.del({ id: d.id, fromTest: true });
-      }).then(function() {
+      }).then(function () {
         throw "An error should have been returned";
       }, function (err) {
         expect(err).to.exist;
@@ -51,66 +51,66 @@ describe('Collection', function () {
       });
     });
   });
-  describe('dpd.todos', function() {
-    it('should exist', function() {
+  describe('dpd.todos', function () {
+    it('should exist', function () {
       expect(dpd.todos).to.exist;
     });
 
-    describe('dpd.on("createTodo", fn)', function() {
-      it('should respond to a realtime event', function(done) {
+    describe('dpd.on("createTodo", fn)', function () {
+      it('should respond to a realtime event', function (done) {
         this.timeout(1500);
-        dpd.socketReady(function() {
-          dpd.once('createTodo', function(todo) {
+        dpd.socketReady(function () {
+          dpd.once('createTodo', function (todo) {
             expect(todo).to.exist;
             expect(todo.title).to.equal('$REALTIME');
             done();
           });
 
-          dpd.todos.post({title: '$REALTIME'});
+          dpd.todos.post({ title: '$REALTIME' });
         });
       });
     });
 
-    describe('dpd.on("createTodo2", fn)', function() {
-      it('should respond to a realtime event without a parameter', function(done) {
-        dpd.socketReady(function() {
-          dpd.once('createTodo2', function(todo) {
+    describe('dpd.on("createTodo2", fn)', function () {
+      it('should respond to a realtime event without a parameter', function (done) {
+        dpd.socketReady(function () {
+          dpd.once('createTodo2', function (todo) {
             expect(todo).to.not.exist;
             done();
           });
 
-          dpd.todos.post({title: '$REALTIME2'});
+          dpd.todos.post({ title: '$REALTIME2' });
         });
       });
     });
 
-    describe('dpd.todos.on("changed", fn)', function() {
-      it('should respond to the changed event (in AfterCommit) on post', function(done) {
-        dpd.socketReady(function() {
-          dpd.todos.once('changed', function() {
+    describe('dpd.todos.on("changed", fn)', function () {
+      it('should respond to the changed event (in AfterCommit) on post', function (done) {
+        dpd.socketReady(function () {
+          dpd.todos.once('changed', function () {
             done();
           });
 
-          dpd.todos.post({title: 'changed - create'});
+          dpd.todos.post({ title: 'changed - create' });
         });
       });
 
-      it('should respond to the changed event (in AfterCommit) on put', function(done) {
-        dpd.todos.post({title: 'changed - create'}, function(item) {
-          dpd.socketReady(function() {
-            dpd.todos.once('changed', function() {
+      it('should respond to the changed event (in AfterCommit) on put', function (done) {
+        dpd.todos.post({ title: 'changed - create' }, function (item) {
+          dpd.socketReady(function () {
+            dpd.todos.once('changed', function () {
               done();
             });
 
-            dpd.todos.put(item.id, {title: 'changed - updated'});
+            dpd.todos.put(item.id, { title: 'changed - updated' });
           });
         });
       });
 
-      it('should respond to the changed event (in AfterCommit) on del', function(done) {
-        dpd.todos.post({title: 'changed - create'}, function(item) {
-          dpd.socketReady(function() {
-            dpd.todos.once('changed', function() {
+      it('should respond to the changed event (in AfterCommit) on del', function (done) {
+        dpd.todos.post({ title: 'changed - create' }, function (item) {
+          dpd.socketReady(function () {
+            dpd.todos.once('changed', function () {
               done();
             });
 
@@ -119,10 +119,10 @@ describe('Collection', function () {
         });
       });
 
-      it('should respond to the changed event (in AfterCommit) on put and have access to previous data', function(done) {
-        dpd.todos.post({title: 'changed - create', message: 'protected'}, function(item) {
-          dpd.socketReady(function() {
-            dpd.todos.once('changed', function(data) {
+      it('should respond to the changed event (in AfterCommit) on put and have access to previous data', function (done) {
+        dpd.todos.post({ title: 'changed - create', message: 'protected' }, function (item) {
+          dpd.socketReady(function () {
+            dpd.todos.once('changed', function (data) {
               expect(data.previous.title).to.equal('changed - create');
               expect(data.previous.message).to.equal('protected');
               expect(data.current.title).to.equal('changed - updated');
@@ -130,35 +130,35 @@ describe('Collection', function () {
               done();
             });
 
-            dpd.todos.put(item.id, {title: 'changed - updated', message: 'should not change'});
+            dpd.todos.put(item.id, { title: 'changed - updated', message: 'should not change' });
           });
         });
       });
     });
 
-    describe('.post({title: \'faux\'}, fn)', function() {
-      it('should create a todo with an id', function(done) {
-        dpd.todos.post({title: 'faux'}, function (todo, err) {
+    describe('.post({title: \'faux\'}, fn)', function () {
+      it('should create a todo with an id', function (done) {
+        dpd.todos.post({ title: 'faux' }, function (todo, err) {
           expect(todo.id.length).to.equal(16);
           expect(todo.title).to.equal('faux');
           expect(err).to.not.exist;
           done();
         });
       });
-      it('should create a todo that exists in the store', function(done) {
-        dpd.todos.post({title: 'faux'}, function (todo, err) {
+      it('should create a todo that exists in the store', function (done) {
+        dpd.todos.post({ title: 'faux' }, function (todo, err) {
           expect(todo.id.length).to.equal(16);
           expect(todo.title).to.equal('faux');
           expect(err).to.not.exist;
-          dpd.todos.get(todo.id, function(res, err) {
+          dpd.todos.get(todo.id, function (res, err) {
             if (err) return done(err);
             expect(res.title).to.equal('faux');
             done();
           });
         });
       });
-      it('should return a promise that is fulfilled', function(done) {
-        dpd.todos.post({title: 'faux'}).then(function(todo) {
+      it('should return a promise that is fulfilled', function (done) {
+        dpd.todos.post({ title: 'faux' }).then(function (todo) {
           expect(todo.id.length).to.equal(16);
           expect(todo.title).to.equal('faux');
           done();
@@ -166,9 +166,9 @@ describe('Collection', function () {
       });
     });
 
-    describe('.post({title: "notvalid"}, fn)', function() {
-      it('should properly return an error', function(done) {
-        dpd.todos.post({title: "notvalid"}, function(result, err) {
+    describe('.post({title: "notvalid"}, fn)', function () {
+      it('should properly return an error', function (done) {
+        dpd.todos.post({ title: "notvalid" }, function (result, err) {
           expect(err).to.exist;
           expect(err.errors).to.exist;
           expect(err.errors.title).to.equal("Title must not be notvalid");
@@ -177,9 +177,9 @@ describe('Collection', function () {
       });
     });
 
-    describe('.post({}, fn)', function() {
-      it('should return a validation error', function(done) {
-        dpd.todos.post({}, function(res, err) {
+    describe('.post({}, fn)', function () {
+      it('should return a validation error', function (done) {
+        dpd.todos.post({}, function (res, err) {
           expect(err).to.exist;
           expect(err.errors.title).to.be.ok;
           done();
@@ -187,9 +187,9 @@ describe('Collection', function () {
       });
     });
 
-    describe('.post({message: "notvalid"}, fn)', function() {
-      it('should properly return an error', function(done) {
-        dpd.todos.post({message: "notvalid"}, function(result, err) {
+    describe('.post({message: "notvalid"}, fn)', function () {
+      it('should properly return an error', function (done) {
+        dpd.todos.post({ message: "notvalid" }, function (result, err) {
           expect(err).to.exist;
           expect(err.errors).to.exist;
           expect(err.errors.message).to.equal("Message must not be notvalid");
@@ -197,10 +197,10 @@ describe('Collection', function () {
         });
       });
 
-      it('should return a promise that is rejected', function(done) {
-        dpd.todos.post({message: "notvalid"}).then(function(todo) {
+      it('should return a promise that is rejected', function (done) {
+        dpd.todos.post({ message: "notvalid" }).then(function (todo) {
           done('promise should not be fulfilled');
-        }, function(err) {
+        }, function (err) {
           expect(err).to.exist;
           expect(err.errors).to.exist;
           expect(err.errors.message).to.equal("Message must not be notvalid");
@@ -208,15 +208,15 @@ describe('Collection', function () {
         });
       });
 
-      it('should not post the message', function(done) {
-        chain(function(next) {
-          dpd.todos.post({title: "$POSTERROR"}, next);
-        }).chain(function(next, res, err) {
+      it('should not post the message', function (done) {
+        chain(function (next) {
+          dpd.todos.post({ title: "$POSTERROR" }, next);
+        }).chain(function (next, res, err) {
           expect(err).to.exist;
           expect(err.errors).to.exist;
           expect(err.errors.title).to.equal("POST error");
           dpd.todos.get(next);
-        }).chain(function(next, res) {
+        }).chain(function (next, res) {
           expect(res.length).to.equal(0);
           done();
         });
@@ -224,36 +224,36 @@ describe('Collection', function () {
 
     });
 
-    describe('.post({title: "foo", owner: 7}, fn)', function() {
-      it('should coerce numbers to strings when querying string properties', function(done) {
-        dpd.todos.post({title: "foo", owner: 7}, function (todo, err) {
+    describe('.post({title: "foo", owner: 7}, fn)', function () {
+      it('should coerce numbers to strings when querying string properties', function (done) {
+        dpd.todos.post({ title: "foo", owner: 7 }, function (todo, err) {
           delete todo.id;
-          expect(todo).to.eql({title: "foo", done: false, owner: '7'});
+          expect(todo).to.eql({ title: "foo", done: false, owner: '7' });
           done();
         });
       });
     });
 
-    describe('.post({title: "$TESTFAIL", fn)', function() {
-      it('should correctly respond to errors in event IO', function(done) {
-        dpd.todos.post({title: "$TESTFAIL"}, function(todo, err) {
+    describe('.post({title: "$TESTFAIL", fn)', function () {
+      it('should correctly respond to errors in event IO', function (done) {
+        dpd.todos.post({ title: "$TESTFAIL" }, function (todo, err) {
           expect(todo.err).to.exist;
           done();
         });
       });
     });
 
-    describe('.get(fn)', function() {
-      it('should not return any cancelled objects', function(done) {
-        chain(function(next) {
-          dpd.todos.post({title: "This one is OK"}, next);
-        }).chain(function(next, res, err) {
+    describe('.get(fn)', function () {
+      it('should not return any cancelled objects', function (done) {
+        chain(function (next) {
+          dpd.todos.post({ title: "This one is OK" }, next);
+        }).chain(function (next, res, err) {
           if (err) return done(err);
-          dpd.todos.post({title: "$GET_CANCEL"}, next);
-        }).chain(function(next, res, err) {
+          dpd.todos.post({ title: "$GET_CANCEL" }, next);
+        }).chain(function (next, res, err) {
           if (err) return done(err);
           dpd.todos.get(next);
-        }).chain(function(next, res, err) {
+        }).chain(function (next, res, err) {
           if (err) return done(err);
           expect(res.length).to.equal(1);
           expect(res[0].title).to.equal("This one is OK");
@@ -262,13 +262,13 @@ describe('Collection', function () {
       });
     });
 
-    describe('.get({title: title}, fn)', function() {
-      it('should return a single result', function(done) {
+    describe('.get({title: title}, fn)', function () {
+      it('should return a single result', function (done) {
         var title = Math.random().toString();
 
-        dpd.todos.post({title: title}, function () {
-          dpd.todos.post({title: "Some other"}, function() {
-            dpd.todos.get({title: "Some other"}, function (todos, err) {
+        dpd.todos.post({ title: title }, function () {
+          dpd.todos.post({ title: "Some other" }, function () {
+            dpd.todos.get({ title: "Some other" }, function (todos, err) {
               expect(todos.length).to.equal(1);
               done(err);
             });
@@ -277,17 +277,17 @@ describe('Collection', function () {
       });
     });
 
-    describe('.get({$sort: {title: 1}}, fn)', function() {
-      it('should order by title', function(done) {
-        chain(function(next) {
-          dpd.todos.post({title: "C"}, next);
-        }).chain(function(next) {
-          dpd.todos.post({title: "A"}, next);
-        }).chain(function(next) {
-          dpd.todos.post({title: "B"}, next);
-        }).chain(function(next) {
-          dpd.todos.get({$sort: {title: 1}}, next);
-        }).chain(function(next, result, err) {
+    describe('.get({$sort: {title: 1}}, fn)', function () {
+      it('should order by title', function (done) {
+        chain(function (next) {
+          dpd.todos.post({ title: "C" }, next);
+        }).chain(function (next) {
+          dpd.todos.post({ title: "A" }, next);
+        }).chain(function (next) {
+          dpd.todos.post({ title: "B" }, next);
+        }).chain(function (next) {
+          dpd.todos.get({ $sort: { title: 1 } }, next);
+        }).chain(function (next, result, err) {
           expect(result).to.exist;
           expect(result.length).to.equal(3);
           expect(result[0].title).to.equal("A");
@@ -298,18 +298,18 @@ describe('Collection', function () {
       });
     });
 
-    describe('.get({id: {$ne: "..."}}, fn)', function() {
-      it('should return all results that do not match the given id', function(done) {
+    describe('.get({id: {$ne: "..."}}, fn)', function () {
+      it('should return all results that do not match the given id', function (done) {
         var titleA = Math.random().toString()
           , titleB = Math.random().toString();
 
-        dpd.todos.post({title: titleA}, function () {
-          dpd.todos.post({title: titleB}, function () {
-            dpd.todos.get({title: {$ne: titleA}}, function (todos, err) {
+        dpd.todos.post({ title: titleA }, function () {
+          dpd.todos.post({ title: titleB }, function () {
+            dpd.todos.get({ title: { $ne: titleA } }, function (todos, err) {
               expect(todos.length).to.equal(1);
               expect(todos[0].title).to.not.equal(titleA);
               var id = todos[0].id;
-              dpd.todos.get({id: {$ne: id}}, function (todos, err) {
+              dpd.todos.get({ id: { $ne: id } }, function (todos, err) {
                 expect(todos.length).to.equal(1);
                 expect(todos[0].id).to.not.equal(id);
                 done(err);
@@ -321,15 +321,15 @@ describe('Collection', function () {
     });
 
     describe('GET /full?boolean=true', function () {
-      it('should filter boolean properties by query string', function(done) {
-        dpd.full.post({boolean: true}, function (full) {
-          dpd.full.post({boolean: false}, function(full){
+      it('should filter boolean properties by query string', function (done) {
+        dpd.full.post({ boolean: true }, function (full) {
+          dpd.full.post({ boolean: false }, function (full) {
             $.ajax({
               type: "GET",
               url: "/full?boolean=true",
               success: function (res) {
                 expect(res.length).to.be.greaterThan(0);
-                res.forEach(function(obj){
+                res.forEach(function (obj) {
                   expect(obj.boolean).to.equal(true);
                 });
                 done();
@@ -343,12 +343,12 @@ describe('Collection', function () {
       });
     });
 
-    describe('.get({id: "non existent"}, fn)', function() {
-      it('should return a 404', function(done) {
+    describe('.get({id: "non existent"}, fn)', function () {
+      it('should return a 404', function (done) {
         var titleA = Math.random().toString()
           , titleB = Math.random().toString();
 
-        dpd.todos.get({id: "non existent"}, function (todos, err) {
+        dpd.todos.get({ id: "non existent" }, function (todos, err) {
           expect(todos).to.not.exist;
           expect(err.message).to.equal('not found');
           expect(err.statusCode).to.equal(404);
@@ -357,11 +357,11 @@ describe('Collection', function () {
       });
     });
 
-    describe('.get({title: "$TESTFAIL2"}, fn)', function() {
-      it('should correctly respond to errors in event IO', function(done) {
-        dpd.todos.post({title: "$FAIL2"}, function() {
-          dpd.todos.post({title: "$TESTFAIL2"}, function() {
-            dpd.todos.get({title: "$TESTFAIL2"}, function(todos, err) {
+    describe('.get({title: "$TESTFAIL2"}, fn)', function () {
+      it('should correctly respond to errors in event IO', function (done) {
+        dpd.todos.post({ title: "$FAIL2" }, function () {
+          dpd.todos.post({ title: "$TESTFAIL2" }, function () {
+            dpd.todos.get({ title: "$TESTFAIL2" }, function (todos, err) {
               expect(todos).to.exist;
               expect(todos[0].err).to.exist;
               done();
@@ -371,9 +371,9 @@ describe('Collection', function () {
       });
     });
 
-    describe('.get(27, fn)', function() {
-      it('should not hang if given a number as id', function(done) {
-        dpd.todos.post({title: 'foobar'}, function () {
+    describe('.get(27, fn)', function () {
+      it('should not hang if given a number as id', function (done) {
+        dpd.todos.post({ title: 'foobar' }, function () {
           dpd.todos.get(27, function (todos, err) {
             expect(err).to.exist;
             done();
@@ -382,10 +382,10 @@ describe('Collection', function () {
       });
     });
 
-    describe('.get({numberGet: true}, fn)', function() {
-      it('should not hang if given a number as id', function(done) {
-        dpd.todos.post({title: 'foobar'}, function () {
-          dpd.todos.get({numberGet: true}, function (todos, err) {
+    describe('.get({numberGet: true}, fn)', function () {
+      it('should not hang if given a number as id', function (done) {
+        dpd.todos.post({ title: 'foobar' }, function () {
+          dpd.todos.get({ numberGet: true }, function (todos, err) {
             expect(todos.length).to.equal(1);
             expect(todos[0].numberGet).to.equal('noResponse');
             done(err);
@@ -394,10 +394,10 @@ describe('Collection', function () {
       });
     });
 
-    describe('.get({hideTitle: true}, fn)', function() {
-      it('should hide property from response', function(done) {
-        dpd.todos.post({title: 'foobar'}, function () {
-          dpd.todos.get({hideTitle: true}, function (todos, err) {
+    describe('.get({hideTitle: true}, fn)', function () {
+      it('should hide property from response', function (done) {
+        dpd.todos.post({ title: 'foobar' }, function () {
+          dpd.todos.get({ hideTitle: true }, function (todos, err) {
             expect(todos.length).to.equal(1);
             expect(todos[0].title).to.not.exist;
             done(err);
@@ -407,10 +407,10 @@ describe('Collection', function () {
     });
 
 
-    describe('.get({arbitrary: true}, fn)', function() {
-      it('should allow arbitrary query parameters', function(done) {
-        dpd.todos.post({title: 'foobar'}, function () {
-          dpd.todos.get({arbitrary: true}, function (todos, err) {
+    describe('.get({arbitrary: true}, fn)', function () {
+      it('should allow arbitrary query parameters', function (done) {
+        dpd.todos.post({ title: 'foobar' }, function () {
+          dpd.todos.get({ arbitrary: true }, function (todos, err) {
             expect(todos.length).to.equal(1);
             expect(todos[0].custom).to.equal('arbitrary');
             done(err);
@@ -418,9 +418,9 @@ describe('Collection', function () {
         });
       });
 
-      it('should run events when an id is included', function(done) {
-        dpd.todos.post({title: 'foobar'}, function (todo) {
-          dpd.todos.get({arbitrary: true, id: todo.id}, function (t) {
+      it('should run events when an id is included', function (done) {
+        dpd.todos.post({ title: 'foobar' }, function (todo) {
+          dpd.todos.get({ arbitrary: true, id: todo.id }, function (t) {
             expect(t.custom).to.equal('arbitrary');
             done();
           });
@@ -428,9 +428,9 @@ describe('Collection', function () {
       });
     });
 
-    describe('.get(id, fn)', function() {
-      it('should run events when an id is queried', function(done) {
-        dpd.todos.post({title: 'foobar'}, function (todo) {
+    describe('.get(id, fn)', function () {
+      it('should run events when an id is queried', function (done) {
+        dpd.todos.post({ title: 'foobar' }, function (todo) {
           dpd.todos.get(todo.id, function (t) {
             expect(t.custom).to.equal('custom');
             done();
@@ -439,12 +439,12 @@ describe('Collection', function () {
       });
     });
 
-    describe('.get({"people.info.name": "Tom"}, fn)', function() {
-      it('should create a todo', function(done) {
-        var tom = {name: 'Tom', age: 13};
-        var june = {name: 'June', age: 27};
-        var post1 = {title: 'Some post', people: {info: tom}};
-        var post2 = {title: 'Another post', people: {info: june}};
+    describe('.get({"people.info.name": "Tom"}, fn)', function () {
+      it('should create a todo', function (done) {
+        var tom = { name: 'Tom', age: 13 };
+        var june = { name: 'June', age: 27 };
+        var post1 = { title: 'Some post', people: { info: tom } };
+        var post2 = { title: 'Another post', people: { info: june } };
 
         dpd.todos.post(post1, function (todo, result) {
           expect(todo.people.info.name).to.equal('Tom');
@@ -452,7 +452,7 @@ describe('Collection', function () {
             dpd.todos.get(function (todos) {
               expect(todos.length).to.equal(2);
             });
-            dpd.todos.get({'people.info.name': 'Tom'}, function (todos) {
+            dpd.todos.get({ 'people.info.name': 'Tom' }, function (todos) {
               expect(todos.length).to.equal(1);
               expect(todos[0].people.info.name).to.equal('Tom');
               done();
@@ -462,36 +462,36 @@ describe('Collection', function () {
       });
     });
 
-    describe('.put(id, {title: "todo 2"}, {done: true},  fn)', function() {
-      it('should throw an error if the filter does not apply', function(done) {
+    describe('.put(id, {title: "todo 2"}, {done: true},  fn)', function () {
+      it('should throw an error if the filter does not apply', function (done) {
         var todoId;
-        chain(function(next) {
-          dpd.todos.post({title: 'todo 1'}, next);
-        }).chain(function(next, res, err) {
+        chain(function (next) {
+          dpd.todos.post({ title: 'todo 1' }, next);
+        }).chain(function (next, res, err) {
           if (err) return done(err);
           todoId = res.id;
-          dpd.todos.put(todoId, {title: "todo 2"}, {done: true}, next);
-        }).chain(function(next, res, err) {
+          dpd.todos.put(todoId, { title: "todo 2" }, { done: true }, next);
+        }).chain(function (next, res, err) {
           expect(err).to.exist;
           dpd.todos.get(todoId, next);
-        }).chain(function(next, res, err) {
+        }).chain(function (next, res, err) {
           expect(res.done).to.be['false'];
           done();
         });
       });
     });
 
-    describe('.put(id, {done: true}, fn)', function() {
-      it('should add properties', function(done) {
-        chain(function(next) {
-          dpd.todos.post({title: 'foobar'}, next);
-        }).chain(function(next, result) {
-          dpd.todos.put(result.id, {done: true}, next);
-        }).chain(function(next, result) {
+    describe('.put(id, {done: true}, fn)', function () {
+      it('should add properties', function (done) {
+        chain(function (next) {
+          dpd.todos.post({ title: 'foobar' }, next);
+        }).chain(function (next, result) {
+          dpd.todos.put(result.id, { done: true }, next);
+        }).chain(function (next, result) {
           expect(result.title).to.equal('foobar');
           expect(result.done).to.equal(true);
           dpd.todos.get(result.id, next);
-        }).chain(function(next, result) {
+        }).chain(function (next, result) {
           expect(result.title).to.equal('foobar');
           expect(result.done).to.equal(true);
           done();
@@ -499,16 +499,16 @@ describe('Collection', function () {
       });
     });
 
-    describe('.put(id, {done: true}, fn)', function() {
-      it('should be able to access old properties in On Put', function(done) {
-        chain(function(next) {
-          dpd.todos.post({title: '$PUT_TEST', message: "x"}, next);
-        }).chain(function(next, result) {
-          dpd.todos.put(result.id, {done: true}, next);
-        }).chain(function(next, result) {
+    describe('.put(id, {done: true}, fn)', function () {
+      it('should be able to access old properties in On Put', function (done) {
+        chain(function (next) {
+          dpd.todos.post({ title: '$PUT_TEST', message: "x" }, next);
+        }).chain(function (next, result) {
+          dpd.todos.put(result.id, { done: true }, next);
+        }).chain(function (next, result) {
           expect(result.message).to.equal("xx");
           dpd.todos.get(result.id, next);
-        }).chain(function(next, result) {
+        }).chain(function (next, result) {
           expect(result.message).to.equal("xx");
           expect(result.done).to.equal(true);
           done();
@@ -516,17 +516,17 @@ describe('Collection', function () {
       });
     });
 
-    describe('.put(id, fn)', function() {
-      it('should be able to read properties after using protect(...) in On Put', function(done) {
-        chain(function(next) {
-          dpd.todos.post({title: '$PROTECT_TEST', message: "x"}, next);
-        }).chain(function(next, result, err) {
-          dpd.todos.put(result.id, {message: "y"}, next);
-        }).chain(function(next, result, err) {
+    describe('.put(id, fn)', function () {
+      it('should be able to read properties after using protect(...) in On Put', function (done) {
+        chain(function (next) {
+          dpd.todos.post({ title: '$PROTECT_TEST', message: "x" }, next);
+        }).chain(function (next, result, err) {
+          dpd.todos.put(result.id, { message: "y" }, next);
+        }).chain(function (next, result, err) {
           expect(result.message).to.equal("x");
           expect(result.title).to.not.exist;
           dpd.todos.get(result.id, next);
-        }).chain(function(next, result, err) {
+        }).chain(function (next, result, err) {
           expect(result.done).to.equal(true);
           expect(result.error_message_ok).to.equal(true);
           expect(result.error_id_ok).to.equal(true);
@@ -536,21 +536,21 @@ describe('Collection', function () {
       });
     });
 
-    describe('.put(id, {message: "notvalid"}, fn)', function() {
-      it('should cancel the update', function(done) {
+    describe('.put(id, {message: "notvalid"}, fn)', function () {
+      it('should cancel the update', function (done) {
         var todoId;
-        chain(function(next) {
-          dpd.todos.post({title: "Some todo"}, next);
-        }).chain(function(next, res, err) {
+        chain(function (next) {
+          dpd.todos.post({ title: "Some todo" }, next);
+        }).chain(function (next, res, err) {
           if (err) return done(err);
           todoId = res.id;
-          dpd.todos.put(todoId, {message: "notvalid"}, next);
-        }).chain(function(next, res, err) {
+          dpd.todos.put(todoId, { message: "notvalid" }, next);
+        }).chain(function (next, res, err) {
           expect(err).to.exist;
           expect(err.errors).to.exist;
           expect(err.errors.message).to.equal("Message must not be notvalid");
           dpd.todos.get(todoId, next);
-        }).chain(function(next, res, err) {
+        }).chain(function (next, res, err) {
           if (err) return done(err);
           expect(res.message).to.not.equal("notvalid");
           done();
@@ -558,21 +558,21 @@ describe('Collection', function () {
       });
     });
 
-    describe('.put(id, {message: "notvalidput"}, fn)', function() {
-      it('should cancel the update', function(done) {
+    describe('.put(id, {message: "notvalidput"}, fn)', function () {
+      it('should cancel the update', function (done) {
         var todoId;
-        chain(function(next) {
-          dpd.todos.post({title: "Some todo"}, next);
-        }).chain(function(next, res, err) {
+        chain(function (next) {
+          dpd.todos.post({ title: "Some todo" }, next);
+        }).chain(function (next, res, err) {
           if (err) return done(err);
           todoId = res.id;
-          dpd.todos.put(todoId, {message: "notvalidput"}, next);
-        }).chain(function(next, res, err) {
+          dpd.todos.put(todoId, { message: "notvalidput" }, next);
+        }).chain(function (next, res, err) {
           expect(err).to.exist;
           expect(err.errors).to.exist;
           expect(err.errors.message).to.equal("message should not be notvalidput");
           dpd.todos.get(todoId, next);
-        }).chain(function(next, res, err) {
+        }).chain(function (next, res, err) {
           if (err) return done(err);
           expect(res.message).to.not.equal("notvalidput");
           done();
@@ -580,17 +580,17 @@ describe('Collection', function () {
       });
     });
 
-    describe('.put(id, {done: true}, fn)', function() {
-      it('should be able to access old properties in On Validate', function(done) {
-        chain(function(next) {
-          dpd.todos.post({title: '$VALIDATE_TEST', message: ""}, next);
-        }).chain(function(next, result) {
+    describe('.put(id, {done: true}, fn)', function () {
+      it('should be able to access old properties in On Validate', function (done) {
+        chain(function (next) {
+          dpd.todos.post({ title: '$VALIDATE_TEST', message: "" }, next);
+        }).chain(function (next, result) {
           expect(result.message).to.equal("x");
-          dpd.todos.put(result.id, {done: true}, next);
-        }).chain(function(next, result) {
+          dpd.todos.put(result.id, { done: true }, next);
+        }).chain(function (next, result) {
           expect(result.message).to.equal("xx");
           dpd.todos.get(result.id, next);
-        }).chain(function(next, result) {
+        }).chain(function (next, result) {
           expect(result.message).to.equal("xx");
           expect(result.done).to.equal(true);
           done();
@@ -598,18 +598,18 @@ describe('Collection', function () {
       });
     });
 
-    describe('.put(id, {tags: ["red", "blue"]}, fn)', function() {
-      it('should set an array', function(done) {
-        chain(function(next) {
-          dpd.todos.post({title: 'foobar'}, next);
-        }).chain(function(next, result) {
-          dpd.todos.put(result.id, {tags: ["red", "blue"]}, next);
-        }).chain(function(next, result) {
+    describe('.put(id, {tags: ["red", "blue"]}, fn)', function () {
+      it('should set an array', function (done) {
+        chain(function (next) {
+          dpd.todos.post({ title: 'foobar' }, next);
+        }).chain(function (next, result) {
+          dpd.todos.put(result.id, { tags: ["red", "blue"] }, next);
+        }).chain(function (next, result) {
           expect(result.tags).to.exist;
           expect(result.tags.length).to.equal(2);
           expect(result.tags).to.include("red").and.include("blue");
           dpd.todos.get(result.id, next);
-        }).chain(function(next, result) {
+        }).chain(function (next, result) {
           expect(result.tags).to.exist;
           expect(result.tags.length).to.equal(2);
           expect(result.tags).to.include("red").and.include("blue");
@@ -618,25 +618,25 @@ describe('Collection', function () {
       });
     });
 
-    describe('.put(id, {tags: {$push: "red"}}, fn)', function() {
-      it('should update an array', function(done) {
-        chain(function(next) {
-          dpd.todos.post({title: 'foobar', tags: ['blue']}, next);
-        }).chain(function(next, result) {
-          dpd.todos.put(result.id, {tags: {$push: "red"}}, next);
-        }).chain(function(next, result) {
+    describe('.put(id, {tags: {$push: "red"}}, fn)', function () {
+      it('should update an array', function (done) {
+        chain(function (next) {
+          dpd.todos.post({ title: 'foobar', tags: ['blue'] }, next);
+        }).chain(function (next, result) {
+          dpd.todos.put(result.id, { tags: { $push: "red" } }, next);
+        }).chain(function (next, result) {
           expect(result.tags.length).to.equal(2);
           expect(result.tags).to.include("red").and.include("blue");
           done();
         });
       });
 
-      it('should update an empty array', function(done) {
-        chain(function(next) {
-          dpd.todos.post({title: 'foobar'}, next);
-        }).chain(function(next, result) {
-          dpd.todos.put(result.id, {tags: {$push: "red"}}, next);
-        }).chain(function(next, result) {
+      it('should update an empty array', function (done) {
+        chain(function (next) {
+          dpd.todos.post({ title: 'foobar' }, next);
+        }).chain(function (next, result) {
+          dpd.todos.put(result.id, { tags: { $push: "red" } }, next);
+        }).chain(function (next, result) {
           expect(result.tags.length).to.equal(1);
           expect(result.tags).to.include("red");
           done();
@@ -644,13 +644,13 @@ describe('Collection', function () {
       });
     });
 
-    describe('.put(id, {tags: {$pushAll: ["red", "yellow"]}}, fn)', function() {
-      it('should update an array', function(done) {
-        chain(function(next) {
-          dpd.todos.post({title: 'foobar', tags: ['blue']}, next);
-        }).chain(function(next, result) {
-          dpd.todos.put(result.id, {tags: {$pushAll: ["red", "yellow"]}}, next);
-        }).chain(function(next, result) {
+    describe('.put(id, {tags: {$pushAll: ["red", "yellow"]}}, fn)', function () {
+      it('should update an array', function (done) {
+        chain(function (next) {
+          dpd.todos.post({ title: 'foobar', tags: ['blue'] }, next);
+        }).chain(function (next, result) {
+          dpd.todos.put(result.id, { tags: { $pushAll: ["red", "yellow"] } }, next);
+        }).chain(function (next, result) {
           expect(result.tags.length).to.equal(3);
           expect(result.tags).to.include("red").and.include("blue").and.include("yellow");
           done();
@@ -658,13 +658,13 @@ describe('Collection', function () {
       });
     });
 
-    describe('.put(id, tags: {$pull: "red"}, fn)', function() {
-      it('should remove an item from an array', function(done) {
-        chain(function(next) {
-          dpd.todos.post({title: 'foobar', tags: ['red', 'blue']}, next);
-        }).chain(function(next, result) {
-          dpd.todos.put(result.id, {tags: {$pull: "red"}}, next);
-        }).chain(function(next, result) {
+    describe('.put(id, tags: {$pull: "red"}, fn)', function () {
+      it('should remove an item from an array', function (done) {
+        chain(function (next) {
+          dpd.todos.post({ title: 'foobar', tags: ['red', 'blue'] }, next);
+        }).chain(function (next, result) {
+          dpd.todos.put(result.id, { tags: { $pull: "red" } }, next);
+        }).chain(function (next, result) {
           expect(result.tags.length).to.equal(1);
           expect(result.tags).to.include("blue");
           done();
@@ -672,13 +672,13 @@ describe('Collection', function () {
       });
     });
 
-    describe('.put(id, tags: {$pullAll: ["red", "blue"]}, fn)', function() {
-      it('should remove multiple items from an array', function(done) {
-        chain(function(next) {
-          dpd.todos.post({title: 'foobar', tags: ['red', 'blue', 'yellow']}, next);
-        }).chain(function(next, result) {
-          dpd.todos.put(result.id, {tags: {$pullAll: ["red", "blue"]}}, next);
-        }).chain(function(next, result) {
+    describe('.put(id, tags: {$pullAll: ["red", "blue"]}, fn)', function () {
+      it('should remove multiple items from an array', function (done) {
+        chain(function (next) {
+          dpd.todos.post({ title: 'foobar', tags: ['red', 'blue', 'yellow'] }, next);
+        }).chain(function (next, result) {
+          dpd.todos.put(result.id, { tags: { $pullAll: ["red", "blue"] } }, next);
+        }).chain(function (next, result) {
           expect(result.tags.length).to.equal(1);
           expect(result.tags).to.include("yellow");
           done();
@@ -686,37 +686,37 @@ describe('Collection', function () {
       });
     });
 
-    describe('.put(id, {tags: {$addUnique: "red"}}, fn)', function() {
-      it('should update a set', function(done) {
-        chain(function(next) {
-          dpd.todos.post({title: 'foobar', tags: ['blue', 'green']}, next);
-        }).chain(function(next, result) {
-          dpd.todos.put(result.id, {tags: {$addUnique: "red"}}, next);
-        }).chain(function(next, result) {
+    describe('.put(id, {tags: {$addUnique: "red"}}, fn)', function () {
+      it('should update a set', function (done) {
+        chain(function (next) {
+          dpd.todos.post({ title: 'foobar', tags: ['blue', 'green'] }, next);
+        }).chain(function (next, result) {
+          dpd.todos.put(result.id, { tags: { $addUnique: "red" } }, next);
+        }).chain(function (next, result) {
           expect(result.tags.length).to.equal(3);
           expect(result.tags).to.include("red").and.include("blue").and.include("green");
           done();
         });
       });
 
-      it('should update an empty array', function(done) {
-        chain(function(next) {
-          dpd.todos.post({title: 'foobar'}, next);
-        }).chain(function(next, result) {
-          dpd.todos.put(result.id, {tags: {$addUnique: "red"}}, next);
-        }).chain(function(next, result) {
+      it('should update an empty array', function (done) {
+        chain(function (next) {
+          dpd.todos.post({ title: 'foobar' }, next);
+        }).chain(function (next, result) {
+          dpd.todos.put(result.id, { tags: { $addUnique: "red" } }, next);
+        }).chain(function (next, result) {
           expect(result.tags.length).to.equal(1);
           expect(result.tags).to.include("red");
           done();
         });
       });
 
-      it('should not update a set if element already exists', function(done) {
-        chain(function(next) {
-          dpd.todos.post({title: 'foobar', tags: ['red', 'green']}, next);
-        }).chain(function(next, result) {
-          dpd.todos.put(result.id, {tags: {$addUnique: "red"}}, next);
-        }).chain(function(next, result) {
+      it('should not update a set if element already exists', function (done) {
+        chain(function (next) {
+          dpd.todos.post({ title: 'foobar', tags: ['red', 'green'] }, next);
+        }).chain(function (next, result) {
+          dpd.todos.put(result.id, { tags: { $addUnique: "red" } }, next);
+        }).chain(function (next, result) {
           expect(result.tags.length).to.equal(2);
           expect(result.tags).to.include("red").and.include("green");
           done();
@@ -725,13 +725,13 @@ describe('Collection', function () {
 
     });
 
-    describe('.put(id, {tags: {$addUnique: ["yellow", "magenta", "violet"]}}, fn)', function() {
-      it('should update a set', function(done) {
-        chain(function(next) {
-          dpd.todos.post({title: 'foobar', tags: ['red', 'blue', 'green']}, next);
-        }).chain(function(next, result) {
-          dpd.todos.put(result.id, {tags: {$addUnique: ["yellow", "magenta", "violet"]}}, next);
-        }).chain(function(next, result) {
+    describe('.put(id, {tags: {$addUnique: ["yellow", "magenta", "violet"]}}, fn)', function () {
+      it('should update a set', function (done) {
+        chain(function (next) {
+          dpd.todos.post({ title: 'foobar', tags: ['red', 'blue', 'green'] }, next);
+        }).chain(function (next, result) {
+          dpd.todos.put(result.id, { tags: { $addUnique: ["yellow", "magenta", "violet"] } }, next);
+        }).chain(function (next, result) {
           expect(result.tags.length).to.equal(6);
           expect(result.tags).to.include("red").and.include("blue").and.include("green")
             .and.include("yellow").and.include("magenta").and.include("violet");
@@ -739,24 +739,24 @@ describe('Collection', function () {
         });
       });
 
-      it('should update an empty array', function(done) {
-        chain(function(next) {
-          dpd.todos.post({title: 'foobar'}, next);
-        }).chain(function(next, result) {
-          dpd.todos.put(result.id, {tags: {$addUnique: ["yellow", "magenta", "violet"]}}, next);
-        }).chain(function(next, result) {
+      it('should update an empty array', function (done) {
+        chain(function (next) {
+          dpd.todos.post({ title: 'foobar' }, next);
+        }).chain(function (next, result) {
+          dpd.todos.put(result.id, { tags: { $addUnique: ["yellow", "magenta", "violet"] } }, next);
+        }).chain(function (next, result) {
           expect(result.tags.length).to.equal(3);
           expect(result.tags).to.include("yellow").and.include("magenta").and.include("violet");
           done();
         });
       });
 
-      it('should not update a set if element already exists', function(done) {
-        chain(function(next) {
-          dpd.todos.post({title: 'foobar', tags: ['red', 'blue', 'green', 'yellow', 'magenta']}, next);
-        }).chain(function(next, result) {
-          dpd.todos.put(result.id, {tags: {$addUnique: ["yellow", "magenta", "violet"]}}, next);
-        }).chain(function(next, result) {
+      it('should not update a set if element already exists', function (done) {
+        chain(function (next) {
+          dpd.todos.post({ title: 'foobar', tags: ['red', 'blue', 'green', 'yellow', 'magenta'] }, next);
+        }).chain(function (next, result) {
+          dpd.todos.put(result.id, { tags: { $addUnique: ["yellow", "magenta", "violet"] } }, next);
+        }).chain(function (next, result) {
           expect(result.tags.length).to.equal(6);
           expect(result.tags).to.include("red").and.include("blue").and.include("green")
             .and.include("yellow").and.include("magenta").and.include("violet");
@@ -766,14 +766,14 @@ describe('Collection', function () {
 
     });
 
-    describe('.put({done: true})', function(){
-      it('should not update multiple items', function(done) {
-        chain(function(next) {
-          dpd.todos.post({title: 'foo'}, next);
-        }).chain(function(next) {
-          dpd.todos.post({title: 'bar'}, next);
-        }).chain(function(next, result) {
-          dpd.todos.put({done: true}, function (res, err) {
+    describe('.put({done: true})', function () {
+      it('should not update multiple items', function (done) {
+        chain(function (next) {
+          dpd.todos.post({ title: 'foo' }, next);
+        }).chain(function (next) {
+          dpd.todos.post({ title: 'bar' }, next);
+        }).chain(function (next, result) {
+          dpd.todos.put({ done: true }, function (res, err) {
             expect(err).to.exist;
             done();
           });
@@ -781,69 +781,69 @@ describe('Collection', function () {
       });
     });
 
-    describe('dpd.todos method override', function() {
-      it('should method overriden by _method property from body', function(done){
+    describe('dpd.todos method override', function () {
+      it('should method overriden by _method property from body', function (done) {
         var todoId;
-        chain(function(next) {
-          dpd.todos.post({title: "Some todo"}, next);
-        }).chain(function(next, res, err) {
+        chain(function (next) {
+          dpd.todos.post({ title: "Some todo" }, next);
+        }).chain(function (next, res, err) {
           if (err) return done(err);
-            todoId = res.id;
+          todoId = res.id;
           expect(res).to.exist;
           $.ajax({
             type: "POST",
-            url : "/todos/"+ todoId,
-            data: { _method:"DELETE" },
-            success: function(res) {
-              dpd.todos.get(todoId, function(result){
-                  expect(result).to.not.exist;
-                  done();
+            url: "/todos/" + todoId,
+            data: { _method: "DELETE" },
+            success: function (res) {
+              dpd.todos.get(todoId, function (result) {
+                expect(result).to.not.exist;
+                done();
               });
             },
             error: function (e) {
-                if (e) return done(e);
+              if (e) return done(e);
               done();
             }
           });
         });
       });
-      it('should method overriden by _method property from url', function(done){
+      it('should method overriden by _method property from url', function (done) {
         var todoId;
-        chain(function(next) {
-          dpd.todos.post({title: "Some todo"}, next);
-        }).chain(function(next, res, err) {
+        chain(function (next) {
+          dpd.todos.post({ title: "Some todo" }, next);
+        }).chain(function (next, res, err) {
           if (err) return done(err);
-            todoId = res.id;
+          todoId = res.id;
           expect(res).to.exist;
           $.ajax({
             type: "POST",
-            url : "/todos/"+ todoId + "?_method=delete",
-            success: function(res) {
-              dpd.todos.get(todoId, function(result){
-                  expect(result).to.not.exist;
-                  done();
+            url: "/todos/" + todoId + "?_method=delete",
+            success: function (res) {
+              dpd.todos.get(todoId, function (result) {
+                expect(result).to.not.exist;
+                done();
               });
             },
             error: function (e) {
-                if (e) return done(e);
+              if (e) return done(e);
               done();
             }
           });
         });
       });
 
-      it('should not deleted by executed commands it like dpd.collection.cmd ', function(done){
+      it('should not deleted by executed commands it like dpd.collection.cmd ', function (done) {
         var todoId;
-        chain(function(next) {
-          dpd.todos.post({title: "Some todo"}, next);
-        }).chain(function(next, res, err) {
+        chain(function (next) {
+          dpd.todos.post({ title: "Some todo" }, next);
+        }).chain(function (next, res, err) {
           if (err) { return done(err); }
           todoId = res.id;
           expect(res).to.exist;
-          dpd.todos.post({ _method:"delete"}, next);
-        }).chain(function(next, res, err){
-          dpd.todos.get({ id:todoId }, next);
-        }).chain(function(next, res, err){
+          dpd.todos.post({ _method: "delete" }, next);
+        }).chain(function (next, res, err) {
+          dpd.todos.get({ id: todoId }, next);
+        }).chain(function (next, res, err) {
           expect(res).to.exist;
           done();
         });
@@ -857,40 +857,40 @@ describe('Collection', function () {
 
   });
 
-  describe('issue 76', function() {
-    it('should prevent unauthorized post', function(done) {
-      chain(function(next) {
-        dpd.todos.post({title: "$REQUIRE_AUTH"}, next);
-      }).chain(function(next, res, err) {
+  describe('issue 76', function () {
+    it('should prevent unauthorized post', function (done) {
+      chain(function (next) {
+        dpd.todos.post({ title: "$REQUIRE_AUTH" }, next);
+      }).chain(function (next, res, err) {
         expect(err).to.exist;
         done();
       });
     });
 
-    it('should allow logged in user to post', function(done) {
-      chain(function(next) {
-        dpd.users.post({username: 'foo', password: 'bar'}, next);
-      }).chain(function(next) {
-        dpd.users.login({username: 'foo', password: 'bar'}, next);
-      }).chain(function(next) {
-        dpd.todos.post({title: "$REQUIRE_AUTH"}, next);
-      }).chain(function(next, res, err) {
+    it('should allow logged in user to post', function (done) {
+      chain(function (next) {
+        dpd.users.post({ username: 'foo', password: 'bar' }, next);
+      }).chain(function (next) {
+        dpd.users.login({ username: 'foo', password: 'bar' }, next);
+      }).chain(function (next) {
+        dpd.todos.post({ title: "$REQUIRE_AUTH" }, next);
+      }).chain(function (next, res, err) {
         expect(err).to.not.exist;
         expect(res.title).to.equal("$REQUIRE_AUTH");
         done();
       });
     });
 
-    it('should allow logged in user to post after second try', function(done) {
-      chain(function(next) {
-        dpd.users.post({username: 'foo', password: 'bar'}, next);
-      }).chain(function(next) {
-        dpd.users.login({username: 'foo', password: 'bar'}, next);
-      }).chain(function(next) {
-        dpd.todos.post({title: "$REQUIRE_AUTH"}, next);
-      }).chain(function(next) {
-        dpd.todos.post({title: "$REQUIRE_AUTH"}, next);
-      }).chain(function(next, res, err) {
+    it('should allow logged in user to post after second try', function (done) {
+      chain(function (next) {
+        dpd.users.post({ username: 'foo', password: 'bar' }, next);
+      }).chain(function (next) {
+        dpd.users.login({ username: 'foo', password: 'bar' }, next);
+      }).chain(function (next) {
+        dpd.todos.post({ title: "$REQUIRE_AUTH" }, next);
+      }).chain(function (next) {
+        dpd.todos.post({ title: "$REQUIRE_AUTH" }, next);
+      }).chain(function (next, res, err) {
         expect(err).to.not.exist;
         expect(res.title).to.equal("$REQUIRE_AUTH");
         done();
@@ -898,21 +898,21 @@ describe('Collection', function () {
     });
 
 
-    afterEach(function(done) {
+    afterEach(function (done) {
       this.timeout(10000);
-      dpd.users.logout(function() {
-        cleanCollection(dpd.users, function() {
+      dpd.users.logout(function () {
+        cleanCollection(dpd.users, function () {
           cleanCollection(dpd.todos, done);
         });
       });
     });
   });
 
-  describe('internal cancel()', function(){
-    it('should not cancel the internal call', function(done) {
-      dpd.todos.post({title: '$CANCEL_TEST'}, function (todo) {
+  describe('internal cancel()', function () {
+    it('should not cancel the internal call', function (done) {
+      dpd.todos.post({ title: '$CANCEL_TEST' }, function (todo) {
         expect(todo.err).to.not.exist;
-        dpd.todos.get({title: '$INTERNAL_CANCEL_TEST'}, function (todos) {
+        dpd.todos.get({ title: '$INTERNAL_CANCEL_TEST' }, function (todos) {
           expect(todos.length).to.equal(1);
           done();
         });
@@ -927,10 +927,10 @@ describe('Collection', function () {
     });
   });
 
-  describe('events', function() {
-    describe('cancelIf()', function() {
-      it('should cancel', function(done) {
-        dpd.todos.post({title: "$CANCEL_IF_TEST"}, function(todo, err) {
+  describe('events', function () {
+    describe('cancelIf()', function () {
+      it('should cancel', function (done) {
+        dpd.todos.post({ title: "$CANCEL_IF_TEST" }, function (todo, err) {
           expect(err).to.exist;
           expect(err.message).to.equal("Cancel if");
           done();
@@ -938,9 +938,9 @@ describe('Collection', function () {
       });
     });
 
-    describe('cancelUnless()', function() {
-      it('should cancel', function(done) {
-        dpd.todos.post({title: "$CANCEL_UNLESS_TEST"}, function(todo, err) {
+    describe('cancelUnless()', function () {
+      it('should cancel', function (done) {
+        dpd.todos.post({ title: "$CANCEL_UNLESS_TEST" }, function (todo, err) {
           expect(err).to.exist;
           expect(err.message).to.equal("Cancel unless");
           done();
@@ -948,9 +948,9 @@ describe('Collection', function () {
       });
     });
 
-    describe('hasErrors()', function() {
-      it('should cancel', function(done) {
-        dpd.todos.post({title: "$HAS_ERRORS_TEST"}, function(todo, err) {
+    describe('hasErrors()', function () {
+      it('should cancel', function (done) {
+        dpd.todos.post({ title: "$HAS_ERRORS_TEST" }, function (todo, err) {
           expect(err).to.exist;
           expect(err.errors.hasErrors).to.equal("Yep");
           expect(err.errors.otherError).to.exist;
@@ -959,9 +959,9 @@ describe('Collection', function () {
       });
     });
 
-    describe('errorIf()', function() {
-      it('should error', function(done) {
-        dpd.todos.post({title: "$ERROR_IF_TEST"}, function(todo, err) {
+    describe('errorIf()', function () {
+      it('should error', function (done) {
+        dpd.todos.post({ title: "$ERROR_IF_TEST" }, function (todo, err) {
           expect(err).to.exist;
           expect(err.errors).to.exist;
           expect(err.errors.errorIf).to.equal("Yep");
@@ -970,9 +970,9 @@ describe('Collection', function () {
       });
     });
 
-    describe('errorUnless()', function() {
-      it('should error', function(done) {
-        dpd.todos.post({title: "$ERROR_UNLESS_TEST"}, function(todo, err) {
+    describe('errorUnless()', function () {
+      it('should error', function (done) {
+        dpd.todos.post({ title: "$ERROR_UNLESS_TEST" }, function (todo, err) {
           expect(err).to.exist;
           expect(err.errors).to.exist;
           expect(err.errors.errorUnless).to.equal("Yep");
@@ -982,48 +982,48 @@ describe('Collection', function () {
     });
   });
 
-  describe('root', function() {
-    afterEach(function(done) {
+  describe('root', function () {
+    afterEach(function (done) {
       _dpd.ajax.headers = {};
       cleanCollection(dpd.todos, done);
     });
 
-    describe('dpd-ssh-key', function() {
-      beforeEach(function() {
+    describe('dpd-ssh-key', function () {
+      beforeEach(function () {
         _dpd.ajax.headers = {
           'dpd-ssh-key': true
         };
       });
 
-      it('should detect root', function(done) {
-        chain(function(next) {
-          dpd.todos.post({title: 'valid'}, next);
-        }).chain(function(next, res, err) {
+      it('should detect root', function (done) {
+        chain(function (next) {
+          dpd.todos.post({ title: 'valid' }, next);
+        }).chain(function (next, res, err) {
           if (err) return done(err);
           expect(res.isRoot).to.equal(true);
           done();
         });
       });
 
-      it('should allow skipping events', function(done) {
-        chain(function(next) {
-          dpd.todos.post({title: 'notvalid', $skipEvents: true}, next);
-        }).chain(function(next, res, err) {
+      it('should allow skipping events', function (done) {
+        chain(function (next) {
+          dpd.todos.post({ title: 'notvalid', $skipEvents: true }, next);
+        }).chain(function (next, res, err) {
           if (err) return done(err);
           expect(res.title).to.equal('notvalid');
           done();
         });
       });
 
-      it('should allow skipping events on get', function(done) {
+      it('should allow skipping events on get', function (done) {
         var id;
-        chain(function(next) {
-          dpd.todos.post({title: '$GET_CANCEL'}, next);
-        }).chain(function(next, res, err) {
+        chain(function (next) {
+          dpd.todos.post({ title: '$GET_CANCEL' }, next);
+        }).chain(function (next, res, err) {
           if (err) return done(err);
           id = res.id;
-          dpd.todos.get(id, {$skipEvents: true}, next);
-        }).chain(function(next, res, err) {
+          dpd.todos.get(id, { $skipEvents: true }, next);
+        }).chain(function (next, res, err) {
           if (err) return done(err);
           expect(res.title).to.equal("$GET_CANCEL");
           done();
@@ -1031,20 +1031,20 @@ describe('Collection', function () {
       });
     });
 
-    it('should not allow skipping events', function(done) {
-      chain(function(next) {
-        dpd.todos.post({title: 'notvalid', $skipEvents: true}, next);
-      }).chain(function(next, res, err) {
+    it('should not allow skipping events', function (done) {
+      chain(function (next) {
+        dpd.todos.post({ title: 'notvalid', $skipEvents: true }, next);
+      }).chain(function (next, res, err) {
         expect(err).to.exist;
         expect(err.errors).to.exist;
         done();
       });
     });
 
-    it('should not detect root', function(done) {
-      chain(function(next) {
-        dpd.todos.post({title: 'valid'}, next);
-      }).chain(function(next, res, err) {
+    it('should not detect root', function (done) {
+      chain(function (next) {
+        dpd.todos.post({ title: 'valid' }, next);
+      }).chain(function (next, res, err) {
         if (err) return done(err);
         expect(res.isRoot).to.not.exist;
         done();
@@ -1054,7 +1054,7 @@ describe('Collection', function () {
   });
 
   describe('internal client', function () {
-    before(function(done) {
+    before(function (done) {
       cleanCollection(dpd.internalclientmaster, done);
     });
 
@@ -1120,7 +1120,7 @@ describe('Collection', function () {
     it("should properly report uncaught error in callback and promise", function (done) {
       var masterId;
       var children = [];
-      populate(children).then(function (mid){
+      populate(children).then(function (mid) {
         masterId = mid;
         return dpd.internalclientmaster.get({ id: masterId, promise: true, testUncaughtError: true });
       }).then(function () {
@@ -1129,7 +1129,7 @@ describe('Collection', function () {
         expect(err).to.exist;
         expect(err.message).to.equal('fail');
         return dpd.internalclientmaster.get({ id: masterId, callback: true, testUncaughtError: true });
-      }).then(function() {
+      }).then(function () {
         throw "an error should've been returned";
       }, function (err) {
         expect(err).to.exist;
@@ -1139,16 +1139,16 @@ describe('Collection', function () {
     });
   });
 
-  describe('dpd.recursive', function() {
-    beforeEach(function(done) {
-      dpd.recursive.post({name: "dataception"}, function(res) {
+  describe('dpd.recursive', function () {
+    beforeEach(function (done) {
+      dpd.recursive.post({ name: "dataception" }, function (res) {
         done();
       });
     });
 
-    it('should only go two levels deep', function(done) {
+    it('should only go two levels deep', function (done) {
       this.timeout(1000);
-      dpd.recursive.get(function(result, err) {
+      dpd.recursive.get(function (result, err) {
         var obj = result[0];
         expect(result.length).to.equal(1);
         expect(obj).to.exist;
@@ -1162,9 +1162,9 @@ describe('Collection', function () {
       });
     });
 
-    it('should be customizable', function(done) {
+    it('should be customizable', function (done) {
       this.timeout(1000);
-      dpd.recursive.get({$limitRecursion: 10}, function(result, err) {
+      dpd.recursive.get({ $limitRecursion: 10 }, function (result, err) {
         var obj = result[0];
         expect(result.length).to.equal(1);
         expect(obj).to.exist;
@@ -1181,18 +1181,18 @@ describe('Collection', function () {
       });
     });
 
-    it('should not change a query', function(done) {
+    it('should not change a query', function (done) {
       this.timeout(1000);
-      chain(function(next) {
-        dpd.recursive.post({name: "test2"}, next);
-      }).chain(function(next) {
-        dpd.recursive.post({name: "test3"}, next);
-      }).chain(function(next) {
-        dpd.recursive.get({$limitRecursion: 10, mode: "self"}, next);
-      }).chain(function(next, res, err) {
+      chain(function (next) {
+        dpd.recursive.post({ name: "test2" }, next);
+      }).chain(function (next) {
+        dpd.recursive.post({ name: "test3" }, next);
+      }).chain(function (next) {
+        dpd.recursive.get({ $limitRecursion: 10, mode: "self" }, next);
+      }).chain(function (next, res, err) {
         if (err) return done(err);
         expect(res.length).to.equal(3);
-        res.forEach(function(x) {
+        res.forEach(function (x) {
           var self = x.self;
           expect(self).to.exist;
           expect(self.name).to.equal(x.name);
@@ -1209,18 +1209,18 @@ describe('Collection', function () {
     });
   });
 
-  describe('dpd.empty', function() {
-    describe('.get(fn)', function() {
-      it('should return an empty array', function(done) {
-        dpd.empty.get(function(result) {
+  describe('dpd.empty', function () {
+    describe('.get(fn)', function () {
+      it('should return an empty array', function (done) {
+        dpd.empty.get(function (result) {
           expect(result).to.eql([]);
           done();
         });
       });
     });
 
-    describe('cancel()', function(){
-      it('should cancel when POSTing', function(done) {
+    describe('cancel()', function () {
+      it('should cancel when POSTing', function (done) {
         dpd.empty.post({}, function (item, err) {
           expect(err).to.exist;
           expect(err.message).to.equal('testing cancel');
@@ -1235,9 +1235,9 @@ describe('Collection', function () {
     });
   });
 
-     describe('previous()', function() {
-     it('should work with $pull and $push', function(done) {
-      dpd.previous.post({ sharedWith: [ 456 ], unsharedWith: [ 234 ] }, function(p) {
+  describe('previous()', function () {
+    it('should work with $pull and $push', function (done) {
+      dpd.previous.post({ sharedWith: [456], unsharedWith: [234] }, function (p) {
 
         dpd.previous.once("was", function (w) {
           expect(w.sharedWith).to.include.members([456]);
@@ -1250,14 +1250,14 @@ describe('Collection', function () {
           expect(p.unsharedWith[1]).to.not.exist;
         });
       });
-     });
-   });
+    });
+  });
 
-  describe('changed()', function(){
-    it('should detect when a value has changed', function(done) {
-      dpd.changed.post({name: 'original'}, function (c) {
-        dpd.changed.put(c.id, {name: 'first name change'}, function (c) {
-          if(c.name !== 'saw first name changed previous original') {
+  describe('changed()', function () {
+    it('should detect when a value has changed', function (done) {
+      dpd.changed.post({ name: 'original' }, function (c) {
+        dpd.changed.put(c.id, { name: 'first name change' }, function (c) {
+          if (c.name !== 'saw first name changed previous original') {
             throw Error('missed name change');
           }
           done();
@@ -1265,10 +1265,10 @@ describe('Collection', function () {
       });
     });
 
-    it('should not return true when a value has not changed', function(done) {
-      dpd.changed.post({name: '$NO_CHANGE'}, function (c) {
-        dpd.changed.put(c.id, {name: '$NO_CHANGE'}, function (c) {
-          if(c.name != '$NO_CHANGE') {
+    it('should not return true when a value has not changed', function (done) {
+      dpd.changed.post({ name: '$NO_CHANGE' }, function (c) {
+        dpd.changed.put(c.id, { name: '$NO_CHANGE' }, function (c) {
+          if (c.name != '$NO_CHANGE') {
             throw new Error('incorrect name change');
           }
           done();
@@ -1276,18 +1276,18 @@ describe('Collection', function () {
       });
     });
 
-    it('should not return true when a value of type object has not changed', function(done) {
-      dpd.changed.post({name: 'irrelevant', data: { 'key': '$NO_CHANGE'} }, function (c) {
-        dpd.changed.put(c.id, { data: { 'key': '$NO_CHANGE'} }, function (c) {
+    it('should not return true when a value of type object has not changed', function (done) {
+      dpd.changed.post({ name: 'irrelevant', data: { 'key': '$NO_CHANGE' } }, function (c) {
+        dpd.changed.put(c.id, { data: { 'key': '$NO_CHANGE' } }, function (c) {
           expect(c.data.changed).to.not.exist;
           done();
         });
       });
     });
 
-    it('should detect when a value of type object has changed', function(done) {
-      dpd.changed.post({name: 'irrelevant', data: { 'key': '$NO_CHANGE'} }, function (c) {
-        dpd.changed.put(c.id, { data: { 'key': '$CHANGED'} }, function (c) {
+    it('should detect when a value of type object has changed', function (done) {
+      dpd.changed.post({ name: 'irrelevant', data: { 'key': '$NO_CHANGE' } }, function (c) {
+        dpd.changed.put(c.id, { data: { 'key': '$CHANGED' } }, function (c) {
           expect(c.data.key).to.equal("$CHANGED");
           expect(c.data.changed).to.be.true;
           done();
@@ -1301,9 +1301,9 @@ describe('Collection', function () {
     });
   });
 
-  describe("BeforeRequest event", function() {
-    it("should be called on GET and allow canceling request from event", function(done) {
-      dpd.testbeforerequest.get(function(data, err) {
+  describe("BeforeRequest event", function () {
+    it("should be called on GET and allow canceling request from event", function (done) {
+      dpd.testbeforerequest.get(function (data, err) {
         expect(err).to.exist;
         expect(err.status).to.equal(401);
         expect(err.message).to.equal("GET not authorized");
@@ -1311,8 +1311,8 @@ describe('Collection', function () {
       });
     });
 
-    it("should be called on PUT and allow canceling request from event", function(done) {
-      dpd.testbeforerequest.put("1234", {data: {foo: "bar"} }, function(data, err) {
+    it("should be called on PUT and allow canceling request from event", function (done) {
+      dpd.testbeforerequest.put("1234", { data: { foo: "bar" } }, function (data, err) {
         expect(err).to.exist;
         expect(err.status).to.equal(401);
         expect(err.message).to.equal("PUT not authorized, data ok");
@@ -1320,8 +1320,8 @@ describe('Collection', function () {
       });
     });
 
-    it("should be called on POST and allow canceling request from event", function(done) {
-      dpd.testbeforerequest.post({data: {foo: "bar"} }, function(data, err) {
+    it("should be called on POST and allow canceling request from event", function (done) {
+      dpd.testbeforerequest.post({ data: { foo: "bar" } }, function (data, err) {
         expect(err).to.exist;
         expect(err.status).to.equal(401);
         expect(err.message).to.equal("POST not authorized, data ok");
@@ -1329,29 +1329,28 @@ describe('Collection', function () {
       });
     });
 
-    it("should be called on GET and allow overriding query from event", function(done) {
+    it("should be called on GET and allow overriding query from event", function (done) {
       // add 3 records
-      chain(function(next) {
+      chain(function (next) {
         dpd.testbeforerequest.post({ data: { foo: "bar" }, secretKey: "secret!" }, next);
-      }).chain(function(next, data, err) {
+      }).chain(function (next, data, err) {
         expect(data).to.exist;
         expect(err).to.not.exist;
         dpd.testbeforerequest.post({ data: { foo: "bar" }, secretKey: "secret!" }, next);
-      }).chain(function(next, data, err) {
+      }).chain(function (next, data, err) {
         expect(data).to.exist;
         expect(err).to.not.exist;
         dpd.testbeforerequest.post({ data: { foo: "bar" }, secretKey: "secret!" }, next);
-      }).chain(function(next, data, err) {
+      }).chain(function (next, data, err) {
         expect(data).to.exist;
         expect(err).to.not.exist;
 
         dpd.testbeforerequest.get({ secretKey: "secret!" }, next);
-      }).chain(function(next, data, err) {
+      }).chain(function (next, data, err) {
         expect(data).to.exist;
         expect(data.length).to.equal(1);
         done();
       });
     });
   });
-
 });
