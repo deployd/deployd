@@ -27,13 +27,22 @@ Deployd is the simplest way to build realtime APIs for web and mobile apps. Read
  - [Example Apps](http://docs.deployd.com/examples/)
 
 
+## requirements
+
+Deployd is built using node and published using npm.  
+To install and use it, you need to install **[Node.JS](https://nodejs.org/en/download/)**.
+
 ## install from npm
+
+Once Node.JS is installed, open your terminal and type the following command:
 
 	npm install deployd -g
 
+the `dpd` command should be available. Type `dpd -V` and the current version should appear.
+
 ## install on windows
 
-[Download](https://bintray.com/artifact/download/deployd/dpd-win-installer/deployd-win-0.8.0.exe) the installer.
+The windows installer is deprecated. The recommended way is now npm (`npm install deployd -g`) and [install mongodb](https://docs.mongodb.com/manual/tutorial/install-mongodb-on-windows/) separately.
 
 ## install on macosx
 

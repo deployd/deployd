@@ -92,6 +92,28 @@ describe('collection', function(){
       var sanitized = r.sanitize({token: 123456});
       expect(sanitized.token).to.equal('123456');
     });
+
+    it('should convert date strings to dates', function() {
+      var r = createCollection({
+        date: {
+          type: 'date'
+        }
+      });
+
+      var sanitized = r.sanitize({date: '2016-09-09T09:09:09.09Z'});
+      expect(sanitized.date).to.eql(new Date('2016-09-09T09:09:09.09Z'));
+    });
+
+    it('should convert numbers to dates', function() {
+      var r = createCollection({
+        date: {
+          type: 'date'
+        }
+      });
+
+      var sanitized = r.sanitize({date: 1473412149090});
+      expect(sanitized.date).to.eql(new Date('2016-09-09T09:09:09.09Z'));
+    });
   });
 
   describe('.sanitizeQuery(query)', function(){
@@ -127,6 +149,39 @@ describe('collection', function(){
 
       var sanitized = r.sanitizeQuery({bool: { $ne: true }});
       expect(sanitized.bool).to.eql({$ne: true});
+    });
+
+    it('should convert date strings to dates', function() {
+      var r = createCollection({
+        date: {
+          type: 'date'
+        }
+      });
+
+      var sanitized = r.sanitizeQuery({date: '2016-09-09T09:09:09.09Z'});
+      expect(sanitized.date).to.eql(new Date('2016-09-09T09:09:09.09Z'));
+    });
+
+    it('should convert numbers to dates', function() {
+      var r = createCollection({
+        date: {
+          type: 'date'
+        }
+      });
+
+      var sanitized = r.sanitizeQuery({date: 1473412149090});
+      expect(sanitized.date).to.eql(new Date('2016-09-09T09:09:09.09Z'));
+    });
+
+    it('should allow object query on dates', function() {
+      var r = createCollection({
+        date: {
+          type: 'date'
+        }
+      });
+
+      var sanitized = r.sanitizeQuery({date: { $gte: new Date(2016, 01, 01) }});
+      expect(sanitized.date).to.eql({ $gte: new Date(2016, 01, 01) });
     });
   });
 
@@ -443,6 +498,58 @@ describe('collection', function(){
       c.execCommands('update', item, {names: {$pushAll: ['jim', 'sam']}});
     });
   });
+
+  describe('.createDomain()', function() {
+    it('should make property non enumerable when calling hide() on domain', function() {
+      var col = new Collection('foodomain', {db: db.create(TEST_DB), config: { properties: {count: {type: 'number'}}}});
+
+      var domain = col.createDomain({count: 1}, {});
+      domain.hide('count');
+
+      expect(domain.data.count).to.equal(1);
+      expect(Object.keys(domain.data).length).to.equal(0);
+
+      // test unhide
+      domain.hide('count', false);
+      expect(domain.data.count).to.equal(1);
+      expect(Object.keys(domain.data).length).to.equal(1);
+    });
+
+    it('should throw when modifying protect()ed property on domain', function() {
+      var col = new Collection('foodomain', {db: db.create(TEST_DB), config: { properties: {count: {type: 'number'}}}});
+
+      var domain = col.createDomain({count: 1}, {}, true);
+      var previousCount = 0;
+      domain.previous.count = previousCount;
+      
+      domain.protect('count');
+      expect(domain.data.count).to.equal(previousCount);
+
+      expect(function() { domain.data.count = 2; }).to.throw(/cannot modify protected property/i);
+
+      // test unprotect
+      domain.protect('count', false);
+      domain.data.count = 2;
+      expect(domain.data.count).to.equal(2);
+
+      domain.protect('count');
+      expect(function() { domain.data.count = 3; }).to.throw(/cannot modify protected property/i);
+      expect(domain.data.count).to.equal(previousCount);
+
+      domain.unprotect('count');
+      domain.data.count = 3;
+      expect(domain.data.count).to.equal(3);
+    });
+
+    it('should properly report changed() properties on domain', function() {
+      var col = new Collection('foodomain', {db: db.create(TEST_DB), config: { properties: {count: {type: 'number'}}}});
+
+      var domain = col.createDomain({count: 1}, {}, true);
+      domain.previous.count = 2;
+      
+      expect(domain.changed('count')).to.be.true;
+    });
+  })
 
   describe('Collection.extendDomain', function() {
     it('should properly bind function to collection instance', function() {

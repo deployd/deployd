@@ -42,6 +42,12 @@ describe('script', function(){
       };
       s.run({session: session}, done);
     });
+
+    it('should always have access to require()', function(done) {
+      var s = new Script('if(typeof require !== "function") throw "no access to require"');
+      s.run({}, done);
+    });
+
   });
 
   describe('.run(ctx, domain, fn)', function(){
