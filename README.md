@@ -74,4 +74,4 @@ The macosx installer is deprecated. The recommended way is now npm (`npm install
     See the License for the specific language governing permissions and
     limitations under the License.
 
-    Copyright 2012 deployd llc
+    Copyright 2017 deployd llc
