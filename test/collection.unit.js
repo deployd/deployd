@@ -354,6 +354,17 @@ describe('collection', function(){
         });
       });
     });
+    
+    it('should not fail validation on $push with required array', function (done) {
+      var c = new Collection('persons', { db: db.create(TEST_DB), config: { properties: { names: { type: 'array', required: true } } } });
+      
+      c.save({ body: { names: { $pushAll: ['jim','sam', 'joe'] } } }, function (err, item) {
+        expect(item.id).to.exist;
+        expect(err).to.not.exist;
+        expect(item.names).to.eql(['jim', 'sam', 'joe']);
+        done(err);
+      });
+    });
 
     it('should not fail validation on $push with required array', function (done) {
       var c = new Collection('persons', { db: db.create(TEST_DB), config: { properties: { names: { type: 'array', required: true } } } });
