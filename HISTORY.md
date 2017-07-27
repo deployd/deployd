@@ -2,6 +2,29 @@
 
 This document records all notable changes to [Deployd](http://deployd.com/). This project adheres to [Semantic Versioning](http://semver.org/).
 
+<a name="v1.0.0"></a>
+# v1.0.0 (2017-07-27)
+
+
+## Bug Fixes
+
+- **collection:** protect and hide should not modify `this` (#782)
+  ([a9fdc4cf](https://github.com/deployd/deployd/commit/a9fdc4cf4211765097cdf5e7aad19f682a62148c))
+- **internal-client:** add req.resume() (#785)
+  ([5e2c7813](https://github.com/deployd/deployd/commit/5e2c781333fd7d41a101e8aa5a2e9793b0f8d803))
+- add socketIo check (#802)
+  ([ce04ddee](https://github.com/deployd/deployd/commit/ce04ddeeedd2c5267d556a6b6ff9938dce7c1db4))
+- fix: server.attach() did not enable socket clustering (#777)
+  ([04bb24a2](https://github.com/deployd/deployd/commit/04bb24a23e4ab0f10651f51367142bd8c18fbf30))
+
+
+## Breaking Changes
+
+  - refactor: remove dpd cli from deployd core module (#776)
+    ([626d4ad6](https://github.com/deployd/deployd/commit/626d4ad69cf32c7c92a91083ff8626ee95313c1a))
+  - refactor(*): remove dashboard and clientlib from deployd core module (#783)
+    ([c9d0a91d](https://github.com/deployd/deployd/commit/c9d0a91d201888cb13f7c2c5b1e3f3d7d8fd31fb))
+
 <a name="v0.8.9"></a>
 # v0.8.9 (2016-08-29)
 
