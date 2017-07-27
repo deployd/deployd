@@ -6,9 +6,7 @@ var InternalResources = require('../lib/resources/internal-resources')
   , path = require('path')
   , testCollection = {type: 'Collection', path: '/my-objects', properties: {title: {type: 'string'}}}
   , Collection = require('../lib/resources/collection')
-  , ClientLib = require('../lib/resources/client-lib')
-  , configPath = './test/support/proj'
-  , Dashboard = require('../lib/resources/dashboard');
+  , configPath = './test/support/proj';
 
 describe('InternalResources', function() {
   describe('.handle(ctx)', function() {

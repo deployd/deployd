@@ -14,7 +14,6 @@
   "dependencies": {
     "async": "^2.0.1",
     "bluebird": "^3.4.3",
-    "commander": "^2.9.0",
     "cookies": "^0.6.1",
     "corser": "^2.0.1",
     "debug": "^2.2.0",
@@ -24,31 +23,27 @@
     "fs-extra": "^0.30.0",
     "mkdirp": "*",
     "mongodb": "^2.2.7",
-    "opener": "^1.4.1",
     "qs": "^6.2.1",
     "request": "2.74.0",
     "scrubber": "*",
-    "semver": "^5.3.0",
     "send": "^0.14.1",
-    "shelljs": "^0.7.3",
     "socket.io": "^1.4.8",
-    "step": "^0.0.6",
     "underscore": "^1.8.3",
     "validation": "*"
   },
   "devDependencies": {
     "chai": "*",
+    "dpd-cli": "^0.8.9",
     "less": "*",
     "mocha": "*",
+    "mocha-jshint": "2.3.1",
+    "mocha-phantomjs": "^4.1.0",
     "rewire": "~2.5.2",
     "sinon": "~1.17.5",
-    "mocha-phantomjs": "^4.1.0",
-    "mocha-jshint": "2.3.1"
-  },
-  "bin": {
-    "dpd": "./bin/dpd"
+    "shelljs": "^0.7.3"
   },
   "scripts": {
+    "pretest": "npm link && cd test-app && npm link deployd && npm install",
     "test": "mocha --timeout 5000 && cd test-app && node runtests.js"
   }
 }

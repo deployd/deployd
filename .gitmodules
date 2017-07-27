@@ -1,3 +1,0 @@
-[submodule "lib/resources/dashboard/bootstrap"]
-	path = lib/resources/dashboard/bootstrap
-	url = https://github.com/deployd/bootstrap

@@ -6,9 +6,7 @@ var configLoader = require('../lib/config-loader')
   , Server = require('../lib/server')
   , Collection = require('../lib/resources/collection')
   , Files = require('../lib/resources/files')
-  , ClientLib = require('../lib/resources/client-lib')
   , InternalResources = require('../lib/resources/internal-resources')
-  , Dashboard = require('../lib/resources/dashboard')
   , sinon = require('sinon')
   , basepath = './test/support/proj';
 
@@ -39,7 +37,7 @@ describe('config-loader', function() {
 
       configLoader.loadConfig(basepath, this.server, function(err, resources) {
         if (err) return done(err);
-        expect(resources).to.have.length(6);
+        expect(resources).to.have.length(4);
         expect(resources.filter(function(r) { return r.name == 'foo';})).to.have.length(1);
         expect(resources.filter(function(r) { return r.name == 'bar';})).to.have.length(1);
         done();
@@ -51,7 +49,7 @@ describe('config-loader', function() {
       JSON.stringify({type: "Collection", properties: {}}).to(path.join(basepath, 'resources/foo/config.json'));
 
       configLoader.loadConfig(basepath, {db: db}, function(err, resourceList) {
-        expect(resourceList).to.have.length(5);
+        expect(resourceList).to.have.length(3);
 
         expect(resourceList[0].config.properties).to.be.a('object');
         expect(resourceList[0] instanceof Collection).to.equal(true);
@@ -65,45 +63,10 @@ describe('config-loader', function() {
 
       configLoader.loadConfig(basepath, {}, function(err, resourceList) {
         if (err) return done(err);
-        expect(resourceList).to.have.length(4);
-
-        expect(resourceList[0] instanceof Files).to.equal(true);
-        expect(resourceList[1] instanceof InternalResources).to.equal(true);
-        expect(resourceList[2] instanceof ClientLib).to.equal(true);
-        expect(resourceList[3] instanceof Dashboard).to.equal(true);
-
-        done(err);
-      });
-    });
-
-    it('should add internal resources but hide_dpdjs', function(done) {
-      sh.mkdir('-p', path.join(basepath, 'resources'));
-
-      server = { options: { hide_dpdjs: true } };
-
-      configLoader.loadConfig( basepath, server, function(err, resourceList) {
-        if (err) return done(err);
         expect(resourceList).to.have.length(2);
 
         expect(resourceList[0] instanceof Files).to.equal(true);
         expect(resourceList[1] instanceof InternalResources).to.equal(true);
-
-        done(err);
-      });
-    });
-
-    it('should add internal resources but hide_dashboard', function(done) {
-      sh.mkdir('-p', path.join(basepath, 'resources'));
-
-      server = { options: { hide_dashboard: true } };
-
-      configLoader.loadConfig( basepath, server, function(err, resourceList) {
-        if (err) return done(err);
-        expect(resourceList).to.have.length(3);
-
-        expect(resourceList[0] instanceof Files).to.equal(true);
-        expect(resourceList[1] instanceof InternalResources).to.equal(true);
-        expect(resourceList[2] instanceof ClientLib).to.equal(true);
 
         done(err);
       });
@@ -175,7 +138,7 @@ describe('config-loader', function() {
 
       function next() {
         if (callsLeft == 0) {
-          expect(fs.readdir.callCount).to.equal(1);
+          expect(fs.readdir.callCount).to.equal(2);
           return done();
         }
         callsLeft--;
