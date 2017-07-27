@@ -59,9 +59,7 @@ describe('type-loader', function(){
     it('should load the default resources', function(done) {
       TypeLoader(basepath, function(resources, customResources) {
         expect(resources).to.not.be.empty;
-        expect(resources).to.include.keys('ClientLib');
         expect(resources).to.include.keys('Collection');
-        expect(resources).to.include.keys('Dashboard');
         expect(resources).to.include.keys('Files');
         expect(resources).to.include.keys('InternalResources');
         expect(resources).to.include.keys('UserCollection');

@@ -1,5 +1,5 @@
 var Script = require('../lib/script');
-    ayepromise = require('../clib/ayepromise');
+    Promise = require('bluebird');
 
 describe('script', function(){
   describe('.run(ctx, fn)', function(done){
@@ -151,15 +151,28 @@ describe('script', function(){
   });
 
   describe('promises', function(){
+    function defer() {
+      var resolve, reject;
+      var promise = new Promise(function () {
+        resolve = arguments[0];
+        reject = arguments[1];
+      });
+      return {
+        resolve: resolve,
+        reject: reject,
+        promise: promise
+      };
+    }
+
     it('should resolve after promise is resolved', function(done) {
       this.timeout(200);
-      var s = new Script('var p = aye.defer(); p.promise.then(inc); setTimeout(p.resolve, 10)');
+      var s = new Script('var p = defer(); p.promise.then(inc); setTimeout(p.resolve, 10)');
       var i = 0;
       function inc() {
         i++;
       }
 
-      s.run({}, {aye: ayepromise, setTimeout: setTimeout, inc: inc}, function () {
+      s.run({}, {defer: defer, setTimeout: setTimeout, inc: inc}, function () {
         expect(i).to.equal(1);
         done();
       });
@@ -167,13 +180,13 @@ describe('script', function(){
 
     it('should reject after promise is rejected', function(done) {
       this.timeout(200);
-      var s = new Script('var p = aye.defer(); p.promise.then(function() {}, inc); setTimeout(p.reject, 10)');
+      var s = new Script('var p = defer(); p.promise.then(function() {}, inc); setTimeout(p.reject, 10)');
       var i = 0;
       function inc() {
         i++;
       }
 
-      s.run({}, {aye: ayepromise, setTimeout: setTimeout, inc: inc}, function () {
+      s.run({}, {defer: defer, setTimeout: setTimeout, inc: inc}, function () {
         expect(i).to.equal(1);
         done();
       });
@@ -181,13 +194,13 @@ describe('script', function(){
 
     it('should resolve after nested promises is resolved and outer promise is resolved', function(done) {
       this.timeout(200);
-      var s = new Script('var p = aye.defer(), p2 = aye.defer(); p.promise.then(function() { return p2.promise; }).then(inc); setTimeout(p.resolve, 22); setTimeout(p2.resolve, 44);');
+      var s = new Script('var p = defer(), p2 = defer(); p.promise.then(function() { return p2.promise; }).then(inc); setTimeout(p.resolve, 22); setTimeout(p2.resolve, 44);');
       var i = 0;
       function inc() {
         i++;
       }
 
-      s.run({}, {aye: ayepromise, setTimeout: setTimeout, inc: inc}, function () {
+      s.run({}, {defer: defer, setTimeout: setTimeout, inc: inc}, function () {
         expect(i).to.equal(1);
         done();
       });
@@ -195,13 +208,13 @@ describe('script', function(){
 
     it('should reject after nested promises is rejected and outer promise is resolved', function(done) {
       this.timeout(200);
-      var s = new Script('var p = aye.defer(), p2 = aye.defer(); p.promise.then(function() { return p2.promise; }).then(function() {}, inc); setTimeout(p.resolve, 22); setTimeout(p2.reject, 44);');
+      var s = new Script('var p = defer(), p2 = defer(); p.promise.then(function() { return p2.promise; }).then(function() {}, inc); setTimeout(p.resolve, 22); setTimeout(p2.reject, 44);');
       var i = 0;
       function inc() {
         i++;
       }
 
-      s.run({}, {aye: ayepromise, setTimeout: setTimeout, inc: inc}, function () {
+      s.run({}, {defer: defer, setTimeout: setTimeout, inc: inc}, function () {
         expect(i).to.equal(1);
         done();
       });
@@ -209,13 +222,13 @@ describe('script', function(){
 
     it('should reject after nested promises is resolved and outer promise is rejected', function(done) {
       this.timeout(200);
-      var s = new Script('var p = aye.defer(), p2 = aye.defer(); p.promise.then(function() { return p2.promise; }).then(function() {}, inc); setTimeout(p.reject, 22); setTimeout(p2.resolve, 44);');
+      var s = new Script('var p = defer(), p2 = defer(); p.promise.then(function() { return p2.promise; }).then(function() {}, inc); setTimeout(p.reject, 22); setTimeout(p2.resolve, 44);');
       var i = 0;
       function inc() {
         i++;
       }
 
-      s.run({}, {aye: ayepromise, setTimeout: setTimeout, inc: inc}, function () {
+      s.run({}, {defer: defer, setTimeout: setTimeout, inc: inc}, function () {
         expect(i).to.equal(1);
         done();
       });
@@ -223,13 +236,13 @@ describe('script', function(){
 
     it('should reject after nested promises is rejected and outer promise is rejected', function(done) {
       this.timeout(200);
-      var s = new Script('var p = aye.defer(), p2 = aye.defer(); p.promise.then(function() { return p2.promise; }).then(function() {}, inc); setTimeout(p.reject, 22); setTimeout(p2.reject, 44);');
+      var s = new Script('var p = defer(), p2 = defer(); p.promise.then(function() { return p2.promise; }).then(function() {}, inc); setTimeout(p.reject, 22); setTimeout(p2.reject, 44);');
       var i = 0;
       function inc() {
         i++;
       }
 
-      s.run({}, {aye: ayepromise, setTimeout: setTimeout, inc: inc}, function () {
+      s.run({}, {defer: defer, setTimeout: setTimeout, inc: inc}, function () {
         expect(i).to.equal(1);
         done();
       });

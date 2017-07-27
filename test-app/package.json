@@ -1,0 +1,10 @@
+{
+  "engines": {
+    "node": ">= 0.10.0"
+  },
+  "dependencies": {
+    "dpd-dashboard": "*",
+    "dpd-clientlib": "*"
+  },
+  "dpdInclude": ["hello", "proxy", "dpd-clientlib", "dpd-dashboard"]
+}

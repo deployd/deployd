@@ -2,8 +2,20 @@
 
 This document records all notable changes to [Deployd](http://deployd.com/). This project adheres to [Semantic Versioning](http://semver.org/).
 
+
+<a name="v1.0.0-alpha.0"></a>
+# v1.0.0-alpha.0 (2016-11-06) - Next
+
+
+### Breaking Changes
+
+- **CLI:** Extract CLI from Core. Use `npm install dpd-cli -g` to create a new project and start the app.
+  ([eee454dab8ae142a0a36339d707a466a9e1bc04c](https://github.com/deployd/deployd/commit/eee454dab8ae142a0a36339d707a466a9e1bc04c))
+- **Dashboard & client-lib:** Extract Dashboard and client-lib from Core. Use `npm install dpd-dashboard --save` to add the dashboard and `npm install dpd-clientlib --save` to add the client library.
+  ([eee454dab8ae142a0a36339d707a466a9e1bc04c](https://github.com/deployd/deployd/commit/eee454dab8ae142a0a36339d707a466a9e1bc04c))
+
 <a name="v0.8.9"></a>
-# v0.8.9 (2016-08-29)
+# v0.8.9 (2016-08-29) - Latest
 
 
 ## Bug Fixes
@@ -18,7 +30,6 @@ This document records all notable changes to [Deployd](http://deployd.com/). Thi
 - **user-collection:** ensure password is a string
   ([e81c6c7b](https://github.com/deployd/deployd/commit/e81c6c7bc3b28c1c2fddee8c85014724356ca8bb),
    [#735](https://github.com/deployd/deployd/issues/735))
-
 
 <a name="v0.8.8"></a>
 # v0.8.8 (2016-01-18)
