@@ -2,6 +2,15 @@
 
 This document records all notable changes to [Deployd](http://deployd.com/). This project adheres to [Semantic Versioning](http://semver.org/).
 
+<a name="v0.8.10"></a>
+# v0.8.10 (2017-09-19)
+
+
+## Bug Fixes
+
+- **Dependencies:** Fix: Force mime version v1.4.0
+  ([1514b8decc4](https://github.com/deployd/deployd/commit/1514b8decc4db06ffdea2928f746e21b638c14a5))
+
 <a name="v0.8.9"></a>
 # v0.8.9 (2016-08-29)
 
