@@ -10,6 +10,8 @@ Deployd is the simplest way to build realtime APIs for web and mobile apps. Read
 
 [Read more about deployd](http://deployd.com)
 
+⚠️ Deployd v1.0.0 has been released. [Read the migration guide](#migration-guide-to-v1.0.0) bellow.
+
 ## quick start
 
 	$ dpd create hello
@@ -26,33 +28,49 @@ Deployd is the simplest way to build realtime APIs for web and mobile apps. Read
  - [Gitter Chat Page](https://gitter.im/deployd/deployd)
  - [Example Apps](http://docs.deployd.com/examples/)
 
-
 ## requirements
 
 Deployd is built using node and published using npm.  
 To install and use it, you need to install **[Node.JS](https://nodejs.org/en/download/)**.
 
+## Migration guide to v1.0.0
+
+v1.0.0 contains a big refactoring: the CLI, dashboard and client-lib has been extracted from the core to allow easier contribution and maintainability.  
+Here's a guide to help you migrate to v.1.0.0.
+
+If you start your application [using a node script (recommend)](http://docs.deployd.com/docs/server/run-script.html), you just need to update the `deployd` dependency and add the missing ones (client-lib and dashboard).
+```bash
+$ npm update deployd
+$ npm install dpd-dashboard dpd-clientlib
+```
+
+If you use the CLI to start your app (using `dpd` inside your app folder), you will need to uninstall it and reinstall `deployd-cli`.
+`npm uninstall deployd -g && npm install deployd-cli -g`
+
+If you have troubles making it work, feel free to ask for help on [the chat](https://gitter.im/deployd/deployd).
+
 ## install from npm
 
 Once Node.JS is installed, open your terminal and type the following command:
 
-	npm install deployd -g
+```bash
+npm install deployd-cli -g
+```
 
 the `dpd` command should be available. Type `dpd -V` and the current version should appear.
 
 ## install on windows
 
-The windows installer is deprecated. The recommended way is now npm (`npm install deployd -g`) and [install mongodb](https://docs.mongodb.com/manual/tutorial/install-mongodb-on-windows/) separately.
+The windows installer is deprecated. The recommended way is now npm (`npm install deployd-cli -g`) and [install mongodb](https://docs.mongodb.com/manual/tutorial/install-mongodb-on-windows/) separately.
 
 ## install on macosx
 
-The macosx installer is deprecated. The recommended way is now npm (`npm install deployd -g`) and [install mongodb](http://docs.mongodb.org/manual/tutorial/install-mongodb-on-os-x/) separately.
+The macosx installer is deprecated. The recommended way is now npm (`npm install deployd-cli -g`) and [install mongodb](http://docs.mongodb.org/manual/tutorial/install-mongodb-on-os-x/) separately.
 
 ## install from source
 
 	git clone https://github.com/deployd/deployd.git
 	npm install
-	npm link
 
 ## unit & integration tests
 
@@ -74,4 +92,4 @@ The macosx installer is deprecated. The recommended way is now npm (`npm install
     See the License for the specific language governing permissions and
     limitations under the License.
 
-    Copyright 2012 deployd llc
+    Copyright 2017 deployd llc
