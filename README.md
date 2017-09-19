@@ -35,7 +35,7 @@ To install and use it, you need to install **[Node.JS](https://nodejs.org/en/dow
 
 ## Migration guide to v1.0.0
 
-v1.0.0 contains a big refactoring: the CLI, dashboard and client-lib has been extracted from the core to allow easier contribution and maintainability.  
+v1.0.0 contains a big refactoring: the CLI, dashboard and client-lib has been extracted from the core to allow easier contributions and maintainability.  
 Here's a guide to help you migrate to v.1.0.0.
 
 If you start your application [using a node script (recommend)](http://docs.deployd.com/docs/server/run-script.html), you just need to update the `deployd` dependency and add the missing ones (client-lib and dashboard).
