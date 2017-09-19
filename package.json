@@ -1,6 +1,6 @@
 {
   "name": "deployd",
-  "version": "0.8.9",
+  "version": "0.8.10",
   "author": "Ritchie Martori",
   "license": "Apache-2.0",
   "description": "the simplest way to build realtime APIs for web and mobile apps",
