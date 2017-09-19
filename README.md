@@ -10,7 +10,7 @@ Deployd is the simplest way to build realtime APIs for web and mobile apps. Read
 
 [Read more about deployd](http://deployd.com)
 
-⚠️ Deployd v1.0.0 has been released. [Read the migration guide](#migration-guide-to-v1.0.0) bellow.
+⚠️ Deployd v1.0.0 has been released. [Read the migration guide](#migration-guide-to-v1.0.0) below.
 
 ## quick start
 

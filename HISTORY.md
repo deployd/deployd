@@ -3,7 +3,7 @@
 This document records all notable changes to [Deployd](http://deployd.com/). This project adheres to [Semantic Versioning](http://semver.org/).
 
 <a name="v1.0.0"></a>
-# v1.0.0 (2017-07-27)
+# v1.0.0 (2017-09-19)
 
 
 ## Bug Fixes
@@ -17,13 +17,24 @@ This document records all notable changes to [Deployd](http://deployd.com/). Thi
 - fix: server.attach() did not enable socket clustering (#777)
   ([04bb24a2](https://github.com/deployd/deployd/commit/04bb24a23e4ab0f10651f51367142bd8c18fbf30))
 
-
-## Breaking Changes
+## Breaking Changes ⚠️
 
   - refactor: remove dpd cli from deployd core module (#776)
     ([626d4ad6](https://github.com/deployd/deployd/commit/626d4ad69cf32c7c92a91083ff8626ee95313c1a))
   - refactor(*): remove dashboard and clientlib from deployd core module (#783)
     ([c9d0a91d](https://github.com/deployd/deployd/commit/c9d0a91d201888cb13f7c2c5b1e3f3d7d8fd31fb))
+
+    ℹ️ A migration guide is available in the [readme](README.md#migration-guide-to-v1.0.0)
+
+<a name="v0.8.10"></a>
+# v0.8.10 (2017-09-19)
+
+
+## Bug Fixes
+
+- **Dependencies:** Fix: Force mime version v1.4.0
+  ([1514b8decc4](https://github.com/deployd/deployd/commit/1514b8decc4db06ffdea2928f746e21b638c14a5))
+
 
 <a name="v0.8.9"></a>
 # v0.8.9 (2016-08-29)
