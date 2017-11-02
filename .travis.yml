@@ -5,6 +5,8 @@ cache:
 sudo: false
 services: mongodb
 node_js:
+  - "9"
+  - "8"
   - "7"
   - "6"
   - "5"
