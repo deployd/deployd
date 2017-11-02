@@ -36,15 +36,15 @@ describe('User Collection', function() {
             expect(u).to.contain({ username: 'foo2' });
             done();
           });
-        });
-
-        dpd.users.post({ username: 'foo', password: 'bar', admin: true })
-        .then(function(res){
-          expect(res).to.exist;
-          return dpd.users.login({ username: 'foo', password: 'bar'});
-        })
-        .then(function(res){
-          dpd.users.post({ username: 'foo2', password: 'bar' });
+          
+          dpd.users.post({ username: 'foo', password: 'bar', admin: true })
+          .then(function(res){
+            expect(res).to.exist;
+            return dpd.users.login({ username: 'foo', password: 'bar'});
+          })
+          .then(function(res){
+            dpd.users.post({ username: 'foo2', password: 'bar' });
+          });
         });
       });
 
