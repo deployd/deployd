@@ -40,7 +40,7 @@
     "shelljs": "^0.7.3"
   },
   "scripts": {
-    "pretest": "npm link && cd test-app && npm link deployd && npm install",
-    "test": "mocha --timeout 5000 && cd test-app && node runtests.js"
+    "pretest": "npm link && cd test-app && npm install && npm link deployd",
+    "test": "mocha --timeout 5000 --exit && cd test-app && node runtests.js"
   }
 }
