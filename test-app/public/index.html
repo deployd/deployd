@@ -15,7 +15,7 @@
     initMochaPhantomJS()
   }
   </script>
-  <script>mocha.setup('bdd')</script>
+  <script>mocha.setup({ui: 'bdd', timeout: 5000})</script>
   <!-- -- tests -- -->
   <script src="test/util.test.js"></script>
   <script src="test/misc.test.js"></script>
