@@ -19,12 +19,19 @@ if (fs.existsSync('data')) {
   shelljs.rm('-rf', 'data');
 }
 
+function generatePort() {
+  const portRange = [3000, 9000];
+  return Math.floor(Math.random() * (portRange[1] - portRange[0])) + portRange[0];
+}
+
 var deploydPath = path.join(process.cwd(), '..');
 
 // using `spawn` because with `fork` the child script won't be able to catch a `process.exit()` event
 // thus leaving mongod zombie processes behind. see https://github.com/joyent/node/issues/5766
-var proc = spawn(process.argv[0], ["../node_modules/dpd-cli/bin/dpd", "--deploydPath", deploydPath], {env: process.env})
+var proc = spawn(process.argv[0], ["../node_modules/deployd-cli/bin/dpd", "--deploydPath", deploydPath, '--mongoPort', generatePort()], {env: process.env})
   , buf = '';
+
+var hitListening = false;
 
 proc.on("error", function(err) {
   console.error(err);
@@ -43,6 +50,13 @@ proc.stderr.on('data', function(data) {
   buf += data.toString();
 });
 
+proc.on('close', function(){
+  if (!hitListening) {
+    process.stdout.write("Something went wrong: \n\n" + buf);      
+    process.exit(1);
+  }
+});
+
 function kill(e) {
   if (e && e !== 0){
     process.stdout.write("Test run failed. dpd output was: \n\n" + buf);
@@ -56,6 +70,7 @@ function kill(e) {
 }
 
 proc.once('listening', function (port){
+  hitListening = true;
   var mpjsProc = fork('../node_modules/mocha-phantomjs/bin/mocha-phantomjs', [ '--ignore-resource-errors', 'http://localhost:' + port ], {silent: true});
   mpjsProc.on("error", function(err) {
     console.error(err);
