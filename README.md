@@ -12,13 +12,33 @@ Deployd is the simplest way to build realtime APIs for web and mobile apps. Read
 
 ⚠️ Deployd v1.0.0 has been released. [Read the migration guide](#migration-guide-to-v1.0.0) below.
 
+## Requirements
+
+Deployd is built using node and published using npm.  
+To install and use it, you need to install **[Node.JS](https://nodejs.org/en/download/)**.
+
 ## quick start
 
+    $ npm install deployd-cli -g
 	$ dpd create hello
 	$ cd hello
 	$ dpd -d
 
-## helpful resources
+## Best Practices
+
+ - Once you start writing anything serious, you should start your project using a node script instead of the `dpd` command. [Read more here](http://docs.deployd.com/docs/server/run-script.html). `Dpd` is only meant to be used as a quick prototyping tool.
+ - You are encouraged to structure your resources in a hierarchy based on what they belong to. Since deployd 1.1.0 you can name your resources like the following example:
+
+    - Assume your user collection is named `users`
+    - Their associated photos could be in a collection named `users/photos`.
+    - A potential [dpd-event](https://www.npmjs.org/package/dpd-event) script associated to photos could go in `users/photos/resize`.
+
+ - Once your project grows, you may find yourself writing code in one place that you need elsewhere. Take a look at [dpd-codemodule](https://www.npmjs.org/package/dpd-codemodule) for this purpose.
+ - Keep in mind that `deployd` comes with **absolutely no built-in access control checking**. Anyone can delete, read, or update any information from any collection unless you close this down. We recommend plugging in your permission checks in `On BeforeRequest` events, and/or other appropriate places.
+ - The [dpd-clientlib](https://www.npmjs.org/package/dpd-clientlib) package is provided mostly as a convenience and should probably not be used directly in production. Once your project outgrows it, feel free to replace it with something else. You may use any HTTP library and/or [socket.io](https://www.npmjs.org/package/socket.io) client implementation to interact with deployd. Please see the documentation for more information.
+ - You will find plugins for various sorts of tasks on [npm](https://www.npmjs.org/) if you search for `dpd`. Deployd plugins start with dpd-*name*
+
+## Helpful Resources
 
  - [Docs](http://docs.deployd.com/)
  - [Getting Started Guide](http://docs.deployd.com/docs/getting-started/what-is-deployd.html)
@@ -28,26 +48,23 @@ Deployd is the simplest way to build realtime APIs for web and mobile apps. Read
  - [Gitter Chat Page](https://gitter.im/deployd/deployd)
  - [Example Apps](http://docs.deployd.com/examples/)
 
-## requirements
-
-Deployd is built using node and published using npm.  
-To install and use it, you need to install **[Node.JS](https://nodejs.org/en/download/)**.
 
 ## Migration guide to v1.0.0
 
 v1.0.0 contains a big refactoring: the CLI, dashboard and client-lib has been extracted from the core to allow easier contributions and maintainability.  
 Here's a guide to help you migrate to v.1.0.0.
 
-If you start your application [using a node script (recommend)](http://docs.deployd.com/docs/server/run-script.html), you just need to update the `deployd` dependency and add the missing ones (client-lib and dashboard).
+If you start your application [using a node script (recommended)](http://docs.deployd.com/docs/server/run-script.html), you just need to update the `deployd` dependency and add the missing ones (client-lib and dashboard).
+
 ```bash
-$ npm update deployd
-$ npm install dpd-dashboard dpd-clientlib
+$ npm install deployd --save
+$ npm install dpd-dashboard dpd-clientlib --save-dev
 ```
 
-If you use the CLI to start your app (using `dpd` inside your app folder), you will need to uninstall it and reinstall `deployd-cli`.
+If you use the CLI to start your app (using `dpd` inside your app folder), you will need to uninstall the old global version of `deployd` and install `deployd-cli`.
 `npm uninstall deployd -g && npm install deployd-cli -g`
 
-If you have troubles making it work, feel free to ask for help on [the chat](https://gitter.im/deployd/deployd).
+If you have trouble making it work, feel free to ask for help on [the chat](https://gitter.im/deployd/deployd).
 
 ## install from npm
 
