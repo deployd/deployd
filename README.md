@@ -57,7 +57,7 @@ Here's a guide to help you migrate to v.1.0.0.
 If you start your application [using a node script (recommended)](http://docs.deployd.com/docs/server/run-script.html), you just need to update the `deployd` dependency and add the missing ones (client-lib and dashboard).
 
 ```bash
-$ npm install deployd --save
+$ npm install deployd@latest --save
 $ npm install dpd-dashboard dpd-clientlib --save-dev
 ```
 
