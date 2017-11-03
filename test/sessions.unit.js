@@ -17,7 +17,8 @@ describe('SessionStore', function() {
           fauxSocket = {
                 id: 'abcd' + i,
                 handshake: {headers: {cookie: 'name=value; name2=value2; sid=' + data.id}},
-                on: function() {}
+                on: function() {},
+                emit: function() {}
               };
 
           sockets.emit('connection', fauxSocket);
