@@ -19,7 +19,7 @@ To install and use it, you need to install **[Node.JS](https://nodejs.org/en/dow
 
 ## quick start
 
-    $ npm install deployd-cli -g
+	$ npm install deployd-cli -g
 	$ dpd create hello
 	$ cd hello
 	$ dpd -d
