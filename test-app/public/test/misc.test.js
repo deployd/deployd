@@ -15,3 +15,15 @@ describe('404s', function(){
     }
   });
 });
+
+describe('Custom Resources', function () {
+  describe('"Hello" resource', function () {
+    it('should respond properly via somenamespace/hello', function (done) {
+      dpd('somenamespace/hello').get(function (doc, err) {
+        expect(doc.hello).to.equal("world");
+        expect(err).to.not.exist;
+        done();
+      });
+    });
+  });
+})
