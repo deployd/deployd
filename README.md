@@ -37,6 +37,12 @@ To install and use it, you need to install **[Node.JS](https://nodejs.org/en/dow
  - Keep in mind that `deployd` comes with **absolutely no built-in access control checking**. Anyone can delete, read, or update any information from any collection unless you close this down. We recommend plugging in your permission checks in `On BeforeRequest` events, and/or other appropriate places.
  - The [dpd-clientlib](https://www.npmjs.org/package/dpd-clientlib) package is provided mostly as a convenience and should probably not be used directly in production. Once your project outgrows it, feel free to replace it with something else. You may use any HTTP library and/or [socket.io](https://www.npmjs.org/package/socket.io) client implementation to interact with deployd. Please see the documentation for more information.
  - You will find plugins for various sorts of tasks on [npm](https://www.npmjs.org/) if you search for `dpd`. Deployd plugins start with dpd-*name*
+ - You can use `deployd` in a cluster configuration. In order for the socket.io adapter to be able to emit to clients on other cluster nodes, you will need to use Redis as a pub/sub server. See [here](https://github.com/deployd/deployd/pull/698) for more information.
+ 
+ ## Other notes:
+ 
+ - *emit to users* type calls that return multiple results (eg: `emit(dpd.users, {active: true}, 'postModified', this);`) are inefficient and should be avoided. Instead you should join sessions to rooms and emit to rooms instead. See PR [698](https://github.com/deployd/deployd/pull/698) for more info.
+ - if you do not use [dpd-clientlib](https://www.npmjs.org/package/dpd-clientlib), keep in mind that you will need to associate the connected websocket with the session id after authenticating. You can do this by emitting a `server:setsession` message on the socket, with a payload of `{sid: 'sessionid'}`. You can get the session id by calling the `login` method of the user collection resource. See the documentation for more information.
 
 ## Helpful Resources
 
