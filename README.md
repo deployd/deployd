@@ -26,18 +26,21 @@ To install and use it, you need to install **[Node.JS](https://nodejs.org/en/dow
 
 ## Best Practices
 
- - Once you start writing anything serious, you should start your project using a node script instead of the `dpd` command. [Read more here](http://docs.deployd.com/docs/server/run-script.html). `Dpd` is only meant to be used as a quick prototyping tool.
- - You are encouraged to structure your resources in a hierarchy based on what they belong to. Since deployd 1.1.0 you can name your resources like the following example:
+ 1. Once you start writing anything serious, you should start your project using a node script instead of the `dpd` command. [Read more here](http://docs.deployd.com/docs/server/run-script.html). `Dpd` is only meant to be used as a quick prototyping tool.
+ 2. You are encouraged to structure your resources in a hierarchy based on what they belong to. Since deployd 1.1.0 you can name your resources like the following example:
 
-    - Assume your user collection is named `users`
-    - Their associated photos could be in a collection named `users/photos`.
-    - A potential [dpd-event](https://www.npmjs.org/package/dpd-event) script associated to photos could go in `users/photos/resize`.
+    1. Assume your user collection is named `users`
+    2. Their associated photos could be in a collection named `users/photos`.
+    3. A potential [dpd-event](https://www.npmjs.org/package/dpd-event) script associated to photos could go in `users/photos/resize`.
 
- - Once your project grows, you may find yourself writing code in one place that you need elsewhere. Take a look at [dpd-codemodule](https://www.npmjs.org/package/dpd-codemodule) for this purpose.
- - Keep in mind that `deployd` comes with **absolutely no built-in access control checking**. Anyone can delete, read, or update any information from any collection unless you close this down. We recommend plugging in your permission checks in `On BeforeRequest` events, and/or other appropriate places.
- - The [dpd-clientlib](https://www.npmjs.org/package/dpd-clientlib) package is provided mostly as a convenience and should probably not be used directly in production. Once your project outgrows it, feel free to replace it with something else. You may use any HTTP library and/or [socket.io](https://www.npmjs.org/package/socket.io) client implementation to interact with deployd. Please see the documentation for more information.
- - You will find plugins for various sorts of tasks on [npm](https://www.npmjs.org/) if you search for `dpd`. Deployd plugins start with dpd-*name*
- - You can use `deployd` in a cluster configuration. In order for the socket.io adapter to be able to emit to clients on other cluster nodes, you will need to use Redis as a pub/sub server. See [here](https://github.com/deployd/deployd/pull/698) for more information.
+ 3. Once your project grows, you may find yourself writing code in one place that you need elsewhere. Take a look at [dpd-codemodule](https://www.npmjs.org/package/dpd-codemodule) for this purpose.
+ 4. Keep in mind that `deployd` comes with **absolutely no built-in access control checking**. Anyone can delete, read, or update any information from any collection unless you close this down. We recommend plugging in your permission checks in `On BeforeRequest` events, and/or other appropriate places.
+ 5. The [dpd-clientlib](https://www.npmjs.org/package/dpd-clientlib) package is provided mostly as a convenience and should probably not be used directly in production. Once your project outgrows it, feel free to replace it with something else. You may use any HTTP library and/or [socket.io](https://www.npmjs.org/package/socket.io) client implementation to interact with deployd. Please see the documentation for more information.
+ 6. You will find plugins for various sorts of tasks on [npm](https://www.npmjs.org/) if you search for `dpd`. Deployd plugins start with dpd-*name*
+ 7. You can use `deployd` in a cluster configuration. In order for the socket.io adapter to be able to emit to clients on other cluster nodes, you will need to use Redis as a pub/sub server. See [here](https://github.com/deployd/deployd/pull/698) for more information.
+ 8. Try not to run `dpd.somecollection.get()` type queries inside `On GET` handlers. 
+    1. These can have severe performance implications especially when running queries that return multiple results, because each subquery will execute at least once for every document returned. 
+    2. Instead you should put your logic in [dpd-event](https://www.npmjs.org/package/dpd-event) scripts that run as fewer queries as possible, and which concatenate the results using code. [lodash](https://www.npmjs.org/package/lodash) can be a good library to help with merging results.
  
  ## Other notes:
  
