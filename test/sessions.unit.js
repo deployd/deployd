@@ -287,21 +287,24 @@ describe('Session', function() {
       var fauxSocket = sockets.createClient('testSocket1');
       sockets.emit('connection', fauxSocket);
       fauxSocket.emit('server:setSession', { sid: data.id });
-      var handler = sinon.spy();
+      fauxSocket.once('server:acksession', function() { 
+        var handler = sinon.spy();
 
-      fauxSocket.on('hello', function(msg) {
-        expect(msg).to.equal('message from server to session2');
-        done();
-      });
+        fauxSocket.on('hello', function(msg) {
+          expect(msg).to.equal('message from server to session2');
+          fauxSocket.removeAllListeners();
+          done();
+        });
 
-      createSession(function(err, data, session2){
-        fauxSocket.emit('server:setSession', { sid: data.id });
-        fauxSocket.on('server:acksession', function() {
-          // this message shouldn't be received:
-          session1.socket.emit('hello', 'message from server to session1');
-          // this message should be received:
-          session2.socket.emit('hello', 'message from server to session2');
-        })
+        createSession(function(err, data, session2){
+          fauxSocket.emit('server:setSession', { sid: data.id });
+          fauxSocket.once('server:acksession', function() {
+            // this message shouldn't be received:
+            session1.socket.emit('hello', 'message from server to session1');
+            // this message should be received:
+            session2.socket.emit('hello', 'message from server to session2');
+          })
+        });
       });
     });
   });
