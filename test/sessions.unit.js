@@ -288,7 +288,11 @@ describe('Session', function() {
       sockets.emit('connection', fauxSocket);
       fauxSocket.emit('server:setSession', { sid: data.id });
       var handler = sinon.spy();
-      fauxSocket.on('hello', handler);
+
+      fauxSocket.on('hello', function(msg) {
+        expect(msg).to.equal('message from server to session2');
+        done();
+      });
 
       createSession(function(err, data, session2){
         fauxSocket.emit('server:setSession', { sid: data.id });
@@ -297,9 +301,6 @@ describe('Session', function() {
           session1.socket.emit('hello', 'message from server to session1');
           // this message should be received:
           session2.socket.emit('hello', 'message from server to session2');
-          expect(handler.calledOnce).to.be.true;
-          expect(handler.firstCall.calledWith('message from server to session2')).to.be.true;
-          done();
         })
       });
     });
