@@ -2,6 +2,36 @@
 
 This document records all notable changes to [Deployd](http://deployd.com/). This project adheres to [Semantic Versioning](http://semver.org/).
 
+<a name="v1.1.0"></a>
+# v1.1.0 (2017-11-04)
+
+**Notes:** [dpd-dashboard](https://www.npmjs.com/package/dpd-dashboard) and [dpd-clientlib](https://www.npmjs.com/package/dpd-clientlib) now follow semver too. Please update their semver ranges in your project to `^1.0.0`
+
+## Bug Fixes
+
+- **tests:**
+  - run tests on random mongo port and update for new mocha/npm (#831)
+  ([4331b3c2](https://github.com/deployd/deployd/commit/4331b3c26c30cc19e636aaef1e409d1ac84ba107))
+
+## Features
+
+- Allow specifying resources in subdirectories/namespaces. (eg. namespace/hello) (#832)
+  ([4d22465b](https://github.com/deployd/deployd/commit/4d22465b6e526f1bff832cb12e4f8137e372677a))
+
+  ### Details:
+
+   What this does is allow structuring resources in subdirectories. (eg clientapi/users, clientapi/photos, clientapi/v2/followers, etc)
+
+  This greatly improves the structure of projects, allowing easier separation of functions into their own separate concerns. 
+
+  Each can have its own separate event code and deployd will handle the routing. This should work for any resource type.
+
+## Documentation
+
+- Update readme with some best practices (#833)
+  ([/aafd3fc5](https://github.com/deployd/deployd/commit/aafd3fc5349ee66a27e558c7662321a40d48ba0e))
+
+
 <a name="v1.0.0"></a>
 # v1.0.0 (2017-09-19)
 
