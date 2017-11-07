@@ -192,6 +192,65 @@ describe('InternalResources', function() {
         });
     });
 
+    it('should delete a resource named "foo/bar" when handling a DELETE request, but leave "foo" alone', function(done) {
+      var q = {path: '/foo', type: 'Bar'}
+        , q2 = {path: '/bar', type: 'Bar'}
+        , test = this;
+
+        sh.mkdir('-p', path.join(configPath, 'resources/foo/bar'));
+        sh.mkdir('-p', path.join(configPath, 'resources/foo'));
+        JSON.stringify(q).to(path.join(configPath, 'resources/foo/bar/config.json'));
+        JSON.stringify(q2).to(path.join(configPath, 'resources/foo/config.json'));
+
+        test.ir.handle({req: {method: 'DELETE', url: '/__resources/foo/bar', isRoot: true}, url: '/foo/bar', done: function() {
+          expect(sh.test('-d', path.join(configPath, 'resources/foo/bar'))).to.not.be.ok;
+          expect(sh.test('-d', path.join(configPath, 'resources/foo'))).to.be.ok;
+          
+          done();
+        }}, function() {
+          throw Error("next called");
+        });
+    });
+
+    it('should delete a resource named "foo" when handling a DELETE request, but leave "foo/bar" alone', function(done) {
+      var q = {path: '/foo', type: 'Bar'}
+        , q2 = {path: '/bar', type: 'Bar'}
+        , test = this;
+
+        sh.mkdir('-p', path.join(configPath, 'resources/foo/bar'));
+        sh.mkdir('-p', path.join(configPath, 'resources/foo'));
+        JSON.stringify(q).to(path.join(configPath, 'resources/foo/bar/config.json'));
+        JSON.stringify(q2).to(path.join(configPath, 'resources/foo/config.json'));
+
+        test.ir.handle({req: {method: 'DELETE', url: '/__resources/foo', isRoot: true}, url: '/foo', done: function() {
+          expect(sh.test('-f', path.join(configPath, 'resources/foo/config.json'))).to.not.be.ok;
+          expect(sh.test('-f', path.join(configPath, 'resources/foo/bar/config.json'))).to.be.ok;
+          expect(sh.test('-d', path.join(configPath, 'resources/foo/bar'))).to.be.ok;
+          
+          done();
+        }}, function() {
+          throw Error("next called");
+        });
+    });
+
+    it('should rename a resource named "foo/bar/foo" to "bar/foo/bar" properly', function(done) {
+      var q = {path: '/foo', type: 'Bar'}
+        , q2 = {path: '/bar', type: 'Bar'}
+        , test = this;
+
+        sh.mkdir('-p', path.join(configPath, 'resources/foo/bar/foo'));
+        JSON.stringify(q).to(path.join(configPath, 'resources/foo/bar/foo/config.json'));
+
+        test.ir.handle({req: {method: 'PUT', url: '/__resources/foo/bar/foo', isRoot: true}, url: '/foo/bar/foo', body: { type: 'Bar', id: '/bar/foo/bar' }, done: function() {
+          expect(sh.test('-d', path.join(configPath, 'resources/foo/bar/foo'))).to.not.be.ok;
+          expect(sh.test('-d', path.join(configPath, 'resources/bar/foo/bar'))).to.be.ok;
+          
+          done();
+        }}, function() {
+          throw Error("next called");
+        });
+    });
+
     it('should call callbacks for config changes with errors', function(done) {
       var file = path.join(configPath, 'resources/foo/config.json');
 
