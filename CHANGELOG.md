@@ -1,24 +1,33 @@
-# History
+# Change Log
 
-This document records all notable changes to [Deployd](http://deployd.com/). This project adheres to [Semantic Versioning](http://semver.org/).
+All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-<a name="v1.1.0"></a>
-# v1.1.0 (2017-11-04)
+<a name="1.1.1"></a>
+## [1.1.1](https://github.com/deployd/deployd/compare/v1.1.0...v1.1.1) (2017-11-07)
+
+
+### Bug Fixes
+
+* **internal-resources:** namespaced resources could not be moved/renamed into other namespaces ([fa4cc64](https://github.com/deployd/deployd/commit/fa4cc64))
+
+
+<a name="1.1.0"></a>
+## [1.1.0](https://github.com/deployd/deployd/compare/v1.0.0...v1.1.0)  (2017-11-04)
 
 **Notes:** [dpd-dashboard](https://www.npmjs.com/package/dpd-dashboard) and [dpd-clientlib](https://www.npmjs.com/package/dpd-clientlib) now follow semver too. Please update their semver ranges in your project to `^1.0.0`
 
-## Bug Fixes
+### Bug Fixes
 
 - **tests:**
   - run tests on random mongo port and update for new mocha/npm (#831)
   ([4331b3c2](https://github.com/deployd/deployd/commit/4331b3c26c30cc19e636aaef1e409d1ac84ba107))
 
-## Features
+### Features
 
 - Allow specifying resources in subdirectories/namespaces. (eg. namespace/hello) (#832)
   ([4d22465b](https://github.com/deployd/deployd/commit/4d22465b6e526f1bff832cb12e4f8137e372677a))
 
-  ### Details:
+  #### Details:
 
    What this does is allow structuring resources in subdirectories. (eg clientapi/users, clientapi/photos, clientapi/v2/followers, etc)
 
@@ -26,17 +35,17 @@ This document records all notable changes to [Deployd](http://deployd.com/). Thi
 
   Each can have its own separate event code and deployd will handle the routing. This should work for any resource type.
 
-## Documentation
+### Documentation
 
 - Update readme with some best practices (#833)
   ([/aafd3fc5](https://github.com/deployd/deployd/commit/aafd3fc5349ee66a27e558c7662321a40d48ba0e))
 
 
 <a name="v1.0.0"></a>
-# v1.0.0 (2017-09-19)
+## v1.0.0 (2017-09-19)
 
 
-## Bug Fixes
+### Bug Fixes
 
 - **collection:** protect and hide should not modify `this` (#782)
   ([a9fdc4cf](https://github.com/deployd/deployd/commit/a9fdc4cf4211765097cdf5e7aad19f682a62148c))
@@ -47,7 +56,7 @@ This document records all notable changes to [Deployd](http://deployd.com/). Thi
 - fix: server.attach() did not enable socket clustering (#777)
   ([04bb24a2](https://github.com/deployd/deployd/commit/04bb24a23e4ab0f10651f51367142bd8c18fbf30))
 
-## Breaking Changes ⚠️
+### Breaking Changes ⚠️
 
   - refactor: remove dpd cli from deployd core module (#776)
     ([626d4ad6](https://github.com/deployd/deployd/commit/626d4ad69cf32c7c92a91083ff8626ee95313c1a))
@@ -57,20 +66,20 @@ This document records all notable changes to [Deployd](http://deployd.com/). Thi
     ℹ️ A migration guide is available in the [readme](README.md#migration-guide-to-v1.0.0)
 
 <a name="v0.8.10"></a>
-# v0.8.10 (2017-09-19)
+## v0.8.10 (2017-09-19)
 
 
-## Bug Fixes
+### Bug Fixes
 
 - **Dependencies:** Fix: Force mime version v1.4.0
   ([1514b8decc4](https://github.com/deployd/deployd/commit/1514b8decc4db06ffdea2928f746e21b638c14a5))
 
 
 <a name="v0.8.9"></a>
-# v0.8.9 (2016-08-29)
+## v0.8.9 (2016-08-29)
 
 
-## Bug Fixes
+### Bug Fixes
 
 - **db:** convert skip/limit arg to integer
   ([86e6f5f6](https://github.com/deployd/deployd/commit/86e6f5f6a06d1c338974735d237fc9d8f33c8ec9))
@@ -85,13 +94,13 @@ This document records all notable changes to [Deployd](http://deployd.com/). Thi
 
 
 <a name="v0.8.8"></a>
-# v0.8.8 (2016-01-18)
+## v0.8.8 (2016-01-18)
 
-## Refactor
+### Refactor
 
 - **session:** use socket.io rooms for emitToUsers ([ff5f840c95](https://github.com/deployd/deployd/commit/ff5f840c9514679f9161af146266d83f3a4f16af))
 
-## Bug Fixes
+### Bug Fixes
 
 - **dpd.js:** use encodeURIComponent
   ([8d58a12e](https://github.com/deployd/deployd/commit/8d58a12e9e0031da73970d6079c4dd2d525b3838))
@@ -107,17 +116,17 @@ This document records all notable changes to [Deployd](http://deployd.com/). Thi
   ([ca0ca85e](https://github.com/deployd/deployd/commit/ca0ca85eed723436ebcfc2674e420c79d1fe1d96))
 
 
-## Performance Improvements
+### Performance Improvements
 
 - **script:** memoize dynamic function
   ([ff6a4dce](https://github.com/deployd/deployd/commit/ff6a4dceee02401d67d4ba1348648cc55ebc13fb))
 
 
 <a name="v0.8.7"></a>
-# v0.8.7 (2015-10-30)
+## v0.8.7 (2015-10-30)
 
 
-## Bug Fixes
+### Bug Fixes
 
 - **dpd:**: dpd CLI was crashing (shelljs global missing)
   ([e1729f2d88](https://github.com/deployd/deployd/commit/e1729f2d887ed28d1bf7cdde123471a2b200e91f))
@@ -127,7 +136,7 @@ This document records all notable changes to [Deployd](http://deployd.com/). Thi
 # v0.8.6 (2015-10-29)
 
 
-## Bug Fixes
+### Bug Fixes
 
 - **User-collection:**
   - prevent crash on invalid user for session (thx @nicholasareed)
@@ -139,7 +148,7 @@ This document records all notable changes to [Deployd](http://deployd.com/). Thi
 - **Dashboard:** Property types in dashboard are sortable (thx @docnoe)
   ([ab7cec630](https://github.com/deployd/deployd/commit/ab7cec6302a901c6f73612b610ac6b559ad1081f))
 
-## Chore
+### Chore
 
   - **Dependency Update:**
     - qs to version 5.2.0
@@ -155,10 +164,10 @@ This document records all notable changes to [Deployd](http://deployd.com/). Thi
 
 
 <a name="v0.8.5"></a>
-# v0.8.5 (2015-08-05)
+## v0.8.5 (2015-08-05)
 
 
-## Bug Fixes
+### Bug Fixes
 
 - **bin/dpd:** prevent process quit when latestversion is not writable
   ([d8a507d5](https://github.com/deployd/deployd/commit/d8a507d560d0c013ee32f501d3137579b682498d))
@@ -172,7 +181,7 @@ This document records all notable changes to [Deployd](http://deployd.com/). Thi
   ([36c4ec2d](https://github.com/deployd/deployd/commit/36c4ec2df705278cdb7de16c774bd3b938b35a1d))
 
 
-## Features
+### Features
 
 - **collection:**
   - add BeforeRequest event

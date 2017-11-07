@@ -166,13 +166,14 @@ The subject contains succinct description of the change:
 
 ###Body
 
+The first line of the body should start with the text **BREAKING CHANGES:** if any are introduced
+
 Just as in the **subject**, use the imperative, present tense: "change" not "changed" nor "changes"
 The body should include the motivation for the change and contrast this with previous behavior.
 
 ###Footer
 
-The footer should contain any information about **Breaking Changes** and is also the place to
-reference GitHub issues that this commit **Closes**.
+Reference GitHub issues that this commit **Closes**.
 
 ## Submitting Your Changes
 
