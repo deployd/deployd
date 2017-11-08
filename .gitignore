@@ -26,3 +26,6 @@ examples/test/data
 test-app/node_modules
 !test-app/node_modules/hello.js
 !test-app/node_modules/proxy
+
+package-lock.json
+yarn.lock

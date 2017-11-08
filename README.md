@@ -8,6 +8,17 @@
 
 Deployd is the simplest way to build realtime APIs for web and mobile apps. Ready-made, configurable Resources add common functionality to a Deployd backend, which can be further customized with JavaScript Events.
 
+## features
+
+ - secure access to database APIs directly from untrusted clients (browser js, mobile apps, etc)
+ - notify clients in realtime of events occurring within the database
+ - user and session management
+ - all APIs exposed over REST / HTTP
+ - bundled browser JavaScript client
+ - web socket authentication and session management
+ - can be hosted by modern cloud platforms
+ - support extension through node modules and npm
+
 [Read more about deployd](http://deployd.com)
 
 ⚠️ Deployd v1.0.0 has been released. [Read the migration guide](#migration-guide-to-v1.0.0) below.
