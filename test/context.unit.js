@@ -1,6 +1,7 @@
 var Resource = require('../lib/resource')
   , Context = require('../lib/context')
-  , Stream = require('stream').Stream;
+  , Stream = require('stream').Stream
+  , sinon = require('sinon');
 
 describe('Context', function() {
 
@@ -43,6 +44,33 @@ describe('Context', function() {
         ctx.res.setHeader('Content-Type', 'text/javascript');
         ctx.done(null, 'callback(123)');
         expect(ctx.res.getHeader('Content-Type')).to.equal('text/javascript');
+        done();
+      });
+    });
+
+    it('should not send headers if they were already sent', function(done) {
+      freq('/foo/bar', null, function(req, res) {
+        var r = new Resource('foo', {});
+        var ctx = new Context(r, req, res, {});
+        ctx.res.writeHead(200);
+        expect(ctx.res.headersSent).to.be.true;
+        ctx.res.setHeader = sinon.spy();
+        ctx.done(null, 'callback(123)');
+        expect(ctx.res.setHeader.callCount).to.equal(0);
+        done();
+      });
+    });
+
+    it('should not call res.end() if response already finished', function(done) {
+      freq('/foo/bar', null, function(req, res) {
+        var r = new Resource('foo', {});
+        var ctx = new Context(r, req, res, {});
+        ctx.res.end("test");
+        expect(ctx.res.headersSent).to.be.true;
+        expect(ctx.res.finished).to.be.true;
+        ctx.res.end = sinon.spy();
+        ctx.done(null, 'callback(123)');
+        expect(ctx.res.end.callCount).to.equal(0);
         done();
       });
     });  
