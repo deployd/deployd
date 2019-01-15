@@ -2,6 +2,8 @@
 
 > the simplest way to build an api.
 
+⚠️  Deployd is not actively maintained anymore. Important bug fixes PRs will be merged (if properly tested and documented) but the existing maintainers don't have time and motivation to build new features.
+
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/deployd/deployd)  [![Current Version](https://img.shields.io/npm/v/deployd.svg?style=flat-square)](https://www.npmjs.org/package/deployd) [![Build Status](https://img.shields.io/travis/deployd/deployd.svg?style=flat-square)](http://travis-ci.org/deployd/deployd)
 
 ## overview
