@@ -26,7 +26,12 @@ describe('http', function() {
 		it('should parse a json query string', function() {
 			var q = http.parseQuery('/foo/bar?{"foo":"bar"}');
 			expect(q).to.eql({foo:'bar'});
-		});
+    });
+    
+    it('should not change a big number', function() {
+			var q = http.parseQuery('/foo/bar?id=9979174442646823');
+			expect(q).to.eql({id:'9979174442646823'});
+    });
 	});
 
 describe('.getBody', function(){
