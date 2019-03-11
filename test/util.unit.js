@@ -29,7 +29,8 @@ describe('http', function() {
     });
     
     it('should not change a big number', function() {
-			var q = http.parseQuery('/foo/bar?id=9979174442646823');
+      var q = http.parseQuery('/foo/bar?id=9979174442646823');
+      // this number is expected to be changed by parseInt to 9979174442646824
 			expect(q).to.eql({id:'9979174442646823'});
     });
 	});
