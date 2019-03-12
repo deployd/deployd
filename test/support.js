@@ -39,8 +39,10 @@ freq = function(url, options, fn, callback) {
   })
   .listen(port)
   .on('listening', function () {
-    request(options, function(){
-      callback.apply(null, arguments);
+    request(options, function (){
+      if (callback) {
+        callback.apply(null, arguments);
+      }
     });
   });
 };
