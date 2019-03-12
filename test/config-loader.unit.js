@@ -136,7 +136,7 @@ describe('config-loader', function() {
       }
 
       var originalLoadConfig = configLoader.loadConfig;
-      this.sinon.stub(configLoader, 'loadConfig', function (basepath, server, fn) {
+      this.sinon.stub(configLoader, 'loadConfig').callsFake(function (basepath, server, fn) {
         originalLoadConfig(basepath, server, function () {
           // intercepting this call so that we can call this sequentially
           next();
