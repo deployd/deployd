@@ -1,33 +1,39 @@
 var http = require('../lib/util/http')
-	,	Stream = require('stream');
+  ,	Stream = require('stream');
 
 describe('uuid', function() {
-	describe('.create()', function() {
-		var uuid = require('../lib/util/uuid');
-		var used = {};
-		// max number of objects that must not conflict
-		// total of about 2 trillion possible combinations
-		var i = 1000; // replace this with a larger number to really test
-		while(i--) {
-			var next = uuid.create();
-			if(used[next]) throw 'already used';
-			used[next] = 1;
-		}
-	});
+  describe('.create()', function() {
+    var uuid = require('../lib/util/uuid');
+    var used = {};
+    // max number of objects that must not conflict
+    // total of about 2 trillion possible combinations
+    var i = 1000; // replace this with a larger number to really test
+    while(i--) {
+      var next = uuid.create();
+      if(used[next]) throw 'already used';
+      used[next] = 1;
+    }
+  });
 });
 
 describe('http', function() {
-	describe('.parseQuery', function() {
-		it('should parse a query string', function() {
-			var q = http.parseQuery('/foo/bar?foo=bar');
-			expect(q).to.eql({foo:'bar'});
-		});
+  describe('.parseQuery', function() {
+    it('should parse a query string', function() {
+      var q = http.parseQuery('/foo/bar?foo=bar');
+      expect(q).to.eql({foo:'bar'});
+    });
 
-		it('should parse a json query string', function() {
-			var q = http.parseQuery('/foo/bar?{"foo":"bar"}');
-			expect(q).to.eql({foo:'bar'});
-		});
-	});
+    it('should parse a json query string', function() {
+      var q = http.parseQuery('/foo/bar?{"foo":"bar"}');
+      expect(q).to.eql({foo:'bar'});
+    });
+
+    it('should not change a big number', function() {
+      var q = http.parseQuery('/foo/bar?id=9979174442646823');
+      // this number is expected to be changed by parseInt to 9979174442646824
+      expect(q).to.eql({id:'9979174442646823'});
+    });
+  });
 
 describe('.getBody', function(){
 

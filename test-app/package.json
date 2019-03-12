@@ -6,5 +6,10 @@
     "dpd-dashboard": "*",
     "dpd-clientlib": "*"
   },
-  "dpdInclude": ["hello", "proxy", "dpd-clientlib", "dpd-dashboard"]
+  "dpdInclude": [
+    "hello",
+    "proxy",
+    "dpd-clientlib",
+    "dpd-dashboard"
+  ]
 }
