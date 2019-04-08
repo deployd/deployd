@@ -17,6 +17,11 @@ require('deployd').attach(server, {
 });
 app.use(server.handleRequest);
 
+// test deployd routing pass to following handler 
+// when a given page match an express handler
+app.get('/express-custom-handler', function(req, res) {
+	res.send('Ok');
+});
 
 // start server
 server.listen(PORT, function() {
