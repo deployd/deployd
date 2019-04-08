@@ -540,7 +540,7 @@ describe('Session', function() {
   it('should not crash process when inserting the same session to the database', function (done) {
     var store = new SessionStore('sessions', db.create(TEST_DB));
     var originalFind = store.find;
-    store.find = sinon.stub(store, "find", function () {
+    store.find = sinon.stub(store, "find").callsFake(function () {
       var myArgs = arguments;
       // simulate 10 ms latency for find function
       setTimeout(function() { originalFind.apply(store, myArgs); }, 10);

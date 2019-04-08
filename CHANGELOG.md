@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.1.3"></a>
+## [1.1.3](https://github.com/deployd/deployd/compare/v1.1.2...v1.1.3) (2019-03-12)
+
+### Bug Fixes
+
+* Fix big numbers being parsed into integers when it wasn't safe to do so ([#873](https://github.com/deployd/deployd/issues/873))
+
+  Documents could have a generated id that is only composed of numbers. Deployd automatically tries to convert parameters that look like numbers to JS numbers with `parseInt`. For big numbers this isn't safe and could result in the numbers being changed.
+
+  This fixes this problem by leaving the numbers strings when they are too big to be safe numbers.
+
+### Chore:
+
+* Dependency updates
+
+### Breaking Changes ⚠️
+
+* Node.js below version 4.0.0 not officially supported any longer
+
 <a name="1.1.2"></a>
 ## [1.1.2](https://github.com/deployd/deployd/compare/v1.1.1...v1.1.2) (2017-12-19)
 
