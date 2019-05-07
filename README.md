@@ -36,6 +36,22 @@ To install and use it, you need to install **[Node.JS](https://nodejs.org/en/dow
 	$ dpd create hello
 	$ cd hello
 	$ dpd -d
+	
+	
+	*** Database configuration. 
+	For MongoDB Database from fresh install - without authentication
+	Deployd will create a database 'localdb; in the MongoDB and the datastore is pointed to '[dpd-installfolder]/data' folder.
+	
+	To start dpd with MongoDB Database authentication, follow this.
+```
+dpd --host "127.0.0.1" -P '27017' -n "mymongodb" -u "myusername" -s "mypassword"
+
+or
+
+dpd --host "127.0.0.1" -P '27017' -n "mymongodb" -a "myusername:mypassword"
+```
+
+Find more info at **[deployd-cli](https://github.com/deployd/deployd-cli)**.
 
 ## Best Practices
 
